@@ -10,7 +10,6 @@
 import loadable from '@loadable/component'; // 按需加载
 import config from '@/config';
 import { RouteConfig } from 'react-router-config';
-import { initFetchApi } from '@/mock';
 
 const routes: RouteConfig[] = [
   {
@@ -45,14 +44,13 @@ const routes: RouteConfig[] = [
 ];
 
 /**
- * 在跳转路由前得逻辑
+ * 在跳转路由前的逻辑
  * @param route
  */
 export function beforeRouter(route: string) {}
 
 // 返回路由
 export default routes.map((route: RouteConfig) => {
-  initFetchApi(config);
   // 检测路由中的'//'，并替换为'/'
   if (route.path && !Array.isArray(route.path)) {
     route.path = route.path.replace('//', '/');

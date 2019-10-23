@@ -18,7 +18,7 @@ const renderRoutes = (routes: any, authed: boolean, authPath = '/login', extraPr
               return <route.component {...props} {...extraProps} route={route} />;
             }
             // eslint-disable-next-line
-            return <Redirect to={{ pathname: authPath, state: { from: props.location } }} />;
+            return <Redirect to={{pathname: authPath, state: {from: props.location}}} />;
           }}
         />
       ))}

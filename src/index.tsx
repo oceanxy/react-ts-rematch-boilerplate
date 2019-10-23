@@ -1,13 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import App from './App';
-import { store } from './store';
-import './style.scss';
+import { initFetchApi } from '@/mock';
+import config from '@/config';
+import './App';
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('root')
-);
+// 初始化mock和API
+initFetchApi(config);

@@ -1,11 +1,16 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { renderRoutes } from 'react-router-config';
-import { BrowserRouter, HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import config from '@/config';
 import routes from './router';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import './style.scss';
 
-export default () => {
-  console.log(routes);
-  debugger;
-  return <BrowserRouter basename={config.basename}>{renderRoutes(routes)}</BrowserRouter>;
-};
+ReactDOM.render(
+  <Provider store={store}>
+    <BrowserRouter basename={config.basename}>{renderRoutes(routes)}</BrowserRouter>
+  </Provider>,
+  document.getElementById('root')
+);

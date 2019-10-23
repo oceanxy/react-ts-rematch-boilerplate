@@ -2,7 +2,7 @@ import Axios from 'axios';
 import { createModel } from '@rematch/core';
 import fetchApis from '@/mock';
 
-export type TestState = { count: number; data: any };
+export type TestState = {count: number; data: any};
 
 export const test = createModel({
   state: {
@@ -10,8 +10,8 @@ export const test = createModel({
     data: {}
   },
   reducers: {
-    increment: (state: { count: number }) => {
-      const { count } = state || { count: 0 };
+    increment: (state: {count: number}) => {
+      const {count} = state || {count: 0};
 
       return {
         ...state,
@@ -32,7 +32,7 @@ export const test = createModel({
       this.increment();
     },
     async getData() {
-      const response = await Axios.get(fetchApis.fetchTest);
+      const response: any = await fetchApis.fetchTest();
       this.updateData(response.data.data);
     },
     async deleteData(id: string) {

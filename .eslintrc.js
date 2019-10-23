@@ -22,10 +22,10 @@ module.exports = {
     // "wx": "readonly"
   },
   'extends': [
+    // 'prettier',
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:jsx-control-statements/recommended', // 需要另外配合babel插件使用
-    'prettier'
+    'plugin:jsx-control-statements/recommended' // 需要另外配合babel插件使用
   ],
   'settings': {
     'react': {
@@ -46,7 +46,7 @@ module.exports = {
     'prettier'
   ],
   'rules': {
-    'prettier/prettier': 2,
+    // 'prettier/prettier': 2,
     'no-extra-semi': 0, // 禁止不必要的分号
     'quotes': ['error', 'single'], // 强制使用单引号
     'no-unused-vars': 0, // 不允许未定义的变量
@@ -83,4 +83,4 @@ module.exports = {
     'promise/catch-or-return': 2,
     'promise/no-native': 0
   }
-}
+};
