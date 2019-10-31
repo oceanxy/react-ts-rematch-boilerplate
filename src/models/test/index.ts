@@ -2,12 +2,11 @@ import Axios from 'axios';
 import { createModel } from '@rematch/core';
 import fetchApis from '@/mock';
 
-export type TestState = {count: number; data: any};
-
 export const test = createModel({
   state: {
     count: 0,
-    data: {}
+    data: {},
+    websocketData: -1
   },
   reducers: {
     increment: (state: {count: number}) => {
@@ -19,10 +18,15 @@ export const test = createModel({
       };
     },
     updateData: (state: any, data: {}) => {
-      // debugger
       return {
         ...state,
         data
+      };
+    },
+    updateWebSocketData: (state: any, websocketData: {}) => {
+      return {
+        ...state,
+        websocketData
       };
     }
   },
@@ -32,8 +36,13 @@ export const test = createModel({
       this.increment();
     },
     async getData() {
-      const response: any = await fetchApis.fetchTest();
-      this.updateData(response.data.data);
+      const {data} = await fetchApis.fetchTest();
+      this.updateData(data.data);
+    },
+    getWebSocketData() {
+      fetchApis.fetchTestWebsocket((msg: any) => {
+        this.updateWebSocketData(msg);
+      });
     },
     async deleteData(id: string) {
       return await Axios.post('/testDelete', id);

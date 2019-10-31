@@ -9,23 +9,14 @@
 
 import loadable from '@loadable/component'; // 按需加载
 import config from '@/config';
-import { RouteConfig } from 'react-router-config';
 
-const routes: RouteConfig[] = [
+const routes = [
   {
     path: config.basename,
     exact: true,
     component: loadable(() => import('@/screens/home')),
-    name: 'home', // 自定义属性
-    title: 'react-home' // 自定义属性
-    // 这里可以扩展一些自定义的属性
-  },
-  {
-    path: config.basename + '/home',
-    exact: true,
-    component: loadable(() => import('@/screens/home')),
     name: 'home',
-    title: 'HelloWorld'
+    title: 'react-home'
   },
   {
     path: config.basename + '/test',
@@ -47,10 +38,12 @@ const routes: RouteConfig[] = [
  * 在跳转路由前的逻辑
  * @param route
  */
-export function beforeRouter(route: string) {}
+export function beforeRouter(route: string) {
+  console.log(route);
+}
 
 // 返回路由
-export default routes.map((route: RouteConfig) => {
+export default routes.map((route) => {
   // 检测路由中的'//'，并替换为'/'
   if (route.path && !Array.isArray(route.path)) {
     route.path = route.path.replace('//', '/');

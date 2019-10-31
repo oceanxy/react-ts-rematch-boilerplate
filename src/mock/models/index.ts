@@ -37,10 +37,13 @@ const mocks: mocks = {
       ]
     }
   },
-  fetchTest2: {
+  fetchTestWebsocket: {
     code: 0,
     msg: '',
-    data: {}
+    data: {
+      'name': 'websocket',
+      'value|1-10': 1
+    }
   }
 };
 

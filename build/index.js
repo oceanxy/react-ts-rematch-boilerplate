@@ -3,7 +3,7 @@ const chalk = require('chalk');
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.prod');
 
-const spinner = ora('webpack编译开始...\n').start();
+const spinner = ora('编译中...\n').start();
 
 webpack(webpackConfig, function (err, stats) {
   if (err) {

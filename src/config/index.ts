@@ -29,7 +29,7 @@ export default {
   // 接口端口号
   port: 3001,
   // 根目录
-  basename: '/',
+  basename: '/clbs/intercom',
   // mock数据开关
-  mock: true
+  mock: false
 };

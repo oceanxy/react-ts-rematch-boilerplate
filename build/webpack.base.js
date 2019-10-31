@@ -28,7 +28,7 @@ if (bundleAnalyzerReport) {
 module.exports = merge(webpackConfig, {
   devtool: 'cheap-module-eval-source-map',
   entry: {
-    app: './src/index.tsx',
+    app: './src/index.ts',
     vendor: ['react', 'react-dom'] // 不变的代码分包
   },
   output: {
@@ -40,7 +40,7 @@ module.exports = merge(webpackConfig, {
     rules: [
       {
         enforce: 'pre',
-        test: /\.tsx?$/,
+        test: /\.ts[x]?$/,
         exclude: /node_modules/,
         include: [APP_PATH],
         loader: 'eslint-loader',
@@ -57,7 +57,7 @@ module.exports = merge(webpackConfig, {
             loader: 'html-loader'
           },
           {
-            test: /\.([jt])sx?$/,
+            test: /\.([jt])s[x]?$/,
             include: APP_PATH,
             exclude: /node_modules/,
             use: [
