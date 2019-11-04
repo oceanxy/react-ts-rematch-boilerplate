@@ -1,8 +1,8 @@
 import Axios, { AxiosResponse } from 'axios';
-import { createModel } from '@rematch/core';
 import fetchApis from '@/mock';
+import { ModelConfig } from '@rematch/core';
 
-export const test = createModel({
+export const test = <ModelConfig>{
   state: {
     count: 0,
     data: {},
@@ -37,6 +37,7 @@ export const test = createModel({
     },
     async getData() {
       const { data } = await fetchApis.fetchTest();
+      fetchApis;
       this.updateData(data.data);
     },
     getWebSocketData() {
@@ -48,4 +49,4 @@ export const test = createModel({
       return await Axios.post('/testDelete', id);
     }
   }
-});
+};
