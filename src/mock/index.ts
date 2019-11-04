@@ -14,7 +14,11 @@ const fetchApis: fetchApis = {};
  * @param fetchApi
  * @param callback
  */
-function fetchWebSocket(config: IConfig, fetchApi: IFetchAPI, callback?: (msg: any) => any): Promise<ReconnectingWebSocket> {
+function fetchWebSocket(
+  config: IConfig,
+  fetchApi: IFetchAPI,
+  callback?: (axiosResponse: AxiosResponse) => void
+): Promise<ReconnectingWebSocket> {
   return new Promise((resolve, reject) => {
     let ws: ReconnectingWebSocket;
     // 检查是否在api中配置了完整的websocket URL
@@ -30,7 +34,7 @@ function fetchWebSocket(config: IConfig, fetchApi: IFetchAPI, callback?: (msg: a
     ws.onopen = () => resolve(ws);
     ws.onerror = reject;
     ws.onmessage = (messageEvent: MessageEvent) => {
-      callback && callback(JSON.parse(messageEvent.data));
+      callback && callback(<AxiosResponse<ReconnectingWebSocket>>{ data: JSON.parse(messageEvent.data) });
     };
   });
 }
@@ -45,7 +49,7 @@ async function fetchMethod(fetchApi: IFetchAPI, config: IConfig, callback?: (msg
   // 如果开启了mock，并且这个接口是一个websocket长链接，使用REST API接口来替代websocket，便于mockjs拦截并返回mock数据
   if (fetchApi.isWebsocket && !(config.mock || fetchApi.forceMock)) {
     const ws = await fetchWebSocket(config, fetchApi, callback);
-    return <AxiosResponse<ReconnectingWebSocket>>{data: ws};
+    return <AxiosResponse<ReconnectingWebSocket>>{ data: ws };
   } else {
     // 开启mock时不用拼接url
     let protocol = '';

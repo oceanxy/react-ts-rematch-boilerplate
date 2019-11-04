@@ -13,14 +13,14 @@ export enum EProtocal {
 }
 
 export interface IConfig {
-  protocol: string,
+  protocol: EProtocal;
   host: string;
   port: number;
   basename: string;
   mock: boolean;
 }
 
-export default {
+export default <IConfig>{
   // 接口协议
   // websocket链接'http://'将自动转换为'ws://'，'https://'将自动转换为'wss://'
   protocol: EProtocal.HTTP,

@@ -1,30 +1,22 @@
-import React, { useEffect } from 'react';
-import './index.scss';
+import Increment from '@/components/test/increment';
+import TestList from '@/components/test/list';
+import TestWebSocket from '@/components/test/websocket';
+import React from 'react';
 
-export default (props: any) => {
-  const {data, websocketData, getData, getWebSocketData} = props;
-
-  useEffect(() => {
-    getData();
-    getWebSocketData();
-  }, []);
-
+const TestContainer = (props: {
+  test: { count: any; data: any; websocketData: any };
+  increment: any;
+  incrementAsync: any;
+  getData: any;
+  getWebSocketData: any;
+}) => {
   return (
-    <div>
-      <div>数据列表：</div>
-      {
-        data &&
-        data.child &&
-        data.child.map((d: {value: number; name: string}, index: number) => {
-          return (
-            <div key={index} className="test">
-              {d.name} {d.value}
-            </div>
-          );
-        })
-      }
-      <div>websocket测试：</div>
-      <div>接收到后端数据：{websocketData}</div>
-    </div>
+    <>
+      <Increment count={props.test.count} increment={props.increment} incrementAsync={props.incrementAsync} />
+      <TestList data={props.test.data} getData={props.getData} />
+      <TestWebSocket data={props.test.websocketData} getData={props.getWebSocketData} />
+    </>
   );
 };
+
+export default TestContainer;

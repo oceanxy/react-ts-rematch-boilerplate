@@ -15,13 +15,20 @@ ws.on('connection', (ws) => {
     console.log(message);
   });
 
-  // 循环向客户端发送自增的数字
-  let n = 0;
+  // 发送服务器时间给客户端
   const interval = setInterval(() => {
     if (ws.readyState === 1) {
-      n++;
-      ws.send(JSON.stringify(n));
-      console.log('已发送数据：' + n);
+      const date = new Date();
+      ws.send(JSON.stringify(
+        date.getFullYear() + '-' +
+        (date.getMonth() + 1) + '-' +
+        date.getDate() + ' ' +
+        date.getHours() + ':' +
+        date.getMinutes() + ':' +
+        date.getSeconds() + ' ' +
+        '星期' +
+        ['日', '一', '二', '三', '四', '五', '六'][date.getDay()]
+      ));
     }
   }, 1000);
 
