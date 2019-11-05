@@ -22,7 +22,7 @@ export interface IConfig {
 
 export default <IConfig>{
   // 接口协议
-  // websocket链接'http://'将自动转换为'ws://'，'https://'将自动转换为'wss://'
+  // websocket链接时'http://'将自动转换为'ws://'，'https://'将自动转换为'wss://'
   protocol: EProtocal.HTTP,
   // 接口host主机
   host: 'localhost',

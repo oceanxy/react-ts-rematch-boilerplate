@@ -10,19 +10,19 @@
 import { IFetchAPIs } from '@/mock/apis';
 import { mock } from 'mockjs';
 
-export interface IMock {
-  code: number;
-  msg: string;
-  data: any;
-}
+export type Mocks = {
+  [mocksName in keyof IFetchAPIs]: {
+    code: number;
+    msg: string;
+    data: any;
+  }
+};
 
-type mocks = { [mocksName in keyof IFetchAPIs]: IMock };
-
-export const productionData = (mocks: mocks, apis: IFetchAPIs, fetchApi: keyof IFetchAPIs) => {
+export const productionData = (mocks: Mocks, apis: IFetchAPIs, fetchApi: keyof IFetchAPIs) => {
   mock(apis[fetchApi].url, mocks[fetchApi]);
 };
 
-const mocks: mocks = {
+const mocks: Mocks = {
   fetchTest: {
     code: 0,
     msg: '',
@@ -44,6 +44,11 @@ const mocks: mocks = {
       'name': 'websocket',
       'value|1-10': 1
     }
+  },
+  deleteData: {
+    code: 0,
+    msg: '',
+    data: null
   }
 };
 

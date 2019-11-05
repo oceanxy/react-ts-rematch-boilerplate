@@ -1,5 +1,11 @@
-export interface IFetchAPIs {
+export interface IFetchAPINames {
   [fetchApiName: string]: IFetchAPI;
+}
+
+export interface IFetchAPIs extends IFetchAPINames {
+  fetchTest: IFetchAPI;
+  fetchTestWebsocket: IFetchAPI;
+  deleteData: IFetchAPI;
 }
 
 export enum EMethod {
@@ -26,6 +32,9 @@ const apis: IFetchAPIs = {
     // url: 'ws://121.40.165.18:8800',
     url: 'ws://localhost:3002/test',
     isWebsocket: true // 如果是websocket长链接且url字段不是完整的websocket地址请务必设置为true
+  },
+  deleteData: {
+    url: '/testDelete'
   }
 };
 

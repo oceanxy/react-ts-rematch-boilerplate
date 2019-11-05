@@ -1,22 +1,30 @@
 import { EProtocal, IConfig } from '@/config';
+import * as _ from 'lodash';
 import apis, { EMethod, IFetchAPI, IFetchAPIs } from './apis';
-import mocks, { productionData } from './models';
+import mocks, { Mocks, productionData } from './models';
 import Axios, { AxiosResponse } from 'axios';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
-type fetchApis = { [fetchApiName in keyof IFetchAPIs]: (callback?: (msg: any) => any) => Promise<AxiosResponse> };
+type FetchApis = {
+  [K in keyof IFetchAPIs | never]: (
+    apiConfig?: {},
+    callback?: (response: AxiosResponse) => void
+  ) => Promise<AxiosResponse>
+}
 
-const fetchApis: fetchApis = {};
+let fetchApis: FetchApis = {};
 
 /**
  * 处理websocket长链接
  * @param config
  * @param fetchApi
+ * @param apiConfig
  * @param callback
  */
 function fetchWebSocket(
   config: IConfig,
   fetchApi: IFetchAPI,
+  apiConfig: any,
   callback?: (axiosResponse: AxiosResponse) => void
 ): Promise<ReconnectingWebSocket> {
   return new Promise((resolve, reject) => {
@@ -24,17 +32,17 @@ function fetchWebSocket(
     // 检查是否在api中配置了完整的websocket URL
     // 如果是完整地websocket URL，则不再拼接URL
     if (fetchApi.url.includes('ws://') || fetchApi.url.includes('wss://')) {
-      ws = new ReconnectingWebSocket(fetchApi.url);
+      ws = new ReconnectingWebSocket(fetchApi.url, '', apiConfig);
     } else {
       // 拼接URL并实例化websocket
-      const protocol = config.protocol === EProtocal.HTTP ? 'ws://' : 'wss://';
-      ws = new ReconnectingWebSocket(protocol + config.host + ':' + config.port + fetchApi.url);
+      const protocols = config.protocol === EProtocal.HTTP ? 'ws://' : 'wss://';
+      ws = new ReconnectingWebSocket(config.host + ':' + config.port + fetchApi.url, protocols, apiConfig);
     }
 
     ws.onopen = () => resolve(ws);
     ws.onerror = reject;
     ws.onmessage = (messageEvent: MessageEvent) => {
-      callback && callback(<AxiosResponse<ReconnectingWebSocket>>{ data: JSON.parse(messageEvent.data) });
+      callback && callback(<AxiosResponse<ReconnectingWebSocket>>{data: JSON.parse(messageEvent.data)});
     };
   });
 }
@@ -43,13 +51,19 @@ function fetchWebSocket(
  * 处理请求的方式
  * @param fetchApi
  * @param config
+ * @param apiConfig
  * @param callback
  */
-async function fetchMethod(fetchApi: IFetchAPI, config: IConfig, callback?: (msg: any) => any): Promise<AxiosResponse> {
+async function fetchMethod(fetchApi: IFetchAPI, config: IConfig, apiConfig: any, callback?: (msg: any) => any): Promise<AxiosResponse> {
+  if (_.isFunction(apiConfig)) {
+    [apiConfig, callback] = [callback, apiConfig];
+    apiConfig = {};
+  }
+
   // 如果开启了mock，并且这个接口是一个websocket长链接，使用REST API接口来替代websocket，便于mockjs拦截并返回mock数据
   if (fetchApi.isWebsocket && !(config.mock || fetchApi.forceMock)) {
-    const ws = await fetchWebSocket(config, fetchApi, callback);
-    return <AxiosResponse<ReconnectingWebSocket>>{ data: ws };
+    const ws = await fetchWebSocket(config, fetchApi, apiConfig, callback);
+    return <AxiosResponse<ReconnectingWebSocket>>{data: ws};
   } else {
     // 开启mock时不用拼接url
     let protocol = '';
@@ -60,10 +74,10 @@ async function fetchMethod(fetchApi: IFetchAPI, config: IConfig, callback?: (msg
 
     // 根据配置的REST API method来发送请求
     if (!fetchApi.method || fetchApi.method === EMethod.GET) {
-      return Axios.get(protocol + fetchApi.url);
+      return Axios.get(protocol + fetchApi.url, apiConfig);
     }
 
-    return Axios.post(protocol + fetchApi.url);
+    return Axios.post(protocol + fetchApi.url, apiConfig);
   }
 }
 
@@ -72,7 +86,7 @@ async function fetchMethod(fetchApi: IFetchAPI, config: IConfig, callback?: (msg
  * @param mocks
  * @param apis
  */
-const fetchApi = (mocks: mocks, apis: IFetchAPIs) => (config: IConfig) => {
+const fetchApi = (mocks: Mocks, apis: IFetchAPIs) => (config: IConfig) => {
   Object.keys(apis).forEach(fetchApi => {
     // 检测mock开关
     if (config.mock || apis[fetchApi].forceMock) {
@@ -82,7 +96,7 @@ const fetchApi = (mocks: mocks, apis: IFetchAPIs) => (config: IConfig) => {
       }
     }
 
-    fetchApis[fetchApi] = (callback?) => fetchMethod(apis[fetchApi], config, callback);
+    fetchApis[fetchApi] = (apiConfig?: {}, callback?: (response: AxiosResponse) => void) => fetchMethod(apis[fetchApi], config, apiConfig, callback);
   });
 
   return fetchApis;
