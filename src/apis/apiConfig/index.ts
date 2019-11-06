@@ -1,3 +1,12 @@
+/**
+ * @Author: Oceanxy
+ * @Email: xieyang@zwlbs.com
+ * @Description: api请求配置
+ * @Date: 2019-11-06 10:33:00
+ * @LastModified: Oceanxy
+ * @LastModifiedTime: 2019-11-06 10:33:00
+ */
+
 export interface IFetchAPINames {
   [fetchApiName: string]: IFetchAPI;
 }

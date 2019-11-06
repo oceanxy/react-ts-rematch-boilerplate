@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2019-10-17 10:04:40
  */
 
-import { IFetchAPIs } from '@/mock/apis';
+import { IFetchAPIs } from '@/apis/apiConfig';
 import { mock } from 'mockjs';
 
 export type Mocks = {

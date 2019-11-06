@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
-import { beforeRouter } from '@/router';
+import { beforeRouter } from '@/utils/router';
 
 const renderRoutes = (routes: any, authed: boolean, authPath = '/login', extraProps = {}, switchProps = {}) =>
   routes ? (

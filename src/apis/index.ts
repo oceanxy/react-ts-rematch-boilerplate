@@ -1,7 +1,16 @@
+/**
+ * @Author: Oceanxy
+ * @Email: xieyang@zwlbs.com
+ * @Description: 生成接口请求函数
+ * @Date: 2019-11-06 10:31:45
+ * @LastModified: Oceanxy
+ * @LastModifiedTime: 2019-11-06 10:31:45
+ */
+
 import { EProtocal, IConfig } from '@/config';
 import * as _ from 'lodash';
-import apis, { EMethod, IFetchAPI, IFetchAPIs } from './apis';
-import mocks, { Mocks, productionData } from './models';
+import apis, { EMethod, IFetchAPI, IFetchAPIs } from './apiConfig';
+import mocks, { Mocks, productionData } from './mock';
 import Axios, { AxiosResponse } from 'axios';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
@@ -55,6 +64,8 @@ function fetchWebSocket(
  * @param callback
  */
 async function fetchMethod(fetchApi: IFetchAPI, config: IConfig, apiConfig: any, callback?: (msg: any) => any): Promise<AxiosResponse> {
+  // 处理参数
+  // 当apiConfig和callback两者只传入其一时，检测这个传入参数的类型，并做相应的值转换
   if (_.isFunction(apiConfig)) {
     [apiConfig, callback] = [callback, apiConfig];
     apiConfig = {};
@@ -92,10 +103,12 @@ const fetchApi = (mocks: Mocks, apis: IFetchAPIs) => (config: IConfig) => {
     if (config.mock || apis[fetchApi].forceMock) {
       // 检测是否是websocket长链接且url是否是一个完整的websocket协议
       if (!apis[fetchApi].url.includes('ws://') && !apis[fetchApi].url.includes('wss://')) {
+        // 生成mock数据
         productionData(mocks, apis, fetchApi);
       }
     }
 
+    // 返回包含调用api的函数的对象
     fetchApis[fetchApi] = (apiConfig?: {}, callback?: (response: AxiosResponse) => void) => fetchMethod(apis[fetchApi], config, apiConfig, callback);
   });
 
@@ -103,5 +116,4 @@ const fetchApi = (mocks: Mocks, apis: IFetchAPIs) => (config: IConfig) => {
 };
 
 export const initFetchApi = fetchApi(mocks, apis);
-
 export default fetchApis;

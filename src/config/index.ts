@@ -1,7 +1,7 @@
 /**
  * @Author: Oceanxy
  * @Email: xieyang@zwlbs.com
- * @Description: 平台全局属性配置
+ * @Description: 全局属性配置
  * @Date: 2019-10-16 10:57:25
  * @LastModified: Oceanxy
  * @LastModifiedTime: 2019-10-16 10:57:25

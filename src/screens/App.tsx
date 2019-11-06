@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import routes from './router';
-import renderRoutes from './utils/renderRouters';
+import routes from '../utils/router';
+import renderRoutes from '../utils/renderRouters';
 import { BrowserRouter, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { store } from './store';
+import { store } from '@/store';
 import './style.scss';
 
 ReactDOM.render(
