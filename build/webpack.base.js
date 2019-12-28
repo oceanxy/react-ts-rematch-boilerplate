@@ -20,7 +20,7 @@ const webpackConfig = {
 if (bundleAnalyzerReport) {
   webpackConfig.plugins.push(new BundleAnalyzerPlugin({
     analyzerMode: 'static',
-    openAnalyzer: false,
+    openAnalyzer: true,
     reportFilename: path.join(config.assetsRoot, './report.html')
   }));
 }

@@ -7,15 +7,18 @@
  * @LastModifiedTime: 2019-11-06 10:34:15
  */
 
-import { AxiosResponse } from 'axios';
 import fetchApis from '@/apis';
 import { ModelConfig } from '@rematch/core';
+import { APIResponse } from '@/interfaces/api/mock';
 
 export const test: ModelConfig = {
   state: {
     count: 0,
-    data: {},
-    websocketData: -1
+    listData: {},
+    websocketData: {
+      name: 'websocket',
+      value: '获取服务器时间中...'
+    }
   },
   reducers: {
     increment: (state: {count: number}) => {
@@ -26,10 +29,10 @@ export const test: ModelConfig = {
         count: count + 1
       };
     },
-    updateData: (state: any, data: {}) => {
+    updateListData: (state: any, data: {}) => {
       return {
         ...state,
-        data
+        listData: data
       };
     },
     updateWebSocketData: (state: any, websocketData: {}) => {
@@ -44,17 +47,18 @@ export const test: ModelConfig = {
       await new Promise(resolve => setTimeout(resolve, 1000));
       this.increment();
     },
-    async getData() {
+    async getListData() {
       const {data} = await fetchApis.fetchTest();
-      this.updateData(data.data);
+      this.updateListData(data.data);
     },
-    getWebSocketData() {
-      fetchApis.fetchTestWebsocket((axiosResponse: AxiosResponse) => {
-        this.updateWebSocketData(axiosResponse.data);
+    async getWebSocketData() {
+      await fetchApis.fetchTestWebsocket((response: APIResponse) => {
+        this.updateWebSocketData(response.data);
       });
     },
     async deleteData(id: string) {
-      return await fetchApis.deleteData({id});
+      const {data} = await fetchApis.deleteData({id});
+      return data.data;
     }
   }
 };

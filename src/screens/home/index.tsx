@@ -1,9 +1,18 @@
+/**
+ * @Author: Oceanxy
+ * @Email: xieyang@zwlbs.com
+ * @Description: 主页
+ * @Date: 2019-12-28 15:03:33
+ * @LastModified: Oceanxy
+ * @LastModifiedTime: 2019-12-28 15:03:33
+ */
+
 import React from 'react';
-import { Routes } from '@/interfaces/router/Router';
 import Logo from '@/screens/home/react-logo.svg';
 import './index.scss';
+import { RouteComponentProps } from 'react-router-dom';
 
-export default (routes: Routes) => {
+export default (routes: RouteComponentProps) => {
   return (
     <div className="App">
       <header className="App-header">

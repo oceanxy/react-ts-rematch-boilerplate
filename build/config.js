@@ -8,6 +8,7 @@ module.exports = {
   productionJsSourceMap: false,
 
   devServer: {
+    openPage: 'clbs/intercom',
     port: 3001,
     host: 'localhost',
     contentBase: path.join(__dirname, '../public'),
