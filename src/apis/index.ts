@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2019-12-28 09:09:56
  */
 
-import config, { EHTTPMethod, EProtocal } from '@/config';
+import config from '@/config';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { IFetchAPI, WebsocketCallback } from '@/interfaces/api';
 import apis, { APIRequestConfig } from '@/apis/api';
@@ -15,6 +15,7 @@ import mocks, { Mocks, productionData } from './mock';
 import Axios, { AxiosResponse } from 'axios';
 import { APIResponse, IPolling } from '@/interfaces/api/mock';
 import _ from 'lodash';
+import { EProtocal, EHTTPMethod } from '@/interfaces/config';
 
 export type APIName =
   'fetchTest' |

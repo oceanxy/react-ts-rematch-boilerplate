@@ -11,7 +11,7 @@ import React from 'react';
 import { Route, Redirect, Switch, RouteComponentProps } from 'react-router-dom';
 import { SwitchProps } from 'react-router-dom';
 import { beforeRouter } from '@/config/router';
-import { IRouteProps } from '@/interfaces/router';
+import { IRouteProps, Routes } from '@/interfaces/router';
 import config from '@/config';
 
 /**
@@ -23,7 +23,7 @@ import config from '@/config';
  * @param [switchProps] {SwitchProps} 需要传给react-router库的Switch组件的props属性
  */
 const renderRoutes = (
-  routes: IRouteProps[],
+  routes: Routes,
   authenticated?: boolean,
   authenticationPath?: string,
   extraProps?: React.ComponentType,
@@ -36,7 +36,7 @@ const renderRoutes = (
   return routes ? (
     <Switch {...switchProps}>
       {
-        routes.map((route: IRouteProps, i: number) => (
+        Object.values(routes).map((route, i: number) => (
           <Route
             key={`react-route-${i}`}
             path={route.path}

@@ -7,8 +7,8 @@
  * @LastModifiedTime: 2019-12-26 17:03:14
  */
 
-import { EHTTPMethod, EProtocal } from '@/config';
 import { APIResponse } from '@/interfaces/api/mock';
+import { EHTTPMethod, EProtocal } from '@/interfaces/config';
 
 export type WebsocketCallback = (response: APIResponse) => void
 

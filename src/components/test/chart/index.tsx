@@ -161,6 +161,7 @@ const TestChart = (props: any) => {
 
   return (
     <div className='test-chart'>
+      <span>ECharts测试：</span>
       <ReactEcharts option={option} />
     </div>
   );

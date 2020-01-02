@@ -8,11 +8,12 @@
  */
 
 import React from 'react';
-import Logo from '@/screens/home/react-logo.svg';
+import Logo from '@/pages/home/react-logo.svg';
+import { NavLink } from 'react-router-dom';
+import { routePath } from '@/config/router';
 import './index.scss';
-import { RouteComponentProps } from 'react-router-dom';
 
-export default (routes: RouteComponentProps) => {
+export default () => {
   return (
     <div className="App">
       <header className="App-header">
@@ -21,8 +22,9 @@ export default (routes: RouteComponentProps) => {
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
         <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
+          React官网
         </a>
+        <NavLink to={routePath.test} className='App-link'>进入功能测试页面</NavLink>
       </header>
     </div>
   );

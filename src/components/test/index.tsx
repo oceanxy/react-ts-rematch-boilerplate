@@ -12,6 +12,7 @@ import TestList from '@/components/test/list';
 import TestWebSocket from '@/components/test/websocket';
 import React from 'react';
 import TestChart from '@/components/test/chart';
+import Nav from '@/components/UI/nav';
 
 const TestContainer = (props: {
   test: {count: any; listData: any; websocketData: any};
@@ -22,6 +23,7 @@ const TestContainer = (props: {
 }) => {
   return (
     <>
+      <Nav />
       <Increment count={props.test.count} increment={props.increment} incrementAsync={props.incrementAsync} />
       <TestList data={props.test.listData} getData={props.getListData} />
       <TestWebSocket data={props.test.websocketData} getData={props.getWebSocketData} />

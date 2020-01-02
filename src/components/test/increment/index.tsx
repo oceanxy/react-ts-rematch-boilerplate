@@ -6,6 +6,7 @@ export default (props: any) => {
 
   return (
     <div>
+      <span>同步/异步事件测试：</span>
       <h2>
         当前数字：<b className="count">{count}</b>
       </h2>
