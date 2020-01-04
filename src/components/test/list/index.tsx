@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './index.scss';
 
 const TestList = (props: any) => {
-  const {data, getData} = props;
+  const { data, getData } = props;
 
   useEffect(() => {
     getData();
@@ -10,18 +10,16 @@ const TestList = (props: any) => {
 
   return (
     <div>
-      <div>数据列表测试：</div>
-      {
-        data &&
+      <div>数据列表测试：(已开启forceMock)</div>
+      {data &&
         data.child &&
-        data.child.map((d: {value: number; name: string}, index: number) => {
+        data.child.map((d: { value: number; name: string }, index: number) => {
           return (
             <div key={index} className="test">
               {d.name} {d.value}
             </div>
           );
-        })
-      }
+        })}
     </div>
   );
 };

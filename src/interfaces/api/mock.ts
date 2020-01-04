@@ -14,19 +14,21 @@ export interface APIResponse {
   /**
    * 服务器状态码
    */
-  code: number
+  code: number;
   /**
    * 服务器消息
    */
-  msg: string
+  msg: string;
   /**
    * 服务器返回数据集
    */
-  data: any
+  data: any;
 }
 
 // 轮询对象
 export interface IPolling {
-  // 关闭轮询的方法
-  close: () => void
+  // 关闭轮询
+  close: () => void;
+  // 重新启动轮询
+  reconnect: () => void;
 }

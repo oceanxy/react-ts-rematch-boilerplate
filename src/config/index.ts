@@ -17,7 +17,9 @@ const config: IConfig = {
   port: 3001,
   host: 'localhost',
   basename: '/clbs/intercom',
-  mock: false
+  mock: true,
+
+  mapKey: '3018bf7f400b01e710642d798b80eaf1'
 };
 
 export default config;

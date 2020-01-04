@@ -9,8 +9,11 @@ module.exports = {
 
   devServer: {
     openPage: 'clbs/intercom',
-    port: 3001,
     host: 'localhost',
+
+    // host: '192.168.110.69',
+
+    port: 3001,
     contentBase: path.join(__dirname, '../public'),
     watchContentBase: true,
     publicPath: '/',

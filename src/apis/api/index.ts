@@ -9,10 +9,19 @@
 
 import { APIName } from '@/apis';
 import { IFetchAPI } from '@/interfaces/api';
+import { APIResponse, IPolling } from '@/interfaces/api/mock';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 
 export type APIRequestConfig = {
-  [K in APIName]: IFetchAPI
-}
+  [K in APIName]: IFetchAPI;
+};
+
+export type FetchApis = {
+  [K in keyof APIRequestConfig]: (
+    data?: any,
+    callback?: (response: APIResponse) => void
+  ) => Promise<APIResponse & ReconnectingWebSocket & IPolling>;
+};
 
 /**
  * API接口请求配置
@@ -32,6 +41,9 @@ const apis: APIRequestConfig = {
   },
   deleteData: {
     url: '/testDelete'
+  },
+  fetchECharts: {
+    url: '/testECharts'
   }
 };
 

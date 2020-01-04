@@ -9,7 +9,7 @@
 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import routes, { routePath } from '@/config/router';
+import routes, { routesMap } from '@/config/router';
 import './index.scss';
 
 /**
@@ -17,7 +17,9 @@ import './index.scss';
  */
 const Nav = () => {
   return (
-    <NavLink to={routePath.home} className='nav-item'>{routes.home.title}</NavLink>
+    <NavLink to={routesMap.home} className="nav-item">
+      {routes.home.title}
+    </NavLink>
   );
 };
 

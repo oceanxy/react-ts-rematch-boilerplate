@@ -18,7 +18,8 @@ const mapDispatch = (dispatch: Dispatch): any => ({
   increment: dispatch.test.increment,
   incrementAsync: dispatch.test.incrementAsync,
   getListData: dispatch.test.getListData,
-  getWebSocketData: dispatch.test.getWebSocketData
+  getWebSocketData: dispatch.test.getWebSocketData,
+  getEChartsData: dispatch.test.getEChartsData
 });
 
 export default connect(

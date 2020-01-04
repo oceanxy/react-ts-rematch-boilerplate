@@ -11,18 +11,19 @@ import fetchApis from '@/apis';
 import { ModelConfig } from '@rematch/core';
 import { APIResponse } from '@/interfaces/api/mock';
 
-export const test: ModelConfig = {
+const test = <ModelConfig>{
   state: {
     count: 0,
     listData: {},
     websocketData: {
       name: 'websocket',
       value: '获取服务器时间中...'
-    }
+    },
+    eChartsData: []
   },
   reducers: {
-    increment: (state: {count: number}) => {
-      const {count} = state || {count: 0};
+    increment: (state: { count: number }) => {
+      const { count } = state || { count: 0 };
 
       return {
         ...state,
@@ -40,6 +41,12 @@ export const test: ModelConfig = {
         ...state,
         websocketData
       };
+    },
+    updateEChartsData: (state: any, data) => {
+      return {
+        ...state,
+        eChartsData: data
+      };
     }
   },
   effects: {
@@ -48,17 +55,23 @@ export const test: ModelConfig = {
       this.increment();
     },
     async getListData() {
-      const {data} = await fetchApis.fetchTest();
+      const { data } = await fetchApis.fetchTest();
       this.updateListData(data.data);
     },
     async getWebSocketData() {
-      await fetchApis.fetchTestWebsocket((response: APIResponse) => {
+      return await fetchApis.fetchTestWebsocket((response: APIResponse) => {
         this.updateWebSocketData(response.data);
       });
     },
+    async getEChartsData() {
+      let { data } = await fetchApis.fetchECharts();
+      this.updateEChartsData(data.data);
+    },
     async deleteData(id: string) {
-      const {data} = await fetchApis.deleteData({id});
+      const { data } = await fetchApis.deleteData({ id });
       return data.data;
     }
   }
 };
+
+export { test };

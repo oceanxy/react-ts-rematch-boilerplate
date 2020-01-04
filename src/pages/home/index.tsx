@@ -10,7 +10,7 @@
 import React from 'react';
 import Logo from '@/pages/home/react-logo.svg';
 import { NavLink } from 'react-router-dom';
-import { routePath } from '@/config/router';
+import { routesMap } from '@/config/router';
 import './index.scss';
 
 export default () => {
@@ -19,12 +19,14 @@ export default () => {
       <header className="App-header">
         <Logo className="App-logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          Edit <code>src/pages/home/index.tsx</code> and save to reload.
         </p>
         <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
           React官网
         </a>
-        <NavLink to={routePath.test} className='App-link'>进入功能测试页面</NavLink>
+        <NavLink to={routesMap.test} className="App-link">
+          进入功能测试页面
+        </NavLink>
       </header>
     </div>
   );

@@ -9,13 +9,9 @@
 
 import loadable from '@loadable/component'; // 按需加载
 import config from '@/config/index';
-import { IRouteProps, RoutePath, Routes } from '@/interfaces/router';
+import { IRouteProps, RoutesMap, Routes } from '@/interfaces/router';
 
-export type RouteName =
-  'login' |
-  'home' |
-  'test' |
-  'notFound'
+export type RouteName = 'login' | 'home' | 'test' | 'notFound';
 
 /**
  * 路由配置
@@ -61,19 +57,19 @@ export function beforeRouter(route: IRouteProps) {
 /**
  * 处理路由中的 '//' 为 '/'
  */
-const routes = <Routes>Object.fromEntries(Object.entries(routesConfig).map(([routeName, route]) => {
-  // 检测路由中的'//'，并替换为'/'
-  if (route.path && !Array.isArray(route.path)) {
-    route.path = route.path.replace('//', '/');
-  }
+const routes = <Routes>Object.fromEntries(
+  Object.entries(routesConfig).map(([routeName, route]) => {
+    // 检测路由中的'//'，并替换为'/'
+    if (route.path && !Array.isArray(route.path)) {
+      route.path = route.path.replace('//', '/');
+    }
 
-  return [routeName, route];
-}));
+    return [routeName, route];
+  })
+);
 
-export const routePath = <RoutePath>Object.fromEntries(
-  Object.entries(routes).map(
-    ([routeName, route]) => [routeName, route.path]
-  )
+export const routesMap = <RoutesMap>(
+  Object.fromEntries(Object.entries(routes).map(([routeName, route]) => [routeName, route.path]))
 );
 
 export default routes;
