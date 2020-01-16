@@ -1,0 +1,22 @@
+.inter-plat-intercom-container {
+  position: fixed;
+  right: 460px;
+  top: 700px;
+  z-index: 2;
+
+  .inter-plat-intercom-content {
+    .inter-plat-intercom-member {
+      display: flex;
+      width: 280px;
+      flex-wrap: wrap;
+      box-shadow: rgba(82, 169, 255, 0.24) 0 0 12px 3px inset;
+      padding: 20px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .inter-plat-intercom-button-container {
+      display: flex;
+    }
+  }
+}

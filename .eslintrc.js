@@ -19,7 +19,6 @@ module.exports = {
   'globals': {
     'window': true,
     'document': true
-    // "wx": "readonly"
   },
   'extends': [
     // 'prettier',

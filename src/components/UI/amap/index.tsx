@@ -7,24 +7,36 @@
  * @LastModifiedTime: 2020-01-04 11:43:57
  */
 
-import React, { CSSProperties } from 'react';
-import { Map } from 'react-amap';
+// @ts-ignore
+// eslint-disable-next-line import/extensions,import/no-unresolved
+import AMap from 'AMap';
+import React, { CSSProperties, useEffect, useRef } from 'react';
 import './index.scss';
 
 export interface IMap {
   mapKey: string;
-  style: CSSProperties;
+  style?: CSSProperties;
 }
 
 /**
- * 导航菜单组件
+ * 地图组件
  */
-const AMap = (props: IMap) => {
-  return (
-    <div className="map-container" style={props.style}>
-      <Map amapkey={props.mapKey} mapStyle="amap://styles/grey" />
-    </div>
-  );
+const ZWMap = (props: IMap) => {
+  const mapRef = useRef(null);
+
+  useEffect(() => {
+    if (mapRef.current) {
+      const map = new AMap.Map('mapContainer', {
+        viewMode: '3D',
+        pitch: 50,
+        zoom: 14
+      });
+
+      map.setMapStyle('amap://styles/grey');
+    }
+  });
+
+  return <div id="mapContainer" className="map-container" ref={mapRef} />;
 };
 
-export default AMap;
+export default ZWMap;

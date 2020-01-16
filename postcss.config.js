@@ -5,8 +5,8 @@ module.exports = {
       utf8: false
     },
     'postcss-px-to-viewport': {
-      viewportWidth: 750,
-      viewportHeight: 1334,
+      viewportWidth: 1920,
+      viewportHeight: 1080,
       unitPrecision: 3,
       viewportUnit: 'vw',
       selectorBlackList: ['.ignore', '.hairlines'],

@@ -27,6 +27,10 @@ export type RoutesMap = { [K in RouteName]: string };
  */
 export interface IRouteProps extends RouteProps {
   /**
+   * 配置该路由是否显示
+   */
+  show?: boolean;
+  /**
    * 路由标题（document.title）
    */
   title?: string;
@@ -34,4 +38,8 @@ export interface IRouteProps extends RouteProps {
    * 需要身份验证才能加载此路由（一般是登录权限）
    */
   requireAuth?: boolean;
+  /**
+   * 访问路由的路径
+   */
+  path: string;
 }

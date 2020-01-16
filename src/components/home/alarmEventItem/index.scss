@@ -1,0 +1,32 @@
+.event-alarm-item {
+  padding: 4px 0;
+  transition: all .4s;
+  cursor: pointer;
+
+  .info {
+    display: flex;
+
+    .status {
+      display: flex;
+      justify-content: flex-end;
+      flex: 1;
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .time {
+    font-size: 12.2px;
+    margin-left: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-top: 6px;
+  }
+
+  & + .event-alarm-item{
+    margin-top: 3px;
+  }
+}

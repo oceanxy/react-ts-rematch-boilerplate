@@ -7,14 +7,15 @@
  * @LastModifiedTime: 2020-01-02 17:18:35
  */
 
-import React from 'react';
+import TestChart from '@/components/test/chart';
 import Increment from '@/components/test/increment';
 import TestList from '@/components/test/list';
 import TestWebSocket from '@/components/test/websocket';
-import TestChart from '@/components/test/chart';
+import ZWMap from '@/components/UI/amap';
 import Nav from '@/components/UI/nav';
-import AMap from '@/components/UI/amap';
 import config from '@/config';
+import routes, { routesMap } from '@/config/router';
+import React from 'react';
 import './index.scss';
 
 const TestContainer = (props: {
@@ -27,12 +28,12 @@ const TestContainer = (props: {
 }) => {
   return (
     <div className="test-color">
-      <Nav />
+      <Nav title={routes.home.title} to={routesMap.home} />
       <Increment count={props.test.count} increment={props.increment} incrementAsync={props.incrementAsync} />
       <TestList data={props.test.listData} getData={props.getListData} />
       <TestWebSocket data={props.test.websocketData} getData={props.getWebSocketData} />
       <TestChart data={props.test.eChartsData} getData={props.getEChartsData} />
-      <AMap mapKey={config.mapKey} style={{ width: '100%', height: '100%', position: 'fixed', top: 0, zIndex: -1 }} />
+      <ZWMap mapKey={config.mapKey} style={{ width: '100%', height: '100%', position: 'fixed', top: 0, zIndex: -1 }} />
     </div>
   );
 };

@@ -1,0 +1,65 @@
+/**
+ * @Author: Oceanxy
+ * @Email: xieyang@zwlbs.com
+ * @Description: 样式化组件集合
+ * @Date: 2020-01-10 15:26:53
+ * @LastModified: Oceanxy（xieyang@zwlbs.com）
+ * @LastModifiedTime: 2020-01-14 16:14:03
+ */
+import { px2vw } from '@/utils/helper';
+import { css } from 'styled-components';
+
+const styledComponents = {
+  subtitle: css`
+    color: #e4f2ff;
+    font-size: ${px2vw(14.44)};
+    text-shadow: #2e72ab 0 0 ${px2vw(7)};
+  `,
+  tabTitle: css`
+    color: #e4f2ff;
+    font-size: ${px2vw(12)};
+    border-bottom: 2px solid transparent;
+    padding: 3px 0;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      text-shadow: #2e72ab 0 0 ${px2vw(7)};
+    }
+  `,
+  tabTitleActive: css`
+    color: #e4f2ff;
+    font-size: ${px2vw(12)};
+    text-shadow: #2e72ab 0 0 ${px2vw(7)};
+    border-bottom: 2px solid #2d4874;
+    padding: 3px 0;
+    cursor: pointer;
+  `,
+  centerTitle: css`
+    border-bottom: 1px solid #4e84c0;
+    padding: ${px2vw(5)} ${px2vw(12)};
+    color: #e4f2ff;
+    font-size: ${px2vw(14.44)};
+  `,
+  marginTop20: css`
+    margin-top: 20px;
+  `,
+  marginBottom10: css`
+    margin-bottom: 10px;
+  `,
+  highlight: css`
+    color: #ccb726;
+  `,
+  flexNone: css`
+    flex: none;
+  `,
+  flex1: css`
+    flex: 1;
+  `,
+  justifyContent: css`
+    justify-content: center;
+  `
+} as const;
+
+export type IStyledComponent = typeof styledComponents;
+export default styledComponents;

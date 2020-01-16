@@ -7,11 +7,12 @@
  * @LastModifiedTime: 2020-01-02 15:15:48
  */
 
-import loadable from '@loadable/component'; // 按需加载
 import config from '@/config/index';
-import { IRouteProps, RoutesMap, Routes } from '@/interfaces/router';
+import { IRouteProps, Routes, RoutesMap } from '@/interfaces/router';
+import loadable from '@loadable/component';
+import _ from 'lodash'; // 按需加载
 
-export type RouteName = 'login' | 'home' | 'test' | 'notFound';
+export type RouteName = 'login' | 'home' | 'home2' | 'test' | 'notFound';
 
 /**
  * 路由配置
@@ -24,10 +25,17 @@ const routesConfig: Routes = {
     title: '登录'
   },
   home: {
+    show: true,
     path: config.basename,
     exact: true,
     component: loadable(() => import('@/pages/home')),
-    title: '首页'
+    title: '指挥调度'
+  },
+  home2: {
+    show: true,
+    path: `${config.basename}/home2`,
+    exact: true,
+    title: '数据管理'
   },
   test: {
     path: `${config.basename}/test`,
@@ -55,9 +63,10 @@ export function beforeRouter(route: IRouteProps) {
 }
 
 /**
- * 处理路由中的 '//' 为 '/'
+ * 路由配置对象
  */
 const routes = <Routes>Object.fromEntries(
+  // 处理路由中的 '//' 为 '/'
   Object.entries(routesConfig).map(([routeName, route]) => {
     // 检测路由中的'//'，并替换为'/'
     if (route.path && !Array.isArray(route.path)) {
@@ -71,5 +80,12 @@ const routes = <Routes>Object.fromEntries(
 export const routesMap = <RoutesMap>(
   Object.fromEntries(Object.entries(routes).map(([routeName, route]) => [routeName, route.path]))
 );
+
+// eslint-disable-next-line consistent-return
+export const renderRoutes = Object.values(routes).map(route => {
+  if (route && !_.isArray(route) && route.show) {
+    return route;
+  }
+});
 
 export default routes;

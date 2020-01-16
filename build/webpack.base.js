@@ -6,17 +6,19 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InterpolateHtmlPlugin = require('interpolate-html-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default;
 const config = require('./config');
 const getClientEnvironment = require('./env');
 
 const APP_PATH = path.resolve(__dirname, '../src');
-
 const bundleAnalyzerReport = argv.report;
 const env = getClientEnvironment(config.publicPath);
+const styledComponentsTransformer = createStyledComponentsTransformer();
 
 const webpackConfig = {
   plugins: []
 };
+
 if (bundleAnalyzerReport) {
   webpackConfig.plugins.push(new BundleAnalyzerPlugin({
     analyzerMode: 'static',
@@ -40,7 +42,7 @@ module.exports = merge(webpackConfig, {
     rules: [
       {
         enforce: 'pre',
-        test: /\.ts[x]?$/,
+        test: /\.[jt]sx?$/,
         exclude: /node_modules/,
         include: [APP_PATH],
         loader: 'eslint-loader',
@@ -57,7 +59,7 @@ module.exports = merge(webpackConfig, {
             loader: 'html-loader'
           },
           {
-            test: /\.([jt])s[x]?$/,
+            test: /\.[jt]sx?$/,
             include: APP_PATH,
             exclude: /node_modules/,
             use: [
@@ -67,7 +69,8 @@ module.exports = merge(webpackConfig, {
               {
                 loader: 'awesome-typescript-loader',
                 options: {
-                  silent: true
+                  silent: true,
+                  getCustomTransformers: () => ({before: [styledComponentsTransformer]})
                 }
               }
             ]
@@ -75,7 +78,7 @@ module.exports = merge(webpackConfig, {
           {
             test: /\.(scss|css)$/,
             use: [
-              { loader: 'style-loader' },
+              {loader: 'style-loader'},
               {
                 loader: 'css-loader',
                 options: {
@@ -103,7 +106,7 @@ module.exports = merge(webpackConfig, {
             }
           },
           {
-            exclude: [/\.(js|mjs|ts|tsx|less|css|jsx)$/, /\.html$/, /\.json$/],
+            exclude: [/\.(js|mjs|ts|tsx|scss|css|jsx)$/, /\.html$/, /\.json$/],
             loader: 'file-loader',
             options: {
               name: 'media/[path][name].[hash:8].[ext]',
@@ -116,7 +119,7 @@ module.exports = merge(webpackConfig, {
     ]
   },
   resolve: {
-    extensions: ['.js', '.json', '.jsx', '.ts', '.tsx'],
+    extensions: ['.js', '.json', '.jsx', '.ts', '.tsx', '.scss', '.css'],
     alias: {
       '@': path.resolve(__dirname, '../src/')
     }

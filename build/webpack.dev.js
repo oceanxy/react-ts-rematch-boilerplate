@@ -14,6 +14,9 @@ module.exports = merge.smart(baseWebpackConfig, {
     filename: 'js/[name].[hash:8].js',
     publicPath: config.publicPath
   },
+  externals: {
+    'AMap': true
+  },
   module: {
     rules: [
       {

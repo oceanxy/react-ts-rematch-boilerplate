@@ -1,0 +1,13 @@
+.inter-plat-temp-group-container {
+  position: fixed;
+  right: 460px;
+  top: 390px;
+  z-index: 2;
+
+  .inter-plat-temp-group-item-container {
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    padding-bottom: 10px;
+  }
+}

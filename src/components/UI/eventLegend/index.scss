@@ -1,0 +1,14 @@
+.legend-container {
+  display: flex;
+  align-items: center;
+
+  .legend-shape {
+    margin-left: 4px;
+  }
+
+  .legend-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

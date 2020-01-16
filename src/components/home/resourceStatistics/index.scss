@@ -1,0 +1,67 @@
+@import '~antd/dist/antd.css';
+
+.ant-select-selection--single {
+  height: 24px;
+  line-height: 24px;
+  margin: 0 2px;
+  background: #152c3f;
+  border: 1px solid #2d3945;
+  border-radius: 0;
+
+  &:hover {
+    border-color: #2e72ab;
+  }
+}
+
+.ant-select-selection__rendered {
+  height: 24px;
+}
+
+.ant-select-selection__placeholder {
+  height: 24px;
+  line-height: 24px;
+  top: 9px;
+  font-size: 12px;
+}
+
+.ant-select-arrow .ant-select-arrow-icon svg {
+  fill: #808d97;
+}
+
+.resource-statistics-container {
+  display: flex;
+
+  & > * {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .resource-statistics-left {
+
+    .resource-statistics-left-range {
+      display: flex;
+      font-size: 12px;
+      height: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+
+      .highlight {
+        padding-right: 4px;
+        color: #ccb726;
+      }
+
+      * + .highlight {
+        padding-left: 4px;
+      }
+    }
+  }
+
+  .resource-statistics-right {
+    .resource-statistics-right-tab {
+      display: flex;
+      margin-bottom: 4px;
+      border-bottom: 1px solid #2d4874;
+    }
+  }
+}

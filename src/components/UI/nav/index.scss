@@ -1,5 +1,19 @@
-.nav-item {
-  display: inline-block;
-  margin-bottom: 30px;
-  color: #61dafb;
+.inter-plat-nav-item {
+  color: #82a2c0;
+  font-size: 14.07px;
+  text-decoration: none;
+  padding: 0 45px;
+  border: #566e84 solid 1px;
+  border-bottom: none;
+  border-top: none;
+  transition: all .3s;
+
+  & + .inter-plat-nav-item {
+    border-left: none;
+  }
+
+  &:hover, &.active {
+    color: currentColor;
+    font-size: 17.94px;
+  }
 }
