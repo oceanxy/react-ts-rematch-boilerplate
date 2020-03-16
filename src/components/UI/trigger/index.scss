@@ -3,8 +3,9 @@
   align-items: center;
   background: rgba(11, 35, 65, 0.8);
   width: 144px;
-  padding: 4px 10px;
-  height: 24px;
+  padding: .37vh 10px;
+  height: 2.222vh;
+  overflow: hidden;
 
   * + & {
     margin-top: 10px;

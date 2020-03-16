@@ -8,7 +8,7 @@
  */
 
 import Container from '@/components/UI/container';
-import { px2vw } from '@/utils/helper';
+import { px2vh, px2vw } from '@/utils/helper';
 import * as echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
 import React from 'react';
@@ -96,7 +96,7 @@ const ResourcesAroundSuddenEventsChart = (props: IResourcesAroundSuddenEventsCha
 
   return (
     <Container className="resource-statistics-left-chart">
-      <ReactEcharts option={option} style={{ height: 160 }} />
+      <ReactEcharts option={option} style={{ height: px2vh(160) }} />
     </Container>
   );
 };

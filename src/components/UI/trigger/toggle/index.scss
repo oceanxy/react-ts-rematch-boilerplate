@@ -1,17 +1,17 @@
 .toggle-container {
-  width: 22px;
-  height: 12px;
+  width: 2.222vh;
+  height: 1.111vh;
   background: #467091;
-  border-radius: 6px;
+  border-radius: 0.556vh;
   display: flex;
   cursor: pointer;
   transition: all .3s cubic-bezier(.645, .045, .355, 1);
 
   span {
     background: rgba(231, 233, 236, 0.5);
-    width: 12px;
-    height: 12px;
-    border-radius: 6px;
+    width: 1.111vh;
+    height: 1.111vh;
+    border-radius: 0.556vh;
     transition: all .3s cubic-bezier(.645, .045, .355, 1);
   }
 

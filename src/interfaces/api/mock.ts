@@ -14,7 +14,7 @@ export interface APIResponse {
   /**
    * 服务器状态码
    */
-  code: number;
+  retCode: number;
   /**
    * 服务器消息
    */

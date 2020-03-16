@@ -17,8 +17,6 @@ import { APIResponse, IPolling } from '@/interfaces/api/mock';
 import _ from 'lodash';
 import { EProtocal, EHTTPMethod } from '@/interfaces/config';
 
-export type APIName = 'fetchTest' | 'fetchTestWebsocket' | 'fetchECharts' | 'deleteData';
-
 /**
  * 拼接URL
  * @param fetchApi {IFetchAPI} API接口请求配置

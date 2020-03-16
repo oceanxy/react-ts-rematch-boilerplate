@@ -52,7 +52,7 @@ const StyledContainer = styled.div((props: IContainer) => {
     return css`
       border: 20px solid transparent;
       border-image-source: url(${ContainerBorderImage2});
-      border-image-slice: 15 22 30 30 fill;
+      border-image-slice: 20 fill;
       border-image-repeat: round;
       ${props.styled}
     `;

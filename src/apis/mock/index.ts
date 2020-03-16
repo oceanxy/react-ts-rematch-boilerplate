@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2019-12-24 11:56:04
  */
 
-import { APIName } from '@/apis';
+import { APIName } from '@/apis/api';
 import apis, { APIRequestConfig } from '@/apis/api';
 import { mock } from 'mockjs';
 import { APIResponse } from '@/interfaces/api/mock';
@@ -40,7 +40,7 @@ export const productionData = (fetchName: keyof APIRequestConfig, isWebsocket?: 
 const mocks: Mocks = {
   // 测试接口
   fetchTest: {
-    code: 0,
+    retCode: 0,
     msg: '',
     data: {
       'name|+1': ['苹果', 'OPPO', '三星', '华为', '小米'],
@@ -55,7 +55,7 @@ const mocks: Mocks = {
   },
   // 测试websocket接口
   fetchTestWebsocket: {
-    code: 0,
+    retCode: 0,
     msg: '',
     data: {
       name: 'websocket',
@@ -64,12 +64,12 @@ const mocks: Mocks = {
   },
   // 测试删除数据接口
   deleteData: {
-    code: 0,
+    retCode: 0,
     msg: '',
     data: null
   },
   fetchECharts: {
-    code: 0,
+    retCode: 0,
     msg: '',
     data: [
       [

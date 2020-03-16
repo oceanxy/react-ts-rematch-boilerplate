@@ -6,7 +6,7 @@
  * @LastModified: Oceanxy（xieyang@zwlbs.com）
  * @LastModifiedTime: 2020-01-14 16:14:03
  */
-import { px2vw } from '@/utils/helper';
+import { px2vh, px2vw } from '@/utils/helper';
 import { css } from 'styled-components';
 
 const styledComponents = {
@@ -19,7 +19,7 @@ const styledComponents = {
     color: #e4f2ff;
     font-size: ${px2vw(12)};
     border-bottom: 2px solid transparent;
-    padding: 3px 0;
+    padding: ${px2vh(3)} 0;
     cursor: pointer;
     transition: all 0.3s;
 
@@ -32,7 +32,7 @@ const styledComponents = {
     font-size: ${px2vw(12)};
     text-shadow: #2e72ab 0 0 ${px2vw(7)};
     border-bottom: 2px solid #2d4874;
-    padding: 3px 0;
+    padding: ${px2vh(3)} 0;
     cursor: pointer;
   `,
   centerTitle: css`
@@ -42,10 +42,10 @@ const styledComponents = {
     font-size: ${px2vw(14.44)};
   `,
   marginTop20: css`
-    margin-top: 20px;
+    margin-top: ${px2vh(20)};
   `,
   marginBottom10: css`
-    margin-bottom: 10px;
+    margin-bottom: ${px2vh(10)};
   `,
   highlight: css`
     color: #ccb726;
@@ -58,6 +58,9 @@ const styledComponents = {
   `,
   justifyContent: css`
     justify-content: center;
+  `,
+  overflowAuto: css`
+    overflow-y: auto;
   `
 } as const;
 

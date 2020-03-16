@@ -4,9 +4,10 @@
  * @Description: 键值对组件
  * @Date: 2020-01-06 17:59:27
  * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-01-11 15:45:01
+ * @LastModifiedTime: 2020-01-16 14:45:35
  */
 
+import { px2vh } from '@/utils/helper';
 import React from 'react';
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
 import './index.scss';
@@ -21,7 +22,7 @@ interface IKeyValue {
 
 const StyledKeyValue = styled.div`
   text-shadow: #2e72ab 0 0 7px;
-  margin-bottom: 10px;
+  margin-bottom: ${px2vh(10)};
   ${props => props.styled};
   flex-basis: ${(props: IKeyValue) => (props.compWidth ? props.compWidth : 'auto')};
 `;

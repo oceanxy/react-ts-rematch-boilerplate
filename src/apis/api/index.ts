@@ -7,10 +7,15 @@
  * @LastModifiedTime: 2019-12-26 15:44:17
  */
 
-import { APIName } from '@/apis';
 import { IFetchAPI } from '@/interfaces/api';
 import { APIResponse, IPolling } from '@/interfaces/api/mock';
 import ReconnectingWebSocket from 'reconnecting-websocket';
+
+export type APIName =
+  'fetchTest' |
+  'fetchTestWebsocket' |
+  'fetchECharts' |
+  'deleteData';
 
 export type APIRequestConfig = {
   [K in APIName]: IFetchAPI;
