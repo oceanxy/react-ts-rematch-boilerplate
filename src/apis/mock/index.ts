@@ -7,10 +7,9 @@
  * @LastModifiedTime: 2019-12-24 11:56:04
  */
 
-import { APIName } from '@/apis/api';
-import apis, { APIRequestConfig } from '@/apis/api';
-import { mock } from 'mockjs';
+import apis, { APIName, APIRequestConfig } from '@/apis/api';
 import { APIResponse } from '@/interfaces/api/mock';
+import { mock } from 'mockjs';
 
 /**
  * mock数据集
@@ -41,7 +40,7 @@ const mocks: Mocks = {
   // 测试接口
   fetchTest: {
     retCode: 0,
-    msg: '',
+    retMsg: '',
     data: {
       'name|+1': ['苹果', 'OPPO', '三星', '华为', '小米'],
       'value|10-100': 1,
@@ -56,7 +55,7 @@ const mocks: Mocks = {
   // 测试websocket接口
   fetchTestWebsocket: {
     retCode: 0,
-    msg: '',
+    retMsg: '',
     data: {
       name: 'websocket',
       'value|1-10': 1
@@ -65,12 +64,12 @@ const mocks: Mocks = {
   // 测试删除数据接口
   deleteData: {
     retCode: 0,
-    msg: '',
+    retMsg: '',
     data: null
   },
   fetchECharts: {
     retCode: 0,
-    msg: '',
+    retMsg: '',
     data: [
       [
         [28604, 77, 17096869, 'Australia', 1990],
@@ -115,6 +114,50 @@ const mocks: Mocks = {
         [53354, 79.1, 321773631, 'United States', 2015]
       ]
     ]
+  },
+  // 事件详情
+  fetchEventDetails: {
+    retCode: 0,
+    retMsg: 'success',
+    data: {
+      // 行政区块 到区县，如"重庆市沙坪坝区"
+      'administrativeRegion': '@county',
+      // 位置
+      'eventEndAddress': '@county(true)',
+      // 事件结束时间 格式yyyy-MM-dd HH:mm:ss
+      'endTime': '@datetime',
+      // 事件持续时长 单位s
+      'eventDurationTime': 19500,
+      // 事件持续时长 x天x小时x分钟x秒
+      'eventDurationTimeStr': '5小时25分0秒',
+      // 事件等级 1：一般 2：较重 3：严重 4：特别严重
+      'eventLevel': 1,
+      // 事件名称
+      'eventName': '上班未到岗',
+      // 事件处理时长 单位s
+      'eventProcessingTime': 3892,
+      // 事件处理时长 x天x小时x分钟x秒
+      'eventProcessingTimeStr': '1小时4分52秒',
+      // 事件处理状态 0:未处理 1：处理中
+      'eventStatus': '1',
+      // 事件类型
+      'eventType': '152',
+      // 纬度
+      'latitude': '29.893485',
+      // 经度
+      'longitude': '111.730631',
+      // 监控对象ID
+      'monitorId': '@guid',
+      // 监控对象名称
+      monitorName() {
+        const p = ['皖', '京', '渝', '闽', '甘', '粤', '区', '黔', '琼', '冀', '豫', '黑', '蒙', '区', '青', '鲁', '晋', '陕', '沪', '川', '津', '藏', '新', '滇', '浙', '港', '澳'][Math.floor(Math.random() * 27)];
+        const r = mock(/[\dA-Z]{5}/);
+
+        return `${p}${r}`;
+      },
+      // 事件开始时间 格式yyyy-MM-dd HH:mm:ss
+      'startTime': '@datetime'
+    }
   }
 };
 

@@ -4,7 +4,7 @@
  * @Description: 图例组件
  * @Date: 2020-01-06 11:42:36
  * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-01-13 14:59:02
+ * @LastModifiedTime: 2020-03-20 15:52:18
  */
 
 import Container from '@/components/UI/container';
@@ -13,7 +13,7 @@ import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 import './index.scss';
 
 /**
- * 事件/任务严重程度
+ * 事件/任务严重程度颜色标识
  */
 export enum ESeverity {
   VERY = '#c50100',

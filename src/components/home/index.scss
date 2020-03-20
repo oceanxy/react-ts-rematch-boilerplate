@@ -59,15 +59,6 @@
       left: 0;
       padding: 20px 0 20px 20px;
 
-      .event-detail-container {
-        display: flex;
-        flex-wrap: wrap;
-
-        & > :last-child {
-          margin-bottom: 0;
-        }
-      }
-
       .event-button-container {
         display: flex;
         justify-content: flex-end;

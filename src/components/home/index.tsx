@@ -4,7 +4,7 @@
  * @Description: 组件组装
  * @Date: 2020-01-04 14:30:18
  * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-01-13 14:58:48
+ * @LastModifiedTime: 2020-03-20 17:24:59
  */
 
 import AlarmEventItem from '@/components/home/alarmEventItem';
@@ -22,11 +22,12 @@ import Search from '@/components/UI/search';
 import Title from '@/components/UI/title';
 import config from '@/config';
 import { renderRoutes } from '@/config/router';
+import EventDetails from '@/containers/home/eventDetails';
 import styledComponent from '@/styled';
 import React from 'react';
 import './index.scss';
 
-const Home = () => {
+const Home = (props: any) => {
   return (
     <Container className="inter-plat-app">
       <Container className="inter-plat-header">
@@ -44,7 +45,7 @@ const Home = () => {
         <Container className="inter-plat-left">
           <Title
             name="事件列表"
-            titleExtraElementStyle={{ marginLeft: 10 }}
+            titleExtraElementStyle={{marginLeft: 10}}
             titleExtraElement={
               <React.Fragment>
                 <EventLegend name="特别严重" iconColor={ESeverity.VERY} />
@@ -54,22 +55,7 @@ const Home = () => {
               </React.Fragment>
             }
           >
-            <Container theme="style1" style={{ marginTop: 10 }}>
-              <EventLegend
-                name="事件详情"
-                nameStyled={styledComponent.subtitle}
-                styled={styledComponent.marginBottom10}
-              />
-              <Container className="event-detail-container">
-                <KeyValue name="开始时间" value="2020-1-7 9:15:00" />
-                <KeyValue name="结束时间" value="2020-1-8 9:15:00" />
-                <KeyValue name="持续时长" value="12:12:00" />
-                <KeyValue name="处理时长" value="00:12:00" />
-                <KeyValue name="经纬度" value="101 345" />
-                <KeyValue name="位置" value="重庆市渝中区大坪时代天街" compWidth="100%" />
-              </Container>
-            </Container>
-
+            <EventDetails />
             <Container className="event-button-container">
               <Button name="全部" active={true} />
               <Button name="未处理" />
@@ -104,7 +90,7 @@ const Home = () => {
             <ResourceStatistics />
           </Title>
           <Title name="任务列表" styled={styledComponent.marginTop20}>
-            <Container theme="style1" style={{ marginTop: 10 }}>
+            <Container theme="style1" style={{marginTop: 10}}>
               <EventLegend
                 name="任务详情"
                 nameStyled={styledComponent.subtitle}

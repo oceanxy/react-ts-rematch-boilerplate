@@ -8,10 +8,10 @@
  */
 
 import fetchApis from '@/apis';
-import { ModelConfig } from '@rematch/core';
 import { APIResponse } from '@/interfaces/api/mock';
+import { ModelConfig } from '@rematch/core';
 
-const test = <ModelConfig>{
+const test = <ModelConfig> {
   state: {
     count: 0,
     listData: {},
@@ -22,8 +22,8 @@ const test = <ModelConfig>{
     eChartsData: []
   },
   reducers: {
-    increment: (state: { count: number }) => {
-      const { count } = state || { count: 0 };
+    increment: (state: {count: number}) => {
+      const {count} = state || {count: 0};
 
       return {
         ...state,
@@ -55,7 +55,7 @@ const test = <ModelConfig>{
       this.increment();
     },
     async getListData() {
-      const { data } = await fetchApis.fetchTest();
+      const {data} = await fetchApis.fetchTest();
       this.updateListData(data.data);
     },
     async getWebSocketData() {
@@ -64,11 +64,11 @@ const test = <ModelConfig>{
       });
     },
     async getEChartsData() {
-      let { data } = await fetchApis.fetchECharts();
+      let {data} = await fetchApis.fetchECharts();
       this.updateEChartsData(data.data);
     },
     async deleteData(id: string) {
-      const { data } = await fetchApis.deleteData({ id });
+      const {data} = await fetchApis.deleteData({id});
       return data.data;
     }
   }

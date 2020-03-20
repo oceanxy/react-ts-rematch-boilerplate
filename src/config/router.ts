@@ -21,14 +21,14 @@ const routesConfig: Routes = {
   login: {
     path: `${config.basename}/login`,
     exact: true,
-    component: loadable(() => import('@/pages/login')),
+    component: loadable(() => import('@/containers/login')),
     title: '登录'
   },
   home: {
     show: true,
     path: config.basename,
     exact: true,
-    component: loadable(() => import('@/pages/home')),
+    component: loadable(() => import('@/containers/home')),
     title: '指挥调度'
   },
   home2: {
@@ -40,7 +40,7 @@ const routesConfig: Routes = {
   test: {
     path: `${config.basename}/test`,
     exact: true,
-    component: loadable(() => import('@/pages/test')),
+    component: loadable(() => import('@/containers/test')),
     title: '脚手架功能测试',
     requireAuth: false
   },
@@ -49,7 +49,7 @@ const routesConfig: Routes = {
   notFound: {
     path: `${config.basename}/*`,
     exact: true,
-    component: loadable(() => import('@/pages/404')),
+    component: loadable(() => import('@/containers/404')),
     title: '页面找不到了-404'
   }
 };
@@ -65,7 +65,7 @@ export function beforeRouter(route: IRouteProps) {
 /**
  * 路由配置对象
  */
-const routes = <Routes>Object.fromEntries(
+const routes = <Routes> Object.fromEntries(
   // 处理路由中的 '//' 为 '/'
   Object.entries(routesConfig).map(([routeName, route]) => {
     // 检测路由中的'//'，并替换为'/'
@@ -77,7 +77,7 @@ const routes = <Routes>Object.fromEntries(
   })
 );
 
-export const routesMap = <RoutesMap>(
+export const routesMap = <RoutesMap> (
   Object.fromEntries(Object.entries(routes).map(([routeName, route]) => [routeName, route.path]))
 );
 

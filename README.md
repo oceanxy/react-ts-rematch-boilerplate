@@ -97,7 +97,7 @@ async function getData() {
 - `/src/config`：全局变量、全局类型定义、接口API约束及其他相关配置。
 - `/src/interface`：全局的typescript接口（interface）。
 - `/src/models`：rematch的model定义目录。
-- `/src/pages`：页面组装及页面数据分发。
+- `/src/container`：页面组装及页面数据分发。
 - `/src/store`：初始化rematch的全局store。
 - `/src/types`：Typescript的types定义。
 - `/src/utils`：helper及其他工具定义。

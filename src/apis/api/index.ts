@@ -12,6 +12,8 @@ import { APIResponse, IPolling } from '@/interfaces/api/mock';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
 export type APIName =
+  'fetchEventDetails' |
+  // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
   'fetchTestWebsocket' |
   'fetchECharts' |
@@ -49,6 +51,9 @@ const apis: APIRequestConfig = {
   },
   fetchECharts: {
     url: '/testECharts'
+  },
+  fetchEventDetails: {
+    url: '/clbs/web/v1/dispatch/event/details'
   }
 };
 
