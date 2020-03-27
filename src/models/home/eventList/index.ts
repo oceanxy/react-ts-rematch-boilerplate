@@ -4,14 +4,14 @@
  * @Description: 事件列表model
  * @Date: 2020-03-23 14:59:49
  * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-23 14:59:49
+ * @LastModifiedTime: 2020-03-28 00:27:38
  */
 
 import fetchApis from '@/apis';
-import { EventDetailsData, EventDetailsRequest } from '@/models/home/eventDetails';
-import { EventStatisticsData } from '@/models/home/eventStatistics';
-import { store } from '@/store';
-import { ModelConfig } from '@rematch/core';
+import {EventDetailsData, EventDetailsRequest} from '@/models/home/eventDetails';
+import {EventStatisticsData} from '@/models/home/eventStatistics';
+import {store} from '@/store';
+import {ModelConfig} from '@rematch/core';
 
 export type EventItemData = {
   monitorId: string, // 监控对象ID
@@ -37,9 +37,9 @@ export type EventListRequest = {
   isStatisticsMethodChanged?: boolean // 请求数据时，事件统计方式较上一次请求是否发生改变，即eventStatus字段是否改变
 }
 
-const eventList = <ModelConfig> {
+const eventList = <ModelConfig>{
   state: {
-    data: <EventItemData[]> [],
+    data: <EventItemData[]>[],
     curSelectedMonitorId: ''
   },
   reducers: {
@@ -59,10 +59,10 @@ const eventList = <ModelConfig> {
   effects: {
     async getData(reqPayload: EventListRequest) {
       const response = await fetchApis.fetchEventList(reqPayload);
-      const {latestEventDetails, eventStatistics, eventList}: EventData = response.data.data;
+      const {latestEventDetails, eventStatistics, eventList}: EventData = response.data;
 
       // 更新事件详情
-      if (eventList.length && !reqPayload.isStatisticsMethodChanged) {
+      if (eventList?.length && !reqPayload.isStatisticsMethodChanged) {
         store.dispatch.eventDetails.updateData(latestEventDetails);
       }
 

@@ -4,12 +4,12 @@
  * @Description: 搜索model
  * @Date: 2020-03-26 18:07:35
  * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-27 18:56:14
+ * @LastModifiedTime: 2020-03-27 21:59:58
  */
 
 import fetchApis from '@/apis';
-import { IconSource, IconSourceHover } from '@/components/UI/icon';
-import { ModelConfig } from '@rematch/core';
+import {IconSource, IconSourceHover} from '@/components/UI/icon';
+import {ModelConfig} from '@rematch/core';
 
 /**
  * 搜索条件
@@ -131,17 +131,17 @@ export interface ISearchState extends ModelConfig {
  * 监控调度对象类型与图标的映射
  * @type {{'0': IconSource; '1': IconSource; '2': IconSource; '9': IconSource; '10': IconSource}}
  */
-export const monitorTypeIcon: {[K: string]: IconSource | IconSourceHover} = {
+export const monitorTypeIcon: { [K: string]: IconSource | IconSourceHover } = {
   '0': IconSource.CAR,
   '1': IconSource.PEOPLE,
   '2': IconSource.THING,
   '9': IconSource.THING,
   '10': IconSource.PEOPLE,
-  '0_hover': IconSourceHover.CAR_HOVER,
-  '1_hover': IconSourceHover.PEOPLE_HOVER,
-  '2_hover': IconSourceHover.THING_HOVER,
-  '9_hover': IconSourceHover.THING_HOVER,
-  '10_hover': IconSourceHover.PEOPLE_HOVER
+  '0_hover': IconSourceHover.CAR,
+  '1_hover': IconSourceHover.PEOPLE,
+  '2_hover': IconSourceHover.THING,
+  '9_hover': IconSourceHover.THING,
+  '10_hover': IconSourceHover.PEOPLE
 };
 
 // 搜索组件model
@@ -154,13 +154,13 @@ const search: ISearchState = {
     updateMonitorData(state, data) {
       return {
         ...state,
-        monitorList: data
+        monitorList: data || []
       };
     },
     updateFenceData(state, data) {
       return {
         ...state,
-        fenceList: data
+        fenceList: data || []
       };
     }
   },
@@ -171,16 +171,16 @@ const search: ISearchState = {
       switch (reqPayload.condition) {
         case SearchCondition.AREA:
           response = await fetchApis.fetchSearchByArea(reqPayload.params);
-          this.updateData(response.data.data.fenceTreeNodes);
+          this.updateFenceData(response.data.fenceTreeNodes);
           break;
         case SearchCondition.POSITION:
-          response = await fetchApis.fetchSearchByMonitorName(reqPayload.params);
-          this.updateData(response.data.data.monitors);
+          // response = await fetchApis.fetchSearchByMonitorName(reqPayload.params);
+          // this.updateData(response.data.data.monitors);
           break;
         case SearchCondition.ENTITY:
         default:
           response = await fetchApis.fetchSearchByMonitorName(reqPayload.params);
-          this.updateData(response.data.data.monitors);
+          this.updateMonitorData(response.data.monitors);
           break;
       }
     }

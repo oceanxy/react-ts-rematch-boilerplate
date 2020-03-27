@@ -14,7 +14,7 @@ import TestWebSocket from '@/components/test/websocket';
 import ZWMap from '@/components/UI/amap';
 import Nav from '@/components/UI/nav';
 import config from '@/config';
-import routes, { routesMap } from '@/config/router';
+import routes, {routesMap} from '@/config/router';
 import React from 'react';
 import './index.scss';
 
@@ -31,7 +31,7 @@ const TestContainer = (props: {
       <Nav title={routes.home.title} to={routesMap.home} />
       <Increment count={props.test.count} increment={props.increment} incrementAsync={props.incrementAsync} />
       <TestList data={props.test.listData} getData={props.getListData} />
-      <TestWebSocket data={props.test.websocketData} getData={props.getWebSocketData} />
+      <TestWebSocket data={props.test.websocketData} getData={props.getWebSocketData}/>
       <TestChart data={props.test.eChartsData} getData={props.getEChartsData} />
       <ZWMap mapKey={config.mapKey} style={{ width: '100%', height: '100%', position: 'fixed', top: 0, zIndex: -1 }} />
     </div>

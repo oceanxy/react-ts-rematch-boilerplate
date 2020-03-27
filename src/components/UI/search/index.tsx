@@ -9,7 +9,7 @@
 
 import Container from '@/components/UI/container';
 import Icon, { iconName, IconSource, IconSourceHover } from '@/components/UI/icon';
-import { IMonitor, IReqPayload, monitorTypeIcon, SearchCondition, SearchRequest } from '@/models/UI/search';
+import {IFence, IMonitor, IReqPayload, monitorTypeIcon, SearchCondition, SearchRequest} from '@/models/UI/search';
 import Select from 'antd/es/select';
 import React, { ButtonHTMLAttributes, useRef, useState } from 'react';
 import styled, { StyledComponent } from 'styled-components';
@@ -21,9 +21,10 @@ import './index.scss';
 export interface ISearch extends ButtonHTMLAttributes<any> {
   active?: boolean;
   isShowSearchResult?: boolean,
-  updateMonitorData?: (reqPayload: IReqPayload) => void,
+  getData?: (reqPayload: IReqPayload) => void,
   data?: {
-    monitorList: IMonitor[]
+    monitorList: IMonitor[],
+    fenceList: IFence[]
   }
 }
 
@@ -60,21 +61,21 @@ const searchConditions: ISearchCondition[] = [
   {
     name: iconName.ENTITY,
     icon: IconSource.ENTITY,
-    iconHover: IconSourceHover.ENTITY_HOVER,
+    iconHover: IconSourceHover.ENTITY,
     value: SearchCondition.ENTITY,
     placeholder: '查找车辆/人员/物资'
   },
   {
     name: iconName.AREA,
     icon: IconSource.AREA,
-    iconHover: IconSourceHover.AREA_HOVER,
+    iconHover: IconSourceHover.AREA,
     value: SearchCondition.AREA,
     placeholder: '查找区域'
   },
   {
     name: iconName.POSITION,
     icon: IconSource.POSITION,
-    iconHover: IconSourceHover.POSITION_HOVER,
+    iconHover: IconSourceHover.POSITION,
     value: SearchCondition.POSITION,
     placeholder: '查找位置'
   }
@@ -84,7 +85,7 @@ const searchConditions: ISearchCondition[] = [
  * 搜索组件
  */
 const Search = (props: ISearch) => {
-  const {updateMonitorData, data} = props;
+  const {getData, data} = props;
   // 控制搜索结果的显示或隐藏
   const [isShowSearchResult, setIsShowSearchResult] = useState(false);
   // 搜索条件（监控对象、区域、位置）
@@ -118,7 +119,7 @@ const Search = (props: ISearch) => {
       supportMonitorType: -1
     };
 
-    updateMonitorData?.({params: requestParam, condition: searchCondition});
+    getData?.({params: requestParam, condition: searchCondition});
     setIsShowSearchResult(!isShowSearchResult);
   };
 

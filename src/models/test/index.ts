@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 测试model
  * @Date: 2019-11-06 10:34:15
- * @LastModified: Oceanxy
- * @LastModifiedTime: 2019-11-06 10:34:15
+ * @LastModified: Oceanxy（xieyang@zwlbs.com）
+ * @LastModifiedTime: 2020-03-28 00:30:10
  */
 
 import fetchApis from '@/apis';
@@ -56,7 +56,7 @@ const test = <ModelConfig> {
     },
     async getListData() {
       const {data} = await fetchApis.fetchTest();
-      this.updateListData(data.data);
+      this.updateListData(data);
     },
     async getWebSocketData() {
       return await fetchApis.fetchTestWebsocket((response: APIResponse) => {
@@ -65,11 +65,11 @@ const test = <ModelConfig> {
     },
     async getEChartsData() {
       let {data} = await fetchApis.fetchECharts();
-      this.updateEChartsData(data.data);
+      this.updateEChartsData(data);
     },
     async deleteData(id: string) {
       const {data} = await fetchApis.deleteData({id});
-      return data.data;
+      return data;
     }
   }
 };

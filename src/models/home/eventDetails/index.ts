@@ -4,11 +4,11 @@
  * @Description: 事件详情model
  * @Date: 2020-03-19 16:31:44
  * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-19 16:31:44
+ * @LastModifiedTime: 2020-03-28 00:27:54
  */
 
 import fetchApis from '@/apis';
-import { ModelConfig } from '@rematch/core';
+import {ModelConfig} from '@rematch/core';
 
 // 事件类型
 export const eventTypeText = ['', '一般', '较重', '严重', '特别严重'];
@@ -56,7 +56,7 @@ const defaultData = {
   startTime: null // 事
 } as EventDetailsData;
 
-const eventDetails = <ModelConfig> {
+const eventDetails = <ModelConfig>{
   state: defaultData,
   reducers: {
     updateData: (state: any, data) => {
@@ -71,7 +71,7 @@ const eventDetails = <ModelConfig> {
   },
   effects: {
     async getData(reqPayload: EventDetailsRequest) {
-      const {data: {data}} = await fetchApis.fetchEventDetails(reqPayload);
+      const {data} = await fetchApis.fetchEventDetails(reqPayload);
       this.updateData(data);
     }
   }

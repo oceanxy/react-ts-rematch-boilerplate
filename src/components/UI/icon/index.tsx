@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: icon组件
  * @Date: 2020-03-26 13:35:50
- * @LastModified: Oceanxy
- * @LastModifiedTime: 2020-03-26 13:35:50
+ * @LastModified: Oceanxy（xieyang@zwlbs.com）
+ * @LastModifiedTime: 2020-03-27 21:59:25
  */
 
 import Container from '@/components/UI/container';
@@ -40,12 +40,12 @@ export enum IconSource {
  * hover图标（base64）
  */
 export enum IconSourceHover {
-  ENTITY_HOVER = entityHover,
-  AREA_HOVER = areaHover,
-  CAR_HOVER = carHover,
-  PEOPLE_HOVER = peopleHover,
-  POSITION_HOVER = positionHover,
-  THING_HOVER = thingHover
+  ENTITY = entityHover,
+  AREA = areaHover,
+  CAR = carHover,
+  PEOPLE = peopleHover,
+  POSITION = positionHover,
+  THING = thingHover
 }
 
 export type IconName<T> = { readonly [K in keyof typeof IconSource]: T }
@@ -77,9 +77,9 @@ const StyledIcon = styled(Container)`
   .icon-img-box {
     .icon-img {
       background: url(${(props: IIcon) => props.icon}) no-repeat center / 100% 100%;
-    }  
+    }
   }
-  
+
   &:hover .icon-img {
     background-image: url(${(props: IIcon) => props.iconHover});
   }

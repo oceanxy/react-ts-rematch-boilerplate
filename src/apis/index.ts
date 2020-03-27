@@ -7,15 +7,16 @@
  * @LastModifiedTime: 2019-12-28 09:09:56
  */
 
-import apis, { APIRequestConfig, FetchApis } from '@/apis/api';
+import apis, {APIRequestConfig, FetchApis} from '@/apis/api';
 import config from '@/config';
-import { IFetchAPI, WebsocketCallback } from '@/interfaces/api';
-import { APIResponse, IPolling } from '@/interfaces/api/mock';
-import { EHTTPMethod, EProtocal } from '@/interfaces/config';
-import Axios, { AxiosResponse } from 'axios';
+import {IFetchAPI, WebsocketCallback} from '@/interfaces/api';
+import {APIResponse, IPolling} from '@/interfaces/api/mock';
+import {EHTTPMethod, EProtocal} from '@/interfaces/config';
+import Axios, {AxiosResponse} from 'axios';
 import _ from 'lodash';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import mocks, { Mocks, productionData } from './mock';
+import mocks, {Mocks, productionData} from './mock';
+import qs from 'qs';
 
 /**
  * 拼接URL
@@ -72,18 +73,39 @@ function fetchHttp(fetchApi: IFetchAPI, params?: any): Promise<AxiosResponse> {
     url = stitchingURL(fetchApi);
   }
 
-  // 根据配置的HTTP Method来发送请求
-  switch (fetchApi.method) {
-    case EHTTPMethod.POST:
-      return Axios.post(url, params);
-    case EHTTPMethod.DELETE:
-      return Axios.delete(url, params);
-    case EHTTPMethod.PUT:
-      return Axios.put(url, params);
-    case EHTTPMethod.GET:
-    default:
-      return Axios.get(url, {params});
-  }
+  const axios = Axios.create({});
+
+  return new Promise<AxiosResponse>((resolve => {
+    let axiosResponse;
+
+    // 根据配置的HTTP Method来发送请求
+    switch (fetchApi.method) {
+      case EHTTPMethod.POST:
+        axiosResponse = axios.post(
+          url,
+          qs.stringify(params, {indices: false}),
+          {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+        );
+        break;
+      case EHTTPMethod.DELETE:
+        axiosResponse = axios.delete(url, params);
+        break;
+      case EHTTPMethod.PUT:
+        axiosResponse = axios.put(url, params);
+        break;
+      case EHTTPMethod.GET:
+      default:
+        axiosResponse = axios.get(url, params);
+        break;
+    }
+
+    axiosResponse
+      .then((data: AxiosResponse) => resolve(data))
+      .catch(reason => resolve(<AxiosResponse>{
+        data: {retCode: 0, retMsg: 'request failed!', data: {}},
+        ...reason
+      }));
+  }));
 }
 
 /**
@@ -105,7 +127,7 @@ async function fetchPolling(fetchApi: IFetchAPI, params?: any, callback?: Websoc
     }
   }, 1000);
 
-  return <IPolling> {
+  return <IPolling>{
     close: () => clearInterval(polling),
     reconnect: () => {
     }
@@ -124,9 +146,9 @@ async function fetchMethod(
   callback?: WebsocketCallback
 ): Promise<APIResponse | IPolling | ReconnectingWebSocket> {
   // 处理参数
-  // 当data和callback两者只传入其一时，检测这个传入参数的类型，并做相应的值转换
+  // 当params和callback两者只传入其一时，检测这个传入参数的类型，并做相应的值转换
   if (_.isFunction(params)) {
-    callback = params;
+    [callback, params] = [params, callback];
   }
 
   // 检测是否是websocket长链接
@@ -134,16 +156,16 @@ async function fetchMethod(
     // 当开启mock数据时，使用轮询的方式模拟websocket
     if (config.mock || fetchApi.forceMock) {
       const polling = await fetchPolling(fetchApi, params, callback);
-      return <IPolling> polling;
+      return <IPolling>polling;
     } else {
-      // 使用websocket获取数据
+      // 从websocket服务器获取数据
       const ws = await fetchWebSocket(fetchApi, params, callback);
-      return <ReconnectingWebSocket> ws;
+      return <ReconnectingWebSocket>ws;
     }
   } else {
-    // 使用HTTP获取数据（开启Mock数据时，HTTP请求会被mockjs拦截，否则向服务端获取数据）
+    // 使用HTTP获取数据（开启Mock数据时，HTTP请求会被mockjs拦截，否则则向服务端获取数据）
     const response: AxiosResponse = await fetchHttp(fetchApi, params);
-    return <APIResponse> {data: response.data};
+    return <APIResponse>response.data;
   }
 }
 
@@ -164,9 +186,9 @@ const fetchApi = (mocks: Mocks, apis: APIRequestConfig) => () => {
       // 检测URL是否带有websocket协议或该API是否开启了websocket功能，以选择生成mock数据的方式
       if (fetchApi.url.match(/^wss?:\/\//) || fetchApi.isWebsocket) {
         // 生成mock数据
-        productionData(<keyof APIRequestConfig> fetchName, true);
+        productionData(<keyof APIRequestConfig>fetchName, true);
       } else {
-        productionData(<keyof APIRequestConfig> fetchName);
+        productionData(<keyof APIRequestConfig>fetchName);
       }
     }
 
@@ -178,8 +200,8 @@ const fetchApi = (mocks: Mocks, apis: APIRequestConfig) => () => {
     fetchApis[fetchName] = (params?: any, callback?: WebsocketCallback) => fetchMethod(fetchApi, params, callback);
   });
 
-  return <FetchApis> fetchApis;
+  return <FetchApis>fetchApis;
 };
 
 export const initFetchApi = fetchApi(mocks, apis);
-export default <FetchApis> fetchApis;
+export default <FetchApis>fetchApis;
