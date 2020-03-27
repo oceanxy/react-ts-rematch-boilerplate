@@ -38,18 +38,18 @@ function stitchingURL(fetchApi: IFetchAPI): string {
 /**
  * 建立websocket通道
  * @param fetchApi {APIRequestConfig} API接口请求配置
- * @param [data] {any} 请求参数
+ * @param [params] {any} 请求参数
  * @param [callback] {WebsocketCallback} websocket接收消息的回调函数
  */
-function fetchWebSocket(fetchApi: IFetchAPI, data?: any, callback?: WebsocketCallback): Promise<ReconnectingWebSocket> {
+function fetchWebSocket(fetchApi: IFetchAPI, params?: any, callback?: WebsocketCallback): Promise<ReconnectingWebSocket> {
   return new Promise((resolve, reject) => {
     let ws: ReconnectingWebSocket;
     // 检查是否在api中配置了完整的websocket URL
     // 如果是完整地websocket URL，则不再拼接URL
     if (fetchApi.url.includes(EProtocal.WS) || fetchApi.url.includes(EProtocal.WSS)) {
-      ws = new ReconnectingWebSocket(fetchApi.url, '', data);
+      ws = new ReconnectingWebSocket(fetchApi.url, '', params);
     } else {
-      ws = new ReconnectingWebSocket(stitchingURL(fetchApi), '', data);
+      ws = new ReconnectingWebSocket(stitchingURL(fetchApi), '', params);
     }
 
     ws.onopen = () => resolve(ws);
@@ -63,9 +63,9 @@ function fetchWebSocket(fetchApi: IFetchAPI, data?: any, callback?: WebsocketCal
 /**
  * 发送HTTP（Axios）请求
  * @param fetchApi {APIRequestConfig} API接口请求配置
- * @param [data] {any} Axios请求配置
+ * @param [params] {any} Axios请求配置
  */
-function fetchHttp(fetchApi: IFetchAPI, data?: any): Promise<AxiosResponse> {
+function fetchHttp(fetchApi: IFetchAPI, params?: any): Promise<AxiosResponse> {
   let url = fetchApi.url;
   // 如果URL内不带协议或未开启mock时，需要自动拼接可访问的URL
   if (!fetchApi.url.match(/^https?:\/\//) && !config.mock && !fetchApi.forceMock) {
@@ -75,32 +75,32 @@ function fetchHttp(fetchApi: IFetchAPI, data?: any): Promise<AxiosResponse> {
   // 根据配置的HTTP Method来发送请求
   switch (fetchApi.method) {
     case EHTTPMethod.POST:
-      return Axios.post(url, data);
+      return Axios.post(url, params);
     case EHTTPMethod.DELETE:
-      return Axios.delete(url, data);
+      return Axios.delete(url, params);
     case EHTTPMethod.PUT:
-      return Axios.put(url, data);
+      return Axios.put(url, params);
     case EHTTPMethod.GET:
     default:
-      return Axios.get(url, data);
+      return Axios.get(url, {params});
   }
 }
 
 /**
  * 使用HTTP轮询模拟websocket
  * @param fetchApi {APIRequestConfig} API接口请求配置
- * @param [data] {any} 请求数据
+ * @param [params] {any} 请求数据
  * @param [callback] {WebsocketCallback} websocket接收消息的回调函数
  */
-async function fetchPolling(fetchApi: IFetchAPI, data?: any, callback?: WebsocketCallback): Promise<IPolling> {
+async function fetchPolling(fetchApi: IFetchAPI, params?: any, callback?: WebsocketCallback): Promise<IPolling> {
   // 首次加载时不延迟，立即请求数据
-  const response = await fetchHttp(fetchApi, data);
+  const response = await fetchHttp(fetchApi, params);
   callback && callback(response.data);
 
   // 初始化轮询
   const polling = setInterval(async () => {
     if (callback) {
-      const response = await fetchHttp(fetchApi, data);
+      const response = await fetchHttp(fetchApi, params);
       callback(response.data);
     }
   }, 1000);
@@ -115,34 +115,34 @@ async function fetchPolling(fetchApi: IFetchAPI, data?: any, callback?: Websocke
 /**
  * 处理请求的方式
  * @param fetchApi {APIRequestConfig} API接口请求配置
- * @param [data] {any} 请求数据
+ * @param [params] {any} 请求数据
  * @param [callback] {WebsocketCallback} websocket接收消息的回调函数
  */
 async function fetchMethod(
   fetchApi: IFetchAPI,
-  data?: any,
+  params?: any,
   callback?: WebsocketCallback
 ): Promise<APIResponse | IPolling | ReconnectingWebSocket> {
   // 处理参数
   // 当data和callback两者只传入其一时，检测这个传入参数的类型，并做相应的值转换
-  if (_.isFunction(data)) {
-    callback = data;
+  if (_.isFunction(params)) {
+    callback = params;
   }
 
   // 检测是否是websocket长链接
   if (fetchApi.isWebsocket || fetchApi.url.match(/^wss?:\/\//)) {
     // 当开启mock数据时，使用轮询的方式模拟websocket
     if (config.mock || fetchApi.forceMock) {
-      const polling = await fetchPolling(fetchApi, data, callback);
+      const polling = await fetchPolling(fetchApi, params, callback);
       return <IPolling> polling;
     } else {
       // 使用websocket获取数据
-      const ws = await fetchWebSocket(fetchApi, data, callback);
+      const ws = await fetchWebSocket(fetchApi, params, callback);
       return <ReconnectingWebSocket> ws;
     }
   } else {
     // 使用HTTP获取数据（开启Mock数据时，HTTP请求会被mockjs拦截，否则向服务端获取数据）
-    const response: AxiosResponse = await fetchHttp(fetchApi, data);
+    const response: AxiosResponse = await fetchHttp(fetchApi, params);
     return <APIResponse> {data: response.data};
   }
 }
@@ -172,10 +172,10 @@ const fetchApi = (mocks: Mocks, apis: APIRequestConfig) => () => {
 
     /**
      * 返回包含所有API函数的对象
-     * @param {any} [data] 请求数据
+     * @param {any} [params] 请求数据
      * @param {WebsocketCallback} [callback] websocket请求时必传的回调函数
      */
-    fetchApis[fetchName] = (data?: any, callback?: WebsocketCallback) => fetchMethod(fetchApi, data, callback);
+    fetchApis[fetchName] = (params?: any, callback?: WebsocketCallback) => fetchMethod(fetchApi, params, callback);
   });
 
   return <FetchApis> fetchApis;

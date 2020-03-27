@@ -17,13 +17,17 @@
     }
   }
 
-  .time {
+  .time, .monitor-name {
     font-size: 12.2px;
     margin-left: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     padding-top: 6px;
+  }
+
+  .monitor-name{
+    margin-left: 10px;
   }
 
   & + .event-alarm-item{

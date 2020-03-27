@@ -22,7 +22,8 @@ const StyledButton = styled.button.attrs((props: IButton) => {
   return {
     className: `inter-plat-button${className}${active}`,
     type: props.type,
-    title: props.name
+    title: props.name,
+    onClick: props.onClick
   };
 })`
   padding: ${((10 / 1920) * 100).toFixed(3)}vh ${((16 / 1920) * 100).toFixed(3)}vw;

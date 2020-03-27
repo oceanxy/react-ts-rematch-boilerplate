@@ -58,28 +58,6 @@
       @include block;
       left: 0;
       padding: 20px 0 20px 20px;
-
-      .event-button-container {
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 20px;
-        padding-right: 10px;
-      }
-
-      .event-list-container {
-        flex: 1;
-        overflow-y: scroll;
-        display: flex;
-        flex-direction: column;
-        padding-right: 4px;
-
-        scrollbar-width: none;
-
-        .legend-name {
-          color: #e4f2ff;
-          font-size: 12.2px;
-        }
-      }
     }
 
     .inter-plat-center {

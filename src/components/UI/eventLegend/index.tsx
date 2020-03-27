@@ -4,7 +4,7 @@
  * @Description: 图例组件
  * @Date: 2020-01-06 11:42:36
  * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-20 15:52:18
+ * @LastModifiedTime: 2020-03-24 14:33:28
  */
 
 import Container from '@/components/UI/container';
@@ -19,8 +19,12 @@ export enum ESeverity {
   VERY = '#c50100',
   SEVERELY = '#da5d00',
   RELATIVELY = '#d0b800',
-  GENERAL = '#0074c7'
+  GENERAL = '#0074c7',
+  GRAY = '#999999'
 }
+
+// 时间类型颜色值
+export const eventTypeColor = [ESeverity.GRAY, ESeverity.GENERAL, ESeverity.RELATIVELY, ESeverity.SEVERELY, ESeverity.VERY];
 
 /**
  * 图例组件接口
@@ -28,7 +32,7 @@ export enum ESeverity {
 interface IEventLegend {
   name: string, // 图例文字
   nameStyled?: FlattenSimpleInterpolation, // 图例文字CSS样式
-  icon?: boolean, // 是否颜色显示图标
+  icon?: boolean, // 是否显示图标
   iconColor?: string | ESeverity, // 图标颜色
   shapeRadius?: number, // 图标半径
   style?: CSSProperties // 图例容器CSS样式
@@ -39,8 +43,8 @@ interface IEventLegend {
  * 图例图标样式组件
  */
 const StyledShape = styled.span`
-  background-color: ${(props: IEventLegend) => props.iconColor ? props.iconColor : ESeverity.GENERAL};
-  box-shadow: ${(props: IEventLegend) => props.iconColor ? props.iconColor : ESeverity.GENERAL} 0 0 4px 2px;
+  background-color: ${(props: IEventLegend) => props.iconColor ? props.iconColor : eventTypeColor[0]};
+  box-shadow: ${(props: IEventLegend) => props.iconColor ? props.iconColor : eventTypeColor[0]} 0 0 4px 2px;
   width: ${(props: IEventLegend) => props.shapeRadius ? props.shapeRadius * 2 : 8}px;
   height: ${(props: IEventLegend) => props.shapeRadius ? props.shapeRadius * 2 : 8}px;
   border-radius:  ${(props: IEventLegend) => props.shapeRadius ? props.shapeRadius : 4}px;

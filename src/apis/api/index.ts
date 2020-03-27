@@ -4,15 +4,19 @@
  * @Description: api接口请求配置
  * @Date: 2019-11-06 10:33:00
  * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2019-12-26 15:44:17
+ * @LastModifiedTime: 2020-03-23 14:59:01
  */
 
 import { IFetchAPI } from '@/interfaces/api';
 import { APIResponse, IPolling } from '@/interfaces/api/mock';
+import { EHTTPMethod } from '@/interfaces/config';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
 export type APIName =
   'fetchEventDetails' |
+  'fetchEventList' |
+  'fetchSearchByMonitorName' |
+  'fetchSearchByArea' |
   // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
   'fetchTestWebsocket' |
@@ -52,8 +56,34 @@ const apis: APIRequestConfig = {
   fetchECharts: {
     url: '/testECharts'
   },
+
+  /**
+   * 获取事件详情
+   */
   fetchEventDetails: {
-    url: '/clbs/web/v1/dispatch/event/details'
+    url: '/clbs/web/v1/dispatch/event/details',
+    method: EHTTPMethod.POST
+  },
+  /**
+   * 获取事件列表
+   */
+  fetchEventList: {
+    url: '/clbs/web/v1/dispatch/event/unhandledList',
+    method: EHTTPMethod.POST
+  },
+  /**
+   * 按监控对象搜索
+   */
+  fetchSearchByMonitorName: {
+    url: '/clbs/web/v1/dispatch/monitor/search/byName',
+    method: EHTTPMethod.POST
+  },
+  /**
+   * 按区域搜索
+   */
+  fetchSearchByArea: {
+    url: '/clbs/web/v1/dispatch/fence/getFenceTree',
+    method: EHTTPMethod.POST
   }
 };
 

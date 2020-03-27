@@ -4,12 +4,12 @@
  * @Description: mock数据模版
  * @Date: 2019-10-17 10:04:40
  * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2019-12-24 11:56:04
+ * @LastModifiedTime: 2020-03-23 14:31:27
  */
 
 import apis, { APIName, APIRequestConfig } from '@/apis/api';
 import { APIResponse } from '@/interfaces/api/mock';
-import { mock } from 'mockjs';
+import { mock, Random } from 'mockjs';
 
 /**
  * mock数据集
@@ -31,6 +31,14 @@ export const productionData = (fetchName: keyof APIRequestConfig, isWebsocket?: 
 
   mock(apis[fetchName].url, mocks[fetchName]);
 };
+
+// 生成车牌
+function monitorName() {
+  const p = ['皖', '京', '渝', '闽', '甘', '粤', '区', '黔', '琼', '冀', '豫', '黑', '蒙', '区', '青', '鲁', '晋', '陕', '沪', '川', '津', '藏', '新', '滇', '浙', '港', '澳'][Math.floor(Math.random() * 27)];
+  const r = mock(/[\dA-Z]{5}/);
+
+  return `${p}${r}`;
+}
 
 /**
  * Mock数据生成规则
@@ -120,43 +128,166 @@ const mocks: Mocks = {
     retCode: 0,
     retMsg: 'success',
     data: {
-      // 行政区块 到区县，如"重庆市沙坪坝区"
       'administrativeRegion': '@county',
-      // 位置
       'eventEndAddress': '@county(true)',
-      // 事件结束时间 格式yyyy-MM-dd HH:mm:ss
       'endTime': '@datetime',
-      // 事件持续时长 单位s
       'eventDurationTime': 19500,
-      // 事件持续时长 x天x小时x分钟x秒
       'eventDurationTimeStr': '5小时25分0秒',
-      // 事件等级 1：一般 2：较重 3：严重 4：特别严重
-      'eventLevel': 1,
-      // 事件名称
-      'eventName': '上班未到岗',
-      // 事件处理时长 单位s
+      'eventLevel|1-4': 1,
+      'eventName|1': ['上班未到岗', '超时长停留'],
       'eventProcessingTime': 3892,
-      // 事件处理时长 x天x小时x分钟x秒
       'eventProcessingTimeStr': '1小时4分52秒',
-      // 事件处理状态 0:未处理 1：处理中
-      'eventStatus': '1',
-      // 事件类型
+      'eventStatus|0-1': 0,
       'eventType': '152',
-      // 纬度
       'latitude': '29.893485',
-      // 经度
       'longitude': '111.730631',
-      // 监控对象ID
       'monitorId': '@guid',
-      // 监控对象名称
-      monitorName() {
-        const p = ['皖', '京', '渝', '闽', '甘', '粤', '区', '黔', '琼', '冀', '豫', '黑', '蒙', '区', '青', '鲁', '晋', '陕', '沪', '川', '津', '藏', '新', '滇', '浙', '港', '澳'][Math.floor(Math.random() * 27)];
-        const r = mock(/[\dA-Z]{5}/);
-
-        return `${p}${r}`;
+      'startTime': '@datetime',
+      'monitorName': monitorName()
+    }
+  },
+  fetchEventList: {
+    retCode: 0,
+    retMsg: '',
+    data: {
+      'eventList|10-15': [{
+        'description': null,
+        'eventLevel|1-4': 1,
+        'eventName|1': ['上班未到岗', '超时长停留'],
+        'eventStatus|0-1': 0,
+        'eventType': '154',
+        'monitorId': '@guid',
+        'monitorName': monitorName(),
+        'startTime': '@datetime'
+      }],
+      'eventStatistics': {
+        'finnishedNum|1-10': 1,
+        'processingNum|1-10': 1,
+        'totalNum|1-10': 1,
+        'untreatedNum|1-10': 1
       },
-      // 事件开始时间 格式yyyy-MM-dd HH:mm:ss
-      'startTime': '@datetime'
+      'latestEventDetails': {
+        'administrativeRegion': '@county',
+        'eventEndAddress': '@county(true)',
+        'endTime': '@datetime',
+        'eventDurationTime': 19500,
+        'eventDurationTimeStr': '5小时25分0秒',
+        'eventLevel|1-4': 1,
+        'eventName|1': ['上班未到岗', '超时长停留'],
+        'eventProcessingTime': 3892,
+        'eventProcessingTimeStr': '1小时4分52秒',
+        'eventStatus|0-1': 0,
+        'eventType': '152',
+        'latitude': '29.893485',
+        'longitude': '111.730631',
+        'monitorId': '@guid',
+        'startTime': '@datetime',
+        'monitorName': monitorName()
+      }
+    }
+  },
+  fetchSearchByMonitorName: {
+    retMsg: '',
+    retCode: 0,
+    data: {
+      'monitors|10-20': [{
+        'monitorId': '@guid',
+        'monitorName|1': [monitorName(), Random.cname()],
+        'monitorType|1': [0, 1, 2, 9, 10],
+        'assignmentName|1': ['分组1', '分组2', '分组3', '分组4'],
+        'deviceNum': Math.floor(Math.random() * 10000),
+        'groupName|1': ['组织1', '组织2', '组织3', '组织4'],
+        'simCardNum': Math.floor(Math.random() * 10000),
+        'userId': Random.integer(10000, 99999)
+      }]
+    }
+  },
+  fetchSearchByArea: {
+    retCode: 0,
+    retMsg: '',
+    data: {
+      'fenceTreeNodes': [
+        {
+          'iconSkin': null,
+          'id': 'cdecb3bd-dccf-4be4-82ac-7ad3b966d9ff',
+          'name': 'yuan',
+          'objType': null,
+          'parentId': '0',
+          'type': 'fenceParent'
+        },
+        {
+          'iconSkin': null,
+          'id': '1f43cb0b-402e-45bd-9f27-aed1a93669ac',
+          'name': '所有绘制方式',
+          'objType': null,
+          'parentId': '0',
+          'type': 'fenceParent'
+        },
+        {
+          'iconSkin': null,
+          'id': 'a987d60b-f5ea-4dca-a4ca-a02b6229a5d4',
+          'name': 'quxi-下级创建',
+          'objType': null,
+          'parentId': '0',
+          'type': 'fenceParent'
+        },
+        {
+          'iconSkin': 'zw_m_circle_skin',
+          'id': 'ef11341b-628f-4d56-8ba0-9b716bd73da0',
+          'name': 'yuan',
+          'objType': 'zw_m_circle',
+          'parentId': 'a987d60b-f5ea-4dca-a4ca-a02b6229a5d4',
+          'type': 'fence'
+        },
+        {
+          'iconSkin': 'zw_m_circle_skin',
+          'id': 'b49dc658-366b-43aa-80cc-6c6843ac68ff',
+          'name': 'yuanxing',
+          'objType': 'zw_m_circle',
+          'parentId': 'a987d60b-f5ea-4dca-a4ca-a02b6229a5d4',
+          'type': 'fence'
+        },
+        {
+          'iconSkin': 'zw_m_circle_skin',
+          'id': '6a8160f4-e829-4b2c-a932-b32c347ab224',
+          'name': 'yuanxing',
+          'objType': 'zw_m_circle',
+          'parentId': '1f43cb0b-402e-45bd-9f27-aed1a93669ac',
+          'type': 'fence'
+        },
+        {
+          'iconSkin': 'zw_m_circle_skin',
+          'id': '78e694a5-e8ca-4fca-98f4-5d1c9430ccba',
+          'name': 'yuan',
+          'objType': 'zw_m_circle',
+          'parentId': '1f43cb0b-402e-45bd-9f27-aed1a93669ac',
+          'type': 'fence'
+        },
+        {
+          'iconSkin': 'zw_m_circle_skin',
+          'id': '1edcd618-fdef-44a4-acb2-8c8b331e9124',
+          'name': 'yuanxing',
+          'objType': 'zw_m_circle',
+          'parentId': 'cdecb3bd-dccf-4be4-82ac-7ad3b966d9ff',
+          'type': 'fence'
+        },
+        {
+          'iconSkin': 'zw_m_circle_skin',
+          'id': 'a8328d1c-73d0-42af-b3b0-cdf9824da845',
+          'name': 'test001',
+          'objType': 'zw_m_circle',
+          'parentId': 'cdecb3bd-dccf-4be4-82ac-7ad3b966d9ff',
+          'type': 'fence'
+        },
+        {
+          'iconSkin': 'zw_m_circle_skin',
+          'id': 'b8a5fe63-0df3-45f9-9d31-7b1264095d79',
+          'name': 'test002',
+          'objType': 'zw_m_circle',
+          'parentId': 'cdecb3bd-dccf-4be4-82ac-7ad3b966d9ff',
+          'type': 'fence'
+        }
+      ]
     }
   }
 };

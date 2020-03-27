@@ -9,13 +9,14 @@
 
 import ItemBorderImageHover from '@/images/event-item-border-hover.png';
 import ItemBorderImage from '@/images/event-item-border.png';
-import React, { CSSProperties, ReactNode } from 'react';
+import React, { CSSProperties, HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 import ContainerBorderImage from './images/container-border-bg.png';
 import ContainerBorderImage2 from './images/container-border-bg2.png';
 import './index.scss';
 
-interface IContainer {
+export interface IContainer<T> extends HTMLAttributes<any> {
+  onClick?: MouseEventHandler<T>;
   className?: string;
   style?: CSSProperties; // CSS样式
   styled?: FlattenSimpleInterpolation; // 样式化组件CSS样式（CSSProperties）
@@ -24,7 +25,7 @@ interface IContainer {
   readonly theme?: 'style1' | 'style2' | 'style3' | never;
 }
 
-const StyledContainer = styled.div((props: IContainer) => {
+const StyledContainer = styled.div((props: IContainer<any>) => {
   if (props.theme === 'style1') {
     return css`
       border-width: 15px 22px 30px 30px;
@@ -43,9 +44,13 @@ const StyledContainer = styled.div((props: IContainer) => {
       border-image-repeat: round;
       ${props.styled}
 
-      &:hover {
+      &:hover, &.active {
         border-image-source: url(${ItemBorderImageHover});
         border-image-outset: 3px;
+      }
+      
+      &.active:hover {
+        transform: scale(1.01);
       }
     `;
   } else if (props.theme === 'style3') {
@@ -66,7 +71,7 @@ const StyledContainer = styled.div((props: IContainer) => {
 /**
  * 容器组件
  */
-const Container = (props: IContainer) => {
+const Container = (props: IContainer<any>) => {
   return (
     <StyledContainer {...props} className={`global-container${props.className ? ` ${props.className}` : ''}`}>
       {props.children}

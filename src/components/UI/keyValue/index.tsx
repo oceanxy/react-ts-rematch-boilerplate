@@ -14,7 +14,7 @@ import './index.scss';
 
 interface IKeyValue {
   name: string;
-  value: string;
+  value: any;
   className?: string;
   styled?: FlattenSimpleInterpolation;
   compWidth?: string; // 组件宽度

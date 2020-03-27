@@ -1,0 +1,190 @@
+/**
+ * @Author: Oceanxy
+ * @Email: xieyang@zwlbs.com
+ * @Description: 搜索model
+ * @Date: 2020-03-26 18:07:35
+ * @LastModified: Oceanxy（xieyang@zwlbs.com）
+ * @LastModifiedTime: 2020-03-27 18:56:14
+ */
+
+import fetchApis from '@/apis';
+import { IconSource, IconSourceHover } from '@/components/UI/icon';
+import { ModelConfig } from '@rematch/core';
+
+/**
+ * 搜索条件
+ */
+export enum SearchCondition {
+  ENTITY = 'ENTITY',
+  AREA = 'AREA',
+  POSITION = 'POSITION'
+}
+
+// 请求参数
+export type SearchRequest = {
+  /**
+   * 监控对象名称关键字
+   */
+  simpleQueryParam: string,
+  /**
+   * 起始记录 默认为0
+   */
+  start?: number,
+  /**
+   * 返回记录数 默认为10
+   */
+  length?: number,
+  /**
+   * 多个用逗号隔开, -1 全部 0：车 1 :人 2 :动态物品 9:静态物资 10:调度员
+   */
+  supportMonitorType: -1 | 0 | 1 | 2 | 9 | 10
+}
+
+/**
+ * 获取搜索数据参数接口
+ */
+export interface IReqPayload {
+  params: SearchRequest,
+  condition: SearchCondition
+}
+
+/**
+ * 监控对象接口
+ */
+export interface IMonitor {
+  /**
+   * 监控对象ID
+   */
+  monitorId: string,
+  /**
+   * 监控对象名称
+   */
+  monitorName: string,
+  /**
+   * 监控对象类型
+   * 0：车；1：人；2：物；9：静态物资；10：调度员
+   */
+  monitorType: 0 | 1 | 2 | 9 | 10,
+  /**
+   * 所属分组名称
+   */
+  assignmentName: string,
+  /**
+   * 设备号
+   */
+  deviceNum: number,
+  /**
+   * 所属组织名称
+   */
+  groupName: string,
+  /**
+   * SIM卡号
+   */
+  simCardNum: number,
+  /**
+   * 对讲平台使用的监控对象ID
+   */
+  userId: number | string
+}
+
+/**
+ * 围栏接口
+ */
+export interface IFence {
+  /**
+   * 围栏(种类)名称
+   */
+  name: string,
+  /**
+   * 父亲节点ID（围栏种类为0，围栏的父节点对应围栏种类ID）
+   */
+  parentId: '',
+  /**
+   * 围栏(种类)ID
+   */
+  id: string,
+  /**
+   * fenceParent:围栏种类 fence：围栏
+   */
+  type: '',
+  /**
+   * 围栏的类型
+   */
+  objType: '',
+  /**
+   * 围栏图标
+   */
+  iconSkin: ''
+}
+
+/**
+ * 搜索组件model接口
+ */
+export interface ISearchState extends ModelConfig {
+  state: {
+    monitorList: IMonitor[],
+    fenceList: IFence[]
+  }
+}
+
+/**
+ * 监控调度对象类型与图标的映射
+ * @type {{'0': IconSource; '1': IconSource; '2': IconSource; '9': IconSource; '10': IconSource}}
+ */
+export const monitorTypeIcon: {[K: string]: IconSource | IconSourceHover} = {
+  '0': IconSource.CAR,
+  '1': IconSource.PEOPLE,
+  '2': IconSource.THING,
+  '9': IconSource.THING,
+  '10': IconSource.PEOPLE,
+  '0_hover': IconSourceHover.CAR_HOVER,
+  '1_hover': IconSourceHover.PEOPLE_HOVER,
+  '2_hover': IconSourceHover.THING_HOVER,
+  '9_hover': IconSourceHover.THING_HOVER,
+  '10_hover': IconSourceHover.PEOPLE_HOVER
+};
+
+// 搜索组件model
+const search: ISearchState = {
+  state: {
+    monitorList: [],
+    fenceList: []
+  },
+  reducers: {
+    updateMonitorData(state, data) {
+      return {
+        ...state,
+        monitorList: data
+      };
+    },
+    updateFenceData(state, data) {
+      return {
+        ...state,
+        fenceList: data
+      };
+    }
+  },
+  effects: {
+    async getData(reqPayload: IReqPayload) {
+      let response;
+
+      switch (reqPayload.condition) {
+        case SearchCondition.AREA:
+          response = await fetchApis.fetchSearchByArea(reqPayload.params);
+          this.updateData(response.data.data.fenceTreeNodes);
+          break;
+        case SearchCondition.POSITION:
+          response = await fetchApis.fetchSearchByMonitorName(reqPayload.params);
+          this.updateData(response.data.data.monitors);
+          break;
+        case SearchCondition.ENTITY:
+        default:
+          response = await fetchApis.fetchSearchByMonitorName(reqPayload.params);
+          this.updateData(response.data.data.monitors);
+          break;
+      }
+    }
+  }
+};
+
+export default search;
