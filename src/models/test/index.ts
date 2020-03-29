@@ -8,10 +8,11 @@
  */
 
 import fetchApis from '@/apis';
-import { APIResponse } from '@/interfaces/api/mock';
-import { ModelConfig } from '@rematch/core';
+import {APIResponse} from '@/interfaces/api/mock';
+import {ModelConfig} from '@rematch/core';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 
-const test = <ModelConfig> {
+const test = <ModelConfig>{
   state: {
     count: 0,
     listData: {},
@@ -22,7 +23,7 @@ const test = <ModelConfig> {
     eChartsData: []
   },
   reducers: {
-    increment: (state: {count: number}) => {
+    increment: (state: { count: number }) => {
       const {count} = state || {count: 0};
 
       return {
@@ -58,7 +59,7 @@ const test = <ModelConfig> {
       const {data} = await fetchApis.fetchTest();
       this.updateListData(data);
     },
-    async getWebSocketData() {
+    async getWebSocketData(): Promise<ReconnectingWebSocket> {
       return await fetchApis.fetchTestWebsocket((response: APIResponse) => {
         this.updateWebSocketData(response.data);
       });
@@ -74,4 +75,4 @@ const test = <ModelConfig> {
   }
 };
 
-export { test };
+export {test};

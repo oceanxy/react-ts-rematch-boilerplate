@@ -4,7 +4,7 @@
  * @Description: 生成接口请求函数
  * @Date: 2019-11-06 10:31:45
  * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2019-12-28 09:09:56
+ * @LastModifiedTime: 2020-03-29 23:33:01
  */
 
 import apis, {APIRequestConfig, FetchApis} from '@/apis/api';
@@ -42,7 +42,7 @@ function stitchingURL(fetchApi: IFetchAPI): string {
  * @param [params] {any} 请求参数
  * @param [callback] {WebsocketCallback} websocket接收消息的回调函数
  */
-function fetchWebSocket(fetchApi: IFetchAPI, params?: any, callback?: WebsocketCallback): Promise<ReconnectingWebSocket> {
+function fetchWebSocket(fetchApi: IFetchAPI, params?: any, callback?: WebsocketCallback): Promise<ReconnectingWebSocket> | undefined {
   return new Promise((resolve, reject) => {
     let ws: ReconnectingWebSocket;
     // 检查是否在api中配置了完整的websocket URL
@@ -53,12 +53,23 @@ function fetchWebSocket(fetchApi: IFetchAPI, params?: any, callback?: WebsocketC
       ws = new ReconnectingWebSocket(stitchingURL(fetchApi), '', params);
     }
 
-    ws.onopen = () => resolve(ws);
-    ws.onerror = reject;
-    ws.onmessage = (messageEvent: MessageEvent) => {
-      callback && callback(JSON.parse(messageEvent.data));
+    ws.onopen = () => {
+      resolve(ws);
     };
-  });
+    ws.onerror = err => {
+      reject(err);
+    };
+
+    if (callback && _.isFunction(callback)) {
+      ws.onmessage = (messageEvent: MessageEvent) => {
+        callback(JSON.parse(messageEvent.data));
+      };
+    }
+  })
+    .then(ws => ws)
+    .catch(error => {
+      console.error('websocket connection failed, please check if the network is normal or the websocket server exists:', error);
+    }) as Promise<ReconnectingWebSocket>;
 }
 
 /**
@@ -99,6 +110,7 @@ function fetchHttp(fetchApi: IFetchAPI, params?: any): Promise<AxiosResponse> {
         break;
     }
 
+    // 返回数据/捕获异常
     axiosResponse
       .then((data: AxiosResponse) => resolve(data))
       .catch(reason => resolve(<AxiosResponse>{
@@ -144,7 +156,7 @@ async function fetchMethod(
   fetchApi: IFetchAPI,
   params?: any,
   callback?: WebsocketCallback
-): Promise<APIResponse | IPolling | ReconnectingWebSocket> {
+): Promise<APIResponse | IPolling | ReconnectingWebSocket | undefined> {
   // 处理参数
   // 当params和callback两者只传入其一时，检测这个传入参数的类型，并做相应的值转换
   if (_.isFunction(params)) {
@@ -160,7 +172,7 @@ async function fetchMethod(
     } else {
       // 从websocket服务器获取数据
       const ws = await fetchWebSocket(fetchApi, params, callback);
-      return <ReconnectingWebSocket>ws;
+      return <ReconnectingWebSocket | undefined>ws;
     }
   } else {
     // 使用HTTP获取数据（开启Mock数据时，HTTP请求会被mockjs拦截，否则则向服务端获取数据）

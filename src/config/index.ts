@@ -19,7 +19,7 @@ const config: IConfig = {
   host: 'localhost',
   // app相关配置
   basename: '/clbs/intercom',
-  mock: true,
+  mock: false,
   // 地图相关配置
   mapKey: '3018bf7f400b01e710642d798b80eaf1'
 };

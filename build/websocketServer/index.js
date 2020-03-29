@@ -22,16 +22,14 @@ ws.on('connection', (ws) => {
   const interval = setInterval(() => {
     if (ws.readyState === 1) {
       const date = new Date();
-      const dateStr = JSON.stringify(
-        date.getFullYear() + '-' +
+      const dateStr = date.getFullYear() + '-' +
         (date.getMonth() + 1) + '-' +
         date.getDate() + ' ' +
         date.getHours() + ':' +
         date.getMinutes() + ':' +
         date.getSeconds() + ' ' +
         '星期' +
-        ['日', '一', '二', '三', '四', '五', '六'][date.getDay()]
-      );
+        ['日', '一', '二', '三', '四', '五', '六'][date.getDay()];
 
       ws.send(
         JSON.stringify({
