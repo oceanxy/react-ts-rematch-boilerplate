@@ -3,16 +3,16 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 搜索组件
  * @Date: 2020-01-14 11:38:22
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-27 17:11:36
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-03-30 周一 14:03:30
  */
 
 import Container from '@/components/UI/container';
 import Icon, { iconName, IconSource, IconSourceHover } from '@/components/UI/icon';
-import {IFence, IMonitor, IReqPayload, monitorTypeIcon, SearchCondition, SearchRequest} from '@/models/UI/search';
+import SearchPanel from '@/containers/UI/search/searchPanel';
+import { IReqPayload, ISearchState, SearchCondition, SearchRequest } from '@/models/UI/search';
 import Select from 'antd/es/select';
 import React, { ButtonHTMLAttributes, useRef, useState } from 'react';
-import styled, { StyledComponent } from 'styled-components';
 import './index.scss';
 
 /**
@@ -22,10 +22,7 @@ export interface ISearch extends ButtonHTMLAttributes<any> {
   active?: boolean;
   isShowSearchResult?: boolean,
   getData?: (reqPayload: IReqPayload) => void,
-  data?: {
-    monitorList: IMonitor[],
-    fenceList: IFence[]
-  }
+  data?: ISearchState
 }
 
 /**
@@ -38,20 +35,6 @@ export interface ISearchCondition {
   value: SearchCondition,
   placeholder: string
 }
-
-/**
- * 用于展示搜索结果的下拉列表styled组件
- * @type {StyledComponent<"ul", AnyIfEmpty<DefaultTheme>, {} & {className: string}, keyof {className: string}>}
- */
-const StyledSearchDisplay: StyledComponent<any, ISearch> = styled.ul.attrs((props: ISearch) => {
-  return {
-    className: `${props.className} ${
-      props.data?.monitorList.length ?
-        (props.isShowSearchResult ? 'inter-plat-search-display-show' : 'inter-plat-search-display-hide') :
-        ''
-    }`
-  };
-})``;
 
 /**
  * 搜索条件名称及图标配置
@@ -86,7 +69,7 @@ const searchConditions: ISearchCondition[] = [
  */
 const Search = (props: ISearch) => {
   const {getData, data} = props;
-  // 控制搜索结果的显示或隐藏
+  // 控制搜索结果面板的显示或隐藏
   const [isShowSearchResult, setIsShowSearchResult] = useState(false);
   // 搜索条件（监控对象、区域、位置）
   const [searchCondition, setSearchCondition] = useState(SearchCondition.ENTITY);
@@ -98,12 +81,14 @@ const Search = (props: ISearch) => {
    * 按监控对象/位置/区域
    * @param value
    */
-  const onChange = (value: any) => {
+  const onChange = (value: SearchCondition) => {
     // 根据当前选中的查询方式更改文本框的提示语
     for (let searchCondition of searchConditions) {
       if (searchCondition.value === value) {
         searchBox.current!.placeholder = searchCondition.placeholder;
-        setSearchCondition(searchCondition.value);
+        searchBox.current!.value = '';
+        setSearchCondition(value);
+        setIsShowSearchResult(false);
         break;
       }
     }
@@ -167,24 +152,7 @@ const Search = (props: ISearch) => {
           onClick={handleSearch}
         />
       </Container>
-
-      <StyledSearchDisplay
-        {...props}
-        isShowSearchResult={isShowSearchResult}
-        className="inter-plat-search-display"
-      >
-        {
-          data?.monitorList.map((item, index) => (
-            <li className="inter-plat-search-display-item" key={`inter-plat-search-display-item-${index}`}>
-              <Icon
-                text={item.monitorName}
-                icon={monitorTypeIcon[item.monitorType] as IconSource}
-                iconHover={monitorTypeIcon[`${item.monitorType}_hover`] as IconSourceHover}
-              />
-            </li>
-          ))
-        }
-      </StyledSearchDisplay>
+      <SearchPanel data={data} isShow={isShowSearchResult} searchCondition={searchCondition} />
     </Container>
   );
 };

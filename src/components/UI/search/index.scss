@@ -1,6 +1,6 @@
 @mixin select-box-bg {
   border: 1px solid rgba(45, 60, 76, 0.8);
-  background: rgba(21, 47, 69, 0.7);
+  background: rgba(21, 47, 69, 0.8);
 }
 
 .inter-plat-search {
@@ -78,6 +78,24 @@
         border-color: #40a9ff;
         box-shadow: 0 0 0 0.104vw rgba(24, 144, 255, .2);
       }
+
+      &::-webkit-input-placeholder { /* WebKit browsers */
+        color: #a6acb3;
+      }
+
+      &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+        color: #a6acb3;
+        opacity: 1;
+      }
+
+      &::-moz-placeholder { /* Mozilla Firefox 19+ */
+        color: #a6acb3;
+        opacity: 1;
+      }
+
+      &:-ms-input-placeholder { /* Internet Explorer 10+ */
+        color: #a6acb3;
+      }
     }
 
     button {
@@ -136,7 +154,7 @@
       }
 
       &:active {
-        transform: scale(1.05);
+        background: rgba(2, 33, 58, .8);
       }
 
       .icon-container {
@@ -150,6 +168,12 @@
 
       span {
         font-size: 12px;
+      }
+
+      &.have-children {
+        flex-direction: column;
+        justify-content: center;
+        align-items: unset;
       }
     }
   }

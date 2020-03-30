@@ -34,7 +34,35 @@ export const productionData = (fetchName: keyof APIRequestConfig, isWebsocket?: 
 
 // 生成车牌
 function monitorName() {
-  const p = ['皖', '京', '渝', '闽', '甘', '粤', '区', '黔', '琼', '冀', '豫', '黑', '蒙', '区', '青', '鲁', '晋', '陕', '沪', '川', '津', '藏', '新', '滇', '浙', '港', '澳'][Math.floor(Math.random() * 27)];
+  const p = [
+    '皖',
+    '京',
+    '渝',
+    '闽',
+    '甘',
+    '粤',
+    '区',
+    '黔',
+    '琼',
+    '冀',
+    '豫',
+    '黑',
+    '蒙',
+    '区',
+    '青',
+    '鲁',
+    '晋',
+    '陕',
+    '沪',
+    '川',
+    '津',
+    '藏',
+    '新',
+    '滇',
+    '浙',
+    '港',
+    '澳'
+  ][Math.floor(Math.random() * 27)];
   const r = mock(/[\dA-Z]{5}/);
 
   return `${p}${r}`;
@@ -128,61 +156,63 @@ const mocks: Mocks = {
     retCode: 0,
     retMsg: 'success',
     data: {
-      'administrativeRegion': '@county',
-      'eventEndAddress': '@county(true)',
-      'endTime': '@datetime',
-      'eventDurationTime': 19500,
-      'eventDurationTimeStr': '5小时25分0秒',
+      administrativeRegion: '@county',
+      eventEndAddress: '@county(true)',
+      endTime: '@datetime',
+      eventDurationTime: 19500,
+      eventDurationTimeStr: '5小时25分0秒',
       'eventLevel|1-4': 1,
       'eventName|1': ['上班未到岗', '超时长停留'],
-      'eventProcessingTime': 3892,
-      'eventProcessingTimeStr': '1小时4分52秒',
+      eventProcessingTime: 3892,
+      eventProcessingTimeStr: '1小时4分52秒',
       'eventStatus|0-1': 0,
-      'eventType': '152',
-      'latitude': '29.893485',
-      'longitude': '111.730631',
-      'monitorId': '@guid',
-      'startTime': '@datetime',
-      'monitorName': monitorName()
+      eventType: '152',
+      latitude: '29.893485',
+      longitude: '111.730631',
+      monitorId: '@guid',
+      startTime: '@datetime',
+      monitorName: monitorName()
     }
   },
   fetchEventList: {
     retCode: 0,
     retMsg: '',
     data: {
-      'eventList|10-15': [{
-        'description': null,
-        'eventLevel|1-4': 1,
-        'eventName|1': ['上班未到岗', '超时长停留'],
-        'eventStatus|0-1': 0,
-        'eventType': '154',
-        'monitorId': '@guid',
-        'monitorName': monitorName(),
-        'startTime': '@datetime'
-      }],
-      'eventStatistics': {
+      'eventList|10-15': [
+        {
+          description: null,
+          'eventLevel|1-4': 1,
+          'eventName|1': ['上班未到岗', '超时长停留'],
+          'eventStatus|0-1': 0,
+          eventType: '154',
+          monitorId: '@guid',
+          monitorName: monitorName(),
+          startTime: '@datetime'
+        }
+      ],
+      eventStatistics: {
         'finnishedNum|1-10': 1,
         'processingNum|1-10': 1,
         'totalNum|1-10': 1,
         'untreatedNum|1-10': 1
       },
-      'latestEventDetails': {
-        'administrativeRegion': '@county',
-        'eventEndAddress': '@county(true)',
-        'endTime': '@datetime',
-        'eventDurationTime': 19500,
-        'eventDurationTimeStr': '5小时25分0秒',
+      latestEventDetails: {
+        administrativeRegion: '@county',
+        eventEndAddress: '@county(true)',
+        endTime: '@datetime',
+        eventDurationTime: 19500,
+        eventDurationTimeStr: '5小时25分0秒',
         'eventLevel|1-4': 1,
         'eventName|1': ['上班未到岗', '超时长停留'],
-        'eventProcessingTime': 3892,
-        'eventProcessingTimeStr': '1小时4分52秒',
+        eventProcessingTime: 3892,
+        eventProcessingTimeStr: '1小时4分52秒',
         'eventStatus|0-1': 0,
-        'eventType': '152',
-        'latitude': '29.893485',
-        'longitude': '111.730631',
-        'monitorId': '@guid',
-        'startTime': '@datetime',
-        'monitorName': monitorName()
+        eventType: '152',
+        latitude: '29.893485',
+        longitude: '111.730631',
+        monitorId: '@guid',
+        startTime: '@datetime',
+        monitorName: monitorName()
       }
     }
   },
@@ -190,102 +220,162 @@ const mocks: Mocks = {
     retMsg: '',
     retCode: 0,
     data: {
-      'monitors|10-20': [{
-        'monitorId': '@guid',
-        'monitorName|1': [monitorName(), Random.cname()],
-        'monitorType|1': [0, 1, 2, 9, 10],
-        'assignmentName|1': ['分组1', '分组2', '分组3', '分组4'],
-        'deviceNum': Math.floor(Math.random() * 10000),
-        'groupName|1': ['组织1', '组织2', '组织3', '组织4'],
-        'simCardNum': Math.floor(Math.random() * 10000),
-        'userId': Random.integer(10000, 99999)
-      }]
+      'monitors|10-20': [
+        {
+          monitorId: '@guid',
+          'monitorName|1': [monitorName(), Random.cname()],
+          'monitorType|1': [0, 1, 2, 9, 10],
+          'assignmentName|1': ['分组1', '分组2', '分组3', '分组4'],
+          deviceNum: Math.floor(Math.random() * 10000),
+          'groupName|1': ['组织1', '组织2', '组织3', '组织4'],
+          simCardNum: Math.floor(Math.random() * 10000),
+          userId: Random.integer(10000, 99999)
+        }
+      ]
     }
   },
   fetchSearchByArea: {
     retCode: 0,
     retMsg: '',
     data: {
-      'fenceTreeNodes': [
+      fenceTreeNodes: [
         {
-          'iconSkin': null,
-          'id': 'cdecb3bd-dccf-4be4-82ac-7ad3b966d9ff',
-          'name': 'yuan',
-          'objType': null,
-          'parentId': '0',
-          'type': 'fenceParent'
+          iconSkin: null,
+          id: '1f43cb0b-402e-45bd-9f27-aed1a93669ac',
+          name: '所有绘制方式',
+          objType: null,
+          parentId: '0',
+          type: 'fenceParent',
+          childNodes: [
+            {
+              childNodes: null,
+              iconSkin: 'zw_m_polygon_skin',
+              id: 'f5349dc7-4b5c-4c96-af22-bcf09463cd0c',
+              name: 'duobianx-2',
+              objType: 'zw_m_polygon',
+              parentId: '1f43cb0b-402e-45bd-9f27-aed1a93669ac',
+              type: 'fence'
+            },
+            {
+              childNodes: null,
+              iconSkin: 'zw_m_circle_skin',
+              id: '6a8160f4-e829-4b2c-a932-b32c347ab224',
+              name: 'yuanxing',
+              objType: 'zw_m_circle',
+              parentId: '1f43cb0b-402e-45bd-9f27-aed1a93669ac',
+              type: 'fence'
+            },
+            {
+              childNodes: null,
+              iconSkin: 'zw_m_line_skin',
+              id: 'adb1a293-a5c9-4b7b-bcdf-8e5d83d8ae7d',
+              name: 'luxian-2',
+              objType: 'zw_m_line',
+              parentId: '1f43cb0b-402e-45bd-9f27-aed1a93669ac',
+              type: 'fence'
+            },
+            {
+              childNodes: null,
+              iconSkin: 'zw_m_marker_skin',
+              id: 'd7b14108-5f42-4c02-b8b2-31c5381b4a92',
+              name: 'biaozhu-2',
+              objType: 'zw_m_marker',
+              parentId: '1f43cb0b-402e-45bd-9f27-aed1a93669ac',
+              type: 'fence'
+            },
+            {
+              childNodes: null,
+              iconSkin: 'zw_m_administration_skin',
+              id: '8ca18d7a-cf35-469e-91fe-5e2b1aa554d5',
+              name: '湖北-宜昌',
+              objType: 'zw_m_administration',
+              parentId: '1f43cb0b-402e-45bd-9f27-aed1a93669ac',
+              type: 'fence'
+            },
+            {
+              childNodes: null,
+              iconSkin: 'zw_m_circle_skin',
+              id: '78e694a5-e8ca-4fca-98f4-5d1c9430ccba',
+              name: 'yuan',
+              objType: 'zw_m_circle',
+              parentId: '1f43cb0b-402e-45bd-9f27-aed1a93669ac',
+              type: 'fence'
+            }
+          ]
         },
         {
-          'iconSkin': null,
-          'id': '1f43cb0b-402e-45bd-9f27-aed1a93669ac',
-          'name': '所有绘制方式',
-          'objType': null,
-          'parentId': '0',
-          'type': 'fenceParent'
+          iconSkin: null,
+          id: 'a987d60b-f5ea-4dca-a4ca-a02b6229a5d4',
+          name: 'quxi-下级创建',
+          objType: null,
+          parentId: '0',
+          type: 'fenceParent',
+          childNodes: [
+            {
+              childNodes: null,
+              iconSkin: 'zw_m_circle_skin',
+              id: 'ef11341b-628f-4d56-8ba0-9b716bd73da0',
+              name: 'yuan',
+              objType: 'zw_m_circle',
+              parentId: 'a987d60b-f5ea-4dca-a4ca-a02b6229a5d4',
+              type: 'fence'
+            },
+            {
+              childNodes: null,
+              iconSkin: 'zw_m_circle_skin',
+              id: 'b49dc658-366b-43aa-80cc-6c6843ac68ff',
+              name: 'yuanxing',
+              objType: 'zw_m_circle',
+              parentId: 'a987d60b-f5ea-4dca-a4ca-a02b6229a5d4',
+              type: 'fence'
+            },
+            {
+              childNodes: null,
+              iconSkin: 'zw_m_administration_skin',
+              id: '4a19456c-6437-4147-b32c-719f4c64a424',
+              name: '湖北-宜昌-枝江',
+              objType: 'zw_m_administration',
+              parentId: 'a987d60b-f5ea-4dca-a4ca-a02b6229a5d4',
+              type: 'fence'
+            }
+          ]
         },
         {
-          'iconSkin': null,
-          'id': 'a987d60b-f5ea-4dca-a4ca-a02b6229a5d4',
-          'name': 'quxi-下级创建',
-          'objType': null,
-          'parentId': '0',
-          'type': 'fenceParent'
-        },
-        {
-          'iconSkin': 'zw_m_circle_skin',
-          'id': 'ef11341b-628f-4d56-8ba0-9b716bd73da0',
-          'name': 'yuan',
-          'objType': 'zw_m_circle',
-          'parentId': 'a987d60b-f5ea-4dca-a4ca-a02b6229a5d4',
-          'type': 'fence'
-        },
-        {
-          'iconSkin': 'zw_m_circle_skin',
-          'id': 'b49dc658-366b-43aa-80cc-6c6843ac68ff',
-          'name': 'yuanxing',
-          'objType': 'zw_m_circle',
-          'parentId': 'a987d60b-f5ea-4dca-a4ca-a02b6229a5d4',
-          'type': 'fence'
-        },
-        {
-          'iconSkin': 'zw_m_circle_skin',
-          'id': '6a8160f4-e829-4b2c-a932-b32c347ab224',
-          'name': 'yuanxing',
-          'objType': 'zw_m_circle',
-          'parentId': '1f43cb0b-402e-45bd-9f27-aed1a93669ac',
-          'type': 'fence'
-        },
-        {
-          'iconSkin': 'zw_m_circle_skin',
-          'id': '78e694a5-e8ca-4fca-98f4-5d1c9430ccba',
-          'name': 'yuan',
-          'objType': 'zw_m_circle',
-          'parentId': '1f43cb0b-402e-45bd-9f27-aed1a93669ac',
-          'type': 'fence'
-        },
-        {
-          'iconSkin': 'zw_m_circle_skin',
-          'id': '1edcd618-fdef-44a4-acb2-8c8b331e9124',
-          'name': 'yuanxing',
-          'objType': 'zw_m_circle',
-          'parentId': 'cdecb3bd-dccf-4be4-82ac-7ad3b966d9ff',
-          'type': 'fence'
-        },
-        {
-          'iconSkin': 'zw_m_circle_skin',
-          'id': 'a8328d1c-73d0-42af-b3b0-cdf9824da845',
-          'name': 'test001',
-          'objType': 'zw_m_circle',
-          'parentId': 'cdecb3bd-dccf-4be4-82ac-7ad3b966d9ff',
-          'type': 'fence'
-        },
-        {
-          'iconSkin': 'zw_m_circle_skin',
-          'id': 'b8a5fe63-0df3-45f9-9d31-7b1264095d79',
-          'name': 'test002',
-          'objType': 'zw_m_circle',
-          'parentId': 'cdecb3bd-dccf-4be4-82ac-7ad3b966d9ff',
-          'type': 'fence'
+          iconSkin: null,
+          id: 'cdecb3bd-dccf-4be4-82ac-7ad3b966d9ff',
+          name: 'yuan',
+          objType: null,
+          parentId: '0',
+          type: 'fenceParent',
+          childNodes: [
+            {
+              childNodes: null,
+              iconSkin: 'zw_m_circle_skin',
+              id: 'a8328d1c-73d0-42af-b3b0-cdf9824da845',
+              name: 'test001',
+              objType: 'zw_m_circle',
+              parentId: 'cdecb3bd-dccf-4be4-82ac-7ad3b966d9ff',
+              type: 'fence'
+            },
+            {
+              childNodes: null,
+              iconSkin: 'zw_m_circle_skin',
+              id: 'b8a5fe63-0df3-45f9-9d31-7b1264095d79',
+              name: 'test002',
+              objType: 'zw_m_circle',
+              parentId: 'cdecb3bd-dccf-4be4-82ac-7ad3b966d9ff',
+              type: 'fence'
+            },
+            {
+              childNodes: null,
+              iconSkin: 'zw_m_circle_skin',
+              id: '1edcd618-fdef-44a4-acb2-8c8b331e9124',
+              name: 'yuanxing',
+              objType: 'zw_m_circle',
+              parentId: 'cdecb3bd-dccf-4be4-82ac-7ad3b966d9ff',
+              type: 'fence'
+            }
+          ]
         }
       ]
     }
