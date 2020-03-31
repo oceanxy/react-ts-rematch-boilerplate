@@ -7,6 +7,7 @@
  * @LastModifiedTime: 2020-03-26 18:19:20
  */
 
+import map from './map';
 import search from './search';
 
-export default {search};
+export default {search, map};

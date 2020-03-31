@@ -3,40 +3,42 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 高德地图组件
  * @Date: 2020-01-04 11:43:57
- * @LastModified: Oceanxy
- * @LastModifiedTime: 2020-01-04 11:43:57
+ * @Date: 2020-03-31 周二 11:03:31
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-03-31 周二 11:03:31
  */
 
-// @ts-ignore
-// eslint-disable-next-line import/extensions,import/no-unresolved
-import AMap from 'AMap';
-import React, { CSSProperties, useEffect, useRef } from 'react';
+import Container, { IContainer } from '@/components/UI/container';
+import config from '@/config';
+import { useScript } from '@/utils/hooks/loadScript';
+import React from 'react';
 import './index.scss';
 
-export interface IMap {
-  mapKey: string;
-  style?: CSSProperties;
+/**
+ * 动态加载高德地图
+ * @type {(props: any) => any}
+ */
+const UseMap = useScript(
+  `https://webapi.amap.com/maps?v=${config.map.mapVersion}&key=${config.map.mapKey}`,
+  () => import('@/components/UI/amap/map')
+);
+
+export interface IZWMap extends IContainer<any> {
+  map?: AMap.Map,
+  updateMapInstance?: (map: AMap.Map) => void
 }
 
 /**
  * 地图组件
  */
-const ZWMap = (props: IMap) => {
-  const mapRef = useRef(null);
+const ZWMap = (props: IZWMap) => {
+  const {map, updateMapInstance} = props;
 
-  useEffect(() => {
-    if (mapRef.current) {
-      const map = new AMap.Map('mapContainer', {
-        viewMode: '3D',
-        pitch: 50,
-        zoom: 14
-      });
-
-      map.setMapStyle('amap://styles/grey');
-    }
-  });
-
-  return <div id="mapContainer" className="map-container" ref={mapRef} />;
+  return (
+    <Container id="mapContainer" className="inter-plat-map" {...props}>
+      {map ? null : <UseMap updateMapInstance={updateMapInstance} />}
+    </Container>
+  );
 };
 
 export default ZWMap;

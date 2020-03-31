@@ -141,6 +141,7 @@ const Search = (props: ISearch) => {
           }
         </Select>
         <input
+          id='searchBox'
           type="text"
           ref={searchBox}
           placeholder={searchConditions[0].placeholder}

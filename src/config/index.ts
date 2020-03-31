@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-01-02 16:04:22
  */
 
-import { IConfig, EProtocal } from '@/interfaces/config';
+import { EProtocal, IConfig } from '@/interfaces/config';
 
 /**
  * 全局配置
@@ -21,7 +21,10 @@ const config: IConfig = {
   basename: '/clbs/intercom',
   mock: true,
   // 地图相关配置
-  mapKey: '3018bf7f400b01e710642d798b80eaf1'
+  map: {
+    mapKey: '3018bf7f400b01e710642d798b80eaf1',
+    mapVersion: '1.4.15'
+  }
 };
 
 export default config;

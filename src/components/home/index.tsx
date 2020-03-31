@@ -12,17 +12,16 @@ import DisplayContent from '@/components/home/displayContent';
 import Intercom from '@/components/home/intercom';
 import ResourceStatistics from '@/components/home/resourceStatistics';
 import TemporaryGroup from '@/components/home/temporaryGroup';
-import ZWMap from '@/components/UI/amap';
 import Button from '@/components/UI/button';
 import Container from '@/components/UI/container';
 import EventLegend, { eventTypeColor } from '@/components/UI/eventLegend';
 import KeyValue from '@/components/UI/keyValue';
 import Nav from '@/components/UI/nav';
 import Title from '@/components/UI/title';
-import config from '@/config';
 import { renderRoutes } from '@/config/router';
 import { EventDetails, EventList, EventStatistics } from '@/containers/home';
 import { Search } from '@/containers/UI';
+import ZWMap from '@/containers/UI/amap';
 import { eventTypeText } from '@/models/home/eventDetails';
 import styledComponent from '@/styled';
 import React from 'react';
@@ -62,7 +61,7 @@ const Home = () => {
           </Title>
         </Container>
         <Container className="inter-plat-center">
-          <ZWMap mapKey={config.mapKey} />
+          <ZWMap />
           <Container className="inter-plat-other">
             <Search />
             <DisplayContent />

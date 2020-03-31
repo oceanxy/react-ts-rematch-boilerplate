@@ -4,7 +4,6 @@ module.exports = {
     'browser': true,
     'node': true,
     'es6': true,
-    // "jquery": true
     'jest': true,
     'jsx-control-statements/jsx-control-statements': true
   },
@@ -18,7 +17,8 @@ module.exports = {
   },
   'globals': {
     'window': true,
-    'document': true
+    'document': true,
+    'AMap': true
   },
   'extends': [
     // 'prettier',

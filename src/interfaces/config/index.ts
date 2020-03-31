@@ -47,7 +47,10 @@ export interface IConfig {
    */
   mock: boolean;
   /**
-   * 地图key
+   * 地图相关设置
    */
-  mapKey: string;
+  map: {
+    mapKey: string,
+    mapVersion: string
+  } & AMap.Map.Options
 }
