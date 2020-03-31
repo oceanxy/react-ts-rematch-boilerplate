@@ -16,12 +16,13 @@
 
     .inter-plat-select {
       width: 60px;
+      height: 30px;
       outline: none;
       margin: 0;
       display: flex;
       align-items: center;
 
-      .ant-select-selection {
+      .ant-select-selector {
         height: 60%;
         width: 100%;
         color: #cbcbcb;
@@ -35,13 +36,18 @@
         align-items: center;
         border-right: 1px solid #0a1c2e;
 
-        .ant-select-selection__rendered {
+        .ant-select-selection-item {
+          height: 100%;
+          display: flex;
+        }
+
+        .ant-select-selection-search {
           width: 20px;
           margin-right: 0;
           vertical-align: middle;
           line-height: unset;
 
-          .ant-select-selection-selected-value {
+          .ant-select-selection-search-input {
             height: 100%;
             line-height: unset;
             float: none;
@@ -50,11 +56,24 @@
             justify-content: center;
           }
         }
+      }
 
-        .ant-select-arrow {
-          font-size: 0.525vw;
-          right: 0.473vw;
-          vertical-align: middle;
+      .ant-select-arrow {
+        font-size: 0.525vw;
+        right: 0.473vw;
+        vertical-align: middle;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .anticon-down {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        svg {
+          fill: #969799;
         }
       }
     }
@@ -205,28 +224,27 @@
   @include select-box-bg;
   border-radius: 0;
 
-  .ant-select-dropdown-menu {
-    color: #cbcbcb;
+  .ant-select-item {
+    font-size: 12px;
+    background: none;
+    color: currentColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 0;
 
-    .ant-select-dropdown-menu-item {
-      font-size: 12px;
-      background: none;
-      color: currentColor;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-
-      &:hover {
-        background: rgba(2, 33, 58, .6);
-      }
+    &.ant-select-item-option-selected {
+      background: rgba(2, 46, 82, 0.65);
     }
 
-    .ant-select-dropdown-menu-item-selected {
-      background: rgba(89, 110, 130, 0.2);
-      font-weight: 600;
-      color: currentColor;
+    &:hover {
+      background: rgba(2, 33, 58, .6);
     }
+  }
+
+  .ant-select-item-selected {
+    background: rgba(89, 110, 130, 0.2);
+    font-weight: 600;
+    color: currentColor;
   }
 }

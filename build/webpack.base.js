@@ -87,7 +87,11 @@ module.exports = merge(webpackConfig, {
               },
               'postcss-loader',
               {
-                loader: 'sass-loader'
+                loader: 'sass-loader',
+                options: {
+                  implementation: require('sass'),
+                  sourceMap: true
+                }
               }
             ]
           },

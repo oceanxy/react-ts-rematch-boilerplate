@@ -3,7 +3,7 @@ const baseWebpackConfig = require('./webpack.base');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InterpolateHtmlPlugin = require('interpolate-html-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -19,7 +19,7 @@ module.exports = merge.smart(baseWebpackConfig, {
   mode: 'production',
   devtool: sourceMapsMode,
   output: {
-    filename: 'js/[name].[contenthash:8].js',
+    filename: 'js/[name].[contenthash:8].js'
   },
   module: {
     rules: [
@@ -38,7 +38,11 @@ module.exports = merge.smart(baseWebpackConfig, {
               },
               'postcss-loader',
               {
-                loader: 'sass-loader'
+                loader: 'sass-loader',
+                options: {
+                  implementation: require('sass'),
+                  sourceMap: true
+                }
               }
             ]
           },
@@ -100,7 +104,7 @@ module.exports = merge.smart(baseWebpackConfig, {
         keepClosingSlash: true,
         minifyJS: true,
         minifyCSS: true,
-        minifyURLs: true,
+        minifyURLs: true
       }
     }),
     new InterpolateHtmlPlugin(env.raw),
@@ -114,7 +118,7 @@ module.exports = merge.smart(baseWebpackConfig, {
       test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
       threshold: 10240,
       minRatio: 0.8
-    }),
+    })
   ],
   optimization: {
     splitChunks: {
@@ -135,7 +139,7 @@ module.exports = merge.smart(baseWebpackConfig, {
     },
     minimizer: [
       new OptimizeCSSAssetsPlugin({
-        cssProcessorOptions: { map: { inline: false } }
+        cssProcessorOptions: {map: {inline: false}}
       }),
       new TerserPlugin({
         sourceMap: config.productionJsSourceMap

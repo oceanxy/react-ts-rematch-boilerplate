@@ -116,8 +116,6 @@ const StyledIcon = styled(Container)`
 `;
 
 const Icon = (props: IIcon) => {
-  console.log('-----', props.icon);
-
   return (
     <StyledIcon {...props} className="icon-container">
       <div className="icon-img-box">

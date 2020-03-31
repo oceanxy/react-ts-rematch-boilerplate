@@ -8,7 +8,7 @@
  */
 
 import Icon, { IconSource, IconSourceHover } from '@/components/UI/icon';
-import { ISearch } from '@/components/UI/search';
+import { ISearch } from '@/components/UI/search/index';
 import { IFence, IMonitor, ISearchState, monitorTypeIcon, SearchCondition } from '@/models/UI/search';
 import React from 'react';
 import styled, { StyledComponent } from 'styled-components';

@@ -9,7 +9,7 @@
 
 import Container from '@/components/UI/container';
 import Icon, { iconName, IconSource, IconSourceHover } from '@/components/UI/icon';
-import SearchPanel from '@/containers/UI/search/searchPanel';
+import SearchPanel from '@/components/UI/search/searchPanel';
 import { IReqPayload, ISearchState, SearchCondition, SearchRequest } from '@/models/UI/search';
 import Select from 'antd/es/select';
 import React, { ButtonHTMLAttributes, useRef, useState } from 'react';
