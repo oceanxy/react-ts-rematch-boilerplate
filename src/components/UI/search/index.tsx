@@ -19,21 +19,23 @@ import './index.scss';
  * 搜索接口
  */
 export interface ISearch extends ButtonHTMLAttributes<any> {
+  searchState?: ISearchState;
   active?: boolean;
-  isShowSearchResult?: boolean,
-  getData?: (reqPayload: IReqPayload) => void,
-  data?: ISearchState
+  setSearchCondition?: (searchCondition: SearchCondition) => void;
+  isShowSearchResult?: boolean;
+  getData?: (reqPayload: IReqPayload) => void;
+  setKeyword?: (keyword: string) => void;
 }
 
 /**
  * 搜索条件接口
  */
 export interface ISearchCondition {
-  name: string,
-  icon: IconSource,
-  iconHover: IconSourceHover,
-  value: SearchCondition,
-  placeholder: string
+  name: string;
+  icon: IconSource;
+  iconHover: IconSourceHover;
+  value: SearchCondition;
+  placeholder: string;
 }
 
 /**
@@ -68,11 +70,10 @@ const searchConditions: ISearchCondition[] = [
  * 搜索组件
  */
 const Search = (props: ISearch) => {
-  const {getData, data} = props;
+  const { searchState, getData, setSearchCondition, setKeyword } = props;
+  const { searchCondition, searchKeyword } = searchState!;
   // 控制搜索结果面板的显示或隐藏
   const [isShowSearchResult, setIsShowSearchResult] = useState(false);
-  // 搜索条件（监控对象、区域、位置）
-  const [searchCondition, setSearchCondition] = useState(SearchCondition.ENTITY);
   // 搜索框Ref
   const searchBox = useRef<HTMLInputElement>(null);
 
@@ -83,11 +84,11 @@ const Search = (props: ISearch) => {
    */
   const onChange = (value: SearchCondition) => {
     // 根据当前选中的查询方式更改文本框的提示语
-    for (let searchCondition of searchConditions) {
-      if (searchCondition.value === value) {
-        searchBox.current!.placeholder = searchCondition.placeholder;
-        searchBox.current!.value = '';
-        setSearchCondition(value);
+    for (let sc of searchConditions) {
+      if (sc.value === value) {
+        searchBox.current!.placeholder = sc.placeholder;
+        setKeyword!('');
+        setSearchCondition!(value);
         setIsShowSearchResult(false);
         break;
       }
@@ -104,7 +105,7 @@ const Search = (props: ISearch) => {
       supportMonitorType: -1
     };
 
-    getData?.({params: requestParam, condition: searchCondition});
+    getData?.({ params: requestParam, condition: searchCondition! });
     setIsShowSearchResult(!isShowSearchResult);
   };
 
@@ -113,10 +114,18 @@ const Search = (props: ISearch) => {
    * @param {React.KeyboardEvent<HTMLDivElement>} e
    */
   const onEnterSearch = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const inputEl = (e.target as HTMLInputElement);
+    const inputEl = e.target as HTMLInputElement;
     if (e.keyCode === 13 && inputEl.value) {
       handleSearch();
     }
+  };
+
+  /**
+   * 文本框输入事件
+   * @param {React.KeyboardEvent<HTMLInputElement>} e
+   */
+  const onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    setKeyword!(e.currentTarget.value);
   };
 
   return (
@@ -128,32 +137,26 @@ const Search = (props: ISearch) => {
           dropdownClassName="inter-plat-dropdown"
           onChange={onChange}
         >
-          {
-            searchConditions.map((item, index) => (
-              <Select.Option
-                key={`inter-plat-select-option-${index}`}
-                value={item.value}
-                title={item.name}
-              >
-                <Icon icon={item.icon} iconHover={item.iconHover} />
-              </Select.Option>
-            ))
-          }
+          {searchConditions.map((item, index) => (
+            <Select.Option key={`inter-plat-select-option-${index}`} value={item.value} title={item.name}>
+              <Icon icon={item.icon} iconHover={item.iconHover} />
+            </Select.Option>
+          ))}
         </Select>
         <input
-          id='searchBox'
+          id="searchBox"
           type="text"
           ref={searchBox}
           placeholder={searchConditions[0].placeholder}
           className="inter-plat-text"
           onKeyUp={onEnterSearch}
+          autoComplete="off"
+          value={searchKeyword}
+          onInput={onInput}
         />
-        <button
-          type="submit"
-          onClick={handleSearch}
-        />
+        <button type="submit" onClick={handleSearch} />
       </Container>
-      <SearchPanel data={data} isShow={isShowSearchResult} searchCondition={searchCondition} />
+      <SearchPanel searchState={searchState!} isShow={isShowSearchResult} />
     </Container>
   );
 };

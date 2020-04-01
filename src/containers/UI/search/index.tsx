@@ -11,9 +11,11 @@ import Search from '@/components/UI/search';
 import { Dispatch, iRootState } from '@/store';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: iRootState) => ({data: state.search});
+const mapStateToProps = (state: iRootState) => ({ searchState: state.search });
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
-  getData: dispatch.search.getData
+  getData: dispatch.search.getData,
+  setSearchCondition: dispatch.search.updateSearchCondition,
+  setKeyword: dispatch.search.updateSearchKeyword
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search);

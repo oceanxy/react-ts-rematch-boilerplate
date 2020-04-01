@@ -7,15 +7,15 @@
  * @LastModifiedTime: 2020-03-19 17:23:31
  */
 
-import EventStatistics from '@/components/home/eventStatistics';
+import EventStatistics from '@/components/home/eventModel/eventStatistics';
 import { Dispatch, iRootState } from '@/store';
 import React from 'react';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: iRootState) => ({data: state.eventStatistics});
+const mapStateToProps = (state: iRootState) => ({ data: state.eventStatistics });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
-  getData: dispatch.eventList.getData,
+  getData: dispatch.eventList.getData
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventStatistics);

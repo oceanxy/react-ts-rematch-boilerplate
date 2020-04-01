@@ -22,7 +22,7 @@ import { renderRoutes } from '@/config/router';
 import { EventDetails, EventList, EventStatistics } from '@/containers/home';
 import { Search } from '@/containers/UI';
 import ZWMap from '@/containers/UI/amap';
-import { eventTypeText } from '@/models/home/eventDetails';
+import { eventTypeText } from '@/models/home/eventModel/eventDetails';
 import styledComponent from '@/styled';
 import React from 'react';
 import './index.scss';
@@ -45,7 +45,7 @@ const Home = () => {
         <Container className="inter-plat-left">
           <Title
             name="事件列表"
-            titleExtraElementStyle={{marginLeft: 10}}
+            titleExtraElementStyle={{ marginLeft: 10 }}
             titleExtraElement={
               <React.Fragment>
                 <EventLegend name={eventTypeText[4]} iconColor={eventTypeColor[4]} />
@@ -74,7 +74,7 @@ const Home = () => {
             <ResourceStatistics />
           </Title>
           <Title name="任务列表" styled={styledComponent.marginTop20}>
-            <Container theme="style1" style={{marginTop: 10}}>
+            <Container theme="style1" style={{ marginTop: 10 }}>
               <EventLegend
                 name="任务详情"
                 nameStyled={styledComponent.subtitle}

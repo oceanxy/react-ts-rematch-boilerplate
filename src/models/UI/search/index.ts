@@ -12,15 +12,6 @@ import fetchApis from '@/apis';
 import { IconSource, IconSourceHover } from '@/components/UI/icon';
 import { ModelConfig } from '@rematch/core';
 
-/**
- * 搜索条件
- */
-export enum SearchCondition {
-  ENTITY = 'ENTITY',
-  AREA = 'AREA',
-  POSITION = 'POSITION'
-}
-
 // 请求参数
 export type SearchRequest = {
   /**
@@ -40,6 +31,15 @@ export type SearchRequest = {
    */
   supportMonitorType: -1 | 0 | 1 | 2 | 9 | 10;
 };
+
+/**
+ * 搜索条件
+ */
+export enum SearchCondition {
+  ENTITY = 'ENTITY',
+  AREA = 'AREA',
+  POSITION = 'POSITION'
+}
 
 /**
  * 获取搜索数据参数接口
@@ -123,11 +123,34 @@ export interface IFence {
 }
 
 /**
+ * POI接口
+ */
+export interface IPOI extends AMap.Autocomplete.Tip {}
+
+/**
  * 搜索组件model接口
  */
 export interface ISearchState {
+  /**
+   * 按对象（监控对象名称）搜索的数据列表
+   */
   monitorList: IMonitor[];
+  /**
+   * 按区域（围栏）搜索的数据列表
+   */
   fenceList: IFence[];
+  /**
+   * POI数据
+   */
+  POIList: IPOI[];
+  /**
+   * 搜索条件
+   */
+  searchCondition?: SearchCondition;
+  /**
+   * 搜索关键字
+   */
+  searchKeyword: string;
 }
 
 /**
@@ -158,11 +181,16 @@ export const monitorTypeIcon: { [K: string]: IconSource | IconSourceHover } = {
   location_hover: IconSourceHover.LOCATION
 };
 
-// 搜索组件model
+/**
+ * 搜索组件model
+ */
 const search: ModelConfig = {
   state: <ISearchState>{
     monitorList: [],
-    fenceList: []
+    fenceList: [],
+    POIList: [],
+    searchCondition: SearchCondition.ENTITY,
+    searchKeyword: ''
   },
   reducers: {
     updateMonitorData(state, data) {
@@ -176,7 +204,21 @@ const search: ModelConfig = {
         ...state,
         fenceList: data || []
       };
-    }
+    },
+    updatePOIData(state, data) {
+      return {
+        ...state,
+        POIList: data || []
+      };
+    },
+    updateSearchCondition: (state, searchCondition: SearchCondition) => ({
+      ...state,
+      searchCondition
+    }),
+    updateSearchKeyword: (state, searchKeyword: string) => ({
+      ...state,
+      searchKeyword
+    })
   },
   effects: {
     async getData(reqPayload: IReqPayload) {
@@ -188,8 +230,6 @@ const search: ModelConfig = {
           this.updateFenceData(response.data.fenceTreeNodes);
           break;
         case SearchCondition.POSITION:
-          // response = await fetchApis.fetchSearchByMonitorName(reqPayload.params);
-          // this.updateData(response.data.data.monitors);
           break;
         case SearchCondition.ENTITY:
         default:

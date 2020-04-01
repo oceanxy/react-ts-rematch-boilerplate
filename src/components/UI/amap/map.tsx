@@ -10,7 +10,7 @@
 import React, { useEffect } from 'react';
 
 interface IMap {
-  updateMapInstance: (map: AMap.Map) => void
+  updateMapInstance: (map: AMap.Map) => void;
 }
 
 const Map = (props: IMap) => {
@@ -26,25 +26,6 @@ const Map = (props: IMap) => {
     });
 
     props.updateMapInstance(map);
-
-    // AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch'], () => {
-    //   const autoOptions = {
-    //     // city: '北京', // 城市，默认全国
-    //     input: 'searchBox' // 使用联想输入的input的id
-    //   };
-    //   const autocomplete = new AMap.Autocomplete(autoOptions);
-    //   const placeSearch = new AMap.PlaceSearch({
-    //     // city: '北京',
-    //     map
-    //   });
-    //
-    //   AMap.event.addListener(autocomplete, 'select', (e) => {
-    //     //TODO 针对选中的poi实现自己的功能
-    //     // placeSearch.setCity(e.poi.adcode);
-    //     // placeSearch.search(e.poi.name, () => {
-    //     // });
-    //   });
-    // });
   }, []);
 
   return null;

@@ -146,6 +146,10 @@
     overflow: auto;
     overflow-x: hidden;
 
+    .secondary {
+      padding-inline-start: 20px;
+    }
+
     &.inter-plat-search-display-show {
       display: flex;
       animation-name: show-item;

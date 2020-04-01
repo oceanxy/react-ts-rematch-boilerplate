@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-03-19 17:23:31
  */
 
-import EventList from '@/components/home/eventList';
+import EventList from '@/components/home/eventModel/eventList';
 import { Dispatch, iRootState } from '@/store';
 import React from 'react';
 import { connect } from 'react-redux';

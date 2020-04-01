@@ -9,14 +9,14 @@
 
 import Button from '@/components/UI/button';
 import Container from '@/components/UI/container';
-import { EventListRequest } from '@/models/home/eventList';
-import { EventStatisticsData } from '@/models/home/eventStatistics';
+import { IEventListRequest } from '@/models/home/eventModel/eventList';
+import { IEventStatisticsState } from '@/models/home/eventModel/eventStatistics';
 import React, { useState } from 'react';
 import './index.scss';
 
 interface IEventStatistics {
-  getData?: (reqPayload: EventListRequest) => void
-  data?: EventStatisticsData
+  getData?: (reqPayload: IEventListRequest) => void;
+  data?: IEventStatisticsState;
 }
 
 // 事件处理状态
@@ -28,7 +28,7 @@ export enum EventStatisticsMethod {
 
 const EventDetails = (props: IEventStatistics) => {
   const [eventStatisticsMethod, setEventStatisticsMethod] = useState(-1);
-  const {data, getData} = props;
+  const { data, getData } = props;
 
   /**
    * 切换统计状态的点击事件
@@ -44,7 +44,7 @@ const EventDetails = (props: IEventStatistics) => {
     getData?.({
       eventStatus: reqEventStatisticsMethod,
       isStatisticsMethodChanged
-    } as EventListRequest);
+    } as IEventListRequest);
 
     // 更新组件状态
     setEventStatisticsMethod(reqEventStatisticsMethod);

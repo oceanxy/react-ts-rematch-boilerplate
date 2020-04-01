@@ -9,16 +9,23 @@
 
 import { ModelConfig } from '@rematch/core';
 
-interface IMapState {
-  map: AMap.Map | null
+/**
+ * 地图状态
+ */
+export interface IMapState {
+  mapInstance: AMap.Map | null;
 }
 
+/**
+ * 地图model
+ * @type {{reducers: {updateMapInstance: (state: IMapState, map: AMap.Map) => {mapInstance: AMap.Map | null; map: AMap.Map}}; state: IMapState}}
+ */
 const map: ModelConfig = {
-  state: <IMapState> {
-    map: null
+  state: <IMapState>{
+    mapInstance: null
   },
   reducers: {
-    updateMapInstance: (state: IMapState, map: AMap.Map) => ({...state, map})
+    updateMapInstance: (state: IMapState, mapInstance: AMap.Map) => ({ ...state, mapInstance })
   }
 };
 
