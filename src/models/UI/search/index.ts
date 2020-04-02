@@ -9,7 +9,7 @@
  */
 
 import fetchApis from '@/apis';
-import { IconSource, IconSourceHover } from '@/components/UI/icon';
+import { IconSource, IconSourceHover } from '@/components/UI/iconComp';
 import { ModelConfig } from '@rematch/core';
 
 // 请求参数
@@ -156,7 +156,7 @@ export interface ISearchState {
 /**
  * 监控调度对象类型与图标的映射
  */
-export const monitorTypeIcon: { [K: string]: IconSource | IconSourceHover } = {
+export const monitorTypeIcon: {[K: string]: IconSource | IconSourceHover} = {
   '0': IconSource.CAR,
   '1': IconSource.PEOPLE,
   '2': IconSource.THING,
@@ -185,7 +185,7 @@ export const monitorTypeIcon: { [K: string]: IconSource | IconSourceHover } = {
  * 搜索组件model
  */
 const search: ModelConfig = {
-  state: <ISearchState>{
+  state: <ISearchState> {
     monitorList: [],
     fenceList: [],
     POIList: [],
@@ -218,6 +218,12 @@ const search: ModelConfig = {
     updateSearchKeyword: (state, searchKeyword: string) => ({
       ...state,
       searchKeyword
+    }),
+    clearData: (state) => ({
+      ...state,
+      monitorList: [],
+      fenceList: [],
+      POIList: []
     })
   },
   effects: {

@@ -8,7 +8,7 @@
  */
 
 import AlarmEventItem from '@/components/home/alarmEventItem';
-import Container from '@/components/UI/container';
+import Container from '@/components/UI/containerComp';
 import { eventTypeColor } from '@/components/UI/eventLegend';
 import { IEventDetailsRequest } from '@/models/home/eventModel/eventDetails';
 import { IEvent, IEventListRequest } from '@/models/home/eventModel/eventList';

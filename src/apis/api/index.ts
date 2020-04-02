@@ -17,6 +17,7 @@ export type APIName =
   'fetchEventList' |
   'fetchSearchByMonitorName' |
   'fetchSearchByArea' |
+  'fetchSourcesStatistics' |
   // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
   'fetchTestWebsocket' |
@@ -83,6 +84,13 @@ const apis: APIRequestConfig = {
    */
   fetchSearchByArea: {
     url: '/clbs/web/v1/dispatch/fence/getFenceTree',
+    method: EHTTPMethod.POST
+  },
+  /**
+   * 突发事件周边资源
+   */
+  fetchSourcesStatistics: {
+    url: '/clbs/web/v1/dispatch/resource/statistics/aroundEvent',
     method: EHTTPMethod.POST
   }
 };

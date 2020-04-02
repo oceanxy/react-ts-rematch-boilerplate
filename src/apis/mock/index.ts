@@ -379,6 +379,16 @@ const mocks: Mocks = {
         }
       ]
     }
+  },
+  fetchSourcesStatistics: {
+    retMsg: '',
+    retCode: 0,
+    data: {
+      statistics: {
+        'itemName|7': '@cname',
+        'totalNum|7': '@integer'
+      }
+    }
   }
 };
 

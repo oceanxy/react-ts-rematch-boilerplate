@@ -7,9 +7,9 @@
  * @LastModifiedTime: 2020-01-14 14:24:28
  */
 
-import Container from '@/components/UI/container';
+import Container from '@/components/UI/containerComp';
 import EventLegend from '@/components/UI/eventLegend';
-import Trigger, { ETriggerType } from '@/components/UI/trigger';
+import Trigger, { ETriggerType } from '@/components/UI/triggerComp';
 import styledComponent from '@/styled';
 import React from 'react';
 import './index.scss';

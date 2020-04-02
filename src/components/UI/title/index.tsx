@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-01-13 14:24:22
  */
 
-import Container from '@/components/UI/container';
+import Container from '@/components/UI/containerComp';
 import React, { CSSProperties, ReactNode } from 'react';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 import './index.scss';

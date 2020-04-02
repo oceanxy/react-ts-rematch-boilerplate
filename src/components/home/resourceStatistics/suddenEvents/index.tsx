@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-01-13 14:59:22
  */
 
-import Container from '@/components/UI/container';
+import Container from '@/components/UI/containerComp';
 import { px2vh, px2vw } from '@/utils/helper';
 import * as echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';

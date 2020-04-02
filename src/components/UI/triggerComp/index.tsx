@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-01-14 14:45:32
  */
 
-import Container from '@/components/UI/container';
+import Container from '@/components/UI/containerComp';
 import loadable from '@loadable/component';
 import React from 'react';
 import './index.scss';
@@ -28,9 +28,9 @@ interface ITrigger {
 const Trigger = (props: ITrigger) => {
   let TypeComponent = null;
   if (props.type === ETriggerType.TRIGGER) {
-    TypeComponent = loadable(() => import('@/components/UI/trigger/toggle'));
+    TypeComponent = loadable(() => import('@/components/UI/triggerComp/toggle'));
   } else if (props.type === ETriggerType.CLOSE) {
-    TypeComponent = loadable(() => import('@/components/UI/trigger/close'));
+    TypeComponent = loadable(() => import('@/components/UI/triggerComp/close'));
   }
 
   return (

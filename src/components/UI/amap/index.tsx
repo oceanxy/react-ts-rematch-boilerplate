@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-04-01 周三 09:04:01
  */
 
-import Container, { IContainer } from '@/components/UI/container';
+import Container, { IContainer } from '@/components/UI/containerComp';
 import config from '@/config';
 import { useScript } from '@/utils/hooks/loadScript';
 import React from 'react';

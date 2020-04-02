@@ -13,13 +13,13 @@ import Intercom from '@/components/home/intercom';
 import ResourceStatistics from '@/components/home/resourceStatistics';
 import TemporaryGroup from '@/components/home/temporaryGroup';
 import Button from '@/components/UI/button';
-import Container from '@/components/UI/container';
+import Container from '@/components/UI/containerComp';
 import EventLegend, { eventTypeColor } from '@/components/UI/eventLegend';
 import KeyValue from '@/components/UI/keyValue';
 import Nav from '@/components/UI/nav';
 import Title from '@/components/UI/title';
 import { renderRoutes } from '@/config/router';
-import { EventDetails, EventList, EventStatistics } from '@/containers/home';
+import { EventDetails, EventList, EventStatistics } from '@/containers/home/eventModel';
 import { Search } from '@/containers/UI';
 import ZWMap from '@/containers/UI/amap';
 import { eventTypeText } from '@/models/home/eventModel/eventDetails';
@@ -45,7 +45,7 @@ const Home = () => {
         <Container className="inter-plat-left">
           <Title
             name="事件列表"
-            titleExtraElementStyle={{ marginLeft: 10 }}
+            titleExtraElementStyle={{marginLeft: 10}}
             titleExtraElement={
               <React.Fragment>
                 <EventLegend name={eventTypeText[4]} iconColor={eventTypeColor[4]} />
@@ -74,7 +74,7 @@ const Home = () => {
             <ResourceStatistics />
           </Title>
           <Title name="任务列表" styled={styledComponent.marginTop20}>
-            <Container theme="style1" style={{ marginTop: 10 }}>
+            <Container theme="style1" style={{marginTop: 10}}>
               <EventLegend
                 name="任务详情"
                 nameStyled={styledComponent.subtitle}

@@ -8,5 +8,6 @@
  */
 
 import eventModel from './eventModel';
+import resourceStatisticsModel from './resourceStatistics';
 
-export default { ...eventModel };
+export default { ...eventModel, ...resourceStatisticsModel };

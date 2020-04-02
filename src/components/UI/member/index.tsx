@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-01-13 16:12:38
  */
 
-import Container from '@/components/UI/container';
+import Container from '@/components/UI/containerComp';
 import { px2vw } from '@/utils/helper';
 import React, { CSSProperties } from 'react';
 import styled, { FlattenSimpleInterpolation } from 'styled-components';

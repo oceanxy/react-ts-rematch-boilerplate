@@ -7,8 +7,8 @@
  * @LastModifiedTime: 2020-01-13 14:59:15
  */
 
-import ResourcesAroundSuddenEventsChart from '@/components/home/resourceStatistics/resourcesAroundSuddenEventsChart';
-import Container from '@/components/UI/container';
+import ResourcesAroundSuddenEventsChart from '@/components/home/resourceStatistics/suddenEvents';
+import Container from '@/components/UI/containerComp';
 import EventLegend from '@/components/UI/eventLegend';
 import styledComponents from '@/styled/styledComponents';
 import Select from 'antd/es/select';

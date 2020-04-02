@@ -15,7 +15,8 @@ const mapStateToProps = (state: iRootState) => ({ searchState: state.search });
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   getData: dispatch.search.getData,
   setSearchCondition: dispatch.search.updateSearchCondition,
-  setKeyword: dispatch.search.updateSearchKeyword
+  setKeyword: dispatch.search.updateSearchKeyword,
+  clearData: dispatch.search.clearData
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search);

@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-03-23 17:26:53
  */
 
-import Container from '@/components/UI/container';
+import Container from '@/components/UI/containerComp';
 import EventLegend, { eventTypeColor } from '@/components/UI/eventLegend';
 import KeyValue from '@/components/UI/keyValue';
 import { eventTypeText, IEventDetailsData } from '@/models/home/eventModel/eventDetails';

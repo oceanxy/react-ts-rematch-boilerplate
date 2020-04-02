@@ -7,24 +7,25 @@
  * @LastModifiedTime: 2020-03-30 周一 14:03:30
  */
 
-import Container from '@/components/UI/container';
-import Icon, { iconName, IconSource, IconSourceHover } from '@/components/UI/icon';
+import Container from '@/components/UI/containerComp';
+import Icon, { iconName, IconSource, IconSourceHover } from '@/components/UI/iconComp';
 import SearchPanel from '@/components/UI/search/searchPanel';
 import { IReqPayload, ISearchState, SearchCondition, SearchRequest } from '@/models/UI/search';
 import Select from 'antd/es/select';
-import React, { ButtonHTMLAttributes, useRef, useState } from 'react';
+import React, { ButtonHTMLAttributes, ChangeEvent, useEffect, useRef, useState } from 'react';
 import './index.scss';
 
 /**
  * 搜索接口
  */
 export interface ISearch extends ButtonHTMLAttributes<any> {
-  searchState?: ISearchState;
-  active?: boolean;
-  setSearchCondition?: (searchCondition: SearchCondition) => void;
-  isShowSearchResult?: boolean;
-  getData?: (reqPayload: IReqPayload) => void;
-  setKeyword?: (keyword: string) => void;
+  searchState?: ISearchState
+  active?: boolean
+  setSearchCondition?: (searchCondition: SearchCondition) => void
+  isShowSearchResult?: boolean
+  getData?: (reqPayload: IReqPayload) => void
+  setKeyword?: (keyword: string) => void
+  clearData?: () => void
 }
 
 /**
@@ -70,8 +71,8 @@ const searchConditions: ISearchCondition[] = [
  * 搜索组件
  */
 const Search = (props: ISearch) => {
-  const { searchState, getData, setSearchCondition, setKeyword } = props;
-  const { searchCondition, searchKeyword } = searchState!;
+  const {searchState, getData, setSearchCondition, setKeyword, clearData} = props;
+  const {searchCondition, searchKeyword} = searchState!;
   // 控制搜索结果面板的显示或隐藏
   const [isShowSearchResult, setIsShowSearchResult] = useState(false);
   // 搜索框Ref
@@ -83,12 +84,17 @@ const Search = (props: ISearch) => {
    * @param value
    */
   const onChange = (value: SearchCondition) => {
-    // 根据当前选中的查询方式更改文本框的提示语
     for (let sc of searchConditions) {
       if (sc.value === value) {
+        // 根据当前选中的查询方式更改文本框的提示语
         searchBox.current!.placeholder = sc.placeholder;
+        // 设置搜索关键词
         setKeyword!('');
+        // 设置搜索条件（按对象、区域或位置搜索）
         setSearchCondition!(value);
+        // 变更搜索条件后，清空搜索数据缓存
+        clearData!();
+        // 设置是否显示搜索结果面板
         setIsShowSearchResult(false);
         break;
       }
@@ -105,8 +111,10 @@ const Search = (props: ISearch) => {
       supportMonitorType: -1
     };
 
-    getData?.({ params: requestParam, condition: searchCondition! });
-    setIsShowSearchResult(!isShowSearchResult);
+    if (searchKeyword) {
+      getData?.({params: requestParam, condition: searchCondition!});
+      setIsShowSearchResult(true);
+    }
   };
 
   /**
@@ -124,8 +132,22 @@ const Search = (props: ISearch) => {
    * 文本框输入事件
    * @param {React.KeyboardEvent<HTMLInputElement>} e
    */
-  const onInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    setKeyword!(e.currentTarget.value);
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const beSetValue = e.currentTarget.value;
+    setKeyword!(beSetValue);
+
+    // 根据输入框的值内容，设置是否显示搜索结果面板
+    if (searchCondition === SearchCondition.POSITION) {
+      if (beSetValue) {
+        setIsShowSearchResult(true);
+      } else {
+        setIsShowSearchResult(false);
+      }
+    } else {
+      if (!beSetValue || beSetValue !== searchKeyword) {
+        setIsShowSearchResult(false);
+      }
+    }
   };
 
   return (
@@ -148,15 +170,15 @@ const Search = (props: ISearch) => {
           type="text"
           ref={searchBox}
           placeholder={searchConditions[0].placeholder}
-          className="inter-plat-text"
+          className="inter-plat-search-input"
           onKeyUp={onEnterSearch}
           autoComplete="off"
           value={searchKeyword}
-          onInput={onInput}
+          onChange={onInputChange}
         />
-        <button type="submit" onClick={handleSearch} />
+        <button className="inter-plat-search-button" type="submit" onClick={handleSearch} />
       </Container>
-      <SearchPanel searchState={searchState!} isShow={isShowSearchResult} />
+      <SearchPanel searchState={searchState!} isShow={isShowSearchResult} setIsShowSearchResult={setIsShowSearchResult} />
     </Container>
   );
 };

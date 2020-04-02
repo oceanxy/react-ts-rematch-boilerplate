@@ -8,11 +8,5 @@
  */
 
 import Home from '@/components/home';
-import React from 'react';
-import EventDetails from './eventDetails';
-import EventList from './eventList';
-import EventStatistics from './eventStatistics';
-
-export { EventList, EventStatistics, EventDetails };
 
 export default Home;

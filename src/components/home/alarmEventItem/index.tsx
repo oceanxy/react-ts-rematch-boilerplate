@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-03-23 18:16:30
  */
 
-import Container from '@/components/UI/container';
+import Container from '@/components/UI/containerComp';
 import EventLegend, { ESeverity } from '@/components/UI/eventLegend';
 import React from 'react';
 import './index.scss';

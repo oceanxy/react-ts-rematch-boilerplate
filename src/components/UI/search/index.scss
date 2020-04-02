@@ -7,7 +7,7 @@
   position: absolute;
   left: 500px;
   top: 85px;
-  padding: 3px;
+  padding: 0;
   display: flex;
   flex-direction: column;
 
@@ -78,7 +78,7 @@
       }
     }
 
-    .inter-plat-text {
+    .inter-plat-search-input {
       text-indent: 60px;
       width: 264px;
       margin-left: -60px;
@@ -127,7 +127,7 @@
       background: url(./images/search-button-icon.png) no-repeat center / 60% 60%;
       transform: scale(.9);
       opacity: .7;
-      transition: all .4s;
+      transition: all .3s cubic-bezier(.645, .045, .355, 1);
 
       &:hover {
         transform: scale(1);
@@ -142,12 +142,14 @@
     padding-left: 0;
     animation: .4s cubic-bezier(0.37, 1.03, 0.55, 1.01) forwards;
     flex-direction: column;
-    max-height: 300px;
+    max-height: 310px;
     overflow: auto;
     overflow-x: hidden;
+    margin: 0;
 
     .secondary {
-      padding-inline-start: 20px;
+      margin-inline-start: 0;
+      padding-inline-start: 0;
     }
 
     &.inter-plat-search-display-show {
@@ -164,21 +166,12 @@
       width: 100%;
       font-size: 12px;
       color: #999999;
-      transition: all .4s;
+      transition: all .3s cubic-bezier(.645, .045, .355, 1);
       list-style: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       user-select: none;
-
-      &:hover {
-        color: #3b7caf;
-        background: rgba(2, 33, 58, .6);
-      }
-
-      &:active {
-        background: rgba(2, 33, 58, .8);
-      }
 
       .icon-container {
         justify-content: start;

@@ -4,40 +4,42 @@
  * @Description: 搜索结果面板组件
  * @Date: 2020-03-30 周一 14:03:30
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-01 周三 15:04:01
+ * @LastModifiedTime: 2020-04-02 周四 15:04:02
  */
 
-import Icon, { IconSource, IconSourceHover } from '@/components/UI/icon';
+import Icon, { IconSource, IconSourceHover } from '@/components/UI/iconComp';
 import { ISearch } from '@/components/UI/search/index';
 import { POI } from '@/containers/UI/amap';
-import { IFence, IMonitor, IPOI, ISearchState, monitorTypeIcon, SearchCondition } from '@/models/UI/search';
-import React from 'react';
+import { IFence, IMonitor, ISearchState, monitorTypeIcon, SearchCondition } from '@/models/UI/search';
+import React, { useEffect, useRef } from 'react';
 import styled, { StyledComponent } from 'styled-components';
 
+/**
+ * 搜索面板接口
+ */
 export interface ISearchPanel {
-  searchState: ISearchState;
-  isShow: boolean;
+  searchState: ISearchState
+  isShow: boolean
+  setIsShowSearchResult: (isShow: boolean) => void
 }
 
 /**
  * styledComponent组件属性
  */
 interface ISearchProps {
-  data: IMonitor[] | IFence[] | IPOI[];
-  isShow: boolean;
+  dataLength: number
+  isShow: boolean
 }
 
 /**
  * 用于展示搜索结果的下拉列表styled组件
  * @type {StyledComponent<"ul", AnyIfEmpty<DefaultTheme>, {} & {className: string}, keyof {className: string}>}
  */
-export const StyledSearchPanel: StyledComponent<any, ISearch> = styled.ul.attrs((props: ISearchProps) => {
-  return {
-    className: `${
-      props.data?.length ? (props.isShow ? 'inter-plat-search-display-show' : 'inter-plat-search-display-hide') : ''
-    }`
-  };
-})``;
+export const StyledSearchPanel: StyledComponent<any, ISearch> = styled.ul.attrs((props: ISearchProps) => ({
+  className: `${
+    props.dataLength ? (props.isShow ? 'inter-plat-search-display-show' : 'inter-plat-search-display-hide') : ''
+  }`
+}))``;
 
 /**
  * 处理搜索结果面板数据
@@ -52,7 +54,7 @@ function handleSearchPanelElement(searchCondition: SearchCondition, data?: ISear
           <li className="inter-plat-search-display-item have-children" key={`fence-item-${index}`}>
             <Icon text={item.name} icon={IconSource.AREA} iconHover={IconSourceHover.AREA} />
             {item.childNodes ? (
-              <StyledSearchPanel data={item.childNodes} isShow={true} className="secondary">
+              <StyledSearchPanel dataLength={item.childNodes?.length} isShow={true} className="secondary">
                 {item.childNodes.map((fence: IFence, fenIndex: number) => (
                   <li className="inter-plat-search-display-item" key={`fence-item-${index}-${fenIndex}`}>
                     <Icon
@@ -93,25 +95,65 @@ function handleSearchPanelElement(searchCondition: SearchCondition, data?: ISear
  * @param {ISearchState} data
  * @returns {IMonitor[] | undefined | IFence[]}
  */
-function handleData(searchCondition: SearchCondition, data?: ISearchState) {
+function handleData(searchCondition: SearchCondition, data?: ISearchState): number | undefined {
   switch (searchCondition) {
     case SearchCondition.POSITION:
-      return data?.fenceList;
+      return data?.POIList.length;
     case SearchCondition.AREA:
-      return data?.fenceList;
+      return data?.fenceList.length;
     case SearchCondition.ENTITY:
     default:
-      return data?.monitorList;
+      return data?.monitorList.length;
   }
 }
 
+/**
+ * 搜索面板组件
+ * @param {ISearchPanel} props
+ * @returns {any}
+ * @constructor
+ */
 const SearchPanel = (props: ISearchPanel) => {
-  const { isShow, searchState } = props;
-  const { searchCondition, ...data } = searchState;
+  const {isShow, searchState, setIsShowSearchResult} = props;
+  const {searchCondition, ...rest} = searchState;
+  // 搜索面板Ref
+  const searchPanelRef = useRef<HTMLUListElement>(null);
+  /**
+   * 触发document点击事件时处理搜索结果面板的显示状态
+   * @param {MouseEvent} e
+   */
+  const domClick = (e: MouseEvent) => {
+    const target = (e.target as HTMLElement);
+    const {classList} = target;
+
+    if (!(
+      classList.contains('inter-plat-search-button') ||
+      classList.contains('inter-plat-search-input') ||
+      searchPanelRef.current?.contains(target as Node)
+    )) {
+      setIsShowSearchResult(false);
+    }
+  };
+
+  useEffect(() => {
+    // 隐藏搜索结果面板
+    // 当单击目标不是文本框或搜索按钮时
+    // 当单击点不在搜索面板范围以内时
+    document.addEventListener('click', domClick);
+
+    return () => {
+      document.removeEventListener('click', domClick);
+    };
+  }, []);
 
   return (
-    <StyledSearchPanel data={handleData(searchCondition!, data)} isShow={isShow} className="inter-plat-search-display">
-      {handleSearchPanelElement(searchCondition!, data)}
+    <StyledSearchPanel
+      ref={searchPanelRef}
+      dataLength={handleData(searchCondition!, rest)}
+      isShow={isShow}
+      className="inter-plat-search-display"
+    >
+      {handleSearchPanelElement(searchCondition!, rest)}
     </StyledSearchPanel>
   );
 };

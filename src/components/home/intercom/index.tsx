@@ -8,7 +8,7 @@
  */
 
 import Button from '@/components/UI/button';
-import Container from '@/components/UI/container';
+import Container from '@/components/UI/containerComp';
 import EventLegend from '@/components/UI/eventLegend';
 import Member from '@/components/UI/member';
 import styledComponent from '@/styled';

@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-03-30 周一 16:03:30
  */
 
-import Container from '@/components/UI/container';
+import Container from '@/components/UI/containerComp';
 import React from 'react';
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
 import areaHover from './images/area-hover.png';
