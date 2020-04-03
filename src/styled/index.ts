@@ -7,8 +7,8 @@
  * @LastModifiedTime: 2020-01-10 15:14:26
  */
 
-import styledComponents, { IStyledComponent } from './styledComponents';
 import { createGlobalStyle, DefaultTheme, GlobalStyleComponent } from 'styled-components';
+import styledBlocks, { IStyledComponent } from './styledBlocks';
 
 export const GlobalStyle: GlobalStyleComponent<{}, DefaultTheme> = createGlobalStyle`
   body {
@@ -43,6 +43,6 @@ export const GlobalStyle: GlobalStyleComponent<{}, DefaultTheme> = createGlobalS
   }
 `;
 
-export default <IStyledComponent>{
-  ...styledComponents
+export default <IStyledComponent> {
+  ...styledBlocks
 };

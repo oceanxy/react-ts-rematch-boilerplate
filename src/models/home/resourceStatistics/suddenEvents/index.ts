@@ -8,12 +8,15 @@
  */
 
 import fetchApis from '@/apis';
+import { IEventDetailsData } from '@/models/home/eventModel/eventDetails';
+import { IRangeControlState } from '@/models/home/resourceStatistics/rangeControl';
+import { store } from '@/store';
 import { ModelConfig } from '@rematch/core';
 
 /**
  * 突发事件周边资源接口
  */
-export interface ISuddenEvent {
+export interface ISuddenEventData {
   /**
    * 突发事件周边资源名称
    */
@@ -29,9 +32,10 @@ export interface ISuddenEvent {
  */
 export interface ISuddenEventRequest {
   /**
-   * 监控对象类型多个用逗号隔开, -1 全部 0：车 1 :人 2 :动态物品 9:静态物资 10:调度员
+   * 监控对象类型。
+   * 多个用逗号隔开, -1 全部(默认) 0：车 1 :人 2 :动态物品 9:静态物资 10:调度员
    */
-  supportMonitorType: -1 | 0 | 1 | 2 | 9 | 10 | string
+  supportMonitorType?: -1 | 0 | 1 | 2 | 9 | 10 | string
   /**
    * 事件开始时间 格式yyyy-MM-dd HH:mm:ss
    */
@@ -47,14 +51,14 @@ export interface ISuddenEventRequest {
   /**
    * 半径，单位m
    */
-  radius: string
+  radius: number
 }
 
 /**
  * 突发事件周边资源状态
  */
 export interface ISuddenEventsState {
-  data: ISuddenEvent
+  data: ISuddenEventData
 }
 
 /**
@@ -69,7 +73,7 @@ const suddenEvents: ModelConfig = {
     }
   },
   reducers: {
-    updateData: (state: any, data: ISuddenEvent) => {
+    updateData: (state: any, data: ISuddenEventData) => {
       return {
         ...state,
         data
@@ -77,8 +81,26 @@ const suddenEvents: ModelConfig = {
     }
   },
   effects: {
-    async getData(reqPayload: ISuddenEventRequest) {
-      const response = await fetchApis.fetchSourcesStatistics(reqPayload);
+    async getData(reqPayload?: ISuddenEventRequest) {
+      let response;
+
+      if (reqPayload) {
+        response = await fetchApis.fetchSourcesStatistics(reqPayload);
+      } else {
+        const {eventDetails, rangeControl}: {
+          eventDetails: IEventDetailsData,
+          rangeControl: IRangeControlState
+        } = store.getState();
+
+        response = await fetchApis.fetchSourcesStatistics({
+          supportMonitorType: -1, // 默认全部
+          startTime: eventDetails.startTime,
+          monitorId: eventDetails.monitorId,
+          eventType: eventDetails.eventType,
+          radius: rangeControl.range! * 1000 // 千米转米
+        });
+      }
+
       this.updateData(response.data.statistics);
     }
   }

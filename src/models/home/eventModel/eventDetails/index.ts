@@ -4,7 +4,7 @@
  * @Description: 事件详情model
  * @Date: 2020-03-19 16:31:44
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-01 周三 11:04:01
+ * @LastModifiedTime: 2020-04-03 周五 17:38:01
  */
 
 import fetchApis from '@/apis';
@@ -41,55 +41,59 @@ export interface IEventDetailsData extends IEventDetailsRequest {
   /**
    * 行政区块 到区县，如"重庆市沙坪坝区"
    */
-  administrativeRegion: string;
+  administrativeRegion: string
   /**
    * 位置
    */
-  eventEndAddress: string;
+  eventEndAddress: string
   /**
    * 事件结束时间 格式yyyy-MM-dd HH:mm:ss
    */
-  endTime: Date | null;
+  endTime: Date | null
   /**
    * 事件持续时长 单位s
    */
-  eventDurationTime: number;
+  eventDurationTime: number
   /**
    * 事件持续时长 x天x小时x分钟x秒
    */
-  eventDurationTimeStr: string;
+  eventDurationTimeStr: string
   /**
    * 事件等级 1：一般 2：较重 3：严重 4：特别严重 0：没有时间详情数据
    */
-  eventLevel: 0 | 1 | 2 | 3 | 4;
+  eventLevel: 0 | 1 | 2 | 3 | 4
   /**
    * 事件名称
    */
-  eventName: string;
+  eventName: string
   /**
    * 事件处理时长 单位s
    */
-  eventProcessingTime: number;
+  eventProcessingTime: number
   /**
    * 事件处理时长 x天x小时x分钟x秒
    */
-  eventProcessingTimeStr: string;
+  eventProcessingTimeStr: string
   /**
    * 事件处理状态 0:未处理 1：处理中
    */
-  eventStatus: 0 | 1;
+  eventStatus: 0 | 1
   /**
    * 纬度
    */
-  latitude: number;
+  latitude: number
   /**
    * 经度
    */
-  longitude: number;
+  longitude: number
   /**
    * 监控对象名称
    */
-  monitorName: string;
+  monitorName: string
+  /**
+   * 事件ID
+   */
+  eventId: string
 }
 
 /**
@@ -103,43 +107,44 @@ export interface IEventDetailsState {
  * 事件详情默认数据
  * @type {{monitorId: string; monitorName: string; latitude: number; eventType: number; eventDurationTime: number; eventLevel: number; eventProcessingTime: number; eventProcessingTimeStr: string; eventStatus: number; eventName: string; startTime: null; endTime: null; administrativeRegion: string; eventEndAddress: string; eventDurationTimeStr: string; longitude: number}}
  */
-const defaultData: IEventDetailsState = {
-  data: {
-    administrativeRegion: '',
-    eventEndAddress: '',
-    endTime: null,
-    eventDurationTime: 0,
-    eventDurationTimeStr: '',
-    eventLevel: 0,
-    eventName: '',
-    eventProcessingTime: 0,
-    eventProcessingTimeStr: '',
-    eventStatus: 0,
-    eventType: 0,
-    latitude: 0,
-    longitude: 0,
-    monitorId: '',
-    monitorName: '',
-    startTime: null
-  }
+const defaultData: IEventDetailsData = {
+  administrativeRegion: '',
+  eventEndAddress: '',
+  endTime: null,
+  eventDurationTime: 0,
+  eventDurationTimeStr: '',
+  eventLevel: 0,
+  eventName: '',
+  eventProcessingTime: 0,
+  eventProcessingTimeStr: '',
+  eventStatus: 0,
+  eventType: 0,
+  latitude: 0,
+  longitude: 0,
+  monitorId: '',
+  monitorName: '',
+  startTime: null,
+  eventId: ''
 };
 
-const eventDetails = <ModelConfig>{
-  state: defaultData,
+const eventDetails = <ModelConfig> {
+  state: <IEventDetailsState> {
+    data: defaultData
+  },
   reducers: {
     updateData: (state: any, data: IEventDetailsData) => {
       return {
         ...state,
-        ...data
+        data
       };
     },
     clearData() {
-      return defaultData;
+      return {data: defaultData};
     }
   },
   effects: {
     async getData(reqPayload: IEventDetailsRequest) {
-      const { data } = await fetchApis.fetchEventDetails(reqPayload);
+      const {data} = await fetchApis.fetchEventDetails(reqPayload);
       this.updateData(data);
     }
   }

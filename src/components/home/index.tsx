@@ -3,26 +3,25 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 组件组装
  * @Date: 2020-01-04 14:30:18
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-24 14:07:38
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-03 周五 09:09:14
  */
 
 import AlarmEventItem from '@/components/home/alarmEventItem';
 import DisplayContent from '@/components/home/displayContent';
+import EventModel from '@/components/home/eventModel';
 import Intercom from '@/components/home/intercom';
 import ResourceStatistics from '@/components/home/resourceStatistics';
 import TemporaryGroup from '@/components/home/temporaryGroup';
 import Button from '@/components/UI/button';
 import Container from '@/components/UI/containerComp';
-import EventLegend, { eventTypeColor } from '@/components/UI/eventLegend';
+import EventLegend from '@/components/UI/eventLegend';
 import KeyValue from '@/components/UI/keyValue';
 import Nav from '@/components/UI/nav';
 import Title from '@/components/UI/title';
 import { renderRoutes } from '@/config/router';
-import { EventDetails, EventList, EventStatistics } from '@/containers/home/eventModel';
 import { Search } from '@/containers/UI';
 import ZWMap from '@/containers/UI/amap';
-import { eventTypeText } from '@/models/home/eventModel/eventDetails';
 import styledComponent from '@/styled';
 import React from 'react';
 import './index.scss';
@@ -43,22 +42,7 @@ const Home = () => {
       </Container>
       <Container className="inter-plat-container">
         <Container className="inter-plat-left">
-          <Title
-            name="事件列表"
-            titleExtraElementStyle={{marginLeft: 10}}
-            titleExtraElement={
-              <React.Fragment>
-                <EventLegend name={eventTypeText[4]} iconColor={eventTypeColor[4]} />
-                <EventLegend name={eventTypeText[3]} iconColor={eventTypeColor[3]} />
-                <EventLegend name={eventTypeText[2]} iconColor={eventTypeColor[2]} />
-                <EventLegend name={eventTypeText[1]} iconColor={eventTypeColor[1]} />
-              </React.Fragment>
-            }
-          >
-            <EventDetails />
-            <EventStatistics />
-            <EventList />
-          </Title>
+          <EventModel />
         </Container>
         <Container className="inter-plat-center">
           <ZWMap />
@@ -70,9 +54,7 @@ const Home = () => {
           </Container>
         </Container>
         <Container className="inter-plat-right">
-          <Title name="资源统计" styled={styledComponent.flexNone}>
-            <ResourceStatistics />
-          </Title>
+          <ResourceStatistics />
           <Title name="任务列表" styled={styledComponent.marginTop20}>
             <Container theme="style1" style={{marginTop: 10}}>
               <EventLegend

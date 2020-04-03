@@ -171,7 +171,8 @@ const mocks: Mocks = {
       longitude: '111.730631',
       monitorId: '@guid',
       startTime: '@datetime',
-      monitorName: monitorName()
+      monitorName: monitorName(),
+      eventId: '@guid'
     }
   },
   fetchEventList: {
@@ -187,7 +188,8 @@ const mocks: Mocks = {
           eventType: '154',
           monitorId: '@guid',
           monitorName: monitorName(),
-          startTime: '@datetime'
+          startTime: '@datetime',
+          eventId: '@guid'
         }
       ],
       eventStatistics: {
@@ -212,7 +214,8 @@ const mocks: Mocks = {
         longitude: '111.730631',
         monitorId: '@guid',
         startTime: '@datetime',
-        monitorName: monitorName()
+        monitorName: monitorName(),
+        eventId: '@guid'
       }
     }
   },
@@ -385,8 +388,8 @@ const mocks: Mocks = {
     retCode: 0,
     data: {
       statistics: {
-        'itemName|7': '@cname',
-        'totalNum|7': '@integer'
+        'itemName|7': ['@cname'],
+        'totalNum|7': ['@integer(100,500)']
       }
     }
   }

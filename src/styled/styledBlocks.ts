@@ -3,13 +3,14 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 样式化组件集合
  * @Date: 2020-01-10 15:26:53
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-01-14 16:14:03
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-03 周五 11:13:06
  */
+
 import { px2vh, px2vw } from '@/utils/helper';
 import { css } from 'styled-components';
 
-const styledComponents = {
+const styledBlocks = {
   subtitle: css`
     color: #e4f2ff;
     font-size: ${px2vw(14.44)};
@@ -64,5 +65,5 @@ const styledComponents = {
   `
 } as const;
 
-export type IStyledComponent = typeof styledComponents;
-export default styledComponents;
+export type IStyledComponent = typeof styledBlocks;
+export default styledBlocks;

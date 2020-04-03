@@ -11,7 +11,11 @@ import SuddenEvents from '@/components/home/resourceStatistics/suddenEvents';
 import { Dispatch, iRootState } from '@/store';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: iRootState) => ({ data: state.suddenEvents });
+const mapStateToProps = (state: iRootState) => ({
+  ...state.suddenEvents,
+  range: state.rangeControl.range,
+  eventId: state.eventDetails.data.eventId
+});
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   getData: dispatch.suddenEvents.getData
 });

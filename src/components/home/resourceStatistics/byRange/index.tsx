@@ -1,37 +1,28 @@
 /**
  * @Author: Oceanxy
  * @Email: xieyang@zwlbs.com
- * @Description: 图表组件-突发事件周围资源
- * @Date: 2020-01-10 11:46:14
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-01-13 14:59:22
+ * @Description: 图表组件-按范围统计资源
+ * @Date: 2020-04-03 周五 09:28:32
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-03 周五 09:28:32
  */
 
 import Container from '@/components/UI/containerComp';
-import { IEventDetailsData } from '@/models/home/eventModel/eventDetails';
-import { IRangeControlState } from '@/models/home/resourceStatistics/rangeControl';
-import { ISuddenEventData, ISuddenEventRequest } from '@/models/home/resourceStatistics/suddenEvents';
-import { px2vw } from '@/utils/helper';
+import { px2vh } from '@/utils/helper';
 import * as echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
 import React, { useEffect } from 'react';
 import './index.scss';
 
-interface ISuddenEventProps {
-  className?: string
-  data?: ISuddenEventData
-  getData?: (reqPayload?: ISuddenEventRequest) => void,
-  range?: IRangeControlState['range'],
-  eventId?: IEventDetailsData['eventId']
+interface IByRange {
+  className?: string;
+  data?: any;
+  getData?: () => void;
 }
 
-const SuddenEvents = (props: ISuddenEventProps) => {
-  const {data, getData, range, eventId} = props;
-  /**
-   * 图表配置
-   * @type {EChartOption}
-   */
-  const option: echarts.EChartOption = {
+const ByRange = (props: IByRange) => {
+  const {data, getData} = props;
+  const option = {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -40,20 +31,19 @@ const SuddenEvents = (props: ISuddenEventProps) => {
       }
     },
     grid: {
-      left: 20,
       top: 20,
       bottom: 20
     },
     xAxis: [
       {
         type: 'category',
-        data: data?.itemName ?? [],
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
         axisTick: {
           show: false
         },
         axisLabel: {
           color: '#ffffff',
-          fontSize: '50%' as unknown as number
+          fontSize: '50%'
         },
         axisLine: {
           lineStyle: {
@@ -70,7 +60,7 @@ const SuddenEvents = (props: ISuddenEventProps) => {
         },
         axisLabel: {
           color: '#ffffff',
-          fontSize: '50%' as unknown as number
+          fontSize: '50%'
         },
         axisLine: {
           lineStyle: {
@@ -88,28 +78,27 @@ const SuddenEvents = (props: ISuddenEventProps) => {
       {
         name: '',
         type: 'bar',
-        barWidth: '40%' as unknown as number,
-        data: data?.totalNum ?? [],
+        barWidth: '40%',
+        data: [10, 52, 200, 334, 390, 330, 220],
         itemStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {offset: 0, color: '#55a4d0'},
             {offset: 1, color: '#1a425a'}
-          ]) as unknown as string
+          ])
         }
       }
     ]
   };
 
-  useEffect(() => {
-    getData!();
-  }, [range, eventId]);
+  // useEffect(() => {
+  //   getData!();
+  // }, []);
 
   return (
     <Container className="resource-statistics-left-chart">
-      <ReactEcharts option={option} style={{height: px2vw(160)}} />
+      <ReactEcharts option={option} style={{height: px2vh(160)}} />
     </Container>
   );
 };
 
-export default SuddenEvents;
-
+export default ByRange;

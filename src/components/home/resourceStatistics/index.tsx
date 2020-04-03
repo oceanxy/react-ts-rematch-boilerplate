@@ -3,55 +3,54 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 资源统计
  * @Date: 2020-01-04 15:03:43
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-01-13 14:59:15
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-03 周五 11:22:13
  */
 
-import ResourcesAroundSuddenEventsChart from '@/components/home/resourceStatistics/suddenEvents';
+import ByRange from '@/components/home/resourceStatistics/byRange';
 import Container from '@/components/UI/containerComp';
 import EventLegend from '@/components/UI/eventLegend';
-import styledComponents from '@/styled/styledComponents';
+import Title from '@/components/UI/title';
+import { RangeControl, SuddenEvents } from '@/containers/home/resourceStatistics';
+import styledBlocks from '@/styled';
 import Select from 'antd/es/select';
 import React from 'react';
 import './index.scss';
 
-const ResourceStatistics = (props: any) => {
+const ResourceStatistics = () => {
   return (
-    <Container theme="style1" style={{ marginTop: 10 }} className="resource-statistics-container">
-      <Container className="resource-statistics-left">
-        <EventLegend
-          name="突发事件周边资源"
-          nameStyled={styledComponents.subtitle}
-          styled={styledComponents.marginBottom10}
-          icon={false}
-        />
-        <Container className="resource-statistics-left-range">
-          <span className="highlight">事件动态2</span>
-          <span>周边</span>
-          <span className="highlight">1</span>
-          <span>公里</span>
-        </Container>
-        <ResourcesAroundSuddenEventsChart />
-      </Container>
-      <Container className="resource-statistics-right">
-        <Container className="resource-statistics-right-tab">
+    <Title name="资源统计" styled={styledBlocks.flexNone}>
+      <Container theme="style1" style={{marginTop: 10}} className="resource-statistics-container">
+        <Container className="resource-statistics-left">
           <EventLegend
-            name="行政区划类资源"
-            styled={styledComponents.flex1}
-            nameStyled={styledComponents.tabTitleActive}
+            name="突发事件周边资源"
+            nameStyled={styledBlocks.subtitle}
+            styled={styledBlocks.marginBottom10}
             icon={false}
           />
-          <EventLegend
-            name="区域内资源"
-            styled={styledComponents.flex1}
-            nameStyled={styledComponents.tabTitle}
-            icon={false}
-          />
+          <RangeControl />
+          <SuddenEvents />
         </Container>
-        <Select placeholder="防火区域" />
-        <ResourcesAroundSuddenEventsChart />
+        <Container className="resource-statistics-right">
+          <Container className="resource-statistics-right-tab">
+            <EventLegend
+              name="行政区划类资源"
+              styled={styledBlocks.flex1}
+              nameStyled={styledBlocks.tabTitleActive}
+              icon={false}
+            />
+            <EventLegend
+              name="区域内资源"
+              styled={styledBlocks.flex1}
+              nameStyled={styledBlocks.tabTitle}
+              icon={false}
+            />
+          </Container>
+          <Select placeholder="防火区域" />
+          <ByRange />
+        </Container>
       </Container>
-    </Container>
+    </Title>
   );
 };
 

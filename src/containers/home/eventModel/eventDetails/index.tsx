@@ -12,7 +12,7 @@ import { Dispatch, iRootState } from '@/store';
 import React from 'react';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: iRootState) => ({ data: state.eventDetails });
+const mapStateToProps = (state: iRootState) => state.eventDetails;
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   getData: dispatch.eventDetails.getData
 });

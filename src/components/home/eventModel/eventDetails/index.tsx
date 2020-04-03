@@ -21,14 +21,10 @@ interface IEventDetails {
 }
 
 const EventDetails = (props: IEventDetails) => {
-  const { data } = props;
-
-  //  useEffect(() => {
-  //    props.getData!();
-  //  }, []);
+  const {data} = props;
 
   return (
-    <Container theme="style1" style={{ marginTop: 10 }}>
+    <Container theme="style1" style={{marginTop: 10}}>
       <EventLegend
         name="事件详情"
         iconColor={eventTypeColor[data!.eventLevel]}

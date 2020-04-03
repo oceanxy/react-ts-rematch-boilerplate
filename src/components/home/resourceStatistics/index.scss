@@ -38,23 +38,6 @@
   }
 
   .resource-statistics-left {
-
-    .resource-statistics-left-range {
-      display: flex;
-      font-size: 12px;
-      height: 24px;
-      flex-wrap: wrap;
-      align-items: center;
-
-      .highlight {
-        padding-right: 4px;
-        color: #ccb726;
-      }
-
-      * + .highlight {
-        padding-left: 4px;
-      }
-    }
   }
 
   .resource-statistics-right {
