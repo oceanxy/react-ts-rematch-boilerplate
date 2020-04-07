@@ -8,6 +8,7 @@
  */
 
 import { ModelConfig } from '@rematch/core';
+import _ from 'lodash';
 
 /**
  * 事件范围控制
@@ -15,8 +16,14 @@ import { ModelConfig } from '@rematch/core';
 export interface IRangeControlState {
   /**
    * 半径。单位（千米）
+   * 范围1-200以内（含）的整数
    */
-  range: number
+  range: number,
+  /**
+   * 半径，单位（千米）。
+   * react受控组件的value值
+   */
+  rangeAsState: string
 }
 
 /**
@@ -25,10 +32,24 @@ export interface IRangeControlState {
  */
 const rangeControl: ModelConfig = {
   state: <IRangeControlState> {
-    range: 1
+    range: 1,
+    rangeAsState: '1'
   },
   reducers: {
-    updateRange: (state: any, range: IRangeControlState['range']) => ({range})
+    updateRange: (state: any, range: IRangeControlState['range'] | IRangeControlState['rangeAsState']) => {
+      if (!_.isNumber(range)) {
+        return {
+          ...state,
+          rangeAsState: range
+        };
+      }
+
+      return {
+        ...state,
+        range,
+        rangeAsState: range
+      };
+    }
   }
 };
 

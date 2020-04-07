@@ -10,13 +10,17 @@
 import Container from '@/components/UI/containerComp';
 import { IEventDetailsData } from '@/models/home/eventModel/eventDetails';
 import { IRangeControlState } from '@/models/home/resourceStatistics/rangeControl';
-import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useEffect } from 'react';
 import './index.scss';
 
+/**
+ * 范围控制组件props接口
+ */
 interface IRangeControlProps {
-  range?: IRangeControlState['range']
-  setRange?: (range: IRangeControlState['range']) => void
-  eventId?: IEventDetailsData['eventId']
+  range: IRangeControlState['range']
+  rangeAsState: IRangeControlState['rangeAsState']
+  setRange: (range: IRangeControlState['range'] | IRangeControlState['rangeAsState']) => void
+  eventId: IEventDetailsData['eventId']
 }
 
 /**
@@ -25,9 +29,8 @@ interface IRangeControlProps {
  * @returns {any}
  * @constructor
  */
-const RangeControl = (props: IRangeControlProps) => {
-  const {range, setRange, eventId} = props;
-  const [radius, setRadius] = useState(String(range));
+const RangeControl = (props: Partial<IRangeControlProps>) => {
+  const {rangeAsState, setRange, eventId} = props;
 
   /**
    * 按键事件
@@ -36,8 +39,15 @@ const RangeControl = (props: IRangeControlProps) => {
   const onKeyup = (e: KeyboardEvent<HTMLInputElement>) => {
     const value = parseInt((e.target as HTMLInputElement).value);
 
+    // 合法值范围区间 [1, 200]
     if (e.keyCode === 13 && !isNaN(value)) {
-      setRange!(value);
+      if (value > 200) {
+        setRange!(200);
+      } else if (value < 1) {
+        setRange!(1);
+      } else {
+        setRange!(value);
+      }
     }
   };
 
@@ -48,11 +58,11 @@ const RangeControl = (props: IRangeControlProps) => {
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = (e.target as HTMLInputElement).value.replace(/[^\d]/g, '');
 
-    setRadius(value);
+    setRange!(value);
   };
 
+  // 当前选中事件变化时，初始化搜索范围值
   useEffect(() => {
-    // 当前事件变化时，初始化搜索范围值
     setRange!(1);
   }, [eventId]);
 
@@ -62,11 +72,11 @@ const RangeControl = (props: IRangeControlProps) => {
       <input
         type="text"
         className="highlight range-input"
-        value={radius}
+        value={rangeAsState}
         onChange={onChange}
         onKeyUp={onKeyup}
         maxLength={3}
-        title={radius ? `请按回车键搜索${radius}公里以内的资源` : '请输入合法值以搜索资源\n合法值：200以内的正整数'}
+        title={rangeAsState ? `请按回车键搜索${rangeAsState}公里以内的资源` : '请输入合法值以搜索资源\n合法值：200以内的正整数'}
       />
       <span>公里</span>
     </Container>
