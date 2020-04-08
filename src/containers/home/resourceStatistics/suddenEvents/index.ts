@@ -10,6 +10,7 @@
 import SuddenEvents from '@/components/home/resourceStatistics/suddenEvents';
 import { Dispatch, iRootState } from '@/store';
 import { connect } from 'react-redux';
+import RangeControl from './rangeControl';
 
 const mapStateToProps = (state: iRootState) => ({
   ...state.suddenEvents,
@@ -19,5 +20,7 @@ const mapStateToProps = (state: iRootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   getData: dispatch.suddenEvents.getData
 });
+
+export { RangeControl };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SuddenEvents);

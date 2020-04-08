@@ -43,6 +43,7 @@
     "@svgr/webpack": "^5.3.0",
     "@types/amap-js-api": "^1.4.7",
     "@types/amap-js-api-autocomplete": "^1.4.0",
+    "@types/amap-js-api-district-search": "^1.4.0",
     "@types/amap-js-api-map-type": "^1.4.0",
     "@types/amap-js-api-place-search": "^1.4.0",
     "@types/echarts": "^4.4.4",

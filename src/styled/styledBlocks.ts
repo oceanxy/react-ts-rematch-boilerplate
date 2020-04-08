@@ -32,7 +32,7 @@ const styledBlocks = {
     color: #e4f2ff;
     font-size: ${px2vw(12)};
     text-shadow: #2e72ab 0 0 ${px2vw(7)};
-    border-bottom: 2px solid #2d4874;
+    border-bottom: 2px solid #40a9ff;
     padding: ${px2vh(3)} 0;
     cursor: pointer;
   `,

@@ -7,6 +7,6 @@
  * @LastModifiedTime: 2020-03-19 17:23:31
  */
 
-import Home from '@/components/home';
+import home from '@/components/home';
 
-export default Home;
+export default home;

@@ -4,7 +4,7 @@
  * @Description: 高德地图组件
  * @Date: 2020-01-04 11:43:57
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-01 周三 09:04:01
+ * @LastModifiedTime: 2020-04-08 周三 14:47:41
  */
 
 import Container, { IContainer } from '@/components/UI/containerComp';
@@ -14,16 +14,17 @@ import React from 'react';
 import './index.scss';
 import Map from './map';
 import POI from './POI';
+import Boundary from './boundary';
 
 /**
  * 动态加载高德地图
  * @type {(props: any) => any}
  */
-const UseMap = useScript(`https://webapi.amap.com/maps?v=${config.map.mapVersion}&key=${config.map.mapKey}`, () =>
+const UseMap: (props: any) => any = useScript(`https://webapi.amap.com/maps?v=${config.map.mapVersion}&key=${config.map.mapKey}`, () =>
   import('./map')
 );
 
-export interface IZWMap extends IContainer<any> {
+export interface IZWMapProps extends IContainer<any> {
   map?: AMap.Map;
   updateMapInstance?: (map: AMap.Map) => void;
 }
@@ -31,7 +32,7 @@ export interface IZWMap extends IContainer<any> {
 /**
  * 地图组件
  */
-const ZWMap = (props: IZWMap) => {
+const ZWMap = (props: IZWMapProps) => {
   const { map, updateMapInstance } = props;
 
   return (
@@ -41,5 +42,5 @@ const ZWMap = (props: IZWMap) => {
   );
 };
 
-export { POI, Map };
+export { POI, Map, Boundary };
 export default ZWMap;

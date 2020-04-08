@@ -1,3 +1,5 @@
+import LngLat = AMap.LngLat;
+
 const headElement = document.body || document.getElementsByTagName('body')[0];
 const _importedScript: {[src: string]: true} = {};
 
@@ -46,4 +48,22 @@ export function px2vw(px: number) {
  */
 export function px2vh(px: number) {
   return `${((px / 1080) * 100).toFixed(3)}vh`;
+}
+
+/**
+ * 将高德地图返回的边界值转换成字符串的形式
+ * 如果边界值数组有多个值，则用“-”分割
+ * @param {AMap.LngLat[][] | undefined} bounds
+ * @returns {string}
+ */
+export function boundsToString(bounds: LngLat[][] | undefined) {
+  const boundsStr = [];
+
+  if (bounds && bounds.length) {
+    for (let bound of bounds) {
+      boundsStr.push(bound?.toString() ?? null);
+    }
+  }
+
+  return boundsStr.join('-');
 }

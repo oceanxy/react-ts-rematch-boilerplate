@@ -3,6 +3,10 @@
   align-items: center;
   margin-bottom: 10px;
 
+  &.no-margin-bottom {
+    margin-bottom: 0;
+  }
+
   .legend-shape {
     margin-left: 4px;
   }

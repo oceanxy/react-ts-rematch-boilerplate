@@ -3,6 +3,9 @@
   background: rgba(21, 47, 69, 0.8);
 }
 
+$hover: #2e72ab;
+$focus: #40a9ff;
+
 .inter-plat-search {
   position: absolute;
   left: 500px;
@@ -21,6 +24,7 @@
       margin: 0;
       display: flex;
       align-items: center;
+      cursor: pointer;
 
       .ant-select-selector {
         height: 60%;
@@ -30,7 +34,7 @@
         background: none;
         border: none;
         outline: none;
-        box-shadow: none;
+        box-shadow: unset !important;
         margin: 0;
         display: flex;
         align-items: center;
@@ -56,6 +60,19 @@
             justify-content: center;
           }
         }
+      }
+
+      &.ant-select-focused.ant-select-single .ant-select-selector {
+        border-right-color: #0a1c2e;
+      }
+
+      &:hover .ant-select-selector,
+      &.ant-select-focused.ant-select-single:hover .ant-select-selector {
+        border-right-color: $hover;
+      }
+
+      &.ant-select-focused.ant-select-single.ant-select-open .ant-select-selector {
+        border-right-color: $focus;
       }
 
       .ant-select-arrow {
@@ -87,14 +104,15 @@
       @include select-box-bg;
       outline: none;
       font-size: 12px;
+      color: #a8aeba;
       transition: all .3s cubic-bezier(.645, .045, .355, 1);
 
       &:hover {
-        border-color: #2e72ab;
+        border-color: $hover;
       }
 
       &:active, &:focus {
-        border-color: #40a9ff;
+        border-color: $focus;
         box-shadow: 0 0 0 0.104vw rgba(24, 144, 255, .2);
       }
 
@@ -214,12 +232,14 @@
       opacity: 0;
     }
   }
-
 }
 
 .inter-plat-dropdown {
-  @include select-box-bg;
   border-radius: 0;
+
+  &.ant-select-dropdown {
+    @include select-box-bg;
+  }
 
   .ant-select-item {
     font-size: 12px;
@@ -231,11 +251,20 @@
     padding: 0;
 
     &.ant-select-item-option-selected {
-      background: rgba(2, 46, 82, 0.65);
+      background: none;
+
+      .ant-select-item-option-content {
+        background: rgba(2, 66, 104, 0.65);
+      }
+    }
+
+    &.ant-select-item-option-active {
+      background: none;
     }
 
     &:hover {
       background: rgba(2, 33, 58, .6);
+      border: none;
     }
   }
 

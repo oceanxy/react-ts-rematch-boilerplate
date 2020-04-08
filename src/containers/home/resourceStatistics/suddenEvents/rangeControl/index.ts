@@ -8,7 +8,7 @@
  * @LastModifiedTime: 2020-04-03 周五 11:24:03
  */
 
-import RangeControl from '@/components/home/resourceStatistics/rangeControl';
+import RangeControl from '@/components/home/resourceStatistics/suddenEvents/rangeControl';
 import { Dispatch, iRootState } from '@/store';
 import { connect } from 'react-redux';
 

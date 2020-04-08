@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-03-26 18:57:04
  */
 
-import React from 'react';
+import AMap, { Boundary, POI } from './amap';
 import Search from './search';
 
-export { Search };
+export { Search, AMap, POI, Boundary };

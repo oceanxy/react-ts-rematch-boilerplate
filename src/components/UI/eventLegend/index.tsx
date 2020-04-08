@@ -3,12 +3,12 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 图例组件
  * @Date: 2020-01-06 11:42:36
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-24 14:33:28
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-08 周三 13:36:24
  */
 
 import Container from '@/components/UI/containerComp';
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties, MouseEvent, useEffect, useState } from 'react';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 import './index.scss';
 
@@ -30,13 +30,15 @@ export const eventTypeColor = [ESeverity.GRAY, ESeverity.GENERAL, ESeverity.RELA
  * 图例组件接口
  */
 interface IEventLegend {
+  className?: string,
   name: string, // 图例文字
   nameStyled?: FlattenSimpleInterpolation, // 图例文字CSS样式
   icon?: boolean, // 是否显示图标
   iconColor?: string | ESeverity, // 图标颜色
   shapeRadius?: number, // 图标半径
   style?: CSSProperties // 图例容器CSS样式
-  styled?: FlattenSimpleInterpolation // 图例容器CSS样式
+  styled?: FlattenSimpleInterpolation, // 图例容器CSS样式
+  onClick?: (e: MouseEvent) => void
 }
 
 /**
@@ -67,18 +69,20 @@ const StyledName = styled.span((props: IEventLegend) => css`
  * 图例组件
  */
 const EventLegend = (props: IEventLegend) => {
+  const {className, icon: iconProps, onClick} = props;
   const [icon, setIcon] = useState(true);
 
   useEffect(() => {
-    setIcon(props.icon ?? true);
-  }, [props.icon]);
+    setIcon(iconProps ?? true);
+  }, [iconProps]);
 
   return (
     <Container
-      className="legend-container"
+      className={`legend-container${className ? ` ${className}` : ''}`}
       style={props.style}
       styled={props.styled}
       title={props.name}
+      onClick={onClick}
     >
       {
         icon ? <StyledShape {...props} className="legend-shape" /> : null

@@ -13,7 +13,7 @@ import { ModelConfig } from '@rematch/core';
  * 地图状态
  */
 export interface IMapState {
-  mapInstance: AMap.Map | null;
+  mapInstance: AMap.Map | null
 }
 
 /**

@@ -383,7 +383,27 @@ const mocks: Mocks = {
       ]
     }
   },
-  fetchSourcesStatistics: {
+  fetchAroundEvent: {
+    retMsg: '',
+    retCode: 0,
+    data: {
+      statistics: {
+        'itemName|7': ['@cname'],
+        'totalNum|7': ['@integer(100,500)']
+      }
+    }
+  },
+  fetchAdministrativeRegions: {
+    retMsg: '',
+    retCode: 0,
+    data: {
+      statistics: {
+        'itemName|7': ['@cname'],
+        'totalNum|7': ['@integer(100,500)']
+      }
+    }
+  },
+  fetchFence: {
     retMsg: '',
     retCode: 0,
     data: {

@@ -8,7 +8,7 @@
  */
 
 import { initFetchApi } from '@/apis';
-import '@/containers/App';
+import '@/components';
 
 // 初始化mock和API
 initFetchApi();

@@ -13,11 +13,13 @@ import { EHTTPMethod } from '@/interfaces/config';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
 export type APIName =
-  'fetchEventDetails' |
-  'fetchEventList' |
-  'fetchSearchByMonitorName' |
-  'fetchSearchByArea' |
-  'fetchSourcesStatistics' |
+  'fetchEventDetails' | // 事件详情
+  'fetchEventList' | // 事件列表
+  'fetchSearchByMonitorName' | // 搜索-按监控对象搜索
+  'fetchSearchByArea' | // 搜索-按区域搜索（按围栏搜索）
+  'fetchAroundEvent' | // 资源统计-按突发事件
+  'fetchAdministrativeRegions' | // 资源统计-按行政区划
+  'fetchFence' | // 资源统计-按区域（按围栏）
   // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
   'fetchTestWebsocket' |
@@ -89,8 +91,22 @@ const apis: APIRequestConfig = {
   /**
    * 突发事件周边资源
    */
-  fetchSourcesStatistics: {
+  fetchAroundEvent: {
     url: '/clbs/web/v1/dispatch/resource/statistics/aroundEvent',
+    method: EHTTPMethod.POST
+  },
+  /**
+   * 按行政区划统计资源
+   */
+  fetchAdministrativeRegions: {
+    url: '/clbs/web/v1/dispatch/resource/statistics/byCity',
+    method: EHTTPMethod.POST
+  },
+  /**
+   * 按范围统计资源（按围栏）
+   */
+  fetchFence: {
+    url: '/clbs/web/v1/dispatch/resource/statistics/byFence',
     method: EHTTPMethod.POST
   }
 };
