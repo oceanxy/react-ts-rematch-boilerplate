@@ -8,10 +8,10 @@
  */
 
 import POI from '@/components/UI/amap/POI';
-import { Dispatch, iRootState } from '@/store';
+import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: iRootState) => ({
+const mapStateToProps = (state: RootState) => ({
   map: state.map.mapInstance,
   searchCondition: state.search.searchCondition,
   data: state.search.POIList,

@@ -9,30 +9,26 @@
 
 import Region from '@/components/home/resourceStatistics/regions';
 import { ERegionSRType } from '@/models/home/resourceStatistics/regionTabs';
-import { Dispatch, iRootState, store } from '@/store';
+import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: iRootState) => {
+const mapStateToProps = (state: RootState) => {
   const {currentType} = state.regionTabs;
 
   return {
+    value: state.adminDivisionResources.value,
+    bounds: state.adminDivisionResources.bounds,
+    fenceId: state.fence.currentFenceId,
     type: currentType,
-    // eventId: state.eventDetails.data.eventId, // 与事件联动需要这个值——事件ID，目前未联动
     data: currentType === ERegionSRType.AR ?
-      state.administrativeRegions.data :
-      state.regions.data
+      state.adminDivisionResources.data :
+      state.regionalResources.data
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): any => {
-  const state = store.getState();
-  const {currentType} = state.regionTabs;
-
-  return {
-    getData: currentType === ERegionSRType.AR ?
-      dispatch.administrativeRegions.getData :
-      dispatch.regions.getData
-  };
-};
+const mapDispatchToProps = (dispatch: Dispatch): any => ({
+  getARData: dispatch.adminDivisionResources.fetchData,
+  getRRData: dispatch.regionalResources.fetchData
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Region);

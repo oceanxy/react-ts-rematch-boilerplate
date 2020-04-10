@@ -4,18 +4,14 @@
  * @Description: 按区域统计数据组件
  * @Date: 2020-04-07 周二 15:19:04
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-08 周三 11:40:13
+ * @LastModifiedTime: 2020-04-10 周五 16:26:54
  */
 
 import Container from '@/components/UI/containerComp';
 import Histogram from '@/components/UI/histogram';
-import { AdministrativeRegions, RegionTabs } from '@/containers/home/resourceStatistics';
-import { IEventDetailsData } from '@/models/home/eventModel/eventDetails';
-import { IResourceStatisticsData } from '@/models/home/resourceStatistics';
-import { IAdministrativeRegionRequest } from '@/models/home/resourceStatistics/administrativeRegions';
-import { IRegionsRequest } from '@/models/home/resourceStatistics/regions';
+import { AdminDivisionControl, RegionalControl, RegionTabs } from '@/containers/home/resourceStatistics';
 import { ERegionSRType, IRegionTabsState } from '@/models/home/resourceStatistics/regionTabs';
-import Select from 'antd/es/select';
+import { boundsToString } from '@/utils/helper';
 import * as echarts from 'echarts';
 import React, { useEffect } from 'react';
 import './index.scss';
@@ -23,11 +19,14 @@ import './index.scss';
 /**
  * 按区域搜索资源组件props
  */
-interface IRegionsProps {
+interface IRegionProps {
   type: IRegionTabsState['currentType']
-  eventId: IEventDetailsData['eventId']
   data: IResourceStatisticsData
-  getData: (reqPayload?: IAdministrativeRegionRequest | IRegionsRequest) => void
+  fenceId: IFenceState['currentFenceId']
+  value: IAdminDivisionResourcesState['value'],
+  bounds: IAdminDivisionResourcesState['bounds']
+  getARData: IAdminDivisionResourcesModel['effects']['fetchData']
+  getRRData: IRegionalResourcesModel['effects']['fetchData']
 }
 
 /**
@@ -36,13 +35,9 @@ interface IRegionsProps {
  * @returns {any}
  * @constructor
  */
-const Region = (props: Partial<IRegionsProps>) => {
-  const {
-    // eventId 与事件联动
-    data,
-    getData,
-    type
-  } = props;
+const Region = (props: Partial<IRegionProps>) => {
+  const {data, type, bounds, getARData, getRRData, value, fenceId} = props;
+  const boundStr = boundsToString(bounds);
 
   const option: echarts.EChartOption = {
     tooltip: {
@@ -113,28 +108,31 @@ const Region = (props: Partial<IRegionsProps>) => {
     ]
   };
 
+  // 获取资源统计柱状图数据-行政区划内资源
   useEffect(() => {
-    // 页面加载后，且按区域统计资源的类型为按区域（围栏）统计时，才加载数据
-    // 因为按行政区划统计目前是手动触发，需要选择行政区划后才加载数据
-    if (type === ERegionSRType.FR) {
-      getData!();
+    if (value?.length && boundStr) {
+      getARData!({
+        supportMonitorType: -1,
+        administrativeLngLat: boundStr
+      });
     }
-  }, [
-    // eventId // 与事件联动
-  ]);
+  }, [boundStr]);
+
+  // 获取资源统计柱状图数据-区域内资源
+  useEffect(() => {
+    if (fenceId === '' || fenceId) {
+      getRRData!();
+    }
+  }, [fenceId]);
 
   return (
     <Container className="resource-statistics-right">
       <RegionTabs />
       {
         type === ERegionSRType.AR ? (
-          <AdministrativeRegions />
+          <AdminDivisionControl />
         ) : (
-          <Select placeholder="防火区域" className='resource-statistics-fence'>
-            <Select.Option value={1}>1</Select.Option>
-            <Select.Option value={2}>2</Select.Option>
-            <Select.Option value={3}>3</Select.Option>
-          </Select>
+          <RegionalControl />
         )
       }
       <Histogram option={option} />

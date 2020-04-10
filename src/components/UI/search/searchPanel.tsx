@@ -10,15 +10,15 @@
 import Icon, { IconSource, IconSourceHover } from '@/components/UI/iconComp';
 import { ISearch } from '@/components/UI/search/index';
 import { POI } from '@/containers/UI/amap';
-import { IFence, IMonitor, ISearchState, monitorTypeIcon, SearchCondition } from '@/models/UI/search';
+import { IMonitor, ISearchState, monitorTypeIcon, SearchCondition } from '@/models/UI/search';
 import React, { useEffect, useRef } from 'react';
 import styled, { StyledComponent } from 'styled-components';
 
 /**
- * 搜索面板接口
+ * 搜索面板props接口
  */
-export interface ISearchPanel {
-  searchState: ISearchState
+export interface ISearchPanelProps {
+  searchState: ISearchState & {fences: IFence[]}
   isShow: boolean
   setIsShowSearchResult: (isShow: boolean) => void
 }
@@ -33,7 +33,7 @@ interface ISearchProps {
 
 /**
  * 用于展示搜索结果的下拉列表styled组件
- * @type {StyledComponent<"ul", AnyIfEmpty<DefaultTheme>, {} & {className: string}, keyof {className: string}>}
+ * @type {StyledComponent<any, ISearch>}
  */
 export const StyledSearchPanel: StyledComponent<any, ISearch> = styled.ul.attrs((props: ISearchProps) => ({
   className: `${
@@ -46,11 +46,11 @@ export const StyledSearchPanel: StyledComponent<any, ISearch> = styled.ul.attrs(
  * @param {SearchCondition} searchCondition
  * @param {ISearch["data"]} data
  */
-function handleSearchPanelElement(searchCondition: SearchCondition, data?: ISearchState) {
+function handleSearchPanelElement(searchCondition: SearchCondition, data?: ISearchState & {fences: IFence[]}) {
   switch (searchCondition) {
     case SearchCondition.AREA:
       return (
-        data?.fenceList.map((item: IFence, index: number) => (
+        data?.fences.map((item: IFence, index: number) => (
           <li className="inter-plat-search-display-item have-children" key={`fence-item-${index}`}>
             <Icon text={item.name} icon={IconSource.AREA} iconHover={IconSourceHover.AREA} />
             {item.childNodes ? (
@@ -95,12 +95,12 @@ function handleSearchPanelElement(searchCondition: SearchCondition, data?: ISear
  * @param {ISearchState} data
  * @returns {IMonitor[] | undefined | IFence[]}
  */
-function handleData(searchCondition: SearchCondition, data?: ISearchState): number | undefined {
+function handleData(searchCondition: SearchCondition, data?: ISearchState & {fences: IFence[]}): number | undefined {
   switch (searchCondition) {
     case SearchCondition.POSITION:
       return data?.POIList.length;
     case SearchCondition.AREA:
-      return data?.fenceList.length;
+      return data?.fences.length;
     case SearchCondition.ENTITY:
     default:
       return data?.monitorList.length;
@@ -109,11 +109,11 @@ function handleData(searchCondition: SearchCondition, data?: ISearchState): numb
 
 /**
  * 搜索面板组件
- * @param {ISearchPanel} props
+ * @param {ISearchPanelProps} props
  * @returns {any}
  * @constructor
  */
-const SearchPanel = (props: ISearchPanel) => {
+const SearchPanel = (props: ISearchPanelProps) => {
   const {isShow, searchState, setIsShowSearchResult} = props;
   const {searchCondition, ...rest} = searchState;
   // 搜索面板Ref

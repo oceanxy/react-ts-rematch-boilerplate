@@ -4,26 +4,26 @@
  * @Description: 搜索组件
  * @Date: 2020-01-14 11:38:22
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-03-30 周一 14:03:30
+ * @LastModifiedTime: 2020-04-09 周四 15:36:14
  */
 
 import Container from '@/components/UI/containerComp';
 import Icon, { iconName, IconSource, IconSourceHover } from '@/components/UI/iconComp';
 import SearchPanel from '@/components/UI/search/searchPanel';
-import { IReqPayload, ISearchState, SearchCondition, SearchRequest } from '@/models/UI/search';
+import { IMonitoredRequest, ISearchRequest, ISearchState, SearchCondition } from '@/models/UI/search';
 import Select from 'antd/es/select';
-import React, { ButtonHTMLAttributes, ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ButtonHTMLAttributes, ChangeEvent, useRef, useState } from 'react';
 import './index.scss';
 
 /**
  * 搜索接口
  */
 export interface ISearch extends ButtonHTMLAttributes<any> {
-  searchState?: ISearchState
+  searchState?: ISearchState & {fences: IFence[]}
   active?: boolean
   setSearchCondition?: (searchCondition: SearchCondition) => void
   isShowSearchResult?: boolean
-  getData?: (reqPayload: IReqPayload) => void
+  getData?: (reqPayload: ISearchRequest) => void
   setKeyword?: (keyword: string) => void
   clearData?: () => void
 }
@@ -41,7 +41,7 @@ export interface ISearchCondition {
 
 /**
  * 搜索条件名称及图标配置
- * @type {({hover: IconSource; name: string; icon: IconSource; placeholder: string; value: string} | {hover: IconSource; name: string; icon: IconSource; placeholder: string; value: string} | {hover: IconSource; name: string; icon: IconSource; placeholder: string; value: string})[]}
+ * @type {ISearchCondition[]}
  */
 const searchConditions: ISearchCondition[] = [
   {
@@ -105,14 +105,25 @@ const Search = (props: ISearch) => {
    * 点击搜索按钮搜索
    */
   const handleSearch = () => {
-    const requestParam: SearchRequest = {
-      simpleQueryParam: searchBox.current!.value,
-      length: 100,
-      supportMonitorType: -1
-    };
-
     if (searchKeyword) {
-      getData?.({params: requestParam, condition: searchCondition!});
+      const keyword = searchBox.current!.value;
+
+      if (searchCondition === SearchCondition.ENTITY) {
+        const requestParam: IMonitoredRequest = {
+          simpleQueryParam: keyword,
+          length: 100,
+          supportMonitorType: -1
+        };
+
+        getData?.({params: requestParam, condition: searchCondition!});
+      } else if (searchCondition === SearchCondition.AREA) {
+        const requestParam: IFencesRequest = {
+          queryParam: keyword
+        };
+
+        getData?.({params: requestParam, condition: searchCondition!});
+      }
+
       setIsShowSearchResult(true);
     }
   };
@@ -178,7 +189,11 @@ const Search = (props: ISearch) => {
         />
         <button className="inter-plat-search-button" type="submit" onClick={handleSearch} />
       </Container>
-      <SearchPanel searchState={searchState!} isShow={isShowSearchResult} setIsShowSearchResult={setIsShowSearchResult} />
+      <SearchPanel
+        searchState={searchState!}
+        isShow={isShowSearchResult}
+        setIsShowSearchResult={setIsShowSearchResult}
+      />
     </Container>
   );
 };

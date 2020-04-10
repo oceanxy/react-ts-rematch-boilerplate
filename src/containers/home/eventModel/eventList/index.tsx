@@ -8,11 +8,11 @@
  */
 
 import EventList from '@/components/home/eventModel/eventList';
-import { Dispatch, iRootState } from '@/store';
+import { Dispatch, RootState } from '@/store';
 import React from 'react';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: iRootState) => state.eventList;
+const mapStateToProps = (state: RootState) => state.eventList;
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   getData: dispatch.eventList.getData,
   itemClick: dispatch.eventList.itemClick,

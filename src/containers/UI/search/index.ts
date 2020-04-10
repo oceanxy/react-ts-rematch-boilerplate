@@ -8,12 +8,14 @@
  */
 
 import Search from '@/components/UI/search';
-import { Dispatch, iRootState } from '@/store';
+import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: iRootState) => ({ searchState: state.search });
+const mapStateToProps = (state: RootState) => ({
+  searchState: {...state.search, fences: state.fence.searchFences}
+});
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
-  getData: dispatch.search.getData,
+  getData: dispatch.search.fetchData,
   setSearchCondition: dispatch.search.updateSearchCondition,
   setKeyword: dispatch.search.updateSearchKeyword,
   clearData: dispatch.search.clearData

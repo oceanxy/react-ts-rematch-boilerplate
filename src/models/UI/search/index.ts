@@ -3,17 +3,17 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 搜索model
  * @Date: 2020-03-26 18:07:35
- * @Date: 2020-03-30 周一 17:03:30
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-03-30 周一 17:03:30
+ * @LastModifiedTime: 2020-04-09 周四 16:59:25
  */
 
 import fetchApis from '@/apis';
 import { IconSource, IconSourceHover } from '@/components/UI/iconComp';
+import { store } from '@/store';
 import { ModelConfig } from '@rematch/core';
 
 // 请求参数
-export type SearchRequest = {
+export type IMonitoredRequest = {
   /**
    * 监控对象名称关键字
    */
@@ -44,8 +44,8 @@ export enum SearchCondition {
 /**
  * 获取搜索数据参数接口
  */
-export interface IReqPayload {
-  params: SearchRequest;
+export interface ISearchRequest {
+  params: IMonitoredRequest | IFencesRequest;
   condition: SearchCondition;
 }
 
@@ -89,40 +89,6 @@ export interface IMonitor {
 }
 
 /**
- * 围栏接口
- */
-export interface IFence {
-  /**
-   * 围栏(种类)名称
-   */
-  name: string;
-  /**
-   * 父亲节点ID（围栏种类为0，围栏的父节点对应围栏种类ID）
-   */
-  parentId: '';
-  /**
-   * 围栏(种类)ID
-   */
-  id: string;
-  /**
-   * fenceParent:围栏种类 fence：围栏
-   */
-  type: '';
-  /**
-   * 围栏的类型
-   */
-  objType: '';
-  /**
-   * 围栏图标
-   */
-  iconSkin: '';
-  /**
-   * 子节点
-   */
-  childNodes: IFence[] | null;
-}
-
-/**
  * POI接口
  */
 export interface IPOI extends AMap.Autocomplete.Tip {}
@@ -135,10 +101,6 @@ export interface ISearchState {
    * 按对象（监控对象名称）搜索的数据列表
    */
   monitorList: IMonitor[];
-  /**
-   * 按区域（围栏）搜索的数据列表
-   */
-  fenceList: IFence[];
   /**
    * POI数据
    */
@@ -187,7 +149,6 @@ export const monitorTypeIcon: {[K: string]: IconSource | IconSourceHover} = {
 const search: ModelConfig = {
   state: <ISearchState> {
     monitorList: [],
-    fenceList: [],
     POIList: [],
     searchCondition: SearchCondition.ENTITY,
     searchKeyword: ''
@@ -197,12 +158,6 @@ const search: ModelConfig = {
       return {
         ...state,
         monitorList: data || []
-      };
-    },
-    updateFenceData(state, data) {
-      return {
-        ...state,
-        fenceList: data || []
       };
     },
     updatePOIData(state, data) {
@@ -218,31 +173,29 @@ const search: ModelConfig = {
     updateSearchKeyword: (state, searchKeyword: string) => ({
       ...state,
       searchKeyword
-    }),
-    clearData: (state) => ({
-      ...state,
-      monitorList: [],
-      fenceList: [],
-      POIList: []
     })
   },
   effects: {
-    async getData(reqPayload: IReqPayload) {
+    async fetchData(payload: ISearchRequest) {
       let response;
 
-      switch (reqPayload.condition) {
+      switch (payload.condition) {
         case SearchCondition.AREA:
-          response = await fetchApis.fetchSearchByArea(reqPayload.params);
-          this.updateFenceData(response.data.fenceTreeNodes);
+          await store.dispatch.fence.fetchData(payload.params);
           break;
         case SearchCondition.POSITION:
           break;
         case SearchCondition.ENTITY:
         default:
-          response = await fetchApis.fetchSearchByMonitorName(reqPayload.params);
+          response = await fetchApis.fetchSearchByMonitorName(payload.params);
           this.updateMonitorData(response.data.monitors);
           break;
       }
+    },
+    async clearData() {
+      store.dispatch.fence.updateFences({searchFences: []});
+      store.dispatch.search.updateMonitorData();
+      store.dispatch.search.updatePOIData();
     }
   }
 };

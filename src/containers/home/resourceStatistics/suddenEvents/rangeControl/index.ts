@@ -9,10 +9,10 @@
  */
 
 import RangeControl from '@/components/home/resourceStatistics/suddenEvents/rangeControl';
-import { Dispatch, iRootState } from '@/store';
+import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: iRootState) => {
+const mapStateToProps = (state: RootState) => {
   return {
     ...state.rangeControl,
     eventName: state.eventDetails.data.eventName,

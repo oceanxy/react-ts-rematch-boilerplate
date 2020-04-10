@@ -8,11 +8,11 @@
  */
 
 import SuddenEvents from '@/components/home/resourceStatistics/suddenEvents';
-import { Dispatch, iRootState } from '@/store';
+import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 import RangeControl from './rangeControl';
 
-const mapStateToProps = (state: iRootState) => ({
+const mapStateToProps = (state: RootState) => ({
   ...state.suddenEvents,
   range: state.rangeControl.range,
   eventId: state.eventDetails.data.eventId

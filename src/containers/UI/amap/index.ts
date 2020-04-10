@@ -8,12 +8,12 @@
  */
 
 import AMap from '@/components/UI/amap';
-import { Dispatch, iRootState } from '@/store';
+import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 import Boundary from './boundary';
 import POI from './POI';
 
-const mapStateToProps = (state: iRootState) => state.map;
+const mapStateToProps = (state: RootState) => state.map;
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   updateMapInstance: dispatch.map.updateMapInstance
 });

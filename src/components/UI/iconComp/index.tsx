@@ -97,6 +97,7 @@ export const iconName: IconName<string> = {
  * 图标接口
  */
 export interface IIcon {
+  key?: string,
   icon?: IconSource;
   styled?: FlattenSimpleInterpolation;
   text?: string;

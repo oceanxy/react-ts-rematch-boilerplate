@@ -4,26 +4,21 @@
  * @Description: 高德地图行政区划边界组件
  * @Date: 2020-04-08 周三 14:39:55
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-08 周三 14:39:55
+ * @LastModifiedTime: 2020-04-10 周五 17:35:17
  */
 
-import {
-  IAdministrativeRegionRequest,
-  IAdministrativeRegionState
-} from '@/models/home/resourceStatistics/administrativeRegions';
 import _ from 'lodash';
 import React, { useEffect } from 'react';
 import SearchResult = AMap.DistrictSearch.SearchResult;
-import LngLat = AMap.LngLat;
 
 /**
  * 位置搜索接口
  */
 export interface IBoundaryProps {
   map: AMap.Map
-  district: IAdministrativeRegionState['value']
-  getAdminRegionsData: (reqPayload?: IAdministrativeRegionRequest) => void
-  setBounds: (bounds: LngLat[][] | undefined) => void
+  district: IAdminDivisionResourcesState['value']
+  getAdminRegionsData: IAdminDivisionResourcesModel['effects']['fetchData']
+  updateState: IAdminDivisionResourcesModel['effects']['resetState']
 }
 
 /**
@@ -33,7 +28,7 @@ export interface IBoundaryProps {
  * @constructor
  */
 const Boundary = (props: Partial<IBoundaryProps>) => {
-  const {map, district, setBounds} = props;
+  const {map, district, updateState} = props;
 
   useEffect(() => {
     // 检测地图是否实例化完成且行政区划值有意义
@@ -50,7 +45,7 @@ const Boundary = (props: Partial<IBoundaryProps>) => {
         districtSearch.search([...district].pop() as string, (status, result: SearchResult | string) => {
           if (_.isPlainObject(result)) {
             const bounds = (result as SearchResult).districtList[0].boundaries;
-            setBounds!(bounds);
+            updateState!({bounds});
           }
         });
       });

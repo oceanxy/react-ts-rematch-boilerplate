@@ -16,10 +16,10 @@ export type APIName =
   'fetchEventDetails' | // 事件详情
   'fetchEventList' | // 事件列表
   'fetchSearchByMonitorName' | // 搜索-按监控对象搜索
-  'fetchSearchByArea' | // 搜索-按区域搜索（按围栏搜索）
+  'fetchFences' | // 获取围栏数据
   'fetchAroundEvent' | // 资源统计-按突发事件
-  'fetchAdministrativeRegions' | // 资源统计-按行政区划
-  'fetchFence' | // 资源统计-按区域（按围栏）
+  'fetchRSByAdminRegions' | // 资源统计-按行政区划
+  'fetchRSByFence' | // 资源统计-按区域（按围栏）
   // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
   'fetchTestWebsocket' |
@@ -82,9 +82,9 @@ const apis: APIRequestConfig = {
     method: EHTTPMethod.POST
   },
   /**
-   * 按区域搜索
+   * 获取围栏数据
    */
-  fetchSearchByArea: {
+  fetchFences: {
     url: '/clbs/web/v1/dispatch/fence/getFenceTree',
     method: EHTTPMethod.POST
   },
@@ -96,16 +96,16 @@ const apis: APIRequestConfig = {
     method: EHTTPMethod.POST
   },
   /**
-   * 按行政区划统计资源
+   * 按行政区划获取资源统计数据
    */
-  fetchAdministrativeRegions: {
+  fetchRSByAdminRegions: {
     url: '/clbs/web/v1/dispatch/resource/statistics/byCity',
     method: EHTTPMethod.POST
   },
   /**
-   * 按范围统计资源（按围栏）
+   * 按范围（围栏）获取资源统计数据
    */
-  fetchFence: {
+  fetchRSByFence: {
     url: '/clbs/web/v1/dispatch/resource/statistics/byFence',
     method: EHTTPMethod.POST
   }

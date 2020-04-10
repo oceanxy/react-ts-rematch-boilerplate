@@ -8,16 +8,16 @@
  */
 
 import { Boundary } from '@/components/UI/amap';
-import { Dispatch, iRootState } from '@/store';
+import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: iRootState) => ({
+const mapStateToProps = (state: RootState) => ({
   map: state.map.mapInstance,
-  district: state.administrativeRegions.value
+  district: state.adminDivisionResources.value
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
-  setBounds: dispatch.administrativeRegions.updateBounds
+  updateState: dispatch.adminDivisionResources.updateState
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Boundary);

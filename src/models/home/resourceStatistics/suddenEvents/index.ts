@@ -9,7 +9,6 @@
 
 import fetchApis from '@/apis';
 import { IEventDetailsData } from '@/models/home/eventModel/eventDetails';
-import { IResourceStatisticsData, IResourceStatisticsRequest } from '@/models/home/resourceStatistics';
 import { IRangeControlState } from '@/models/home/resourceStatistics/rangeControl';
 import { store } from '@/store';
 import { ModelConfig } from '@rematch/core';

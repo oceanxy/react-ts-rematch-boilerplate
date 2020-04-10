@@ -237,7 +237,7 @@ const mocks: Mocks = {
       ]
     }
   },
-  fetchSearchByArea: {
+  fetchFences: {
     retCode: 0,
     retMsg: '',
     data: {
@@ -393,7 +393,7 @@ const mocks: Mocks = {
       }
     }
   },
-  fetchAdministrativeRegions: {
+  fetchRSByAdminRegions: {
     retMsg: '',
     retCode: 0,
     data: {
@@ -403,7 +403,7 @@ const mocks: Mocks = {
       }
     }
   },
-  fetchFence: {
+  fetchRSByFence: {
     retMsg: '',
     retCode: 0,
     data: {

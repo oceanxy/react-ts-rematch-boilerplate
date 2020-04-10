@@ -9,10 +9,10 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { iRootState, Dispatch } from '@/store';
+import { RootState, Dispatch } from '@/store';
 import TestContainer from '@/components/test';
 
-const mapState = (state: iRootState) => ({ test: state.test });
+const mapState = (state: RootState) => ({ test: state.test });
 
 const mapDispatch = (dispatch: Dispatch): any => ({
   increment: dispatch.test.increment,

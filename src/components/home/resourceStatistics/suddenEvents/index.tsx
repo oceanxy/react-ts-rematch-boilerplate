@@ -12,7 +12,6 @@ import EventLegend from '@/components/UI/eventLegend';
 import Histogram from '@/components/UI/histogram';
 import { RangeControl } from '@/containers/home/resourceStatistics';
 import { IEventDetailsData } from '@/models/home/eventModel/eventDetails';
-import { IResourceStatisticsData } from '@/models/home/resourceStatistics';
 import { IRangeControlState } from '@/models/home/resourceStatistics/rangeControl';
 import { ISuddenEventRequest } from '@/models/home/resourceStatistics/suddenEvents';
 import styledBlocks from '@/styled';

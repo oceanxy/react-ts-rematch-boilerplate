@@ -8,10 +8,10 @@
  */
 
 import RegionTabs from '@/components/home/resourceStatistics/regions/regionTabs';
-import { Dispatch, iRootState } from '@/store';
+import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: iRootState) => ({
+const mapStateToProps = (state: RootState) => ({
   type: state.regionTabs.currentType
 });
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
