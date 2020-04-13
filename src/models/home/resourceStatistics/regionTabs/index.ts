@@ -7,8 +7,6 @@
  * @LastModifiedTime: 2020-04-08 周三 10:39:58
  */
 
-import { ModelConfig } from '@rematch/core';
-
 /**
  * 按区域统计资源方式
  */
@@ -24,30 +22,18 @@ export enum ERegionSRType {
 }
 
 /**
- * 按区域统计资源tab切换State
- */
-export interface IRegionTabsState {
-  /**
-   * 当前统计区域资源的方式
-   */
-  currentType: ERegionSRType
-}
-
-/**
  * 按区域统计资源tab切换model
- * @type {ModelConfig}
+ * @type {IRegionTabsModel}
  */
-const regionTabs: ModelConfig = {
-  state: <IRegionTabsState> {
+const regionTabs: IRegionTabsModel = {
+  state: {
     currentType: ERegionSRType.AR
   },
   reducers: {
-    updateType: (state: any, type: ERegionSRType) => {
-      return {
-        ...state,
-        currentType: type
-      };
-    }
+    updateType: (state, type) => ({
+      ...state,
+      currentType: type
+    })
   }
 };
 

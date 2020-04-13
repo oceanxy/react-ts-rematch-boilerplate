@@ -47,7 +47,7 @@ declare global {
   /**
    * 围栏数据请求参数接口
    */
-  interface IFencesRequest {
+  interface IFenceRequest {
     /**
      * 围栏种类名称或围栏名称关键字。为空查询全部
      */
@@ -81,18 +81,17 @@ declare global {
       /**
        * 更新围栏列表数据
        * @param {IFenceState} state
-       * @param {IFence[]} fences
+       * @param {Partial<IFenceState>} payload
        * @returns {IFenceState}
        */
-      updateFences(state: IFenceState, fences?: Partial<IFenceState>): IFenceState,
-      updateFenceId(state: IFenceState, fenceId?: (IFenceState['currentFenceId'])): IFenceState
+      updateState(state: IFenceState, payload?: Partial<IFenceState>): IFenceState
     },
     effects: {
       /**
        * 从远程获取围栏列表数据
-       * @param {IFencesRequest} reqPayload 请求参数
+       * @param {IFenceRequest} reqPayload 请求参数
        */
-      fetchData(reqPayload: IFencesRequest): void
+      fetchData(reqPayload: IFenceRequest): void
       setFenceId(id?: IFenceState['currentFenceId']): void
     }
   }

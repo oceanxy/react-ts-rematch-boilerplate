@@ -13,13 +13,13 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
   map: state.map.mapInstance,
+  data: state.position.searchPositions,
   searchCondition: state.search.searchCondition,
-  data: state.search.POIList,
   keyword: state.search.searchKeyword
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
-  updatePOIData: dispatch.search.updatePOIData
+  setState: dispatch.position.setState
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(POI);

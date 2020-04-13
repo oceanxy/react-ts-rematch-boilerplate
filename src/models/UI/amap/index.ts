@@ -7,25 +7,16 @@
  * @LastModifiedTime: 2020-03-31 周二 17:03:31
  */
 
-import { ModelConfig } from '@rematch/core';
-
-/**
- * 地图状态
- */
-export interface IMapState {
-  mapInstance: AMap.Map | null
-}
-
 /**
  * 地图model
  * @type {{reducers: {updateMapInstance: (state: IMapState, map: AMap.Map) => {mapInstance: AMap.Map | null; map: AMap.Map}}; state: IMapState}}
  */
-const map: ModelConfig = {
-  state: <IMapState>{
+const map: IAMapModel = {
+  state: {
     mapInstance: null
   },
   reducers: {
-    updateMapInstance: (state: IMapState, mapInstance: AMap.Map) => ({ ...state, mapInstance })
+    updateMapInstance: (state, mapInstance) => ({...state, mapInstance})
   }
 };
 

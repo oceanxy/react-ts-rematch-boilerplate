@@ -51,7 +51,7 @@ declare global {
     }
     effects: {
       fetchData(reqPayload?: IAdminDivisionResourcesRequest): void
-      resetState(payload: Partial<IAdminDivisionResourcesState>): void
+      resetState(payload?: Partial<IAdminDivisionResourcesState>): void
     }
   }
 }

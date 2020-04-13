@@ -8,8 +8,6 @@
  */
 
 import Container from '@/components/UI/containerComp';
-import { IEventDetailsData } from '@/models/home/eventModel/eventDetails';
-import { IRangeControlState } from '@/models/home/resourceStatistics/rangeControl';
 import React, { ChangeEvent, KeyboardEvent, useEffect } from 'react';
 import './index.scss';
 

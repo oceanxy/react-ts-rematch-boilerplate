@@ -4,13 +4,13 @@
  * @Description: 搜索结果面板组件
  * @Date: 2020-03-30 周一 14:03:30
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-02 周四 15:04:02
+ * @LastModifiedTime: 2020-04-13 周一 15:05:37
  */
 
 import Icon, { IconSource, IconSourceHover } from '@/components/UI/iconComp';
-import { ISearch } from '@/components/UI/search/index';
+import { ISearchProps } from '@/components/UI/search/index';
 import { POI } from '@/containers/UI/amap';
-import { IMonitor, ISearchState, monitorTypeIcon, SearchCondition } from '@/models/UI/search';
+import { monitorTypeIcon, SearchCondition } from '@/models/UI/search';
 import React, { useEffect, useRef } from 'react';
 import styled, { StyledComponent } from 'styled-components';
 
@@ -18,7 +18,7 @@ import styled, { StyledComponent } from 'styled-components';
  * 搜索面板props接口
  */
 export interface ISearchPanelProps {
-  searchState: ISearchState & {fences: IFence[]}
+  searchState: ISearchState & SearchResultData
   isShow: boolean
   setIsShowSearchResult: (isShow: boolean) => void
 }
@@ -26,16 +26,16 @@ export interface ISearchPanelProps {
 /**
  * styledComponent组件属性
  */
-interface ISearchProps {
+interface IStyledSearchProps {
   dataLength: number
   isShow: boolean
 }
 
 /**
  * 用于展示搜索结果的下拉列表styled组件
- * @type {StyledComponent<any, ISearch>}
+ * @type {StyledComponent<any, ISearchProps>}
  */
-export const StyledSearchPanel: StyledComponent<any, ISearch> = styled.ul.attrs((props: ISearchProps) => ({
+export const StyledSearchPanel: StyledComponent<any, ISearchProps> = styled.ul.attrs((props: IStyledSearchProps) => ({
   className: `${
     props.dataLength ? (props.isShow ? 'inter-plat-search-display-show' : 'inter-plat-search-display-hide') : ''
   }`
@@ -46,11 +46,11 @@ export const StyledSearchPanel: StyledComponent<any, ISearch> = styled.ul.attrs(
  * @param {SearchCondition} searchCondition
  * @param {ISearch["data"]} data
  */
-function handleSearchPanelElement(searchCondition: SearchCondition, data?: ISearchState & {fences: IFence[]}) {
+function handleSearchPanelElement(searchCondition: SearchCondition, data?: SearchResultData) {
   switch (searchCondition) {
     case SearchCondition.AREA:
       return (
-        data?.fences.map((item: IFence, index: number) => (
+        data?.searchFences.map((item: IFence, index: number) => (
           <li className="inter-plat-search-display-item have-children" key={`fence-item-${index}`}>
             <Icon text={item.name} icon={IconSource.AREA} iconHover={IconSourceHover.AREA} />
             {item.childNodes ? (
@@ -74,7 +74,7 @@ function handleSearchPanelElement(searchCondition: SearchCondition, data?: ISear
     case SearchCondition.ENTITY:
     default:
       return (
-        data?.monitorList.map((item: IMonitor, index: number) => {
+        data?.searchEntities.map((item: IEntity, index: number) => {
           return (
             <li className="inter-plat-search-display-item" key={`monitor-item-${index}`}>
               <Icon
@@ -92,18 +92,18 @@ function handleSearchPanelElement(searchCondition: SearchCondition, data?: ISear
 /**
  * 根据搜索条件处理数据
  * @param {SearchCondition} searchCondition
- * @param {ISearchState} data
- * @returns {IMonitor[] | undefined | IFence[]}
+ * @param {SearchResultData} data
+ * @returns {number | undefined}
  */
-function handleData(searchCondition: SearchCondition, data?: ISearchState & {fences: IFence[]}): number | undefined {
+function handleData(searchCondition: SearchCondition, data?: SearchResultData): number | undefined {
   switch (searchCondition) {
     case SearchCondition.POSITION:
-      return data?.POIList.length;
+      return data?.searchPositions.length;
     case SearchCondition.AREA:
-      return data?.fences.length;
+      return data?.searchFences.length;
     case SearchCondition.ENTITY:
     default:
-      return data?.monitorList.length;
+      return data?.searchEntities.length;
   }
 }
 

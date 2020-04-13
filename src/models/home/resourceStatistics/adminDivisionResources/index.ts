@@ -3,12 +3,14 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 资源统计-按行政区划
  * @Date: 2020-04-07 周二 15:39:30
+ * @Date: 2020-04-13 周一 10:12:41
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-10 周五 17:16:25
+ * @LastModifiedTime: 2020-04-13 周一 10:12:41
  */
 
 import fetchApis from '@/apis';
 import { store } from '@/store';
+import { boundsToString } from '@/utils/helper';
 
 /**
  * 默认数据
@@ -38,22 +40,28 @@ const adminDivisionResources: IAdminDivisionResourcesModel = {
     }
   },
   effects: {
-    async fetchData(reqPayload?: IAdminDivisionResourcesRequest) {
+    async fetchData(reqPayload) {
       let response;
 
       if (reqPayload) {
         response = await fetchApis.fetchRSByAdminRegions(reqPayload);
       } else {
+        const boundsStr = boundsToString(store.getState().adminDivisionResources.bounds);
+
         response = await fetchApis.fetchRSByAdminRegions({
           supportMonitorType: -1, // 默认全部
-          administrativeLngLat: []
+          administrativeLngLat: boundsStr
         });
       }
 
-      store.dispatch.adminDivisionResources.updateState(response.data.statistics);
+      store.dispatch.adminDivisionResources.updateState({data: response.data.statistics});
     },
-    resetState(): void {
-      store.dispatch.adminDivisionResources.updateState({});
+    resetState(payload): void {
+      if (payload && Object.keys(payload).length) {
+        store.dispatch.adminDivisionResources.updateState(payload);
+      } else {
+        store.dispatch.adminDivisionResources.updateState(defaultState);
+      }
     }
   }
 };

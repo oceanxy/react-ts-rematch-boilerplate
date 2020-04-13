@@ -4,7 +4,7 @@
  * @Description: 围栏model
  * @Date: 2020-04-09 周四 09:40:08
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-10 周五 16:26:37
+ * @LastModifiedTime: 2020-04-13 周一 14:37:26
  */
 
 import fetchApis from '@/apis';
@@ -21,16 +21,10 @@ const fence: IFenceModel = {
     currentFenceId: ''
   },
   reducers: {
-    updateFences(state, fences) {
+    updateState(state, payload) {
       return {
         ...state,
-        ...fences
-      };
-    },
-    updateFenceId(state, fenceId) {
-      return {
-        ...state,
-        currentFenceId: fenceId || ''
+        ...payload
       };
     }
   },
@@ -46,10 +40,10 @@ const fence: IFenceModel = {
         params = {fences: response.data.fenceTreeNodes || []};
       }
 
-      store.dispatch.fence.updateFences(params);
+      store.dispatch.fence.updateState(params);
     },
     setFenceId(id): void {
-      store.dispatch.fence.updateFenceId(id || '');
+      store.dispatch.fence.updateState({id: id || ''});
     }
   }
 };

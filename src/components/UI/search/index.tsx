@@ -10,7 +10,7 @@
 import Container from '@/components/UI/containerComp';
 import Icon, { iconName, IconSource, IconSourceHover } from '@/components/UI/iconComp';
 import SearchPanel from '@/components/UI/search/searchPanel';
-import { IMonitoredRequest, ISearchRequest, ISearchState, SearchCondition } from '@/models/UI/search';
+import { SearchCondition } from '@/models/UI/search';
 import Select from 'antd/es/select';
 import React, { ButtonHTMLAttributes, ChangeEvent, useRef, useState } from 'react';
 import './index.scss';
@@ -18,14 +18,13 @@ import './index.scss';
 /**
  * 搜索接口
  */
-export interface ISearch extends ButtonHTMLAttributes<any> {
-  searchState?: ISearchState & {fences: IFence[]}
-  active?: boolean
-  setSearchCondition?: (searchCondition: SearchCondition) => void
-  isShowSearchResult?: boolean
-  getData?: (reqPayload: ISearchRequest) => void
-  setKeyword?: (keyword: string) => void
-  clearData?: () => void
+export interface ISearchProps extends ButtonHTMLAttributes<any> {
+  searchState: ISearchState & SearchResultData
+  active: boolean
+  isShowSearchResult: boolean
+  fetchData: ISearchModel['effects']['fetchData']
+  setState: ISearchModel['effects']['setState']
+  clearData: ISearchModel['effects']['clearData']
 }
 
 /**
@@ -70,8 +69,8 @@ const searchConditions: ISearchCondition[] = [
 /**
  * 搜索组件
  */
-const Search = (props: ISearch) => {
-  const {searchState, getData, setSearchCondition, setKeyword, clearData} = props;
+const Search = (props: Partial<ISearchProps>) => {
+  const {searchState, fetchData, setState, clearData} = props;
   const {searchCondition, searchKeyword} = searchState!;
   // 控制搜索结果面板的显示或隐藏
   const [isShowSearchResult, setIsShowSearchResult] = useState(false);
@@ -88,10 +87,8 @@ const Search = (props: ISearch) => {
       if (sc.value === value) {
         // 根据当前选中的查询方式更改文本框的提示语
         searchBox.current!.placeholder = sc.placeholder;
-        // 设置搜索关键词
-        setKeyword!('');
-        // 设置搜索条件（按对象、区域或位置搜索）
-        setSearchCondition!(value);
+        // 清空搜索关键词、设置新的搜索条件（按对象、区域或位置搜索）
+        setState!({searchKeyword: '', searchCondition: value});
         // 变更搜索条件后，清空搜索数据缓存
         clearData!();
         // 设置是否显示搜索结果面板
@@ -109,19 +106,19 @@ const Search = (props: ISearch) => {
       const keyword = searchBox.current!.value;
 
       if (searchCondition === SearchCondition.ENTITY) {
-        const requestParam: IMonitoredRequest = {
+        const requestParam: IEntityRequest = {
           simpleQueryParam: keyword,
           length: 100,
           supportMonitorType: -1
         };
 
-        getData?.({params: requestParam, condition: searchCondition!});
+        fetchData?.({params: requestParam, condition: searchCondition!});
       } else if (searchCondition === SearchCondition.AREA) {
-        const requestParam: IFencesRequest = {
+        const requestParam: IFenceRequest = {
           queryParam: keyword
         };
 
-        getData?.({params: requestParam, condition: searchCondition!});
+        fetchData?.({params: requestParam, condition: searchCondition!});
       }
 
       setIsShowSearchResult(true);
@@ -145,7 +142,7 @@ const Search = (props: ISearch) => {
    */
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const beSetValue = e.currentTarget.value;
-    setKeyword!(beSetValue);
+    setState!({searchKeyword: beSetValue});
 
     // 根据输入框的值内容，设置是否显示搜索结果面板
     if (searchCondition === SearchCondition.POSITION) {

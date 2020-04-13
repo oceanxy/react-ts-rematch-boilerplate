@@ -10,7 +10,7 @@
 import Container from '@/components/UI/containerComp';
 import EventLegend, { eventTypeColor } from '@/components/UI/eventLegend';
 import KeyValue from '@/components/UI/keyValue';
-import { eventTypeText, IEventDetailsData } from '@/models/home/eventModel/eventDetails';
+import { eventTypeText } from '@/models/home/eventModel/eventDetails';
 import styledComponent from '@/styled';
 import React from 'react';
 import './index.scss';

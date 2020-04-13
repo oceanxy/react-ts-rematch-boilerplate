@@ -9,7 +9,7 @@
 
 import Container from '@/components/UI/containerComp';
 import EventLegend from '@/components/UI/eventLegend';
-import { ERegionSRType, IRegionTabsState } from '@/models/home/resourceStatistics/regionTabs';
+import { ERegionSRType } from '@/models/home/resourceStatistics/regionTabs';
 import styledBlocks from '@/styled';
 import React, { MouseEvent } from 'react';
 import './index.scss';

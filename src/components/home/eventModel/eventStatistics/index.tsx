@@ -9,8 +9,6 @@
 
 import Button from '@/components/UI/button';
 import Container from '@/components/UI/containerComp';
-import { IEventListRequest } from '@/models/home/eventModel/eventList';
-import { IEventStatisticsState } from '@/models/home/eventModel/eventStatistics';
 import React, { useState } from 'react';
 import './index.scss';
 

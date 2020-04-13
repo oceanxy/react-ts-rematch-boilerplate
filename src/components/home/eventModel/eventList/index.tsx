@@ -3,19 +3,20 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 事件列表组件
  * @Date: 2020-03-23 15:50:32
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-24 16:14:09
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-13 周一 13:54:13
  */
 
 import AlarmEventItem from '@/components/home/alarmEventItem';
 import Container from '@/components/UI/containerComp';
 import { eventTypeColor } from '@/components/UI/eventLegend';
-import { IEventDetailsRequest } from '@/models/home/eventModel/eventDetails';
-import { IEvent, IEventListRequest } from '@/models/home/eventModel/eventList';
 import React, { useEffect, useState } from 'react';
 import './index.scss';
 
-interface IEventList {
+/**
+ * 时间列表组件props
+ */
+interface IEventListProps {
   data?: IEvent[];
   curSelectedMonitorId?: '';
   setCurMonitorId?: (curSelectedMonitorId: string) => void;
@@ -24,9 +25,19 @@ interface IEventList {
   itemClick?: ({ startTime, monitorId, eventType }: IEventDetailsRequest) => void;
 }
 
+/**
+ * 事件类型状态对应文字
+ * @type {string[]}
+ */
 export const eventTypeStatus = ['未处理', '处理中'];
 
-const EventDetails = (props: IEventList) => {
+/**
+ * 事件详情组件
+ * @param {IEventListProps} props
+ * @returns {any}
+ * @constructor
+ */
+const EventDetails = (props: IEventListProps) => {
   const { data, curSelectedMonitorId, setCurMonitorId } = props;
   const [isInit, setInit] = useState(true);
 

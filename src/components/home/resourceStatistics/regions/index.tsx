@@ -10,7 +10,7 @@
 import Container from '@/components/UI/containerComp';
 import Histogram from '@/components/UI/histogram';
 import { AdminDivisionControl, RegionalControl, RegionTabs } from '@/containers/home/resourceStatistics';
-import { ERegionSRType, IRegionTabsState } from '@/models/home/resourceStatistics/regionTabs';
+import { ERegionSRType } from '@/models/home/resourceStatistics/regionTabs';
 import { boundsToString } from '@/utils/helper';
 import * as echarts from 'echarts';
 import React, { useEffect } from 'react';

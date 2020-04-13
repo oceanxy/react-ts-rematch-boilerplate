@@ -4,7 +4,8 @@
  * @Description: 行政区划级联选择组件
  * @Date: 2020-04-08 周三 14:06:34
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-10 周五 15:26:05
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-13 周一 10:14:54
  */
 
 import Container from '@/components/UI/containerComp';
@@ -39,7 +40,7 @@ const AdminDivisionControl = (props: Partial<IAdminDivisionControlProps>) => {
     if (value.length) {
       resetState!({value} as {value: IAdminDivisionResourcesState['value']});
     } else {
-      resetState!({});
+      resetState!();
     }
   };
 

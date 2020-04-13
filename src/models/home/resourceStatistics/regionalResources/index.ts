@@ -21,7 +21,7 @@ const defaultData: IResourceStatisticsData = {
 
 /**
  * 按区域统计资源model
- * @type {{effects: {fetchData(reqPayload): Promise<void>}; reducers: {updateData: (state, data) => {data: IResourceStatisticsData}}; state: {data: {itemName: any[]; totalNum: any[]}}}}
+ * @type {IRegionalResourcesModel}
  */
 const regionalResources: IRegionalResourcesModel = {
   state: {
