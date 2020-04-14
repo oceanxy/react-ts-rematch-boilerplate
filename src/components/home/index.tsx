@@ -4,25 +4,20 @@
  * @Description: 组件组装
  * @Date: 2020-01-04 14:30:18
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-03 周五 09:09:14
+ * @LastModifiedTime: 2020-04-14 周二 10:24:36
  */
 
-import AlarmEventItem from '@/components/home/alarmEventItem';
 import DisplayContent from '@/components/home/displayContent';
 import EventModel from '@/components/home/eventModel';
 import Intercom from '@/components/home/intercom';
 import ResourceStatistics from '@/components/home/resourceStatistics';
+import TaskModel from '@/components/home/taskModel';
 import TemporaryGroup from '@/components/home/temporaryGroup';
-import Button from '@/components/UI/button';
 import Container from '@/components/UI/containerComp';
-import EventLegend from '@/components/UI/eventLegend';
-import KeyValue from '@/components/UI/keyValue';
 import Nav from '@/components/UI/nav';
-import Title from '@/components/UI/title';
 import { renderRoutes } from '@/config/router';
 import { Search } from '@/containers/UI';
 import ZWMap from '@/containers/UI/amap';
-import styledComponent from '@/styled';
 import React from 'react';
 import './index.scss';
 
@@ -55,43 +50,7 @@ const Home = () => {
         </Container>
         <Container className="inter-plat-right">
           <ResourceStatistics />
-          <Title name="任务列表" styled={styledComponent.marginTop20}>
-            <Container theme="style1" style={{marginTop: 10}}>
-              <EventLegend
-                name="任务详情"
-                nameStyled={styledComponent.subtitle}
-                styled={styledComponent.marginBottom10}
-              />
-              <Container className="task-detail-container">
-                <KeyValue name="开始时间" value="2020-1-7 9:15:00" />
-                <KeyValue name="结束时间" value="2020-1-8 9:15:00" />
-                <KeyValue name="持续时长" value="12:12:00" />
-                <KeyValue name="处理时长" value="00:12:00" />
-                <KeyValue name="经纬度" value="101 345" />
-                <KeyValue name="位置" value="重庆市渝中区大坪时代天街" compWidth="100%" />
-              </Container>
-              <Container className="task-member-container">
-                <Button name="按" />
-                <Button name="按" />
-                <Button name="按" />
-              </Container>
-            </Container>
-            <Container className="task-button-container">
-              <Button name="全部" active={true} />
-              <Button name="未处理" />
-              <Button name="处理中" />
-            </Container>
-            <Container className="task-list-container">
-              <AlarmEventItem name="任务名称" />
-              <AlarmEventItem name="任务名称" />
-              <AlarmEventItem name="任务名称" />
-              <AlarmEventItem name="任务名称" />
-              <AlarmEventItem name="任务名称" />
-              <AlarmEventItem name="任务名称" />
-              <AlarmEventItem name="任务名称" />
-              <AlarmEventItem name="任务名称" />
-            </Container>
-          </Title>
+          <TaskModel />
         </Container>
       </Container>
     </Container>

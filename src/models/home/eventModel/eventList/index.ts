@@ -34,7 +34,7 @@ const eventList: IEventListModel = {
     }
   },
   effects: {
-    async getData(reqPayload) {
+    async fetchData(reqPayload) {
       const response = await fetchApis.fetchEventList(reqPayload);
       const {latestEventDetails, eventStatistics, eventList}: IEventData = response.data;
 

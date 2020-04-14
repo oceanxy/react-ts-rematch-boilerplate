@@ -52,7 +52,7 @@ declare global {
      */
     eventDurationTimeStr: string
     /**
-     * 事件等级 1：一般 2：较重 3：严重 4：特别严重 0：没有时间详情数据
+     * 事件等级 1：一般 2：较重 3：严重 4：特别严重 0：没有事件详情数据
      */
     eventLevel: 0 | 1 | 2 | 3 | 4
     /**
@@ -96,7 +96,7 @@ declare global {
     data: IEventDetailsData;
   }
 
-  interface IEventDetails extends ModelConfig {
+  interface IEventDetailsModel extends ModelConfig {
     state: IEventDetailsState
     reducers: {
       updateData(state: IEventDetailsState, data: IEventDetailsData): IEventDetailsState

@@ -1,0 +1,14 @@
+.task-list-container {
+  flex: 1;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  padding-right: 4px;
+
+  scrollbar-width: none;
+
+  .legend-name {
+    color: #e4f2ff;
+    font-size: 12.2px;
+  }
+}

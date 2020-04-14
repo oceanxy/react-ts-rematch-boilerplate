@@ -8,7 +8,7 @@
  */
 
 import Container from '@/components/UI/containerComp';
-import EventLegend from '@/components/UI/eventLegend';
+import ItemLegend from '@/components/UI/itemLegend';
 import { ERegionSRType } from '@/models/home/resourceStatistics/regionTabs';
 import styledBlocks from '@/styled';
 import React, { MouseEvent } from 'react';
@@ -39,7 +39,7 @@ const RegionTabs = (props: Partial<IRegionTabsProps>) => {
 
   return (
     <Container className="resource-statistics-right-tab">
-      <EventLegend
+      <ItemLegend
         className="no-margin-bottom"
         name="行政区划内资源"
         styled={flex1}
@@ -47,7 +47,7 @@ const RegionTabs = (props: Partial<IRegionTabsProps>) => {
         icon={false}
         onClick={setCurrentType.bind(null, ERegionSRType.AR)}
       />
-      <EventLegend
+      <ItemLegend
         className="no-margin-bottom"
         name="区域内资源"
         styled={flex1}

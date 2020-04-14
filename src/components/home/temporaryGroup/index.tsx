@@ -8,7 +8,7 @@
  */
 
 import Container from '@/components/UI/containerComp';
-import EventLegend from '@/components/UI/eventLegend';
+import ItemLegend from '@/components/UI/itemLegend';
 import Trigger, { ETriggerType } from '@/components/UI/triggerComp';
 import styledComponent from '@/styled';
 import React from 'react';
@@ -24,7 +24,7 @@ interface ITemporaryGroup {
 const TemporaryGroup = (props: ITemporaryGroup) => {
   return (
     <Container className="inter-plat-temp-group-container" theme="style3">
-      <EventLegend
+      <ItemLegend
         name="临时组"
         icon={false}
         nameStyled={styledComponent.centerTitle}

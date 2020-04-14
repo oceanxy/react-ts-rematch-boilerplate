@@ -20,6 +20,8 @@ export type APIName =
   'fetchAroundEvent' | // 资源统计-按突发事件
   'fetchRSByAdminRegions' | // 资源统计-按行政区划
   'fetchRSByFence' | // 资源统计-按区域（按围栏）
+  'fetchTaskList' | // 获取任务列表数据
+  'fetchTaskDetails' | // 获取任务详情数据
   // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
   'fetchTestWebsocket' |
@@ -107,6 +109,20 @@ const apis: APIRequestConfig = {
    */
   fetchRSByFence: {
     url: '/clbs/web/v1/dispatch/resource/statistics/byFence',
+    method: EHTTPMethod.POST
+  },
+  /**
+   * 获取任务列表及任务统计数据
+   */
+  fetchTaskList: {
+    url: '/clbs/web/v1/dispatch/task/query/unhandledEventTasks',
+    method: EHTTPMethod.POST
+  },
+  /**
+   * 获取任务详情数据
+   */
+  fetchTaskDetails: {
+    url: '/clbs/web/v1/dispatch/task/details',
     method: EHTTPMethod.POST
   }
 };

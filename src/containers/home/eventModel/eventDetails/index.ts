@@ -9,8 +9,6 @@
 
 import EventDetails from '@/components/home/eventModel/eventDetails';
 import { Dispatch, RootState } from '@/store';
-import { RematchDispatch } from '@rematch/core';
-import React from 'react';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => state.eventDetails;

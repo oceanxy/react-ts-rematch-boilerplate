@@ -113,7 +113,7 @@ declare global {
       updateCurId(state: IEventListState, curSelectedMonitorId: IEventListState['curSelectedMonitorId']): IEventListState
     }
     effects: {
-      getData(reqPayload: IEventListRequest): void
+      fetchData(reqPayload: IEventListRequest): void
       itemClick(reqPayload: IEventDetailsRequest): void
       setCurId(curSelectedMonitorId: IEventListState['IEventListState']): void
     }

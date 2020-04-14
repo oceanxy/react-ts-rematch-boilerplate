@@ -43,7 +43,7 @@ const fence: IFenceModel = {
       store.dispatch.fence.updateState(params);
     },
     setFenceId(id): void {
-      store.dispatch.fence.updateState({id: id || ''});
+      store.dispatch.fence.updateState({currentFenceId: id || ''});
     }
   }
 };

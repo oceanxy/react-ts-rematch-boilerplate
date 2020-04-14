@@ -8,7 +8,7 @@
  */
 
 import Container from '@/components/UI/containerComp';
-import EventLegend from '@/components/UI/eventLegend';
+import ItemLegend from '@/components/UI/itemLegend';
 import Trigger, { ETriggerType } from '@/components/UI/triggerComp';
 import styledComponent from '@/styled';
 import React from 'react';
@@ -24,7 +24,7 @@ interface IDisplayContent {
 const DisplayContent = (props: IDisplayContent) => {
   return (
     <Container className="inter-plat-display-container" theme="style3">
-      <EventLegend
+      <ItemLegend
         name="显示内容"
         icon={false}
         styled={styledComponent.justifyContent}

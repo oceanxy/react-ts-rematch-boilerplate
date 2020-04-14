@@ -4,12 +4,12 @@
  * @Description: 事件列表组件
  * @Date: 2020-03-23 15:50:32
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-13 周一 13:54:13
+ * @LastModifiedTime: 2020-04-14 周二 10:26:34
  */
 
-import AlarmEventItem from '@/components/home/alarmEventItem';
+import ListItem from '@/components/home/listItem';
 import Container from '@/components/UI/containerComp';
-import { eventTypeColor } from '@/components/UI/eventLegend';
+import { eventTypeColor } from '@/models/home/eventModel';
 import React, { useEffect, useState } from 'react';
 import './index.scss';
 
@@ -17,12 +17,12 @@ import './index.scss';
  * 时间列表组件props
  */
 interface IEventListProps {
-  data?: IEvent[];
-  curSelectedMonitorId?: '';
-  setCurMonitorId?: (curSelectedMonitorId: string) => void;
-  getData?: (reqPayload: IEventListRequest) => void;
-  clearEventDetailsData?: () => void;
-  itemClick?: ({ startTime, monitorId, eventType }: IEventDetailsRequest) => void;
+  data: IEvent[]
+  curSelectedMonitorId: IEventListState['curSelectedMonitorId']
+  setCurMonitorId: IEventListModel['effects']['setCurId']
+  fetchData: IEventListModel['effects']['fetchData']
+  clearEventDetailsData: IEventDetailsModel['reducers']['clearData']
+  itemClick: IEventListModel['effects']['itemClick']
 }
 
 /**
@@ -37,8 +37,8 @@ export const eventTypeStatus = ['未处理', '处理中'];
  * @returns {any}
  * @constructor
  */
-const EventDetails = (props: IEventListProps) => {
-  const { data, curSelectedMonitorId, setCurMonitorId } = props;
+const EventDetails = (props: Partial<IEventListProps>) => {
+  const {data, curSelectedMonitorId, setCurMonitorId} = props;
   const [isInit, setInit] = useState(true);
 
   /**
@@ -46,7 +46,7 @@ const EventDetails = (props: IEventListProps) => {
    * @param {IEventDetailsRequest} payload
    */
   const onClick = (payload: IEventDetailsRequest) => {
-    const { itemClick, clearEventDetailsData } = props;
+    const {itemClick, clearEventDetailsData} = props;
 
     // 检测当前点击的监控对象是否选中。如果已选中，则取消选中；反之则选中。
     if (curSelectedMonitorId === payload.monitorId) {
@@ -59,7 +59,7 @@ const EventDetails = (props: IEventListProps) => {
   };
 
   useEffect(() => {
-    props.getData!({
+    props.fetchData!({
       sortType: 0,
       isReturnEventDetails: 1
     } as IEventListRequest);
@@ -73,9 +73,10 @@ const EventDetails = (props: IEventListProps) => {
 
   return (
     <Container className="event-list-container">
-      {data && data.length
-        ? data.map((item, index) => (
-            <AlarmEventItem
+      {
+        data && data.length ?
+          data.map((item, index) => (
+            <ListItem
               key={`event-list-${index}`}
               className={curSelectedMonitorId === item.monitorId ? 'active' : ''}
               name={item.eventName}
@@ -89,8 +90,9 @@ const EventDetails = (props: IEventListProps) => {
                 eventType: item.eventType
               })}
             />
-          ))
-        : null}
+          )) :
+          null
+      }
     </Container>
   );
 };

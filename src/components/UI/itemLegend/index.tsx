@@ -4,10 +4,11 @@
  * @Description: 图例组件
  * @Date: 2020-01-06 11:42:36
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-08 周三 13:36:24
+ * @LastModifiedTime: 2020-04-14 周二 15:19:50
  */
 
 import Container from '@/components/UI/containerComp';
+import { eventTypeColor } from '@/models/home/eventModel';
 import React, { CSSProperties, MouseEvent, useEffect, useState } from 'react';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 import './index.scss';
@@ -16,20 +17,20 @@ import './index.scss';
  * 事件/任务严重程度颜色标识
  */
 export enum ESeverity {
-  VERY = '#c50100',
-  SEVERELY = '#da5d00',
-  RELATIVELY = '#d0b800',
-  GENERAL = '#0074c7',
-  GRAY = '#999999'
+  VERY_Event = '#c50100',
+  SEVERELY_Event = '#da5d00',
+  RELATIVELY_Event = '#d0b800',
+  GENERAL_Event = '#0074c7',
+  GRAY = '#999999',
+  GENERAL_TASK = '#0052FE',
+  IMPORTANT_TASK = '#FA0512',
+  URGENT_TASK = '#BB068E'
 }
-
-// 时间类型颜色值
-export const eventTypeColor = [ESeverity.GRAY, ESeverity.GENERAL, ESeverity.RELATIVELY, ESeverity.SEVERELY, ESeverity.VERY];
 
 /**
  * 图例组件接口
  */
-interface IEventLegend {
+interface IItemLegend {
   className?: string,
   name: string, // 图例文字
   nameStyled?: FlattenSimpleInterpolation, // 图例文字CSS样式
@@ -45,17 +46,17 @@ interface IEventLegend {
  * 图例图标样式组件
  */
 const StyledShape = styled.span`
-  background-color: ${(props: IEventLegend) => props.iconColor ? props.iconColor : eventTypeColor[0]};
-  box-shadow: ${(props: IEventLegend) => props.iconColor ? props.iconColor : eventTypeColor[0]} 0 0 4px 2px;
-  width: ${(props: IEventLegend) => props.shapeRadius ? props.shapeRadius * 2 : 8}px;
-  height: ${(props: IEventLegend) => props.shapeRadius ? props.shapeRadius * 2 : 8}px;
-  border-radius:  ${(props: IEventLegend) => props.shapeRadius ? props.shapeRadius : 4}px;
+  background-color: ${(props: IItemLegend) => props.iconColor ? props.iconColor : eventTypeColor[0]};
+  box-shadow: ${(props: IItemLegend) => props.iconColor ? props.iconColor : eventTypeColor[0]} 0 0 4px 2px;
+  width: ${(props: IItemLegend) => props.shapeRadius ? props.shapeRadius * 2 : 8}px;
+  height: ${(props: IItemLegend) => props.shapeRadius ? props.shapeRadius * 2 : 8}px;
+  border-radius:  ${(props: IItemLegend) => props.shapeRadius ? props.shapeRadius : 4}px;
 `;
 
 /**
  * 图例名称样式组件
  */
-const StyledName = styled.span((props: IEventLegend) => css`
+const StyledName = styled.span((props: IItemLegend) => css`
   font-size: ${(10.11 / 1920 * 100).toFixed(3)}vw;
   color: #cccccc;
   ${props.nameStyled};
@@ -68,7 +69,7 @@ const StyledName = styled.span((props: IEventLegend) => css`
 /**
  * 图例组件
  */
-const EventLegend = (props: IEventLegend) => {
+const ItemLegend = (props: IItemLegend) => {
   const {className, icon: iconProps, onClick} = props;
   const [icon, setIcon] = useState(true);
 
@@ -92,4 +93,4 @@ const EventLegend = (props: IEventLegend) => {
   );
 };
 
-export default EventLegend;
+export default ItemLegend;

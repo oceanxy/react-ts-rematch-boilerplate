@@ -9,12 +9,11 @@
 
 import EventList from '@/components/home/eventModel/eventList';
 import { Dispatch, RootState } from '@/store';
-import React from 'react';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => state.eventList;
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
-  getData: dispatch.eventList.getData,
+  fetchData: dispatch.eventList.fetchData,
   itemClick: dispatch.eventList.itemClick,
   clearEventDetailsData: dispatch.eventDetails.clearData,
   setCurMonitorId: dispatch.eventList.setCurId

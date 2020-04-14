@@ -10,6 +10,17 @@
 import fetchApis from '@/apis';
 import { store } from '@/store';
 
+const defaultData: IEntity = {
+  monitorId: '',
+  monitorName: '',
+  monitorType: -1,
+  assignmentName: '',
+  deviceNum: 0,
+  groupName: '',
+  simCardNum: 0,
+  userId: ''
+};
+
 /**
  * 实体model
  * @type {IEntityModel}
@@ -48,4 +59,5 @@ const entity: IEntityModel = {
   }
 };
 
+export { defaultData };
 export default entity;

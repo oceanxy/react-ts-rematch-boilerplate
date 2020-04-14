@@ -8,7 +8,7 @@
  */
 
 import Container from '@/components/UI/containerComp';
-import EventLegend from '@/components/UI/eventLegend';
+import ItemLegend from '@/components/UI/itemLegend';
 import Histogram from '@/components/UI/histogram';
 import { RangeControl } from '@/containers/home/resourceStatistics';
 import styledBlocks from '@/styled';
@@ -105,7 +105,7 @@ const SuddenEvents = (props: Partial<ISuddenEventProps>) => {
 
   return (
     <Container className="resource-statistics-left">
-      <EventLegend
+      <ItemLegend
         name="突发事件周边资源"
         nameStyled={styledBlocks.subtitle}
         styled={styledBlocks.marginBottom10}

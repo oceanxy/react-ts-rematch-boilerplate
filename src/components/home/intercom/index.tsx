@@ -9,7 +9,7 @@
 
 import Button from '@/components/UI/button';
 import Container from '@/components/UI/containerComp';
-import EventLegend from '@/components/UI/eventLegend';
+import ItemLegend from '@/components/UI/itemLegend';
 import Member from '@/components/UI/member';
 import styledComponent from '@/styled';
 import React from 'react';
@@ -25,7 +25,7 @@ interface IIntercom {
 const Intercom = (props: IIntercom) => {
   return (
     <Container className="inter-plat-intercom-container" theme="style3">
-      <EventLegend
+      <ItemLegend
         name="对讲名称"
         icon={false}
         nameStyled={styledComponent.centerTitle}

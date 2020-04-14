@@ -7,10 +7,10 @@
  * @LastModifiedTime: 2020-04-01 周三 13:04:01
  */
 
-import EventLegend, { eventTypeColor } from '@/components/UI/eventLegend';
+import ItemLegend from '@/components/UI/itemLegend';
 import Title from '@/components/UI/title';
 import { EventDetails, EventList, EventStatistics } from '@/containers/home/eventModel';
-import { eventTypeText } from '@/models/home/eventModel/eventDetails';
+import { eventTypeColor, eventTypeText } from '@/models/home/eventModel';
 import React from 'react';
 
 const EventModel = () => {
@@ -20,10 +20,10 @@ const EventModel = () => {
       titleExtraElementStyle={{marginLeft: 10}}
       titleExtraElement={
         <React.Fragment>
-          <EventLegend name={eventTypeText[4]} iconColor={eventTypeColor[4]} />
-          <EventLegend name={eventTypeText[3]} iconColor={eventTypeColor[3]} />
-          <EventLegend name={eventTypeText[2]} iconColor={eventTypeColor[2]} />
-          <EventLegend name={eventTypeText[1]} iconColor={eventTypeColor[1]} />
+          <ItemLegend name={eventTypeText[4]} iconColor={eventTypeColor[4]} />
+          <ItemLegend name={eventTypeText[3]} iconColor={eventTypeColor[3]} />
+          <ItemLegend name={eventTypeText[2]} iconColor={eventTypeColor[2]} />
+          <ItemLegend name={eventTypeText[1]} iconColor={eventTypeColor[1]} />
         </React.Fragment>
       }
     >

@@ -412,6 +412,119 @@ const mocks: Mocks = {
         'totalNum|7': ['@integer(100,500)']
       }
     }
+  },
+  fetchTaskList: {
+    retCode: 0,
+    retMsg: '',
+    data: {
+      taskPageInfo: {
+        'totalRecords': 1,
+        'start': 0,
+        'totalPages': 1,
+        'pageSize': 10,
+        'end': 10,
+        'page': 1,
+        'records|10-20': [
+          {
+            'address': '@county(true)',
+            'createDataTime': '@datetime',
+            'createDataUsername': '@name',
+            'dateDuplicateType': null,
+            'description': 'Random.paragraph(10,20)',
+            'endTime': '2020-04-17 23:59:59',
+            'eventNames|1': ['超时长停留', '紧急报警'],
+            'events': null,
+            'executors': null,
+            'groupId': '@guid',
+            'groupName': 'Random.paragraph(3,5)',
+            'realEndTime': null,
+            'realStartTime': null,
+            'startTime': '@datetime',
+            'status|1': [0, 1, 2],
+            'taskId': '@guid',
+            'taskLevel|1': [1, 2, 3],
+            'taskName': () => `任务${Random.integer(10, 100)}`,
+            'taskPeriod': 1,
+            'updateDataTime': '@datetime',
+            'updateDataUsername': null
+          }
+        ]
+      },
+      taskStatistics: {
+        'finishedNum|1-10': 1,
+        'processingNum|1-10': 1,
+        'totalNum|1-10': 1,
+        'untreatedNum|1-10': 1
+      }
+    }
+  },
+  fetchTaskDetails: {
+    retCode: 0,
+    retMsg: '',
+    data: {
+      'taskInfo': {
+        'address': '重庆市渝中区石油路街道医学院路重庆医科大学袁家岗校区',
+        'dateDuplicateType': null,
+        'description': '任务创建接口测试',
+        'eventNames': '紧急报警,超时长停留',
+        'groupId': '960c2a44-a13c-1039-8e6f-e9bbe4905ce3',
+        'groupName': null,
+        'realEndTime': null,
+        'realStartTime': null,
+        'status': 0,
+        'taskId': '86a1392f-6b47-4633-b8b2-286903fa4837',
+        'taskLevel': '1',
+        'taskName|1': ['超时长停留', '紧急报警'],
+        'startTime': '@datetime',
+        'endTime': '@datetime',
+        'taskPeriod': 1,
+        'events': [
+          {
+            'description': null,
+            'eventId': '9712b799-c1f9-45f9-bc91-13bf1d2f1cf9_1586326064000_0',
+            'eventLevel': '1',
+            'eventName': '紧急报警',
+            'eventStatus': '1',
+            'eventType': '0',
+            'monitorId': '9712b799-c1f9-45f9-bc91-13bf1d2f1cf9',
+            'monitorName': '川0002',
+            'startTime': '2020-04-08 14:07:44'
+          },
+          {
+            'description': null,
+            'eventId': '72eaf419-3da4-4d5b-9e03-0ac54e78c2f4_1586336127000_154',
+            'eventLevel': '1',
+            'eventName': '超时长停留',
+            'eventStatus': '1',
+            'eventType': '154',
+            'monitorId': '72eaf419-3da4-4d5b-9e03-0ac54e78c2f4',
+            'monitorName': 'IW2527车',
+            'startTime': '2020-04-08 16:55:27'
+          }
+        ],
+        'executors': [
+          {
+            'assignmentName': 'tb-group09,tb-group01,tb-group02',
+            'curAssignmentName': '大王叫我去巡山040910534',
+            'curAssignmentType': '2',
+            'deviceNum': '0002527',
+            'dispatchStatus': '2',
+            'groupName': '回归测试',
+            'hasForbiddenWord': false,
+            'iconUrl': null,
+            'monitorId': '72eaf419-3da4-4d5b-9e03-0ac54e78c2f4',
+            'monitorName': 'IW2527车',
+            'monitorType': '0',
+            'onlineStatus': 0,
+            'plateColor': null,
+            'simCardNum': '18600332931',
+            'thingTypeName': null,
+            'userId': 7349,
+            'userNumber': '93446'
+          }
+        ]
+      }
+    }
   }
 };
 

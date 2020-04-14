@@ -3,10 +3,11 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 按钮组件
  * @Date: 2020-01-07 09:50:44
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-01-10 11:39:13
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-14 周二 17:11:26
  */
 
+import { px2vh, px2vw } from '@/utils/helper';
 import React, { ButtonHTMLAttributes } from 'react';
 import styled from 'styled-components';
 import './index.scss';
@@ -26,7 +27,7 @@ const StyledButton = styled.button.attrs((props: IButton) => {
     onClick: props.onClick
   };
 })`
-  padding: ${((10 / 1920) * 100).toFixed(3)}vh ${((16 / 1920) * 100).toFixed(3)}vw;
+  padding: ${px2vh(4)} ${px2vw(10)};
 `;
 
 /**

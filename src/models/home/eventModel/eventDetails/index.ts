@@ -11,12 +11,6 @@ import fetchApis from '@/apis';
 import { store } from '@/store';
 
 /**
- * 事件类型文本
- * @type {string[]}
- */
-export const eventTypeText = ['', '一般', '较重', '严重', '特别严重'];
-
-/**
  * 事件详情默认数据
  * @type {IEventDetailsData}
  */
@@ -40,7 +34,7 @@ const defaultData: IEventDetailsData = {
   eventId: ''
 };
 
-const eventDetails: IEventDetails = {
+const eventDetails: IEventDetailsModel = {
   state: {
     data: defaultData
   },
@@ -63,4 +57,5 @@ const eventDetails: IEventDetails = {
   }
 };
 
+export { defaultData };
 export default eventDetails;
