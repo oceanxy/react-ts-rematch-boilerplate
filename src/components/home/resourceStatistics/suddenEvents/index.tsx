@@ -8,10 +8,11 @@
  */
 
 import Container from '@/components/UI/containerComp';
-import ItemLegend from '@/components/UI/itemLegend';
 import Histogram from '@/components/UI/histogram';
+import ItemLegend from '@/components/UI/itemLegend';
 import { RangeControl } from '@/containers/home/resourceStatistics';
 import styledBlocks from '@/styled';
+import { px2vw } from '@/utils/helper';
 import * as echarts from 'echarts';
 import React, { useEffect } from 'react';
 import './index.scss';
@@ -40,7 +41,7 @@ const SuddenEvents = (props: Partial<ISuddenEventProps>) => {
     },
     grid: {
       left: 20,
-      top: 20,
+      top: 5,
       bottom: 20
     },
     xAxis: [
@@ -112,7 +113,7 @@ const SuddenEvents = (props: Partial<ISuddenEventProps>) => {
         icon={false}
       />
       <RangeControl />
-      <Histogram option={option} classNameForCon="resource-statistics-left-chart" />
+      <Histogram option={option} classNameForCon="resource-statistics-left-chart" style={{height: px2vw(130)}} />
     </Container>
   );
 };

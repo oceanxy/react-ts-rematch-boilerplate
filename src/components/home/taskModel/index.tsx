@@ -10,7 +10,7 @@
 import ItemLegend from '@/components/UI/itemLegend';
 import Title from '@/components/UI/title';
 import { TaskDetails, TaskList, TaskStatistics } from '@/containers/home/taskModel';
-import { taskTypeColor, taskTypeText } from '@/models/home/taskModel';
+import { taskTypeColor, taskTypeText } from '@/models/home/taskModel/taskDetails';
 import React from 'react';
 import './index.scss';
 

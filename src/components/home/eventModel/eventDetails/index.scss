@@ -1,13 +1,14 @@
 .event-detail-container {
   display: flex;
   flex-wrap: wrap;
+  padding-top: 10px;
 
   & > :last-child {
     margin-bottom: 0;
   }
+}
 
-  .no-data-warn {
-    margin: 10px auto;
-    font-size: 12px;
-  }
+.no-data-warn {
+  margin: 10px auto;
+  font-size: 12px;
 }

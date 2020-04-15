@@ -22,6 +22,7 @@ export type APIName =
   'fetchRSByFence' | // 资源统计-按区域（按围栏）
   'fetchTaskList' | // 获取任务列表数据
   'fetchTaskDetails' | // 获取任务详情数据
+  'updateTask' | // 更新任务信息
   // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
   'fetchTestWebsocket' |
@@ -123,6 +124,10 @@ const apis: APIRequestConfig = {
    */
   fetchTaskDetails: {
     url: '/clbs/web/v1/dispatch/task/details',
+    method: EHTTPMethod.POST
+  },
+  updateTask: {
+    url: '/clbs/web/v1/dispatch/task/update',
     method: EHTTPMethod.POST
   }
 };

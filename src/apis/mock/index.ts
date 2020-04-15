@@ -9,6 +9,7 @@
 
 import apis, { APIName, APIRequestConfig } from '@/apis/api';
 import { APIResponse } from '@/interfaces/api/mock';
+import _ from 'lodash';
 import { mock, Random } from 'mockjs';
 
 /**
@@ -429,14 +430,14 @@ const mocks: Mocks = {
             'address': '@county(true)',
             'createDataTime': '@datetime',
             'createDataUsername': '@name',
-            'dateDuplicateType': null,
-            'description': 'Random.paragraph(10,20)',
+            'dateDuplicateType': '',
+            'description': Random.paragraph(10, 20),
             'endTime': '2020-04-17 23:59:59',
             'eventNames|1': ['超时长停留', '紧急报警'],
             'events': null,
             'executors': null,
             'groupId': '@guid',
-            'groupName': 'Random.paragraph(3,5)',
+            'groupName': Random.paragraph(3, 5),
             'realEndTime': null,
             'realStartTime': null,
             'startTime': '@datetime',
@@ -444,7 +445,7 @@ const mocks: Mocks = {
             'taskId': '@guid',
             'taskLevel|1': [1, 2, 3],
             'taskName': () => `任务${Random.integer(10, 100)}`,
-            'taskPeriod': 1,
+            'taskPeriod|1': [1, 2],
             'updateDataTime': '@datetime',
             'updateDataUsername': null
           }
@@ -463,21 +464,46 @@ const mocks: Mocks = {
     retMsg: '',
     data: {
       'taskInfo': {
-        'address': '重庆市渝中区石油路街道医学院路重庆医科大学袁家岗校区',
-        'dateDuplicateType': null,
+        'address': Random.county(true),
+        'dateDuplicateType': () => {
+          const weeks = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+          const weeksXB: number[] = [];
+
+          _.range(Random.integer(1, 7)).forEach(() => {
+            const xb = Random.integer(0, 6);
+            if (!weeksXB.includes(xb)) {
+              weeksXB.push(xb);
+            }
+          });
+
+          const weekXBSort = weeksXB.sort((a, b) => a - b);
+          const result = weekXBSort.map((xb) => weeks[xb]);
+
+          return result.join(', ');
+        },
         'description': '任务创建接口测试',
         'eventNames': '紧急报警,超时长停留',
         'groupId': '960c2a44-a13c-1039-8e6f-e9bbe4905ce3',
         'groupName': null,
-        'realEndTime': null,
-        'realStartTime': null,
-        'status': 0,
-        'taskId': '86a1392f-6b47-4633-b8b2-286903fa4837',
-        'taskLevel': '1',
-        'taskName|1': ['超时长停留', '紧急报警'],
+        'realEndTime': '@datetime',
+        'realStartTime': '@datetime',
+        'status|1': [0, 1, 2],
+        'taskId': '@guid',
+        'taskLevel|1': [1, 2, 3],
+        'taskDurationTimeStr': () => {
+          const time = [
+            `${Random.integer(1, 10)}天`,
+            `${Random.integer(0, 23)}时`,
+            `${Random.integer(0, 59)}分`,
+            `${Random.integer(0, 59)}秒`
+          ];
+
+          return time.slice(Random.integer(0, 3)).join('');
+        },
+        'taskName': () => `任务${Random.integer(10, 100)}`,
         'startTime': '@datetime',
         'endTime': '@datetime',
-        'taskPeriod': 1,
+        'taskPeriod|1': [1, 2],
         'events': [
           {
             'description': null,
@@ -524,6 +550,15 @@ const mocks: Mocks = {
           }
         ]
       }
+    }
+  },
+  updateTask: {
+    retMsg: '',
+    retCode: Random.integer(0, 1),
+    data: {
+      newUserIds: null,
+      deleteUserIds: null,
+      intercomGroupId: null
     }
   }
 };

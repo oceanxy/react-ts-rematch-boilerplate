@@ -8,6 +8,7 @@
  */
 
 import { TaskPeriod } from '@/models/home/taskModel';
+import { TaskStatus } from '@/models/home/taskModel/taskDetails/index';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
@@ -72,9 +73,9 @@ declare global {
      */
     startTime: Date | null,
     /**
-     * 任务状态 0：未开始 1：执行中 2: 已完成
+     * 任务状态
      */
-    status: 0 | 1 | 2,
+    status: TaskStatus,
     /**
      * 任务ID
      */

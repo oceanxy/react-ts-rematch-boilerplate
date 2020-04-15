@@ -8,6 +8,32 @@
  */
 
 /**
+ * 任务统计的方式
+ */
+export enum TaskStatisticsMethod {
+  /**
+   * 未开始
+   * @type {number}
+   */
+  NOTSTART = 0,
+  /**
+   * 执行中
+   * @type {number}
+   */
+  PROCESSING = 1,
+  /**
+   * 已完成
+   * @type {number}
+   */
+  COMPLETED = 2,
+  /**
+   * 全部
+   * @type {number}
+   */
+  ALL = -1
+}
+
+/**
  * 任务统计model
  * @type {ITaskStatisticsModel}
  */

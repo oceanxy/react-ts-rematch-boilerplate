@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-01-16 14:45:35
  */
 
-import { px2vh } from '@/utils/helper';
+import { px2vw } from '@/utils/helper';
 import React from 'react';
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
 import './index.scss';
@@ -22,7 +22,7 @@ interface IKeyValue {
 
 const StyledKeyValue = styled.div`
   text-shadow: #2e72ab 0 0 7px;
-  margin-bottom: ${px2vh(10)};
+  margin-bottom: ${px2vw(4)};
   ${props => props.styled};
   flex-basis: ${(props: IKeyValue) => (props.compWidth ? props.compWidth : 'auto')};
 `;

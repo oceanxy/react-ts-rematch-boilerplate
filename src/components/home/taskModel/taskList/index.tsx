@@ -3,13 +3,13 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 任务列表组件
  * @Date: 2020-04-14 周二 10:56:15
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-14 周二 10:56:15
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-15 周三 10:10:56
  */
 
 import ListItem from '@/components/home/listItem';
 import Container from '@/components/UI/containerComp';
-import { taskTypeColor, taskTypeStatus } from '@/models/home/taskModel';
+import { taskTypeColor, taskTypeStatus } from '@/models/home/taskModel/taskDetails';
 import React, { useEffect, useState } from 'react';
 import './index.scss';
 
@@ -18,12 +18,11 @@ interface ITaskListProps {
   curSelectedTaskId: ITaskListState['curSelectedTaskId']
   setState: ITaskListModel['effects']['setState']
   fetchData: ITaskListModel['effects']['fetchData']
-  clearTaskDetailsData: ITaskDetailsModel['reducers']['clearData']
-  itemClick: ITaskListModel['effects']['itemClick']
 }
 
 const TaskList = (props: Partial<ITaskListProps>) => {
   const {data, curSelectedTaskId, fetchData, setState} = props;
+  // 指示组件是否是初次渲染的状态
   const [isInit, setInit] = useState(true);
 
   /**
@@ -31,14 +30,10 @@ const TaskList = (props: Partial<ITaskListProps>) => {
    * @param {IEventDetailsRequest} payload
    */
   const onClick = (payload: ITaskDetailsRequest) => {
-    const {itemClick, clearTaskDetailsData} = props;
-
     // 检测当前点击的任务是否选中。如果已选中，则取消选中；反之则选中。
     if (curSelectedTaskId === payload.taskId) {
-      clearTaskDetailsData!();
       setState?.({curSelectedTaskId: ''});
     } else {
-      itemClick!(payload);
       setState?.({curSelectedTaskId: payload.taskId});
     }
   };

@@ -11,7 +11,7 @@ import Container from '@/components/UI/containerComp';
 import Histogram from '@/components/UI/histogram';
 import { AdminDivisionControl, RegionalControl, RegionTabs } from '@/containers/home/resourceStatistics';
 import { ERegionSRType } from '@/models/home/resourceStatistics/regionTabs';
-import { boundsToString } from '@/utils/helper';
+import { boundsToString, px2vw } from '@/utils/helper';
 import * as echarts from 'echarts';
 import React, { useEffect } from 'react';
 import './index.scss';
@@ -49,7 +49,7 @@ const Region = (props: Partial<IRegionProps>) => {
     },
     grid: {
       left: 20,
-      top: 20,
+      top: 10,
       bottom: 20
     },
     xAxis: [
@@ -135,7 +135,7 @@ const Region = (props: Partial<IRegionProps>) => {
           <RegionalControl />
         )
       }
-      <Histogram option={option} />
+      <Histogram option={option} style={{height: px2vw(120)}} />
     </Container>
   );
 };

@@ -106,7 +106,6 @@ declare global {
     effects: {
       fetchData(reqPayload?: ITaskListRequest): void
       setState(payload: Partial<ITaskListState>): void
-      itemClick(reqPayload: ITaskDetailsRequest): void
     }
   }
 }

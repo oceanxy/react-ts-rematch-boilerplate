@@ -1,14 +1,9 @@
 .task-detail-container {
   display: flex;
   flex-wrap: wrap;
+  padding-top: 10px;
 
   & > :last-child {
     margin-bottom: 0;
   }
-}
-
-.task-member-container {
-  border-top: 1px solid #213c5a;
-  display: flex;
-  margin-top: 15px;
 }

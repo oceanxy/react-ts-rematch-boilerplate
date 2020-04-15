@@ -11,9 +11,14 @@ import TaskDetails from '@/components/home/taskModel/taskDetails';
 import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: RootState) => state.taskDetails;
+const mapStateToProps = (state: RootState) => ({
+  ...state.taskDetails,
+  curSelTaskId: state.taskList.curSelectedTaskId
+});
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
-  fetchData: dispatch.taskDetails.fetchData
+  fetchData: dispatch.taskDetails.fetchData,
+  clearData: dispatch.taskDetails.clearData,
+  showEditTaskModal: dispatch.editTask.showModal
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskDetails);

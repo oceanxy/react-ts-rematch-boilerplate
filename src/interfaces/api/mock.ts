@@ -12,7 +12,7 @@ import { AxiosResponse } from 'axios';
 // HTTP接口响应
 export interface APIResponse {
   /**
-   * 服务器状态码
+   * 服务器状态码 数字0:成功 其他：失败
    */
   retCode: number;
   /**

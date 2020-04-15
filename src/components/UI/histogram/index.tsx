@@ -16,7 +16,7 @@ import './index.scss';
 
 interface IHistogramProps extends ReactEchartsPropsTypes {
   classNameForCon?: string,
-  styled?: FlattenSimpleInterpolation // 图例容器CSS样式
+  styledForCon?: FlattenSimpleInterpolation // 图例容器CSS样式
 }
 
 /**
@@ -26,11 +26,11 @@ interface IHistogramProps extends ReactEchartsPropsTypes {
  * @constructor
  */
 const Histogram = (props: IHistogramProps) => {
-  const {classNameForCon, styled, ...rest} = props;
+  const {classNameForCon, styledForCon, ...rest} = props;
 
   return (
-    <Container className={classNameForCon} styled={styled}>
-      <ReactEcharts {...rest} style={{height: px2vw(160)}} />
+    <Container className={classNameForCon} styled={styledForCon}>
+      <ReactEcharts {...rest} />
     </Container>
   );
 };

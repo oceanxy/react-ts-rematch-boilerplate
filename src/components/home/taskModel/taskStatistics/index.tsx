@@ -9,7 +9,7 @@
 
 import Button from '@/components/UI/button';
 import Container from '@/components/UI/containerComp';
-import { TaskStatisticsMethod } from '@/models/home/taskModel';
+import { TaskStatisticsMethod } from '@/models/home/taskModel/taskStatistics';
 import React, { useState } from 'react';
 import './index.scss';
 

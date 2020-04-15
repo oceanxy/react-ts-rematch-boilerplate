@@ -4,36 +4,39 @@
  * @Description: icon组件
  * @Date: 2020-03-26 13:35:50
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-03-30 周一 16:03:30
+ * @LastModifiedTime: 2020-04-15 周三 13:56:48
  */
 
 import Container from '@/components/UI/containerComp';
-import React from 'react';
+import carHover from '@/components/UI/iconComp/images/entity/car-hover.png';
+import car from '@/components/UI/iconComp/images/entity/car.png';
+import peopleHover from '@/components/UI/iconComp/images/entity/people-hover.png';
+import people from '@/components/UI/iconComp/images/entity/people.png';
+import thingHover from '@/components/UI/iconComp/images/entity/thing-hover.png';
+import thing from '@/components/UI/iconComp/images/entity/thing.png';
+import circleHover from '@/components/UI/iconComp/images/fence/fence-circle-hover.png';
+import circle from '@/components/UI/iconComp/images/fence/fence-circle.png';
+import lineHover from '@/components/UI/iconComp/images/fence/fence-line-hover.png';
+import line from '@/components/UI/iconComp/images/fence/fence-line.png';
+import pointHover from '@/components/UI/iconComp/images/fence/fence-point-hover.png';
+import point from '@/components/UI/iconComp/images/fence/fence-point.png';
+import polygonHover from '@/components/UI/iconComp/images/fence/fence-polygon-hover.png';
+import polygon from '@/components/UI/iconComp/images/fence/fence-polygon.png';
+import regionsHover from '@/components/UI/iconComp/images/fence/fence-regions-hover.png';
+import regions from '@/components/UI/iconComp/images/fence/fence-regions.png';
+import areaHover from '@/components/UI/iconComp/images/search/area-hover.png';
+import area from '@/components/UI/iconComp/images/search/area.png';
+import entityHover from '@/components/UI/iconComp/images/search/entity-hover.png';
+import entity from '@/components/UI/iconComp/images/search/entity.png';
+import locationHover from '@/components/UI/iconComp/images/search/location-hover.png';
+import location from '@/components/UI/iconComp/images/search/location.png';
+import positionHover from '@/components/UI/iconComp/images/search/position-hover.png';
+import position from '@/components/UI/iconComp/images/search/position.png';
+import taskComplete from '@/components/UI/iconComp/images/taskDetails/task_details_complete.png';
+import taskEdit from '@/components/UI/iconComp/images/taskDetails/task_details_edit.png';
+import taskIntercom from '@/components/UI/iconComp/images/taskDetails/task_details_intercom.png';
+import React, { MouseEvent } from 'react';
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
-import areaHover from './images/area-hover.png';
-import area from './images/area.png';
-import carHover from './images/car-hover.png';
-import car from './images/car.png';
-import entityHover from './images/entity-hover.png';
-import entity from './images/entity.png';
-import circleHover from './images/fence-circle-hover.png';
-import circle from './images/fence-circle.png';
-import lineHover from './images/fence-line-hover.png';
-import line from './images/fence-line.png';
-import pointHover from './images/fence-point-hover.png';
-import point from './images/fence-point.png';
-import polygonHover from './images/fence-polygon-hover.png';
-import polygon from './images/fence-polygon.png';
-import regionsHover from './images/fence-regions-hover.png';
-import regions from './images/fence-regions.png';
-import locationHover from './images/location-hover.png';
-import location from './images/location.png';
-import peopleHover from './images/people-hover.png';
-import people from './images/people.png';
-import positionHover from './images/position-hover.png';
-import position from './images/position.png';
-import thingHover from './images/thing-hover.png';
-import thing from './images/thing.png';
 import './index.scss';
 
 /**
@@ -51,7 +54,10 @@ export enum IconSource {
   LINE = line,
   POINT = point,
   REGIONS = regions,
-  LOCATION = location
+  LOCATION = location,
+  TASKINTERCOM = taskIntercom,
+  TASKCOMPLETE = taskComplete,
+  TASKEDIT = taskEdit
 }
 
 /**
@@ -69,14 +75,17 @@ export enum IconSourceHover {
   LINE = lineHover,
   POINT = pointHover,
   REGIONS = regionsHover,
-  LOCATION = locationHover
+  LOCATION = locationHover,
+  TASKINTERCOM = taskIntercom,
+  TASKCOMPLETE = taskComplete,
+  TASKEDIT = taskEdit
 }
 
 export type IconName<T> = { readonly [K in keyof typeof IconSource]: T };
 
 /**
  * 图标名称
- * @type {{POSITION: string; ENTITY_HOVER: string; ENTITY: string; AREA: string; POSITION_HOVER: string; AREA_HOVER: string; CAR: string; PEOPLE: string; CAR_HOVER: string; PEOPLE_HOVER: string; THING: string; THING_HOVER: string}}
+ * @type {IconName<string>}
  */
 export const iconName: IconName<string> = {
   ENTITY: '对象',
@@ -90,35 +99,44 @@ export const iconName: IconName<string> = {
   LINE: '路线围栏',
   POINT: '标注围栏',
   REGIONS: '行政区划围栏',
-  LOCATION: '点'
+  LOCATION: '点',
+  TASKCOMPLETE: '完成任务',
+  TASKEDIT: '编辑任务',
+  TASKINTERCOM: '对讲'
 };
 
 /**
- * 图标接口
+ * 图标props
  */
-export interface IIcon {
-  key?: string,
-  icon?: IconSource;
-  styled?: FlattenSimpleInterpolation;
-  text?: string;
-  iconHover?: IconSourceHover;
+export interface IIconProps {
+  title?: string
+  key?: string
+  icon?: IconSource
+  styled?: FlattenSimpleInterpolation
+  text?: string
+  iconHover?: IconSourceHover
+  className?: string
+
+  onClick?(event: MouseEvent): void
 }
 
 const StyledIcon = styled(Container)`
   .icon-img-box {
     .icon-img {
-      background: url(${(props: IIcon) => props.icon}) no-repeat center / auto 100%;
+      background: url(${(props: IIconProps) => props.icon}) no-repeat center / auto 100%;
     }
   }
 
   &:hover .icon-img {
-    background-image: url(${(props: IIcon) => props.iconHover});
+    background-image: url(${(props: IIconProps) => props.iconHover});
   }
 `;
 
-const Icon = (props: IIcon) => {
+const Icon = (props: IIconProps) => {
+  const {className} = props;
+
   return (
-    <StyledIcon {...props} className="icon-container">
+    <StyledIcon {...props} className={`icon-container${className ? ` ${className}` : ''}`}>
       <div className="icon-img-box">
         <span className="icon-img" />
       </div>

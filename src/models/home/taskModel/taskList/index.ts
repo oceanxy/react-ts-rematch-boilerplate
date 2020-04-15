@@ -4,7 +4,7 @@
  * @Description: 任务列表
  * @Date: 2020-04-13 周一 17:18:47
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-14 周二 17:22:59
+ * @LastModifiedTime: 2020-04-15 周三 10:10:39
  */
 
 import fetchApis from '@/apis';
@@ -51,10 +51,6 @@ const taskList: ITaskListModel = {
     },
     async setState(payload) {
       store.dispatch.taskList.updateState(payload);
-    },
-    async itemClick(reqPayload) {
-      // 根据请求参数获取事件详情数据
-      await store.dispatch.taskDetails.fetchData(reqPayload);
     }
   }
 };
