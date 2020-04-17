@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
   ...state.taskDetails,
+  isShowEditTaskModal: state.editTask.isShowModal,
   curSelTaskId: state.taskList.curSelectedTaskId
 });
 const mapDispatchToProps = (dispatch: Dispatch): any => ({

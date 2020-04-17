@@ -24,7 +24,7 @@ interface IIntercom {
  */
 const Intercom = (props: IIntercom) => {
   return (
-    <Container className="inter-plat-intercom-container" theme="style3">
+    <Container className="inter-plat-intercom-container" conTheme="style3">
       <ItemLegend
         name="对讲名称"
         icon={false}

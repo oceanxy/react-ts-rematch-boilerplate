@@ -10,7 +10,7 @@
 import ItemLegend from '@/components/UI/itemLegend';
 import Title from '@/components/UI/title';
 import { TaskDetails, TaskList, TaskStatistics } from '@/containers/home/taskModel';
-import { taskTypeColor, taskTypeText } from '@/models/home/taskModel/taskDetails';
+import { taskTypeColor, taskLevelText } from '@/models/home/taskModel/taskDetails';
 import React from 'react';
 import './index.scss';
 
@@ -20,9 +20,9 @@ const TaskModel = () => {
       name="任务列表"
       titleExtraElement={
         <>
-          <ItemLegend name={taskTypeText[1]} iconColor={taskTypeColor[1]} />
-          <ItemLegend name={taskTypeText[2]} iconColor={taskTypeColor[2]} />
-          <ItemLegend name={taskTypeText[3]} iconColor={taskTypeColor[3]} />
+          <ItemLegend name={taskLevelText[1]} iconColor={taskTypeColor[1]} />
+          <ItemLegend name={taskLevelText[2]} iconColor={taskTypeColor[2]} />
+          <ItemLegend name={taskLevelText[3]} iconColor={taskTypeColor[3]} />
         </>
       }
     >

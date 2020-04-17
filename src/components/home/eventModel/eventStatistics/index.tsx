@@ -9,7 +9,7 @@
 
 import Button from '@/components/UI/button';
 import Container from '@/components/UI/containerComp';
-import { EventStatisticsMethod } from '@/models/home/eventModel';
+import { EventStatisticsMethod } from '@/models/home/eventModel/eventDetails';
 import React, { useState } from 'react';
 import './index.scss';
 
@@ -20,7 +20,7 @@ interface IEventStatisticsProps {
 
 const EventDetails = (props: Partial<IEventStatisticsProps>) => {
   const [eventStatisticsMethod, setEventStatisticsMethod] = useState(-1);
-  const {data, fetchData} = props;
+  const { data, fetchData } = props;
 
   /**
    * 切换统计状态的点击事件

@@ -30,8 +30,14 @@ const editTask: IEditTaskModel = {
     async showModal(isShowModal) {
       store.dispatch.editTask.updateModalState(isShowModal ?? true);
     },
-    async updateTask(task: ITask) {
+    async updateTask(task) {
       return await fetchApis.updateTask(task);
+    },
+    getEventIds(events) {
+      return events.map((event) => event.eventId);
+    },
+    getEntityIds(entities) {
+      return entities.map((entity) => entity.monitorId);
     }
   }
 };

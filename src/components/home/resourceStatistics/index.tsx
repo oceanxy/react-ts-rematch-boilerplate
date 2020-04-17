@@ -17,7 +17,7 @@ import './index.scss';
 const ResourceStatistics = () => {
   return (
     <Title name="资源统计" styled={styledBlocks.flexNone}>
-      <Container theme="style1" style={{marginTop: 10}} className="resource-statistics-container">
+      <Container conTheme="style1" style={{ marginTop: 10 }} className="resource-statistics-container">
         <SuddenEvents />
         <Regions />
       </Container>

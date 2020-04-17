@@ -11,12 +11,14 @@ import Container from '@/components/UI/containerComp';
 import Icon, { IconSource, IconSourceHover } from '@/components/UI/iconComp';
 import EditTask from '@/containers/home/taskModel/editTask';
 import { TaskStatus } from '@/models/home/taskModel/taskDetails';
+import { message } from 'antd';
 import React from 'react';
 import './index.scss';
 
 interface ITaskOperationProps {
-  data?: ITask
-  showEditTaskModal: IEditTaskModel['effects']['showModal']
+  data?: ITask;
+  isShowEditTaskModal: IEditTaskState['isShowModal'];
+  showEditTaskModal: IEditTaskModel['effects']['showModal'];
 }
 
 /**
@@ -26,10 +28,11 @@ interface ITaskOperationProps {
  * @constructor
  */
 const TaskOperation = (props: Partial<ITaskOperationProps>) => {
-  const {data, showEditTaskModal} = props;
+  const { data, showEditTaskModal, isShowEditTaskModal } = props;
 
   const onIntercomClick = () => {
-    data?.taskId && data.status !== TaskStatus.Completed && showEditTaskModal!();
+    message.destroy();
+    data?.taskId && data.status === TaskStatus.NotStart && showEditTaskModal!();
   };
 
   return (
@@ -44,7 +47,7 @@ const TaskOperation = (props: Partial<ITaskOperationProps>) => {
         title="编辑"
         icon={IconSource.TASKEDIT}
         iconHover={IconSourceHover.TASKEDIT}
-        className={data?.taskId && data?.status !== TaskStatus.Completed ? '' : 'disabled'}
+        className={data?.taskId && data?.status === TaskStatus.NotStart ? '' : 'disabled'}
         onClick={onIntercomClick}
       />
       <Icon
@@ -53,7 +56,7 @@ const TaskOperation = (props: Partial<ITaskOperationProps>) => {
         iconHover={IconSourceHover.TASKCOMPLETE}
         className={data?.taskId && data?.status === TaskStatus.Processing ? '' : 'disabled'}
       />
-      <EditTask />
+      {isShowEditTaskModal ? <EditTask /> : null}
     </Container>
   );
 };

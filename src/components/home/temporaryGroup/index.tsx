@@ -23,7 +23,7 @@ interface ITemporaryGroup {
  */
 const TemporaryGroup = (props: ITemporaryGroup) => {
   return (
-    <Container className="inter-plat-temp-group-container" theme="style3">
+    <Container className="inter-plat-temp-group-container" conTheme="style3">
       <ItemLegend
         name="临时组"
         icon={false}

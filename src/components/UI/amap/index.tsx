@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-04-08 周三 14:47:41
  */
 
-import Container, { IContainer } from '@/components/UI/containerComp';
+import Container, { IContainerProps } from '@/components/UI/containerComp';
 import config from '@/config';
 import { useScript } from '@/utils/hooks/loadScript';
 import React from 'react';
@@ -20,11 +20,13 @@ import Boundary from './boundary';
  * 动态加载高德地图
  * @type {(props: any) => any}
  */
-const UseMap: (props: any) => any = useScript(`https://webapi.amap.com/maps?v=${config.map.mapVersion}&key=${config.map.mapKey}`, () =>
+const UseMap: (
+  props: any
+) => any = useScript(`https://webapi.amap.com/maps?v=${config.map.mapVersion}&key=${config.map.mapKey}`, () =>
   import('./map')
 );
 
-export interface IZWMapProps extends IContainer<any> {
+export interface IZWMapProps extends IContainerProps<any> {
   map?: AMap.Map;
   updateMapInstance?: (map: AMap.Map) => void;
 }

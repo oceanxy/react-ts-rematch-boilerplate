@@ -17,10 +17,10 @@ import './index.scss';
  * 区域（围栏）切换组件props
  */
 interface IRegionalControlProps {
-  data: IFenceState['fences']
-  currentId: IFenceState['currentFenceId']
-  getData: IFenceModel['effects']['fetchData']
-  setId: IFenceModel['effects']['setFenceId']
+  data: IFenceState['fences'];
+  currentId: IFenceState['currentFenceId'];
+  getData: IFenceModel['effects']['fetchData'];
+  setId: IFenceModel['effects']['setFenceId'];
 }
 
 /**
@@ -28,7 +28,7 @@ interface IRegionalControlProps {
 
  */
 const RegionalControl = (props: Partial<IRegionalControlProps>) => {
-  const {getData, data, currentId, setId} = props;
+  const { getData, data, currentId, setId } = props;
 
   /**
    * 选择区域（围栏）事件
@@ -54,36 +54,27 @@ const RegionalControl = (props: Partial<IRegionalControlProps>) => {
         allowClear={true}
         placeholder="请选择区域"
         className="resource-statistics-fence"
-        dropdownClassName="resource-statistics-fence-dropdown"
+        dropdownClassName="inter-plat-dropdown resource-statistics-fence-dropdown"
         onChange={onChange}
         value={currentId || undefined}
       >
-        {
-          data && data.map((fence: IFence, index: number) => (
-            <Select.OptGroup key={`resource-statistics-fence-${index}`} label={
-              <Icon
-                text={fence.name}
-                icon={IconSource.AREA}
-                iconHover={IconSourceHover.AREA}
-              />
-            }>
-              {
-                fence.childNodes?.map((fenceChild: IFence, childIndex: number) => (
-                  <Select.Option
-                    key={`resource-statistics-fence-${index}-${childIndex}`}
-                    value={fenceChild.id}
-                  >
-                    <Icon
-                      text={fenceChild.name}
-                      icon={monitorTypeIcon[fenceChild.objType] as IconSource}
-                      iconHover={monitorTypeIcon[`${fenceChild.objType}_hover`] as IconSourceHover}
-                    />
-                  </Select.Option>
-                ))
-              }
+        {data &&
+          data.map((fence: IFence, index: number) => (
+            <Select.OptGroup
+              key={`resource-statistics-fence-${index}`}
+              label={<Icon text={fence.name} icon={IconSource.AREA} iconHover={IconSourceHover.AREA} />}
+            >
+              {fence.childNodes?.map((fenceChild: IFence, childIndex: number) => (
+                <Select.Option key={`resource-statistics-fence-${index}-${childIndex}`} value={fenceChild.id}>
+                  <Icon
+                    text={fenceChild.name}
+                    icon={monitorTypeIcon[fenceChild.objType] as IconSource}
+                    iconHover={monitorTypeIcon[`${fenceChild.objType}_hover`] as IconSourceHover}
+                  />
+                </Select.Option>
+              ))}
             </Select.OptGroup>
-          ))
-        }
+          ))}
       </Select>
     );
   }

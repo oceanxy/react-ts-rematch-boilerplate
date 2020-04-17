@@ -9,8 +9,6 @@
 
 import fetchApis from '@/apis';
 import { ESeverity } from '@/components/UI/itemLegend';
-import { defaultData as eventDetailsDefData } from '@/models/home/eventModel/eventDetails';
-import { defaultData as entityDefData } from '@/models/UI/entity';
 import { store } from '@/store';
 
 /**
@@ -28,6 +26,53 @@ export enum TaskPeriod {
    */
   Timing = 2
 }
+
+/**
+ * 定时任务周期
+ */
+export enum DateDuplicateType {
+  /**
+   * 星期一
+   * @type {number}
+   */
+  Monday = 1,
+  /**
+   * 星期二
+   */
+  Tuesday,
+  /**
+   * 星期三
+   */
+  Wednesday,
+  /**
+   * 星期四
+   */
+  Thursday,
+  /**
+   * 星期五
+   */
+  Friday,
+  /**
+   * 星期六
+   */
+  Saturday,
+  /**
+   * 星期日
+   */
+  Sunday
+}
+
+/**
+ * 定时任务周期显示文本
+ * @type {string[]}
+ */
+export const dateDuplicateTypeText = ['', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+
+/**
+ * 任务周期显示文本
+ * @type {string[]}
+ */
+export const taskPeriodText = ['', '即时', '定时'];
 
 /**
  * 任务状态
@@ -49,18 +94,23 @@ export const taskTypeStatus = ['未开始', '执行中', '已完成'];
  * 任务类型文本
  * @type {string[]}
  */
-export const taskTypeText = ['', '一般', '重要', '紧急'];
+export const taskLevelText = ['', '一般', '重要', '紧急'];
+
+/**
+ * 任务等级 （0:没有数据 1:一般、2:重要、3:紧急）
+ */
+export enum TaskLevel {
+  Null,
+  General,
+  Important,
+  Urgent
+}
 
 /**
  * 任务类型颜色值
  * @type {(ESeverity.GENERAL_TASK | ESeverity.IMPORTANT_TASK | ESeverity.URGENT_TASK)[]}
  */
-export const taskTypeColor = [
-  ESeverity.GRAY,
-  ESeverity.GENERAL_TASK,
-  ESeverity.IMPORTANT_TASK,
-  ESeverity.URGENT_TASK
-];
+export const taskTypeColor = [ESeverity.GRAY, ESeverity.GENERAL_TASK, ESeverity.IMPORTANT_TASK, ESeverity.URGENT_TASK];
 
 /**
  * 任务详情默认数据
@@ -74,8 +124,8 @@ const defaultData: ITask = {
   description: '',
   endTime: null,
   eventNames: '',
-  events: eventDetailsDefData,
-  executors: entityDefData,
+  events: [],
+  executors: [],
   groupId: '',
   groupName: '',
   realEndTime: null,

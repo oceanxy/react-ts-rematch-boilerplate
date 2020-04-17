@@ -8,7 +8,42 @@
  */
 
 import fetchApis from '@/apis';
+import { ESeverity } from '@/components/UI/itemLegend';
 import { store } from '@/store';
+
+/**
+ * 事件类型文本
+ * @type {string[]}
+ */
+export const eventTypeText = ['', '一般', '较重', '严重', '特别严重'];
+
+// 事件类型颜色值
+export const eventTypeColor = [
+  ESeverity.GRAY,
+  ESeverity.GENERAL_Event,
+  ESeverity.RELATIVELY_Event,
+  ESeverity.SEVERELY_Event,
+  ESeverity.VERY_Event
+];
+
+// 事件处理状态
+export enum EventStatisticsMethod {
+  /**
+   * 未处理
+   * @type {number}
+   */
+  UNPROCESSED = 0,
+  /**
+   * 处理中
+   * @type {number}
+   */
+  PROCESSING = 1,
+  /**
+   * 全部
+   * @type {number}
+   */
+  ALL = -1
+}
 
 /**
  * 事件详情默认数据
@@ -46,12 +81,12 @@ const eventDetails: IEventDetailsModel = {
       };
     },
     clearData() {
-      return {data: defaultData};
+      return { data: defaultData };
     }
   },
   effects: {
     async getData(reqPayload: IEventDetailsRequest) {
-      const {data} = await fetchApis.fetchEventDetails(reqPayload);
+      const { data } = await fetchApis.fetchEventDetails(reqPayload);
       store.dispatch.eventDetails.updateData(data);
     }
   }

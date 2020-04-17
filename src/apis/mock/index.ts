@@ -172,7 +172,7 @@ const mocks: Mocks = {
       longitude: '111.730631',
       monitorId: '@guid',
       startTime: '@datetime',
-      monitorName: monitorName(),
+      monitorName: monitorName,
       eventId: '@guid'
     }
   },
@@ -188,7 +188,7 @@ const mocks: Mocks = {
           'eventStatus|0-1': 0,
           eventType: '154',
           monitorId: '@guid',
-          monitorName: monitorName(),
+          monitorName: monitorName,
           startTime: '@datetime',
           eventId: '@guid'
         }
@@ -215,7 +215,7 @@ const mocks: Mocks = {
         longitude: '111.730631',
         monitorId: '@guid',
         startTime: '@datetime',
-        monitorName: monitorName(),
+        monitorName: monitorName,
         eventId: '@guid'
       }
     }
@@ -227,7 +227,7 @@ const mocks: Mocks = {
       'monitors|10-20': [
         {
           monitorId: '@guid',
-          'monitorName|1': [monitorName(), Random.cname()],
+          'monitorName|1': [monitorName, () => Random.cname()],
           'monitorType|1': [0, 1, 2, 9, 10],
           'assignmentName|1': ['分组1', '分组2', '分组3', '分组4'],
           deviceNum: Math.floor(Math.random() * 10000),
@@ -419,35 +419,35 @@ const mocks: Mocks = {
     retMsg: '',
     data: {
       taskPageInfo: {
-        'totalRecords': 1,
-        'start': 0,
-        'totalPages': 1,
-        'pageSize': 10,
-        'end': 10,
-        'page': 1,
+        totalRecords: 1,
+        start: 0,
+        totalPages: 1,
+        pageSize: 10,
+        end: 10,
+        page: 1,
         'records|10-20': [
           {
-            'address': '@county(true)',
-            'createDataTime': '@datetime',
-            'createDataUsername': '@name',
-            'dateDuplicateType': '',
-            'description': Random.paragraph(10, 20),
-            'endTime': '2020-04-17 23:59:59',
+            address: '@county(true)',
+            createDataTime: '@datetime',
+            createDataUsername: '@name',
+            dateDuplicateType: '',
+            description: Random.paragraph(10, 20),
+            endTime: '2020-04-17 23:59:59',
             'eventNames|1': ['超时长停留', '紧急报警'],
-            'events': null,
-            'executors': null,
-            'groupId': '@guid',
-            'groupName': Random.paragraph(3, 5),
-            'realEndTime': null,
-            'realStartTime': null,
-            'startTime': '@datetime',
+            events: null,
+            executors: null,
+            groupId: '@guid',
+            groupName: Random.paragraph(3, 5),
+            realEndTime: null,
+            realStartTime: null,
+            startTime: '@datetime',
             'status|1': [0, 1, 2],
-            'taskId': '@guid',
+            taskId: '@guid',
             'taskLevel|1': [1, 2, 3],
-            'taskName': () => `任务${Random.integer(10, 100)}`,
+            taskName: () => `任务${Random.integer(10, 100)}`,
             'taskPeriod|1': [1, 2],
-            'updateDataTime': '@datetime',
-            'updateDataUsername': null
+            updateDataTime: '@datetime',
+            updateDataUsername: null
           }
         ]
       },
@@ -463,9 +463,9 @@ const mocks: Mocks = {
     retCode: 0,
     retMsg: '',
     data: {
-      'taskInfo': {
-        'address': Random.county(true),
-        'dateDuplicateType': () => {
+      taskInfo: {
+        address: Random.county(true),
+        dateDuplicateType: () => {
           const weeks = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
           const weeksXB: number[] = [];
 
@@ -481,16 +481,16 @@ const mocks: Mocks = {
 
           return result.join(', ');
         },
-        'description': '任务创建接口测试',
-        'eventNames': '紧急报警,超时长停留',
-        'groupId': '960c2a44-a13c-1039-8e6f-e9bbe4905ce3',
-        'groupName': null,
-        'realEndTime': '@datetime',
-        'realStartTime': '@datetime',
+        description: '任务创建接口测试',
+        eventNames: '紧急报警,超时长停留',
+        groupId: '960c2a44-a13c-1039-8e6f-e9bbe4905ce3',
+        groupName: null,
+        realEndTime: '@datetime',
+        realStartTime: '@datetime',
         'status|1': [0, 1, 2],
-        'taskId': '@guid',
+        taskId: '@guid',
         'taskLevel|1': [1, 2, 3],
-        'taskDurationTimeStr': () => {
+        taskDurationTimeStr: () => {
           const time = [
             `${Random.integer(1, 10)}天`,
             `${Random.integer(0, 23)}时`,
@@ -500,53 +500,44 @@ const mocks: Mocks = {
 
           return time.slice(Random.integer(0, 3)).join('');
         },
-        'taskName': () => `任务${Random.integer(10, 100)}`,
-        'startTime': '@datetime',
-        'endTime': '@datetime',
+        taskName: () => `任务${Random.integer(10, 100)}`,
+        startTime: '@datetime',
+        endTime: '@datetime',
         'taskPeriod|1': [1, 2],
-        'events': [
+        'events|3-6': [
           {
-            'description': null,
-            'eventId': '9712b799-c1f9-45f9-bc91-13bf1d2f1cf9_1586326064000_0',
-            'eventLevel': '1',
-            'eventName': '紧急报警',
-            'eventStatus': '1',
-            'eventType': '0',
-            'monitorId': '9712b799-c1f9-45f9-bc91-13bf1d2f1cf9',
-            'monitorName': '川0002',
-            'startTime': '2020-04-08 14:07:44'
-          },
-          {
-            'description': null,
-            'eventId': '72eaf419-3da4-4d5b-9e03-0ac54e78c2f4_1586336127000_154',
-            'eventLevel': '1',
-            'eventName': '超时长停留',
-            'eventStatus': '1',
-            'eventType': '154',
-            'monitorId': '72eaf419-3da4-4d5b-9e03-0ac54e78c2f4',
-            'monitorName': 'IW2527车',
-            'startTime': '2020-04-08 16:55:27'
+            description: null,
+            eventId: '@guid',
+            'taskLevel|1': [1, 2, 3],
+            eventName: () => {
+              return `事件${Random.integer(1, 100)}`;
+            },
+            'eventStatus|1': [0, 1],
+            eventType: Random.integer(1000, 10000),
+            monitorId: '@guid',
+            monitorName: monitorName,
+            startTime: '@datetime'
           }
         ],
-        'executors': [
+        'executors|3-6': [
           {
-            'assignmentName': 'tb-group09,tb-group01,tb-group02',
-            'curAssignmentName': '大王叫我去巡山040910534',
-            'curAssignmentType': '2',
-            'deviceNum': '0002527',
-            'dispatchStatus': '2',
-            'groupName': '回归测试',
-            'hasForbiddenWord': false,
-            'iconUrl': null,
-            'monitorId': '72eaf419-3da4-4d5b-9e03-0ac54e78c2f4',
-            'monitorName': 'IW2527车',
-            'monitorType': '0',
-            'onlineStatus': 0,
-            'plateColor': null,
-            'simCardNum': '18600332931',
-            'thingTypeName': null,
-            'userId': 7349,
-            'userNumber': '93446'
+            assignmentName: 'tb-group09,tb-group01,tb-group02',
+            curAssignmentName: '大王叫我去巡山040910534',
+            curAssignmentType: '2',
+            deviceNum: '0002527',
+            dispatchStatus: '2',
+            groupName: '回归测试',
+            hasForbiddenWord: false,
+            iconUrl: null,
+            monitorId: '@guid',
+            monitorName: monitorName,
+            monitorType: '0',
+            onlineStatus: 0,
+            plateColor: null,
+            simCardNum: '18600332931',
+            thingTypeName: null,
+            userId: 7349,
+            userNumber: '93446'
           }
         ]
       }

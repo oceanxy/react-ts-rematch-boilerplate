@@ -18,25 +18,26 @@ import './index.scss';
 
 interface ITaskDetailsProps {
   data: ITaskDetailsState['data'];
-  curSelTaskId: ITaskListState['curSelectedTaskId']
+  isShowEditTaskModal: IEditTaskState['isShowModal'];
+  curSelTaskId: ITaskListState['curSelectedTaskId'];
   fetchData: ITaskDetailsModel['effects']['fetchData'];
   clearData: ITaskDetailsModel['reducers']['clearData'];
-  showEditTaskModal: IEditTaskModel['effects']['showModal']
+  showEditTaskModal: IEditTaskModel['effects']['showModal'];
 }
 
 const TaskDetails = (props: Partial<ITaskDetailsProps>) => {
-  const {data, curSelTaskId, fetchData, clearData,showEditTaskModal} = props;
+  const { data, curSelTaskId, fetchData, clearData, showEditTaskModal, isShowEditTaskModal } = props;
 
   useEffect(() => {
     if (curSelTaskId) {
-      fetchData!({taskId: curSelTaskId});
+      fetchData!({ taskId: curSelTaskId });
     } else {
       clearData!();
     }
   }, [curSelTaskId]);
 
   return (
-    <Container theme="style1" style={{marginTop: 10}}>
+    <Container conTheme="style1" style={{ marginTop: 10 }}>
       <ItemLegend
         name="任务详情"
         iconColor={taskTypeColor[data!.taskLevel]}
@@ -44,30 +45,26 @@ const TaskDetails = (props: Partial<ITaskDetailsProps>) => {
         styled={styledBlocks.marginBottom10}
       />
       <Container className="task-detail-container">
-        {
-          data?.taskId ? (
-            <>
-              <KeyValue name="任务名称" value={data.taskName} />
-              <KeyValue name="执行时长" value={data.taskDurationTimeStr} />
-              <KeyValue
-                name="任务周期"
-                compWidth="100%"
-                value={
-                  data.taskPeriod === TaskPeriod.Immediate ?
-                    '即时' :
-                    `定时(${data.dateDuplicateType})`
-                }
-              />
-              <KeyValue name="开始时间" value={data.startTime} />
-              <KeyValue name="结束时间" value={data.endTime} />
-              <KeyValue name="实际开始时间" value={data.realStartTime || '-'} />
-              <KeyValue name="关联事件" value={data.eventNames} />
-              <KeyValue name="任务地址" value={data.address} compWidth="100%" />
-            </>
-          ) : <p className="no-data-warn">请先点击需要查看的任务</p>
-        }
+        {data?.taskId ? (
+          <>
+            <KeyValue name="任务名称" value={data.taskName} />
+            <KeyValue name="执行时长" value={data.taskDurationTimeStr} />
+            <KeyValue
+              name="任务周期"
+              compWidth="100%"
+              value={data.taskPeriod === TaskPeriod.Immediate ? '即时' : `定时(${data.dateDuplicateType})`}
+            />
+            <KeyValue name="开始时间" value={data.startTime} />
+            <KeyValue name="结束时间" value={data.endTime} />
+            <KeyValue name="实际开始时间" value={data.realStartTime || '-'} />
+            <KeyValue name="关联事件" value={data.eventNames} />
+            <KeyValue name="任务地址" value={data.address} compWidth="100%" />
+          </>
+        ) : (
+          <p className="no-data-warn">请先点击需要查看的任务</p>
+        )}
       </Container>
-      <TaskOperation data={data} showEditTaskModal={showEditTaskModal} />
+      <TaskOperation data={data} isShowEditTaskModal={isShowEditTaskModal} showEditTaskModal={showEditTaskModal} />
     </Container>
   );
 };

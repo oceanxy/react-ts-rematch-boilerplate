@@ -12,11 +12,14 @@ import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
+  data: state.taskDetails.data,
   isShowModal: state.editTask.isShowModal
 });
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   showModal: dispatch.editTask.showModal,
-  updateTask: dispatch.editTask.updateTask
+  updateTask: dispatch.editTask.updateTask,
+  getEventIds: dispatch.editTask.getEventIds,
+  getEntityIds: dispatch.editTask.getEntityIds
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditTask);

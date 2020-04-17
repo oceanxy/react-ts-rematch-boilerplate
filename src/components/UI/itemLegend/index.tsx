@@ -8,7 +8,7 @@
  */
 
 import Container from '@/components/UI/containerComp';
-import { eventTypeColor } from '@/models/home/eventModel';
+import { eventTypeColor } from '@/models/home/eventModel/eventDetails';
 import React, { CSSProperties, MouseEvent, useEffect, useState } from 'react';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 import './index.scss';
@@ -31,46 +31,48 @@ export enum ESeverity {
  * 图例组件接口
  */
 interface IItemLegend {
-  className?: string,
-  name: string, // 图例文字
-  nameStyled?: FlattenSimpleInterpolation, // 图例文字CSS样式
-  icon?: boolean, // 是否显示图标
-  iconColor?: string | ESeverity, // 图标颜色
-  shapeRadius?: number, // 图标半径
-  style?: CSSProperties // 图例容器CSS样式
-  styled?: FlattenSimpleInterpolation, // 图例容器CSS样式
-  onClick?: (e: MouseEvent) => void
+  className?: string;
+  name: string; // 图例文字
+  nameStyled?: FlattenSimpleInterpolation; // 图例文字CSS样式
+  icon?: boolean; // 是否显示图标
+  iconColor?: string | ESeverity; // 图标颜色
+  shapeRadius?: number; // 图标半径
+  style?: CSSProperties; // 图例容器CSS样式
+  styled?: FlattenSimpleInterpolation; // 图例容器CSS样式
+  onClick?: (e: MouseEvent) => void;
 }
 
 /**
  * 图例图标样式组件
  */
 const StyledShape = styled.span`
-  background-color: ${(props: IItemLegend) => props.iconColor ? props.iconColor : eventTypeColor[0]};
-  box-shadow: ${(props: IItemLegend) => props.iconColor ? props.iconColor : eventTypeColor[0]} 0 0 4px 2px;
-  width: ${(props: IItemLegend) => props.shapeRadius ? props.shapeRadius * 2 : 8}px;
-  height: ${(props: IItemLegend) => props.shapeRadius ? props.shapeRadius * 2 : 8}px;
-  border-radius:  ${(props: IItemLegend) => props.shapeRadius ? props.shapeRadius : 4}px;
+  background-color: ${(props: IItemLegend) => (props.iconColor ? props.iconColor : eventTypeColor[0])};
+  box-shadow: ${(props: IItemLegend) => (props.iconColor ? props.iconColor : eventTypeColor[0])} 0 0 4px 2px;
+  width: ${(props: IItemLegend) => (props.shapeRadius ? props.shapeRadius * 2 : 8)}px;
+  height: ${(props: IItemLegend) => (props.shapeRadius ? props.shapeRadius * 2 : 8)}px;
+  border-radius: ${(props: IItemLegend) => (props.shapeRadius ? props.shapeRadius : 4)}px;
 `;
 
 /**
  * 图例名称样式组件
  */
-const StyledName = styled.span((props: IItemLegend) => css`
-  font-size: ${(10.11 / 1920 * 100).toFixed(3)}vw;
-  color: #cccccc;
-  ${props.nameStyled};
-  
-  .legend-shape + & {
-    margin-left: ${(8 / 1920 * 100).toFixed(3)}vw;
-  }
-`);
+const StyledName = styled.span(
+  (props: IItemLegend) => css`
+    font-size: ${((10.11 / 1920) * 100).toFixed(3)}vw;
+    color: #cccccc;
+    ${props.nameStyled};
+
+    .legend-shape + & {
+      margin-left: ${((8 / 1920) * 100).toFixed(3)}vw;
+    }
+  `
+);
 
 /**
  * 图例组件
  */
 const ItemLegend = (props: IItemLegend) => {
-  const {className, icon: iconProps, onClick} = props;
+  const { className, icon: iconProps, onClick } = props;
   const [icon, setIcon] = useState(true);
 
   useEffect(() => {
@@ -85,10 +87,10 @@ const ItemLegend = (props: IItemLegend) => {
       title={props.name}
       onClick={onClick}
     >
-      {
-        icon ? <StyledShape {...props} className="legend-shape" /> : null
-      }
-      <StyledName className="legend-name" {...props}>{props.name}</StyledName>
+      {icon ? <StyledShape {...props} className="legend-shape" /> : null}
+      <StyledName className="legend-name" {...props}>
+        {props.name}
+      </StyledName>
     </Container>
   );
 };

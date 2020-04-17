@@ -10,14 +10,14 @@
 import ItemLegend from '@/components/UI/itemLegend';
 import Title from '@/components/UI/title';
 import { EventDetails, EventList, EventStatistics } from '@/containers/home/eventModel';
-import { eventTypeColor, eventTypeText } from '@/models/home/eventModel';
+import { eventTypeColor, eventTypeText } from '@/models/home/eventModel/eventDetails';
 import React from 'react';
 
 const EventModel = () => {
   return (
     <Title
       name="事件列表"
-      titleExtraElementStyle={{marginLeft: 10}}
+      titleExtraElementStyle={{ marginLeft: 10 }}
       titleExtraElement={
         <React.Fragment>
           <ItemLegend name={eventTypeText[4]} iconColor={eventTypeColor[4]} />

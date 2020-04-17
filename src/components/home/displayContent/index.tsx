@@ -23,7 +23,7 @@ interface IDisplayContent {
  */
 const DisplayContent = (props: IDisplayContent) => {
   return (
-    <Container className="inter-plat-display-container" theme="style3">
+    <Container className="inter-plat-display-container" conTheme="style3">
       <ItemLegend
         name="显示内容"
         icon={false}

@@ -43,6 +43,10 @@ declare global {
      * 事件开始时间
      */
     startTime: Date | null;
+    /**
+     * 事件ID
+     */
+    eventId: string;
   }
 
   /**
@@ -107,15 +111,18 @@ declare global {
    * 事件列表model
    */
   interface IEventListModel extends ModelConfig {
-    state: IEventListState
+    state: IEventListState;
     reducers: {
-      updateData(state: IEventListState, data: IEvent[]): IEventListState
-      updateCurId(state: IEventListState, curSelectedMonitorId: IEventListState['curSelectedMonitorId']): IEventListState
-    }
+      updateData(state: IEventListState, data: IEvent[]): IEventListState;
+      updateCurId(
+        state: IEventListState,
+        curSelectedMonitorId: IEventListState['curSelectedMonitorId']
+      ): IEventListState;
+    };
     effects: {
-      fetchData(reqPayload: IEventListRequest): void
-      itemClick(reqPayload: IEventDetailsRequest): void
-      setCurId(curSelectedMonitorId: IEventListState['IEventListState']): void
-    }
+      fetchData(reqPayload: IEventListRequest): void;
+      itemClick(reqPayload: IEventDetailsRequest): void;
+      setCurId(curSelectedMonitorId: IEventListState['IEventListState']): void;
+    };
   }
 }
