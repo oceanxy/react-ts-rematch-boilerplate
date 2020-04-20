@@ -23,6 +23,7 @@ export type APIName =
   'fetchTaskList' | // 获取任务列表数据
   'fetchTaskDetails' | // 获取任务详情数据
   'updateTask' | // 更新任务信息
+  'completeTask' | // 完成任务
   // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
   'fetchTestWebsocket' |
@@ -128,6 +129,10 @@ const apis: APIRequestConfig = {
   },
   updateTask: {
     url: '/clbs/web/v1/dispatch/task/update',
+    method: EHTTPMethod.POST
+  },
+  completeTask: {
+    url: '/clbs/web/v1/dispatch/task/finish',
     method: EHTTPMethod.POST
   }
 };

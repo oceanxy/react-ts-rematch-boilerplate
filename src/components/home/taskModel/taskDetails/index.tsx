@@ -7,10 +7,10 @@
  * @LastModifiedTime: 2020-04-15 周三 10:11:19
  */
 
-import TaskOperation from '@/components/home/taskModel/taskDetails/operation';
 import Container from '@/components/UI/containerComp';
 import ItemLegend from '@/components/UI/itemLegend';
 import KeyValue from '@/components/UI/keyValue';
+import OperationTask from '@/containers/home/taskModel/operationTask';
 import { TaskPeriod, taskTypeColor } from '@/models/home/taskModel/taskDetails';
 import styledBlocks from '@/styled';
 import React, { useEffect } from 'react';
@@ -18,26 +18,24 @@ import './index.scss';
 
 interface ITaskDetailsProps {
   data: ITaskDetailsState['data'];
-  isShowEditTaskModal: IEditTaskState['isShowModal'];
   curSelTaskId: ITaskListState['curSelectedTaskId'];
   fetchData: ITaskDetailsModel['effects']['fetchData'];
   clearData: ITaskDetailsModel['reducers']['clearData'];
-  showEditTaskModal: IEditTaskModel['effects']['showModal'];
 }
 
 const TaskDetails = (props: Partial<ITaskDetailsProps>) => {
-  const { data, curSelTaskId, fetchData, clearData, showEditTaskModal, isShowEditTaskModal } = props;
+  const {data, curSelTaskId, fetchData, clearData} = props;
 
   useEffect(() => {
     if (curSelTaskId) {
-      fetchData!({ taskId: curSelTaskId });
+      fetchData!({taskId: curSelTaskId});
     } else {
       clearData!();
     }
   }, [curSelTaskId]);
 
   return (
-    <Container conTheme="style1" style={{ marginTop: 10 }}>
+    <Container conTheme="style1" style={{marginTop: 10}}>
       <ItemLegend
         name="任务详情"
         iconColor={taskTypeColor[data!.taskLevel]}
@@ -64,7 +62,7 @@ const TaskDetails = (props: Partial<ITaskDetailsProps>) => {
           <p className="no-data-warn">请先点击需要查看的任务</p>
         )}
       </Container>
-      <TaskOperation data={data} isShowEditTaskModal={isShowEditTaskModal} showEditTaskModal={showEditTaskModal} />
+      <OperationTask />
     </Container>
   );
 };

@@ -556,6 +556,11 @@ const mocks: Mocks = {
       deleteUserIds: null,
       intercomGroupId: null
     }
+  },
+  completeTask: {
+    retMsg: '',
+    retCode: Random.integer(0, 1),
+    data: null
   }
 };
 

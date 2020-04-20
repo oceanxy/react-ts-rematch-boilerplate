@@ -9,6 +9,7 @@
 
 import Container from '@/components/UI/containerComp';
 import Icon, { IconSource, IconSourceHover } from '@/components/UI/iconComp';
+import CompleteTask from '@/containers/home/taskModel/completeTask';
 import EditTask from '@/containers/home/taskModel/editTask';
 import { TaskStatus } from '@/models/home/taskModel/taskDetails';
 import { message } from 'antd';
@@ -18,7 +19,9 @@ import './index.scss';
 interface ITaskOperationProps {
   data?: ITask;
   isShowEditTaskModal: IEditTaskState['isShowModal'];
+  isShowCompleteTaskModal: ICompleteTaskState['isShowModal'];
   showEditTaskModal: IEditTaskModel['effects']['showModal'];
+  showCompleteTaskModal: ICompleteTaskModel['effects']['showModal'];
 }
 
 /**
@@ -27,12 +30,36 @@ interface ITaskOperationProps {
  * @returns {any}
  * @constructor
  */
-const TaskOperation = (props: Partial<ITaskOperationProps>) => {
-  const {data, showEditTaskModal, isShowEditTaskModal} = props;
+const OperationTask = (props: Partial<ITaskOperationProps>) => {
+  const {
+    data,
+    showEditTaskModal,
+    isShowEditTaskModal,
+    isShowCompleteTaskModal,
+    showCompleteTaskModal
+  } = props;
 
+  /**
+   * 对讲
+   */
   const onIntercomClick = () => {
+
+  };
+
+  /**
+   * 编辑任务
+   */
+  const onEditTaskClick = () => {
     message.destroy();
     data?.taskId && data.status === TaskStatus.NotStart && showEditTaskModal!();
+  };
+
+  /**
+   * 完成任务
+   */
+  const onCompleteTaskClick = () => {
+    message.destroy();
+    data?.taskId && data.status === TaskStatus.Processing && showCompleteTaskModal!();
   };
 
   return (
@@ -41,24 +68,27 @@ const TaskOperation = (props: Partial<ITaskOperationProps>) => {
         title="对讲"
         icon={IconSource.TASKINTERCOM}
         iconHover={IconSourceHover.TASKINTERCOM}
-        className={data?.taskId && data?.status !== TaskStatus.Completed ? '' : 'disabled'}
+        className={data?.taskId && data.status !== TaskStatus.Completed ? '' : 'disabled'}
+        onClick={onIntercomClick}
       />
       <Icon
         title="编辑"
         icon={IconSource.TASKEDIT}
         iconHover={IconSourceHover.TASKEDIT}
-        className={data?.taskId && data?.status === TaskStatus.NotStart ? '' : 'disabled'}
-        onClick={onIntercomClick}
+        className={data?.taskId && data.status === TaskStatus.NotStart ? '' : 'disabled'}
+        onClick={onEditTaskClick}
       />
       <Icon
         title="完成"
         icon={IconSource.TASKCOMPLETE}
         iconHover={IconSourceHover.TASKCOMPLETE}
-        className={data?.taskId && data?.status === TaskStatus.Processing ? '' : 'disabled'}
+        className={data?.taskId && data.status === TaskStatus.Processing ? '' : 'disabled'}
+        onClick={onCompleteTaskClick}
       />
       {isShowEditTaskModal ? <EditTask /> : null}
+      {isShowCompleteTaskModal ? <CompleteTask /> : null}
     </Container>
   );
 };
 
-export default TaskOperation;
+export default OperationTask;

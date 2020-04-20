@@ -1,0 +1,30 @@
+@mixin border-color {
+  border-color: #213c5a;
+}
+
+@mixin bg_hover {
+  border-color: #2e72ab;
+}
+
+@mixin btn {
+  text-shadow: 0 0 4px #000d24;
+  color: #3f8ee0;
+  background: #012141;
+  @include border-color;
+  font-weight: bolder;
+  padding: 0 10px;
+
+  &:hover {
+    @include bg_hover;
+  }
+}
+
+.complete-operation-modal-row {
+  & > * {
+    margin-left: 10px;
+  }
+
+  button {
+    @include btn;
+  }
+}

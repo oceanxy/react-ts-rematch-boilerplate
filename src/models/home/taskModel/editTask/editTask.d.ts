@@ -13,7 +13,7 @@ import { ModelConfig } from '@rematch/core';
 
 declare global {
   /**
-   * 任务编辑请求参数 或 用于表单回填的值
+   * 任务编辑请求参数
    */
   interface IEditTaskRequest {
     /**
