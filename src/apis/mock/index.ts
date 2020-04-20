@@ -466,7 +466,7 @@ const mocks: Mocks = {
       taskInfo: {
         address: Random.county(true),
         dateDuplicateType: () => {
-          const weeks = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+          const weeks = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
           const weeksXB: number[] = [];
 
           _.range(Random.integer(1, 7)).forEach(() => {
@@ -477,9 +477,13 @@ const mocks: Mocks = {
           });
 
           const weekXBSort = weeksXB.sort((a, b) => a - b);
-          const result = weekXBSort.map((xb) => weeks[xb]);
 
-          return result.join(', ');
+          // 直接返回中文形式的值 如'周一,周二'
+          // const result = weekXBSort.map((xb) => weeks[xb]);
+          // return result.join(',');
+
+          // 返回数字形式的值 如‘1,2,3’
+          return weekXBSort.join();
         },
         description: '任务创建接口测试',
         eventNames: '紧急报警,超时长停留',
@@ -487,6 +491,7 @@ const mocks: Mocks = {
         groupName: null,
         realEndTime: '@datetime',
         realStartTime: '@datetime',
+        remark: Random.cparagraph(20, 30),
         'status|1': [0, 1, 2],
         taskId: '@guid',
         'taskLevel|1': [1, 2, 3],

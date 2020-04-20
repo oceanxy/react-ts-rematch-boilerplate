@@ -8,6 +8,7 @@
  */
 
 import fetchApis from '@/apis';
+import { TaskLevel, TaskPeriod } from '@/models/home/taskModel/taskDetails';
 import { store } from '@/store';
 
 /**
@@ -19,25 +20,22 @@ const editTask: IEditTaskModel = {
     isShowModal: false
   },
   reducers: {
-    updateModalState: (state, isShowModal) => {
+    updateModalState: (state, payload) => {
       return {
         ...state,
-        isShowModal
+        ...payload
       };
     }
   },
   effects: {
     async showModal(isShowModal) {
-      store.dispatch.editTask.updateModalState(isShowModal ?? true);
+      store.dispatch.editTask.updateModalState({isShowModal: isShowModal ?? true});
     },
-    async updateTask(task) {
+    async updateRemoteTask(task) {
       return await fetchApis.updateTask(task);
     },
-    getEventIds(events) {
-      return events.map((event) => event.eventId);
-    },
-    getEntityIds(entities) {
-      return entities.map((entity) => entity.monitorId);
+    setState(payload: Partial<IEditTaskState>) {
+      store.dispatch.editTask.updateModalState(payload);
     }
   }
 };

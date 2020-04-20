@@ -96,12 +96,18 @@
             }
           }
 
-          &.input input,
-          .ant-picker {
-            padding: 5px 10px;
+          &.input textarea {
+            resize: none;
           }
 
           &.input input,
+          &.input textarea,
+          .ant-picker {
+            padding: 4px 10px;
+          }
+
+          &.input input,
+          &.input textarea,
           .ant-select .ant-select-selector,
           .ant-picker {
             @include bg;
@@ -111,19 +117,22 @@
           }
 
           &.input input:hover,
+          &.input textarea:hover,
           &:hover .ant-select-selector,
           .ant-picker:hover {
             @include bg_hover;
           }
 
           &.input input:focus,
+          &.input textarea:focus,
           .ant-select.ant-select-focused .ant-select-selector,
           .ant-picker.ant-picker-focused {
             @include bg_focus;
           }
 
           &.ant-form-item-has-error .ant-select .ant-select-selector,
-          &.ant-form-item-has-error.input input {
+          &.ant-form-item-has-error.input input,
+          &.ant-form-item-has-error.input textarea {
             border-color: #ff4d4f !important;
           }
 
@@ -131,8 +140,8 @@
             .ant-select-selector {
               padding: 0;
 
-              .ant-select-selection-search{
-                input{
+              .ant-select-selection-search {
+                input {
                   margin-left: 10px;
                 }
               }
@@ -338,7 +347,7 @@
                   opacity: .8;
 
                   &:hover {
-                    background: rgba(2, 66, 104, .4);
+                    background: #02213a;
                   }
                 }
 

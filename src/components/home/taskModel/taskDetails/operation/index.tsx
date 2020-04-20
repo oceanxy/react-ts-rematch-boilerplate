@@ -28,7 +28,7 @@ interface ITaskOperationProps {
  * @constructor
  */
 const TaskOperation = (props: Partial<ITaskOperationProps>) => {
-  const { data, showEditTaskModal, isShowEditTaskModal } = props;
+  const {data, showEditTaskModal, isShowEditTaskModal} = props;
 
   const onIntercomClick = () => {
     message.destroy();

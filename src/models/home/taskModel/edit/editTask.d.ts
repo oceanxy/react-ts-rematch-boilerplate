@@ -8,12 +8,12 @@
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
-import { TaskLevel, TaskPeriod } from '@/models/home/taskModel/taskDetails';
+import { DateDuplicateType, TaskLevel, TaskPeriod } from '@/models/home/taskModel/taskDetails';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
   /**
-   * 任务编辑请求参数
+   * 任务编辑请求参数 或 用于表单回填的值
    */
   interface IEditTaskRequest {
     /**
@@ -41,21 +41,21 @@ declare global {
      */
     taskPeriod: TaskPeriod;
     /**
-     * 定时任务的周期值（1-7），以逗号分割。1-7分别对应周一到周日
+     * 定时任务的周期值（1-7）。1-7分别对应周一到周日
      */
-    dateDuplicateType: string;
+    dateDuplicateType?: DateDuplicateType[];
     /**
      * 任务描述
      */
     remark: string;
     /**
-     * 指派的监控对象ID，多个用逗号分割
+     * 指派的监控对象ID
      */
-    designateMonitorIds: string;
+    designateMonitorIds: IEntity['monitorId'][];
     /**
-     * 事件ID，多个用逗隔开
+     * 事件ID
      */
-    eventIds: string;
+    eventIds: IEvent['eventId'][];
     /**
      * 修改的任务ID
      */
@@ -66,7 +66,10 @@ declare global {
    * 任务编辑组件状态
    */
   interface IEditTaskState {
-    isShowModal: boolean;
+    /**
+     * 是否显示编辑任务对话框
+     */
+    isShowModal: boolean
   }
 
   /**
@@ -78,35 +81,28 @@ declare global {
       /**
        * 更新组件状态
        * @param {IEditTaskState} state
-       * @param {IEditTaskState["isShowModal"]} isShowModal
+       * @param {Partial<IEditTaskState>} payload
        * @returns {IEditTaskState}
        */
-      updateModalState(state: IEditTaskState, isShowModal: IEditTaskState['isShowModal']): IEditTaskState;
+      updateModalState(state: IEditTaskState, payload: Partial<IEditTaskState>): IEditTaskState;
     };
     effects: {
       /**
        * 显示/隐藏任务编辑框
        * @param {IEditTaskState["isShowModal"]} isShowModal
        */
-      showModal(isShowModal?: IEditTaskState['isShowModal']): void;
+      showModal(isShowModal?: IEditTaskState['isShowModal']): void
       /**
        * 向服务端发送更新任务信息请求
        * @param {ITask} task
        * @returns {Promise<APIResponse>}
        */
-      updateTask(task: ITask): Promise<APIResponse>;
+      updateRemoteTask(task: IEditTaskRequest): Promise<APIResponse>;
       /**
-       * 获取任务关联事件的ID（用逗号分割）
-       * @param {IEvent[]} events
-       * @returns {string}
+       * 设置状态
+       * @param {Partial<IEditTaskState>} payload
        */
-      getEventIds(events: IEvent[]): IEvent['eventId'][];
-      /**
-       * 获取任务关联实体（监控对象）的ID（用逗号分割）
-       * @param {IEntity} entities
-       * @returns {string}
-       */
-      getEntityIds(entities: IEntity[]): IEntity['monitorId'][];
+      setState(payload: Partial<IEditTaskState>)
     };
   }
 }
