@@ -10,6 +10,9 @@
 import { createGlobalStyle, DefaultTheme, GlobalStyleComponent } from 'styled-components';
 import styledBlocks, { IStyledComponent } from './styledBlocks';
 
+/**
+ * 全局样式
+ */
 export const GlobalStyle: GlobalStyleComponent<{}, DefaultTheme> = createGlobalStyle`
   body {
     margin: 0;
@@ -40,6 +43,17 @@ export const GlobalStyle: GlobalStyleComponent<{}, DefaultTheme> = createGlobalS
     box-shadow: inset 0 0 4px rgba(51, 107, 145, 0.8);
     background: rgba(10, 28, 46, 0.8);
     border-radius: 6px;
+  }
+  
+  .ant-message-notice-content.ant-message-notice-content {
+    border: 1px solid rgba(45, 60, 76, .95);
+    background: rgba(21, 47, 69, .95);
+    color: #dbe7f5;
+    box-shadow: 0 0 4px 0 #2e72ab;
+    
+    .highlight {
+      color: #40a9ff;
+    }
   }
 `;
 

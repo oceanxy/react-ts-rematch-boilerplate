@@ -4,11 +4,12 @@
  * @Description: 任务详情
  * @Date: 2020-04-14 周二 09:24:12
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-14 周二 09:24:12
+ * @LastModifiedTime: 2020-04-21 周二 09:56:15
  */
 
 import fetchApis from '@/apis';
 import { ESeverity } from '@/components/UI/itemLegend';
+import { CurActiveGroupType } from '@/models/home/intercom/group';
 import { store } from '@/store';
 
 /**
@@ -165,7 +166,11 @@ const taskDetails: ITaskDetailsModel = {
     }
   },
   effects: {
-    async fetchData(reqPayload: ITaskDetailsRequest) {
+    async fetchData(reqPayload?: ITaskDetailsRequest) {
+      if (!reqPayload) {
+        reqPayload = {taskId: store.getState().taskList.curSelectedTaskId};
+      }
+
       const response = await fetchApis.fetchTaskDetails(reqPayload);
       store.dispatch.taskDetails.updateData(response.data.taskInfo);
     }

@@ -124,17 +124,37 @@ declare global {
     taskId: ITask['taskId'];
   }
 
+  /**
+   * 任务详情状态
+   */
   interface ITaskDetailsState {
     data: ITask;
   }
 
+  /**
+   * 任务详情model
+   */
   interface ITaskDetailsModel extends ModelConfig {
     state: ITaskDetailsState;
     reducers: {
+      /**
+       * 更新任务详情本地数据
+       * @param {ITaskDetailsState} state
+       * @param {ITask} data
+       * @returns {ITaskDetailsState}
+       */
       updateData(state: ITaskDetailsState, data: ITask): ITaskDetailsState;
+      /**
+       * 清空任务详情数据
+       * @returns {ITaskDetailsState}
+       */
       clearData(): ITaskDetailsState;
     };
     effects: {
+      /**
+       * 从远程获任务详情数据
+       * @param {ITaskDetailsRequest} reqPayload
+       */
       fetchData(reqPayload: ITaskDetailsRequest): void;
     };
   }

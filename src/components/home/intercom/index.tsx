@@ -1,61 +1,43 @@
 /**
  * @Author: Oceanxy
  * @Email: xieyang@zwlbs.com
- * @Description: 临时组组件
+ * @Description: 对讲组件
  * @Date: 2020-01-14 14:24:28
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-01-14 14:24:28
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-21 周二 16:11:30
  */
 
-import Button from '@/components/UI/button';
+import IntercomGroupName from '@/components/home/intercom/groupName';
 import Container from '@/components/UI/containerComp';
-import ItemLegend from '@/components/UI/itemLegend';
-import Member from '@/components/UI/member';
-import styledComponent from '@/styled';
+import { IntercomMembers, IntercomOperation } from '@/containers/home/intercom';
 import React from 'react';
 import './index.scss';
 
-interface IIntercom {
-  active?: boolean;
+/**
+ * 对讲面板Props
+ */
+interface IIntercomProps {
+  active: IIntercomState['active'];
 }
 
 /**
  * 临时组组件
  */
-const Intercom = (props: IIntercom) => {
-  return (
-    <Container className="inter-plat-intercom-container" conTheme="style3">
-      <ItemLegend
-        name="对讲名称"
-        icon={false}
-        nameStyled={styledComponent.centerTitle}
-        styled={styledComponent.justifyContent}
-      />
+const Intercom = (props: Partial<IIntercomProps>) => {
+  const {active} = props;
+
+  return active ? (
+    <Container
+      className="inter-plat-intercom-container"
+      conTheme="style3"
+    >
+      <IntercomGroupName />
       <Container className="inter-plat-intercom-content">
-        <Container className="inter-plat-intercom-member">
-          <Member />
-          <Member />
-          <Member />
-          <Member />
-          <Member />
-          <Member />
-          <Member />
-          <Member />
-          <Member />
-          <Member />
-          <Member />
-          <Member />
-        </Container>
-        <Container className="inter-plat-intercom-button-container">
-          <Button name="按" />
-          <Button name="按" />
-          <Button name="按" />
-          <Button name="按" />
-          <Button name="按" />
-        </Container>
+        <IntercomMembers />
+        <IntercomOperation />
       </Container>
     </Container>
-  );
+  ) : null;
 };
 
 export default Intercom;

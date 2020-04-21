@@ -8,7 +8,7 @@
  */
 
 import Container from '@/components/UI/containerComp';
-import EventLegend, { ESeverity } from '@/components/UI/itemLegend';
+import ItemLegend, { ESeverity } from '@/components/UI/itemLegend';
 import React from 'react';
 import './index.scss';
 
@@ -28,7 +28,7 @@ const ListItem = (props: Partial<IListItemProps>) => {
   return (
     <Container className={`event-alarm-item${className ? ` ${className}` : ''}`} conTheme="style2" onClick={onClick}>
       <div className="info">
-        <EventLegend name={name || ''} iconColor={iconColor} />
+        <ItemLegend name={name || ''} iconColor={iconColor} />
         <span className="status">{status}</span>
       </div>
       <div className="info">

@@ -561,6 +561,39 @@ const mocks: Mocks = {
     retMsg: '',
     retCode: Random.integer(0, 1),
     data: null
+  },
+  fetchIntercomMembers: {
+    retCode: 0,
+    retMsg: '',
+    data: {
+      'interlocutorMemberList|7-15': [
+        {
+
+          'audioOnlineStatus': () => Random.integer(0, 1),
+          'userName': monitorName,
+          'type': () => Random.integer(0, 2),
+          'userId': () => Random.integer(),
+          'deviceId': () => Random.integer().toString(),
+          'modelName': () => Random.integer().toString(),
+          'sensorAbility': 0,
+          'sensorOnlineStatus': 0,
+          'defaultGroupId': 4294947295,
+          'isApp': 0,
+          'gpsFunction': 1,
+          'fenceEnable': 0,
+          'patrolEnable': 0,
+          'videoOnlineStatus': 0,
+          'beStunned': 0,
+          'videoFunction': 0,
+          'iconSkin': 'vehicleSkin',
+          'gisAbility': 0,
+          'audioAbility': 1,
+          'custId': 94,
+          'userNumber': 93446,
+          'locatestatus': 1
+        }
+      ]
+    }
   }
 };
 

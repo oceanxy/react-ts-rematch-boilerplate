@@ -1,7 +1,7 @@
 /**
  * @Author: Oceanxy
  * @Email: xieyang@zwlbs.com
- * @Description: 对讲名称组件
+ * @Description: 临时组组件
  * @Date: 2020-01-14 14:24:28
  * @LastModified: Oceanxy（xieyang@zwlbs.com）
  * @LastModifiedTime: 2020-01-14 14:24:28

@@ -4,7 +4,7 @@
  * @Description: 完成任务model
  * @Date: 2020-04-20 周一 17:37:50
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-20 周一 17:37:50
+ * @LastModifiedTime: 2020-04-21 周二 09:56:39
  */
 
 import fetchApis from '@/apis';
@@ -31,7 +31,16 @@ const editTask: ICompleteTaskModel = {
       store.dispatch.completeTask.updateModalState({isShowModal: isShowModal ?? true});
     },
     async completeRemoteTask(completeTask) {
-      return await fetchApis.completeTask(completeTask);
+      const response = await fetchApis.completeTask(completeTask);
+
+      if (Number(response.retCode) === 0) {
+        // 完成任务后，更新任务列表
+        store.dispatch.taskList.fetchData();
+        // 完成任务后，更新当前选中任务的详情
+        store.dispatch.taskDetails.fetchData();
+      }
+
+      return response;
     },
     setState(payload) {
       store.dispatch.completeTask.updateModalState(payload);

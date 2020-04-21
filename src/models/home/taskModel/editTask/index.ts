@@ -32,7 +32,16 @@ const editTask: IEditTaskModel = {
       store.dispatch.editTask.updateModalState({isShowModal: isShowModal ?? true});
     },
     async updateRemoteTask(task) {
-      return await fetchApis.updateTask(task);
+      const response =  await fetchApis.updateTask(task);
+
+      if (Number(response.retCode) === 0) {
+        // 编辑任务后，更新任务列表
+        store.dispatch.taskList.fetchData();
+        // 编辑任务后，更新当前选中任务的详情
+        store.dispatch.taskDetails.fetchData();
+      }
+
+      return response;
     },
     setState(payload: Partial<IEditTaskState>) {
       store.dispatch.editTask.updateModalState(payload);

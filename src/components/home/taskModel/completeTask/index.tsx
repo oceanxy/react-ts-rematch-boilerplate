@@ -63,13 +63,17 @@ const CompleteTask = (props: Partial<ICompleteTaskProps>) => {
       conTheme="style1"
       width={300}
       className="task-operation-modal"
-      title="确定要完成任务吗？"
+      title="请确认"
       visible={isShowModal}
       onCancel={completeTaskCancel}
       footer={null}
       maskClosable={false}
       getContainer={false}
     >
+      <Row justify="center">
+        确定要完成任务吗？
+      </Row>
+      <br/>
       <Row justify="center" className="complete-operation-modal-row">
         <Button size="small" type="primary" loading={loading} onClick={completeTaskOK}>确 定</Button>
         <Button size="small" type="primary" onClick={completeTaskCancel}>取 消</Button>

@@ -4,7 +4,7 @@
  * @Description: 任务列表
  * @Date: 2020-04-13 周一 17:18:47
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-15 周三 10:10:39
+ * @LastModifiedTime: 2020-04-21 周二 09:21:02
  */
 
 import fetchApis from '@/apis';
@@ -33,13 +33,15 @@ const taskList: ITaskListModel = {
   effects: {
     async fetchData(reqPayload?) {
       if (!reqPayload) {
+        const state = store.getState();
+
         reqPayload = {
-          monitorId: '',
-          queryType: 0,
+          monitorId: state.eventList.curSelectedMonitorId,
+          queryType: -1,
           taskStatus: -1,
-          eventId: '',
+          eventId: state.eventDetails.data.eventId,
           start: 0,
-          length: 200
+          length: 2000
         };
       }
 

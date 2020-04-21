@@ -24,6 +24,7 @@ export type APIName =
   'fetchTaskDetails' | // 获取任务详情数据
   'updateTask' | // 更新任务信息
   'completeTask' | // 完成任务
+  'fetchIntercomMembers' | // 获取任务组或临时组的成员
   // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
   'fetchTestWebsocket' |
@@ -133,6 +134,10 @@ const apis: APIRequestConfig = {
   },
   completeTask: {
     url: '/clbs/web/v1/dispatch/task/finish',
+    method: EHTTPMethod.POST
+  },
+  fetchIntercomMembers: {
+    url: '/clbs/web/v1/dispatch/command/getInterlocutorAssignmentMember',
     method: EHTTPMethod.POST
   }
 };

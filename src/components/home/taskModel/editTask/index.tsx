@@ -83,7 +83,7 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
     setLoading(false);
     showModal!(false);
 
-    if (Number(response.retCode) === 0) {
+    if (!Number(response.retCode)) {
       message.info('修改成功');
     } else {
       message.info('修改失败，请稍后再试。');
