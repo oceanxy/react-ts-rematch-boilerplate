@@ -10,6 +10,7 @@
 import { store } from '@/store';
 import intercomGroup, { CurActiveGroupType } from './group';
 import intercomMembers from './members';
+import intercomNotice from './notice';
 import intercomOperation from './operation';
 
 const intercom: IIntercomModel = {
@@ -27,8 +28,19 @@ const intercom: IIntercomModel = {
   effects: {
     setState(payload): void {
       store.dispatch.intercom.updateState(payload);
+    },
+    setActive(active: boolean): void {
+      store.dispatch.intercom.updateState({active});
+
+      if (!active) {
+        store.dispatch.intercomGroup.updateState({
+          name: '',
+          id: '',
+          curActiveGroupType: CurActiveGroupType.Null
+        });
+      }
     }
   }
 };
 
-export default {intercom, intercomGroup, intercomMembers, intercomOperation};
+export default {intercom, intercomGroup, intercomMembers, intercomOperation, intercomNotice};

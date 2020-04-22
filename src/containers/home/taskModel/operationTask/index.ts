@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-04-20 周一 17:53:18
  */
 
-import OperationTask from '@/components/home/taskModel/taskDetails/operation';
+import OperationTask from '@/components/home/taskModel/operationTask';
 import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 

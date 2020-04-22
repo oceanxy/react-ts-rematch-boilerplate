@@ -8,9 +8,16 @@
  */
 
 import IntercomMembers from '@/components/home/intercom/members';
-import { RootState } from '@/store';
+import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: RootState) => ({data: state.intercomMembers.data});
+const mapStateToProps = (state: RootState) => ({
+  data: state.intercomMembers.data,
+  isActiveIntercom: state.intercom.active
+});
 
-export default connect(mapStateToProps)(IntercomMembers);
+const mapDispatchToProps = (dispatch: Dispatch): any => ({
+  fetchData: dispatch.intercomMembers.fetchData
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(IntercomMembers);

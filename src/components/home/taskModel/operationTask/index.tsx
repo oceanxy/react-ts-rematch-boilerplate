@@ -8,7 +8,7 @@
  */
 
 import Container from '@/components/UI/containerComp';
-import Icon, { IconSource, IconSourceHover } from '@/components/UI/iconComp';
+import Icon, { IconSource } from '@/components/UI/iconComp';
 import CompleteTask from '@/containers/home/taskModel/completeTask';
 import EditTask from '@/containers/home/taskModel/editTask';
 import { CurActiveGroupType } from '@/models/home/intercom/group';
@@ -18,7 +18,7 @@ import React from 'react';
 import './index.scss';
 
 interface ITaskOperationProps {
-  data?: ITask;
+  data?: ITask
   intercomGroupState: IIntercomGroupState
   isShowEditTaskModal: IEditTaskState['isShowModal']
   isShowCompleteTaskModal: ICompleteTaskState['isShowModal']
@@ -51,15 +51,10 @@ const OperationTask = (props: Partial<ITaskOperationProps>) => {
    * 对讲
    */
   const onIntercomClick = () => {
-    if (id !== data?.taskId) {
-      if (
-        // 检测当前是否已激活其他群组的对讲面板
-        curActiveGroupType === CurActiveGroupType.Null &&
-        // 检测是否有任务被选中
-        data?.taskId &&
-        // 检测任务状态是否已完成
-        data.status !== TaskStatus.Completed
-      ) {
+    // 检测是否有任务被选中且任务状态是否已完成
+    if (data?.taskId && data?.status !== TaskStatus.Completed) {
+      // 检测当前是否已激活其他群组类型（任务组/临时组/个呼）的对讲面板
+      if (curActiveGroupType === CurActiveGroupType.Null) {
         // 更新对讲面板状态
         setIntercomState!({active: true});
         // 更新对讲群组状态
@@ -68,9 +63,27 @@ const OperationTask = (props: Partial<ITaskOperationProps>) => {
           id: data.taskId,
           curActiveGroupType: CurActiveGroupType.Task
         });
-      } else {
+      } else if (curActiveGroupType === CurActiveGroupType.Task) {
+        if (id !== data?.taskId) {
+          message.destroy();
+          message.warning((
+            <span>其他任务组（<span className="highlight"> {name} </span>）正在进行对讲，暂不能进行此操作！</span>
+          ));
+        } else {
+          message.destroy();
+          message.info((
+            <span>当前任务组（<span className="highlight"> {name} </span>）已激活对讲功能！</span>
+          ));
+        }
+      } else if (curActiveGroupType === CurActiveGroupType.Entity) {
+        message.destroy();
         message.warning((
-          <span>任务组（<span className="highlight"> {name} </span>）正在进行对讲！</span>
+          <span>临时组（<span className="highlight"> {name} </span>）正在进行对讲，暂不能进行此操作！</span>
+        ));
+      } else {
+        message.destroy();
+        message.warning((
+          <span>监控对象（<span className="highlight"> {name} </span>）正在进行对讲，暂不能进行此操作！</span>
         ));
       }
     }
@@ -89,7 +102,17 @@ const OperationTask = (props: Partial<ITaskOperationProps>) => {
    */
   const onCompleteTaskClick = () => {
     message.destroy();
-    data?.taskId && data.status === TaskStatus.Processing && showCompleteTaskModal!();
+    // 检测当前是否已激活其他群组类型（任务组/临时组）的对讲面板
+    if (curActiveGroupType === CurActiveGroupType.Null) {
+      data?.taskId && data.status === TaskStatus.Processing && showCompleteTaskModal!();
+    } else {
+      message.warning((
+        <span>
+          {curActiveGroupType === CurActiveGroupType.Task ? '任务组' : '临时组'}
+          （<span className="highlight"> {name} </span>）正在进行对讲，暂不能进行此操作！
+        </span>
+      ));
+    }
   };
 
   return (
@@ -97,21 +120,18 @@ const OperationTask = (props: Partial<ITaskOperationProps>) => {
       <Icon
         title="对讲"
         icon={IconSource.TASKINTERCOM}
-        iconHover={IconSourceHover.TASKINTERCOM}
         className={data?.taskId && data.status !== TaskStatus.Completed ? '' : 'disabled'}
         onClick={onIntercomClick}
       />
       <Icon
         title="编辑"
         icon={IconSource.TASKEDIT}
-        iconHover={IconSourceHover.TASKEDIT}
         className={data?.taskId && data.status === TaskStatus.NotStart ? '' : 'disabled'}
         onClick={onEditTaskClick}
       />
       <Icon
         title="完成"
         icon={IconSource.TASKCOMPLETE}
-        iconHover={IconSourceHover.TASKCOMPLETE}
         className={data?.taskId && data.status === TaskStatus.Processing ? '' : 'disabled'}
         onClick={onCompleteTaskClick}
       />

@@ -24,7 +24,11 @@ export enum CurActiveGroupType {
   /**
    * 激活临时组
    */
-  Temporary
+  Temporary,
+  /**
+   * 激活个呼（对单个的实体（监控）对象）
+   */
+  Entity
 }
 
 /**

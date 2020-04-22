@@ -14,6 +14,9 @@ declare global {
    * 对讲状态
    */
   interface IIntercomState {
+    /**
+     * 对讲面板激活状态
+     */
     active: boolean
   }
 
@@ -34,6 +37,11 @@ declare global {
        * @param {Partial<IIntercomState>} payload
        */
       setState(payload: Partial<IIntercomState>): void
+      /**
+       * 设置对讲面板激活状态以及快速清空对讲组状态
+       * @param {boolean} active
+       */
+      setActive(active: boolean): void
     }
   }
 }

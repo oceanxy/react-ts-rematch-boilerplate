@@ -39,9 +39,9 @@ interface IMemberProps {
    */
   styled?: FlattenSimpleInterpolation
   /**
-   * 同React标签的key属性
+   * 离线
    */
-  key?: string
+  online?: 0 | 1 | boolean
 }
 
 const StyledMember = styled(Container)`  
@@ -52,16 +52,17 @@ const StyledMember = styled(Container)`
  * 导航菜单组件
  */
 const Member = (props: IMemberProps) => {
+  const {online, title} = props;
+
   return (
     <StyledMember
-      key={props.key}
-      title={props.title}
-      className="inter-plat-member"
+      className={`inter-plat-member${online ? '' : ' offline'}`}
+      title={`${title}${online ? '' : '(离线)'}`}
       styled={props.styled}
       style={props.style}
     >
-      <img src={props.src ?? user} alt={props.alt ?? ''} />
-      <span>{props.name}</span>
+      <div className="member-img-box"><img src={props.src ?? user} alt={props.alt ?? ''} /></div>
+      <span className="member-name">{props.name}</span>
     </StyledMember>
   );
 };

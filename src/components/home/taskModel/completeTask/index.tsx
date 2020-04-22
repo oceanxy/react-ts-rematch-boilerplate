@@ -70,11 +70,11 @@ const CompleteTask = (props: Partial<ICompleteTaskProps>) => {
       maskClosable={false}
       getContainer={false}
     >
-      <Row justify="center">
+      <Row justify="start">
         确定要完成任务吗？
       </Row>
       <br/>
-      <Row justify="center" className="complete-operation-modal-row">
+      <Row justify="end" className="complete-operation-modal-row">
         <Button size="small" type="primary" loading={loading} onClick={completeTaskOK}>确 定</Button>
         <Button size="small" type="primary" onClick={completeTaskCancel}>取 消</Button>
       </Row>

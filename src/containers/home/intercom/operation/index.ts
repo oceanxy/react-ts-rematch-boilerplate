@@ -11,6 +11,8 @@ import IntercomOperation from '@/components/home/intercom/operarion';
 import { RootState } from '@/store';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: RootState) => ({});
+const mapStateToProps = (state: RootState) => ({
+  curActiveGroupType: state.intercomGroup.curActiveGroupType
+});
 
 export default connect(mapStateToProps)(IntercomOperation);

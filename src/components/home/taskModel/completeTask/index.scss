@@ -8,8 +8,8 @@
 
 @mixin btn {
   text-shadow: 0 0 4px #000d24;
-  color: #3f8ee0;
-  background: #012141;
+  color: #3f8ee0 !important;
+  background: #012141 !important;
   @include border-color;
   font-weight: bolder;
   padding: 0 10px;

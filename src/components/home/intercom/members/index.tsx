@@ -9,15 +9,23 @@
 
 import Container from '@/components/UI/containerComp';
 import Member from '@/components/UI/member';
-import React from 'react';
+import React, { useEffect } from 'react';
 import './index.scss';
 
 interface IIntercomMembersProps {
   data: IIntercomMembersState['data']
+  isActiveIntercom: IIntercomState['active']
+  fetchData: IIntercomMembersModel['effects']['fetchData']
 }
 
 const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
-  const {data} = props;
+  const {data, isActiveIntercom, fetchData} = props;
+
+  useEffect(() => {
+    if (isActiveIntercom) {
+      fetchData!();
+    }
+  }, [isActiveIntercom]);
 
   return (
     <Container className="inter-plat-intercom-member">
@@ -28,6 +36,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
               key={`inter-plat-intercom-member-${index}`}
               title={member.userName}
               name={member.userName}
+              online={member.audioOnlineStatus}
             />
           );
         }) ?? null

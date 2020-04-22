@@ -24,6 +24,13 @@ import polygonHover from '@/components/UI/iconComp/images/fence/fence-polygon-ho
 import polygon from '@/components/UI/iconComp/images/fence/fence-polygon.png';
 import regionsHover from '@/components/UI/iconComp/images/fence/fence-regions-hover.png';
 import regions from '@/components/UI/iconComp/images/fence/fence-regions.png';
+import banned from '@/components/UI/iconComp/images/intercom/banned.png';
+import call from '@/components/UI/iconComp/images/intercom/call.png';
+import forbidden from '@/components/UI/iconComp/images/intercom/forbidden.png';
+import hangUp from '@/components/UI/iconComp/images/intercom/hang-up.png';
+import notice from '@/components/UI/iconComp/images/intercom/notice.png';
+import intercomCall from '@/components/UI/iconComp/images/intercom/intercom-call.png';
+import intercomCalling from '@/components/UI/iconComp/images/intercom/intercom-calling.png';
 import areaHover from '@/components/UI/iconComp/images/search/area-hover.png';
 import area from '@/components/UI/iconComp/images/search/area.png';
 import entityHover from '@/components/UI/iconComp/images/search/entity-hover.png';
@@ -57,7 +64,14 @@ export enum IconSource {
   LOCATION = location,
   TASKINTERCOM = taskIntercom,
   TASKCOMPLETE = taskComplete,
-  TASKEDIT = taskEdit
+  TASKEDIT = taskEdit,
+  BANNED = banned,
+  CALL = call,
+  FORBIDDEN = forbidden,
+  HANGUP = hangUp,
+  NOTICE = notice,
+  INTERCOMCALL = intercomCall,
+  INTERCOMCALLING = intercomCalling
 }
 
 /**
@@ -75,10 +89,7 @@ export enum IconSourceHover {
   LINE = lineHover,
   POINT = pointHover,
   REGIONS = regionsHover,
-  LOCATION = locationHover,
-  TASKINTERCOM = taskIntercom,
-  TASKCOMPLETE = taskComplete,
-  TASKEDIT = taskEdit
+  LOCATION = locationHover
 }
 
 export type IconName<T> = { readonly [K in keyof typeof IconSource]: T };
@@ -102,7 +113,14 @@ export const iconName: IconName<string> = {
   LOCATION: '点',
   TASKCOMPLETE: '完成任务',
   TASKEDIT: '编辑任务',
-  TASKINTERCOM: '对讲'
+  TASKINTERCOM: '对讲',
+  BANNED: '禁言中',
+  CALL: '呼叫',
+  FORBIDDEN: '禁言',
+  HANGUP: '挂断',
+  NOTICE: '通知',
+  INTERCOMCALL: '组呼/个呼',
+  INTERCOMCALLING: '组呼中/个呼中'
 };
 
 /**
@@ -127,9 +145,10 @@ const StyledIcon = styled(Container)`
     }
   }
 
-  &:hover .icon-img {
-    background-image: url(${(props: IIconProps) => props.iconHover});
-  }
+  ${(props: IIconProps) => props.iconHover ? `
+    &:hover .icon-img {
+      background-image: url(${props.iconHover});
+    }` : ''}
 `;
 
 const Icon = (props: IIconProps) => {

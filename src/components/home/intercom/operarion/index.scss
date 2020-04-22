@@ -1,3 +1,15 @@
 .inter-plat-intercom-button-container {
   display: flex;
+  margin-top: 10px;
+  justify-content: center;
+
+  .icon-container {
+    flex: 0 0;
+    cursor: pointer;
+
+    .icon-img {
+      width: 32px;
+      height: 32px;
+    }
+  }
 }

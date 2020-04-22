@@ -25,15 +25,16 @@ const members: IIntercomMembersModel = {
   effects: {
     async fetchData(reqPayload) {
       if (!reqPayload) {
+        const state = store.getState();
+
         reqPayload = {
-          // TODO 获取对讲群组ID
-          intercomGroupId: '',
+          intercomGroupId: state.intercomGroup.id,
           interlocutorStatus: 0
         };
       }
 
       const response = await fetchApis.fetchIntercomMembers(reqPayload);
-      store.dispatch.intercomMembers.updateState(response.data.interlocutorMemberList);
+      store.dispatch.intercomMembers.updateState({data: response.data.interlocutorMemberList});
     }
   }
 };
