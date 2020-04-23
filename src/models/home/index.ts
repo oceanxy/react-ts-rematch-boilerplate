@@ -11,5 +11,6 @@ import eventModel from './eventModel';
 import intercom from './intercom';
 import resourceStatisticsModel from './resourceStatistics';
 import taskModel from './taskModel';
+import temporaryGroup from './temporaryGroup';
 
-export default {...eventModel, ...resourceStatisticsModel, ...taskModel, ...intercom};
+export default {...eventModel, ...resourceStatisticsModel, ...taskModel, ...intercom, ...temporaryGroup};

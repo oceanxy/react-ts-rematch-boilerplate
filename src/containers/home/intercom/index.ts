@@ -16,7 +16,8 @@ import IntercomNotice from './notice';
 import IntercomOperation from './operation';
 
 const mapStateToProps = (state: RootState) => ({
-  active: state.intercom.active
+  active: state.intercom.active,
+  isIntercomNoticeActive: state.intercomNotice.active
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({

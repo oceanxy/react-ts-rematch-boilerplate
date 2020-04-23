@@ -3,9 +3,10 @@
   align-items: center;
   background: rgba(11, 35, 65, 0.8);
   width: 144px;
-  padding: .37vh 10px;
-  height: 2.222vh;
-  overflow: hidden;
+  padding: 4px 10px;
+  height: 24px;
+  border: 1px solid #213c5a;
+  transition: all .3s cubic-bezier(.645, .045, .355, 1);
 
   * + & {
     margin-top: 10px;
@@ -19,5 +20,18 @@
     flex: 1;
     display: flex;
     justify-content: flex-end;
+  }
+
+  &.temporaryGroup {
+    cursor: pointer;
+
+    &:hover {
+      border-color: #2e72ab;
+    }
+
+    &:active,
+    &.active {
+      background: rgb(18, 47, 83);
+    }
   }
 }

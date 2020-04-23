@@ -12,28 +12,35 @@ import { Input } from 'antd';
 import React, { ChangeEvent, CompositionEvent, useState } from 'react';
 import './index.scss';
 
+/**
+ * 对讲通知组件Props
+ */
 interface IIntercomNoticeProps {
   value: IIntercomNoticeState['value']
   setState: IIntercomNoticeModel['effects']['setState']
 }
 
+/**
+ * 对讲组件
+ * @param {Partial<IIntercomNoticeProps>} props
+ * @returns {any}
+ * @constructor
+ */
 const IntercomNotice = (props: Partial<IIntercomNoticeProps>) => {
-  const {value, setState} = props;
-  const [lock, setLock] = useState(false);
+  const {setState} = props;
+  // 组件内部缓存的文本域值，解决antd Input受控时输入中文的问题
   const [val, setVal] = useState('');
 
+  /**
+   * 文本域change事件
+   * @param {React.ChangeEvent<HTMLTextAreaElement> | React.CompositionEvent<HTMLTextAreaElement>} e
+   */
   const onChange = (e: ChangeEvent<HTMLTextAreaElement> | CompositionEvent<HTMLTextAreaElement>) => {
     const tempValue = (e.target as HTMLTextAreaElement).value;
-
-    if (e.type === 'compositionstart') {
-      setLock(true);
-    } else if (e.type === 'compositionend') {
-      setLock(false);
-    }
-
     setVal(tempValue);
 
-    if (!lock) {
+    // 中文输入时，锁定受控文本域
+    if (e.type === 'change') {
       setState!({value: tempValue});
     }
   };
@@ -45,6 +52,7 @@ const IntercomNotice = (props: Partial<IIntercomNoticeProps>) => {
         value={val}
         onChange={onChange}
         onCompositionStart={onChange}
+        onCompositionUpdate={onChange}
         onCompositionEnd={onChange}
       />
     </Container>

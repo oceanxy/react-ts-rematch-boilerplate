@@ -20,7 +20,6 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   showEditTaskModal: dispatch.editTask.showModal,
   showCompleteTaskModal: dispatch.completeTask.showModal,
-  setIntercomState: dispatch.intercom.setState,
   setIntercomGroupState: dispatch.intercomGroup.setState
 });
 

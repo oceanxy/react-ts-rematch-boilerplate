@@ -8,7 +8,14 @@
  */
 
 const operation: IIntercomOperationModel = {
-  state: {}
+  state: {},
+  reducers: {},
+  effects: {
+    async intercomGroupCall() {
+      // TODO 对接第三方组呼接口
+      console.log('调用第三方组呼接口');
+    }
+  }
 };
 
 export default operation;

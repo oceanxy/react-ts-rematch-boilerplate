@@ -25,6 +25,8 @@ export type APIName =
   'updateTask' | // 更新任务信息
   'completeTask' | // 完成任务
   'fetchIntercomMembers' | // 获取任务组或临时组的成员
+  'fetchTemporaryGroup' | // 获取临时组
+  'unbindTemporaryGroup' | // 解散临时组
   // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
   'fetchTestWebsocket' |
@@ -138,6 +140,14 @@ const apis: APIRequestConfig = {
   },
   fetchIntercomMembers: {
     url: '/clbs/web/v1/dispatch/command/getInterlocutorAssignmentMember',
+    method: EHTTPMethod.POST
+  },
+  fetchTemporaryGroup: {
+    url: '/clbs/web/v1/dispatch/command/getTemporaryGroup',
+    method: EHTTPMethod.POST
+  },
+  unbindTemporaryGroup: {
+    url: '/clbs/web/v1/dispatch/command/unbindTemporaryGroup',
     method: EHTTPMethod.POST
   }
 };

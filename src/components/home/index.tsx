@@ -11,7 +11,7 @@ import DisplayContent from '@/components/home/displayContent';
 import EventModel from '@/components/home/eventModel';
 import ResourceStatistics from '@/components/home/resourceStatistics';
 import TaskModel from '@/components/home/taskModel';
-import TemporaryGroup from '@/components/home/temporaryGroup';
+import TemporaryGroup from '@/containers/home/temporaryGroup';
 import Container from '@/components/UI/containerComp';
 import Nav from '@/components/UI/nav';
 import { renderRoutes } from '@/config/router';

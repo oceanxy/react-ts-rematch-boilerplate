@@ -4,7 +4,7 @@
  * @Description: icon组件
  * @Date: 2020-03-26 13:35:50
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-15 周三 13:56:48
+ * @LastModifiedTime: 2020-04-23 周四 11:17:05
  */
 
 import Container from '@/components/UI/containerComp';
@@ -26,11 +26,13 @@ import regionsHover from '@/components/UI/iconComp/images/fence/fence-regions-ho
 import regions from '@/components/UI/iconComp/images/fence/fence-regions.png';
 import banned from '@/components/UI/iconComp/images/intercom/banned.png';
 import call from '@/components/UI/iconComp/images/intercom/call.png';
+import returnIcon from '@/components/UI/iconComp/images/intercom/return.png';
+import send from '@/components/UI/iconComp/images/intercom/send.png';
 import forbidden from '@/components/UI/iconComp/images/intercom/forbidden.png';
 import hangUp from '@/components/UI/iconComp/images/intercom/hang-up.png';
-import notice from '@/components/UI/iconComp/images/intercom/notice.png';
 import intercomCall from '@/components/UI/iconComp/images/intercom/intercom-call.png';
 import intercomCalling from '@/components/UI/iconComp/images/intercom/intercom-calling.png';
+import notice from '@/components/UI/iconComp/images/intercom/notice.png';
 import areaHover from '@/components/UI/iconComp/images/search/area-hover.png';
 import area from '@/components/UI/iconComp/images/search/area.png';
 import entityHover from '@/components/UI/iconComp/images/search/entity-hover.png';
@@ -71,7 +73,9 @@ export enum IconSource {
   HANGUP = hangUp,
   NOTICE = notice,
   INTERCOMCALL = intercomCall,
-  INTERCOMCALLING = intercomCalling
+  INTERCOMCALLING = intercomCalling,
+  RETURN = returnIcon,
+  SEND = send
 }
 
 /**
@@ -120,7 +124,9 @@ export const iconName: IconName<string> = {
   HANGUP: '挂断',
   NOTICE: '通知',
   INTERCOMCALL: '组呼/个呼',
-  INTERCOMCALLING: '组呼中/个呼中'
+  INTERCOMCALLING: '组呼中/个呼中',
+  RETURN: '返回',
+  SEND: '发送'
 };
 
 /**
@@ -134,8 +140,9 @@ export interface IIconProps {
   text?: string
   iconHover?: IconSourceHover
   className?: string
+  disabled?: boolean
 
-  onClick?(event: MouseEvent): void
+  onClick?(event?: MouseEvent): void
 }
 
 const StyledIcon = styled(Container)`
@@ -149,13 +156,24 @@ const StyledIcon = styled(Container)`
     &:hover .icon-img {
       background-image: url(${props.iconHover});
     }` : ''}
+  
+  ${(props) => props.disabled ? `
+    filter: grayscale(100%);
+    opacity: 0.6;
+    background: none;
+    cursor: default!important;
+  ` : ''}
 `;
 
 const Icon = (props: IIconProps) => {
-  const {className} = props;
+  const {className, onClick, ...rest} = props;
 
   return (
-    <StyledIcon {...props} className={`icon-container${className ? ` ${className}` : ''}`}>
+    <StyledIcon
+      {...rest}
+      className={`icon-container${className ? ` ${className}` : ''}`}
+      onClick={rest.disabled == undefined || !rest.disabled ? onClick : undefined}
+    >
       <div className="icon-img-box">
         <span className="icon-img" />
       </div>

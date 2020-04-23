@@ -12,7 +12,7 @@ import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
-  isShowModal: state.completeTask.isShowModal,
+  isShowModal: state.completeTask.isShowModal
 });
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   showModal: dispatch.completeTask.showModal,

@@ -11,7 +11,7 @@ import Container from '@/components/UI/containerComp';
 import ItemLegend from '@/components/UI/itemLegend';
 import KeyValue from '@/components/UI/keyValue';
 import OperationTask from '@/containers/home/taskModel/operationTask';
-import { TaskPeriod, taskTypeColor } from '@/models/home/taskModel/taskDetails';
+import { dateDuplicateTypeText, TaskPeriod, taskTypeColor } from '@/models/home/taskModel/taskDetails';
 import styledBlocks from '@/styled';
 import React, { useEffect } from 'react';
 import './index.scss';
@@ -34,6 +34,11 @@ const TaskDetails = (props: Partial<ITaskDetailsProps>) => {
     }
   }, [curSelTaskId]);
 
+  const dateDuplicateText = data?.dateDuplicateType
+    .split(',')
+    .map((str) => dateDuplicateTypeText[Number(str)])
+    .join('，');
+
   return (
     <Container conTheme="style1" style={{marginTop: 10}}>
       <ItemLegend
@@ -50,7 +55,7 @@ const TaskDetails = (props: Partial<ITaskDetailsProps>) => {
             <KeyValue
               name="任务周期"
               compWidth="100%"
-              value={data.taskPeriod === TaskPeriod.Immediate ? '即时' : `定时(${data.dateDuplicateType})`}
+              value={data.taskPeriod === TaskPeriod.Immediate ? '即时' : `定时（${dateDuplicateText}）`}
             />
             <KeyValue name="开始时间" value={data.startTime} />
             <KeyValue name="结束时间" value={data.endTime} />

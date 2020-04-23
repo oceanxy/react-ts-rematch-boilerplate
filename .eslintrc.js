@@ -69,7 +69,7 @@ module.exports = {
     'import/no-extraneous-dependencies': ['off'],
     'import/no-unresolved': 2,
     'new-cap': 0,
-    'no-implicit-coercion': 'error',
+    'no-implicit-coercion': 0,
     'no-mixed-operators': 0,
     'no-plusplus': 0,
     'no-use-before-define': 0,

@@ -4,21 +4,21 @@
  * @Description: 对讲通知model
  * @Date: 2020-04-22 周三 17:08:06
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-22 周三 17:08:06
+ * @LastModifiedTime: 2020-04-23 周四 10:42:12
  */
 
 import { ModelConfig } from '@rematch/core';
 
 declare global {
   /**
-   * 对讲成员请求参数
+   * 对讲通知请求参数
    */
   interface IIntercomNoticeRequest {
 
   }
 
   /**
-   * 对讲成员state
+   * 对讲通知state
    */
   interface IIntercomNoticeState {
     /**
@@ -32,7 +32,7 @@ declare global {
   }
 
   /**
-   * 对讲成员model
+   * 对讲通知model
    */
   interface IIntercomNoticeModel extends ModelConfig {
     state: IIntercomNoticeState
@@ -50,7 +50,7 @@ declare global {
        * 请求服务端对讲成员数据
        * @param {IIntercomNoticeRequest} reqPayload
        */
-      fetchData(reqPayload?: IIntercomNoticeRequest): void
+      sendData(reqPayload?: IIntercomNoticeRequest): void
       setState(payload: Partial<IIntercomNoticeState>): void
     }
   }

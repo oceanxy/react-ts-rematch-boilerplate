@@ -7,7 +7,8 @@
   .inter-plat-temp-group-item-container {
     display: flex;
     flex-direction: column;
-    padding-top: 1.852vh;
-    padding-bottom: .93vh;
+    margin: 20px 0 4px;
+    overflow-y: auto;
+    height: 130px;
   }
 }

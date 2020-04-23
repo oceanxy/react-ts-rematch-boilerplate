@@ -8,7 +8,7 @@
  */
 
 import Container from '@/components/UI/containerComp';
-import { IntercomGroup, IntercomNotice, IntercomOperation } from '@/containers/home/intercom';
+import { IntercomGroup, IntercomMembers, IntercomNotice, IntercomOperation } from '@/containers/home/intercom';
 import React from 'react';
 import './index.scss';
 
@@ -18,13 +18,14 @@ import './index.scss';
 interface IIntercomProps {
   active: IIntercomState['active']
   setActive: IIntercomModel['effects']['setActive']
+  isIntercomNoticeActive: IIntercomNoticeState['active']
 }
 
 /**
  * 临时组组件
  */
 const Intercom = (props: Partial<IIntercomProps>) => {
-  const {active, setActive} = props;
+  const {active, setActive, isIntercomNoticeActive} = props;
 
   /**
    * 关闭事件
@@ -37,13 +38,12 @@ const Intercom = (props: Partial<IIntercomProps>) => {
     <Container
       className="inter-plat-intercom-container"
       conTheme="style3"
-      close={true}
+      close={!isIntercomNoticeActive}
       onClose={onClose}
     >
       <IntercomGroup />
       <Container className="inter-plat-intercom-content">
-        <IntercomNotice />
-        {/*<IntercomMembers />*/}
+        {isIntercomNoticeActive ? <IntercomNotice /> : <IntercomMembers />}
         <IntercomOperation />
       </Container>
     </Container>

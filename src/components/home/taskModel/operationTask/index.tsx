@@ -24,7 +24,6 @@ interface ITaskOperationProps {
   isShowCompleteTaskModal: ICompleteTaskState['isShowModal']
   showEditTaskModal: IEditTaskModel['effects']['showModal']
   showCompleteTaskModal: ICompleteTaskModel['effects']['showModal']
-  setIntercomState: IIntercomModel['effects']['setState']
   setIntercomGroupState: IIntercomGroupModel['effects']['setState']
 }
 
@@ -42,7 +41,6 @@ const OperationTask = (props: Partial<ITaskOperationProps>) => {
     isShowEditTaskModal,
     isShowCompleteTaskModal,
     showCompleteTaskModal,
-    setIntercomState,
     setIntercomGroupState
   } = props;
   const {id, curActiveGroupType, name} = intercomGroupState!;
@@ -55,8 +53,6 @@ const OperationTask = (props: Partial<ITaskOperationProps>) => {
     if (data?.taskId && data?.status !== TaskStatus.Completed) {
       // 检测当前是否已激活其他群组类型（任务组/临时组/个呼）的对讲面板
       if (curActiveGroupType === CurActiveGroupType.Null) {
-        // 更新对讲面板状态
-        setIntercomState!({active: true});
         // 更新对讲群组状态
         setIntercomGroupState!({
           name: data.taskName,
@@ -72,10 +68,10 @@ const OperationTask = (props: Partial<ITaskOperationProps>) => {
         } else {
           message.destroy();
           message.info((
-            <span>当前任务组（<span className="highlight"> {name} </span>）已激活对讲功能！</span>
+            <span>当前任务组（<span className="highlight"> {name} </span>）已激活对讲功能，请勿重复操作！</span>
           ));
         }
-      } else if (curActiveGroupType === CurActiveGroupType.Entity) {
+      } else if (curActiveGroupType === CurActiveGroupType.Temporary) {
         message.destroy();
         message.warning((
           <span>临时组（<span className="highlight"> {name} </span>）正在进行对讲，暂不能进行此操作！</span>
@@ -119,20 +115,20 @@ const OperationTask = (props: Partial<ITaskOperationProps>) => {
     <Container className="task-operation-container">
       <Icon
         title="对讲"
+        disabled={!(data?.taskId && data.status !== TaskStatus.Completed)}
         icon={IconSource.TASKINTERCOM}
-        className={data?.taskId && data.status !== TaskStatus.Completed ? '' : 'disabled'}
         onClick={onIntercomClick}
       />
       <Icon
         title="编辑"
+        disabled={!(data?.taskId && data.status === TaskStatus.NotStart)}
         icon={IconSource.TASKEDIT}
-        className={data?.taskId && data.status === TaskStatus.NotStart ? '' : 'disabled'}
         onClick={onEditTaskClick}
       />
       <Icon
         title="完成"
+        disabled={!(data?.taskId && data.status === TaskStatus.Processing)}
         icon={IconSource.TASKCOMPLETE}
-        className={data?.taskId && data.status === TaskStatus.Processing ? '' : 'disabled'}
         onClick={onCompleteTaskClick}
       />
       {isShowEditTaskModal ? <EditTask /> : null}

@@ -15,6 +15,15 @@ declare global {
   }
 
   interface IIntercomOperationModel extends ModelConfig {
-    state: IIntercomOperationState
+    state: IIntercomOperationState,
+    reducers: {
+      // updateState(state: IIntercomOperationState, payload: Partial<IIntercomOperationState>): IIntercomOperationState
+    }
+    effects: {
+      /**
+       * 组呼
+       */
+      intercomGroupCall(): void
+    }
   }
 }

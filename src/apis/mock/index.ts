@@ -466,11 +466,11 @@ const mocks: Mocks = {
       taskInfo: {
         address: Random.county(true),
         dateDuplicateType: () => {
-          const weeks = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+          const weeks = ['', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
           const weeksXB: number[] = [];
 
           _.range(Random.integer(1, 7)).forEach(() => {
-            const xb = Random.integer(0, 6);
+            const xb = Random.integer(1, 7);
             if (!weeksXB.includes(xb)) {
               weeksXB.push(xb);
             }
@@ -594,6 +594,24 @@ const mocks: Mocks = {
         }
       ]
     }
+  },
+  fetchTemporaryGroup: {
+    retMsg: '',
+    retCode: 0,
+    data: {
+      'temporaryGroupList|4-10': [
+        {
+          'intercomGroupId': '@guid',
+          'name': () => `临时组${Random.integer(0, 100)}`,
+          'id': '@guid'
+        }
+      ]
+    }
+  },
+  unbindTemporaryGroup: {
+    retCode: 0,
+    retMsg: '',
+    data: null
   }
 };
 
