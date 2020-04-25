@@ -35,6 +35,26 @@ const members: IIntercomMembersModel = {
 
       const response = await fetchApis.fetchIntercomMembers(reqPayload);
       store.dispatch.intercomMembers.updateState({data: response.data.interlocutorMemberList});
+    },
+    async removeMember() {
+      // TODO 调用第三方删除成员接口
+      const response = await fetchApis.removeMember();
+
+      if (response.retCode === 0) {
+        store.dispatch.intercomMembers.fetchData();
+      }
+
+      return response;
+    },
+    async addMember() {
+      // TODO 调用第三方新增成员接口
+      const response = await fetchApis.addMember();
+
+      if (response.retCode === 0) {
+        store.dispatch.intercomMembers.fetchData();
+      }
+
+      return response;
     }
   }
 };

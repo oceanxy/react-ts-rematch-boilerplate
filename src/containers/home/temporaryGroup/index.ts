@@ -10,6 +10,7 @@
 import TemporaryGroup from '@/components/home/temporaryGroup';
 import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
+import CreateTemporaryGroup from './create';
 
 const mapStateToProps = (state: RootState) => ({
   data: state.temporaryGroup.data,
@@ -20,5 +21,9 @@ const mapDispatchToProps = (dispatch: Dispatch): any => ({
   setState: dispatch.intercomGroup.setState,
   unbindTemporaryGroup: dispatch.temporaryGroup.unbindTemporaryGroup
 });
+
+export {
+  CreateTemporaryGroup
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TemporaryGroup);

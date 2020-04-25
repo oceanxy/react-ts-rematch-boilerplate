@@ -4,10 +4,11 @@
  * @Description: icon组件
  * @Date: 2020-03-26 13:35:50
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-23 周四 11:17:05
+ * @LastModifiedTime: 2020-04-25 周六 14:43:26
  */
 
 import Container from '@/components/UI/containerComp';
+import add from '@/components/UI/iconComp/images/add.png';
 import carHover from '@/components/UI/iconComp/images/entity/car-hover.png';
 import car from '@/components/UI/iconComp/images/entity/car.png';
 import peopleHover from '@/components/UI/iconComp/images/entity/people-hover.png';
@@ -26,13 +27,13 @@ import regionsHover from '@/components/UI/iconComp/images/fence/fence-regions-ho
 import regions from '@/components/UI/iconComp/images/fence/fence-regions.png';
 import banned from '@/components/UI/iconComp/images/intercom/banned.png';
 import call from '@/components/UI/iconComp/images/intercom/call.png';
-import returnIcon from '@/components/UI/iconComp/images/intercom/return.png';
-import send from '@/components/UI/iconComp/images/intercom/send.png';
 import forbidden from '@/components/UI/iconComp/images/intercom/forbidden.png';
 import hangUp from '@/components/UI/iconComp/images/intercom/hang-up.png';
 import intercomCall from '@/components/UI/iconComp/images/intercom/intercom-call.png';
 import intercomCalling from '@/components/UI/iconComp/images/intercom/intercom-calling.png';
 import notice from '@/components/UI/iconComp/images/intercom/notice.png';
+import returnIcon from '@/components/UI/iconComp/images/intercom/return.png';
+import send from '@/components/UI/iconComp/images/intercom/send.png';
 import areaHover from '@/components/UI/iconComp/images/search/area-hover.png';
 import area from '@/components/UI/iconComp/images/search/area.png';
 import entityHover from '@/components/UI/iconComp/images/search/entity-hover.png';
@@ -75,7 +76,8 @@ export enum IconSource {
   INTERCOMCALL = intercomCall,
   INTERCOMCALLING = intercomCalling,
   RETURN = returnIcon,
-  SEND = send
+  SEND = send,
+  ADD = add
 }
 
 /**
@@ -126,7 +128,8 @@ export const iconName: IconName<string> = {
   INTERCOMCALL: '组呼/个呼',
   INTERCOMCALLING: '组呼中/个呼中',
   RETURN: '返回',
-  SEND: '发送'
+  SEND: '发送',
+  ADD: '添加'
 };
 
 /**

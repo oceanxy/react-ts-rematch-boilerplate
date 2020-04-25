@@ -2,7 +2,6 @@
   display: flex;
   align-items: center;
   background: rgba(11, 35, 65, 0.8);
-  width: 144px;
   padding: 4px 10px;
   height: 24px;
   border: 1px solid #213c5a;
@@ -22,7 +21,7 @@
     justify-content: flex-end;
   }
 
-  &.temporaryGroup {
+  &.hover {
     cursor: pointer;
 
     &:hover {

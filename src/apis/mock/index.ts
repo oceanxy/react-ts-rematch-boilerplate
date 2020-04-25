@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: mock数据模版
  * @Date: 2019-10-17 10:04:40
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-23 14:31:27
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-25 周六 15:20:19
  */
 
 import apis, { APIName, APIRequestConfig } from '@/apis/api';
@@ -609,6 +609,51 @@ const mocks: Mocks = {
     }
   },
   unbindTemporaryGroup: {
+    retCode: 0,
+    retMsg: '',
+    data: null
+  },
+  fetchDispatchServer: {
+    retCode: 0,
+    retMsg: '',
+    data: {
+      'isSupportVideoConferece': true,
+      'isSupportVideoCall': true,
+      'isSupportAudioConferece': true,
+      'isSupportMessageText': false,
+      'audioServerIP': 'hj.iwalkie.cn',
+      'isSupportRTAudioMessage': false,
+      'dispatchServicePort': '9000',
+      'isOwnPreventSpeechRole': true,
+      'userOwnTempAssignmentIntercomGroupIdList': [],
+      'audioServerPort': 9000,
+      'pid': '63183d88-5000-492e-b42f-9047f684ced2',
+      'isSupportVideoFunc': false,
+      'eventServicePort': '443',
+      'isSupportMessageImage': false,
+      'isSupportFenceEnable': false,
+      'custId': 94,
+      'name': 'xiaoyun',
+      'isSupportAudio': true,
+      'attributes': 2,
+      'isSupportVideo': false,
+      'isSupportSensor': false,
+      'id': 6590,
+      'isSupportGis': false,
+      'isSupportPatrolEnable': false
+    }
+  },
+  createTemporaryGroup: {
+    retMsg: '',
+    retCode: 0,
+    data: null
+  },
+  removeMember: {
+    retCode: 0,
+    retMsg: '',
+    data: null
+  },
+  addMember: {
     retCode: 0,
     retMsg: '',
     data: null

@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 成员组件
  * @Date: 2020-01-13 16:12:38
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-01-13 16:12:38
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-25 周六 16:50:20
  */
 
 import Container from '@/components/UI/containerComp';
@@ -42,6 +42,11 @@ interface IMemberProps {
    * 离线
    */
   online?: 0 | 1 | boolean
+
+  /**
+   * 点击事件
+   */
+  onClick?(): void
 }
 
 const StyledMember = styled(Container)`  
@@ -52,7 +57,7 @@ const StyledMember = styled(Container)`
  * 导航菜单组件
  */
 const Member = (props: IMemberProps) => {
-  const {online, title} = props;
+  const {online, title, onClick} = props;
 
   return (
     <StyledMember
@@ -60,6 +65,7 @@ const Member = (props: IMemberProps) => {
       title={`${title}${online ? '' : '(离线)'}`}
       styled={props.styled}
       style={props.style}
+      onClick={onClick}
     >
       <div className="member-img-box"><img src={props.src ?? user} alt={props.alt ?? ''} /></div>
       <span className="member-name">{props.name}</span>

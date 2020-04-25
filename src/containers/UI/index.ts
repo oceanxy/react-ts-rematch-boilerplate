@@ -8,6 +8,7 @@
  */
 
 import AMap, { Boundary, POI } from './amap';
+import MonitoringDispatch from './monitoringDispatch';
 import Search from './search';
 
-export { Search, AMap, POI, Boundary };
+export { Search, AMap, POI, Boundary, MonitoringDispatch };

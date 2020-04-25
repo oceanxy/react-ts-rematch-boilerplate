@@ -11,12 +11,12 @@ import DisplayContent from '@/components/home/displayContent';
 import EventModel from '@/components/home/eventModel';
 import ResourceStatistics from '@/components/home/resourceStatistics';
 import TaskModel from '@/components/home/taskModel';
-import TemporaryGroup from '@/containers/home/temporaryGroup';
 import Container from '@/components/UI/containerComp';
 import Nav from '@/components/UI/nav';
 import { renderRoutes } from '@/config/router';
 import { Intercom } from '@/containers/home/intercom';
-import { Search } from '@/containers/UI';
+import TemporaryGroup from '@/containers/home/temporaryGroup';
+import { MonitoringDispatch, Search } from '@/containers/UI';
 import ZWMap from '@/containers/UI/amap';
 import React from 'react';
 import './index.scss';
@@ -53,6 +53,7 @@ const Home = () => {
           <TaskModel />
         </Container>
       </Container>
+      <MonitoringDispatch />
     </Container>
   );
 };

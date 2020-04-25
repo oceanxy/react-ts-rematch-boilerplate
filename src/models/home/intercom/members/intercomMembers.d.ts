@@ -7,6 +7,7 @@
  * @LastModifiedTime: 2020-04-21 周二 11:32:16
  */
 
+import { APIResponse } from '@/interfaces/api/mock';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
@@ -75,6 +76,9 @@ declare global {
    * 对讲成员state
    */
   interface IIntercomMembersState {
+    /**
+     * 对讲成员数据集
+     */
     data: IIntercomMember[]
   }
 
@@ -98,6 +102,12 @@ declare global {
        * @param {IIntercomMembersRequest} reqPayload
        */
       fetchData(reqPayload?: IIntercomMembersRequest): void
+      /**
+       * 删除成员
+       * @returns {Promise<APIResponse>}
+       */
+      removeMember(): Promise<APIResponse>
+      addMember(): Promise<APIResponse>
     }
   }
 }

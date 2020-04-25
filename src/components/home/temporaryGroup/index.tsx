@@ -3,18 +3,17 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 临时组组件
  * @Date: 2020-01-14 14:24:28
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-01-14 14:24:28
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-25 周六 16:48:58
  */
 
 import Container from '@/components/UI/containerComp';
-import ItemLegend from '@/components/UI/itemLegend';
 import Modal from '@/components/UI/modal';
 import Trigger, { ETriggerType } from '@/components/UI/triggerComp';
+import { CreateTemporaryGroup } from '@/containers/home/temporaryGroup';
 import { CurActiveGroupType } from '@/models/home/intercom/group';
-import styledComponent from '@/styled';
 import { message } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './index.scss';
 
 interface ITemporaryGroupProps {
@@ -31,9 +30,13 @@ interface ITemporaryGroupProps {
 const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
   const {data, fetchData, intercomGroupState, setState, unbindTemporaryGroup} = props;
   const {id, curActiveGroupType, name} = intercomGroupState!;
+  // 解除临时组绑定时，传递给询问对话框的状态
+  const [tempGroup, setShowTempGroup] = useState({visible: false, current: null as ITemporaryGroup | null});
+  // 解除绑定loading状态
+  const [loading, setLoading] = useState(false);
 
   /**
-   * 临时组点击事件
+   * 临时组对讲
    * @param {ITemporaryGroup} tempGroup
    */
   const onClick = (tempGroup: ITemporaryGroup) => {
@@ -75,18 +78,24 @@ const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
    * @param {ITemporaryGroup} tempGroup
    * @returns {Promise<void>}
    */
-  const onTriggerClick = async (tempGroup: ITemporaryGroup) => {
+  const unbindTempGroup = async (tempGroup: ITemporaryGroup) => {
+    setLoading(true);
     const response = await unbindTemporaryGroup!(tempGroup.intercomGroupId);
+    setLoading(false);
 
+    message.destroy();
     if (Number(response.retCode) === 0) {
-      message.destroy();
       message.success(`临时组（${tempGroup.name}）已解散。`);
 
       // 如果解散临时组时，该临时组的对讲面板处于激活状态，则清空该临时组的对讲面板的所有状态
       if (id === tempGroup.intercomGroupId) {
         setState!({name: '', id: '', curActiveGroupType: CurActiveGroupType.Null});
       }
+    } else {
+      message.success(`未能解散临时组（${tempGroup.name}），请稍后再试。`);
     }
+
+    setShowTempGroup({visible: false, current: null});
   };
 
   useEffect(() => {
@@ -95,12 +104,7 @@ const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
 
   return (
     <Container className="inter-plat-temp-group-container" conTheme="style3">
-      <ItemLegend
-        name="临时组"
-        icon={false}
-        nameStyled={styledComponent.centerTitle}
-        styled={styledComponent.justifyContent}
-      />
+      <CreateTemporaryGroup />
       <Container className="inter-plat-temp-group-item-container">
         {
           data?.map((tempGroup, index) => {
@@ -110,22 +114,21 @@ const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
                 name={tempGroup.name}
                 type={ETriggerType.CLOSE}
                 active={tempGroup.intercomGroupId === id}
+                triggerTitle='解散临时组'
                 onClick={onClick.bind(null, tempGroup)}
-                onTriggerClick={onTriggerClick.bind(null, tempGroup)}
+                onTriggerClick={() => setShowTempGroup({visible: true, current: tempGroup})}
               />
             );
           })
         }
       </Container>
       <Modal
-        title="Modal"
-        visible={true}
-        okText="确认"
-        cancelText="取消"
+        visible={tempGroup.visible}
+        confirmLoading={loading}
+        onCancel={() => setShowTempGroup({visible: false, current: null})}
+        onOk={unbindTempGroup.bind(null, tempGroup.current!)}
       >
-        <p>Bla bla ...</p>
-        <p>Bla bla ...</p>
-        <p>Bla bla ...</p>
+        确定要解散该临时组吗？
       </Modal>
     </Container>
   );

@@ -69,6 +69,11 @@ declare global {
        * @returns {Promise<APIResponse>}
        */
       unbindTemporaryGroup(intercomGroupId: string): Promise<APIResponse>
+      /**
+       * 创建临时组
+       * @returns {Promise<APIResponse>}
+       */
+      createTemporaryGroup(): Promise<APIResponse>
     }
   }
 }

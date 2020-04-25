@@ -20,9 +20,7 @@ import Boundary from './boundary';
  * 动态加载高德地图
  * @type {(props: any) => any}
  */
-const UseMap: (
-  props: any
-) => any = useScript(`https://webapi.amap.com/maps?v=${config.map.mapVersion}&key=${config.map.mapKey}`, () =>
+const UseMap = useScript(`https://webapi.amap.com/maps?v=${config.map.mapVersion}&key=${config.map.mapKey}`, () =>
   import('./map')
 );
 

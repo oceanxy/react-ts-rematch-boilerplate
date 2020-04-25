@@ -10,7 +10,8 @@
 import map from './amap';
 import entity from './entity';
 import fence from './fence';
+import monitoringDispatch from './monitoringDispatch';
 import position from './position';
 import search from './search';
 
-export default {search, map, fence, entity, position};
+export default {search, map, fence, entity, position, monitoringDispatch};

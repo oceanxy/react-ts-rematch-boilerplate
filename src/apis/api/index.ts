@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: api接口请求配置
  * @Date: 2019-11-06 10:33:00
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-23 14:59:01
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-25 周六 15:19:36q
  */
 
 import { IFetchAPI } from '@/interfaces/api';
@@ -27,6 +27,10 @@ export type APIName =
   'fetchIntercomMembers' | // 获取任务组或临时组的成员
   'fetchTemporaryGroup' | // 获取临时组
   'unbindTemporaryGroup' | // 解散临时组
+  'fetchDispatchServer' | // 获取登录调度服务所需的参数
+  'createTemporaryGroup' | // 创建临时组
+  'removeMember' | // 删除临时组成员
+  'addMember' | // 新增临时组成员
   // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
   'fetchTestWebsocket' |
@@ -148,6 +152,22 @@ const apis: APIRequestConfig = {
   },
   unbindTemporaryGroup: {
     url: '/clbs/web/v1/dispatch/command/unbindTemporaryGroup',
+    method: EHTTPMethod.POST
+  },
+  fetchDispatchServer: {
+    url: '/clbs/web/v1/dispatch/command/dispatchLogin',
+    method: EHTTPMethod.POST
+  },
+  createTemporaryGroup: {
+    url: '/c',
+    method: EHTTPMethod.POST
+  },
+  removeMember: {
+    url: '/r',
+    method: EHTTPMethod.POST
+  },
+  addMember: {
+    url: '/a',
     method: EHTTPMethod.POST
   }
 };

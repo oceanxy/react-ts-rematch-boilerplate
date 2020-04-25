@@ -19,18 +19,59 @@
   }
 }
 
-.global-modal {
+.ant-modal.global-modal {
+  padding: 0;
+
   .ant-modal-content {
     background: none;
     color: #dbe7f5;
+    box-shadow: unset;
+
+    .ant-modal-close {
+      color: currentColor;
+      transition: all .3s cubic-bezier(.645, .045, .355, 1);
+
+      .ant-modal-close-x {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+      }
+
+      &:hover {
+        transform: scale(1.2);
+        color: #3b7caf;
+      }
+    }
+
 
     .ant-modal-header {
       color: currentColor;
-      background: none;
+      background: transparent;
+      border-bottom: 1px solid #213c5a;
+      padding: 6px 0;
 
-      .ant-modal-title{
+      .ant-modal-title {
         color: currentColor;
       }
     }
+
+    .ant-modal-body {
+      padding: 20px 10px;
+    }
+
+    .ant-modal-footer {
+      border-top: 1px solid #213c5a;
+      padding-bottom: 0;
+    }
+  }
+
+  .cancel-btn,
+  .okay-btn {
+    &.ant-btn {
+      height: 26px;
+      line-height: 24px;
+    }
+
+    @include btn;
   }
 }

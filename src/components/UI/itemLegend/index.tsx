@@ -9,7 +9,7 @@
 
 import Container from '@/components/UI/containerComp';
 import { eventTypeColor } from '@/models/home/eventModel/eventDetails';
-import React, { CSSProperties, MouseEvent, useEffect, useState } from 'react';
+import React, { CSSProperties, MouseEvent, ReactNode, useEffect, useState } from 'react';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 import './index.scss';
 
@@ -31,15 +31,17 @@ export enum ESeverity {
  * 图例组件接口
  */
 interface IItemLegend {
-  className?: string;
-  name: string; // 图例文字
-  nameStyled?: FlattenSimpleInterpolation; // 图例文字CSS样式
-  icon?: boolean; // 是否显示图标
+  className?: string
+  name: string // 图例文字
+  nameStyled?: FlattenSimpleInterpolation // 图例文字CSS样式
+  icon?: boolean // 是否显示图标
   iconColor?: string | ESeverity; // 图标颜色
-  shapeRadius?: number; // 图标半径
-  style?: CSSProperties; // 图例容器CSS样式
-  styled?: FlattenSimpleInterpolation; // 图例容器CSS样式
-  onClick?: (e: MouseEvent) => void;
+  iconPosition?: 'left' | 'right' // ICON显示与名称左侧还是右侧，默认左侧
+  customIcon?: ReactNode // 自定义Icon
+  shapeRadius?: number // 图标半径
+  style?: CSSProperties // 图例容器CSS样式
+  styled?: FlattenSimpleInterpolation // 图例容器CSS样式
+  onClick?: (e: MouseEvent) => void
 }
 
 /**
@@ -72,8 +74,9 @@ const StyledName = styled.span(
  * 图例组件
  */
 const ItemLegend = (props: IItemLegend) => {
-  const { className, icon: iconProps, onClick } = props;
+  const {className, icon: iconProps, iconPosition, customIcon, onClick} = props;
   const [icon, setIcon] = useState(true);
+  const Icon = customIcon ? customIcon : (<StyledShape {...props} className="legend-shape" />);
 
   useEffect(() => {
     setIcon(iconProps ?? true);
@@ -87,10 +90,11 @@ const ItemLegend = (props: IItemLegend) => {
       title={props.name}
       onClick={onClick}
     >
-      {icon ? <StyledShape {...props} className="legend-shape" /> : null}
+      {icon && (!iconPosition || iconPosition === 'left') ? Icon : null}
       <StyledName className="legend-name" {...props}>
         {props.name}
       </StyledName>
+      {icon && iconPosition === 'right' ? Icon : null}
     </Container>
   );
 };

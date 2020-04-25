@@ -46,7 +46,7 @@ const OperationTask = (props: Partial<ITaskOperationProps>) => {
   const {id, curActiveGroupType, name} = intercomGroupState!;
 
   /**
-   * 对讲
+   * 任务组对讲
    */
   const onIntercomClick = () => {
     // 检测是否有任务被选中且任务状态是否已完成
@@ -111,6 +111,43 @@ const OperationTask = (props: Partial<ITaskOperationProps>) => {
     }
   };
 
+  /**
+   * 个呼占位
+   */
+  const onIntercomCall = () => {
+    if (curActiveGroupType === CurActiveGroupType.Null) {
+      setIntercomGroupState!({
+        name: '实体（监控对象）名称',
+        id: 'ewfqwef',
+        curActiveGroupType: CurActiveGroupType.Entity
+      });
+    } else if (curActiveGroupType === CurActiveGroupType.Task) {
+      message.destroy();
+      message.warning((
+        <span>任务组（<span className="highlight"> {name} </span>）正在进行对讲，暂不能进行此操作！</span>
+      ));
+    } else if (curActiveGroupType === CurActiveGroupType.Temporary) {
+      message.destroy();
+      message.warning((
+        <span>临时组（<span className="highlight"> {name} </span>）正在进行对讲，暂不能进行此操作！</span>
+      ));
+    } else {
+      message.destroy();
+
+      if (id === data?.taskId) {
+        message.destroy();
+        message.info((
+          <span>当前监控对象（<span className="highlight"> {name} </span>）已激活对讲功能，请勿重复操作！</span>
+        ));
+      } else {
+        message.destroy();
+        message.warning((
+          <span>其他监控对象（<span className="highlight"> {name} </span>）正在进行对讲，暂不能进行此操作！</span>
+        ));
+      }
+    }
+  };
+
   return (
     <Container className="task-operation-container">
       <Icon
@@ -130,6 +167,11 @@ const OperationTask = (props: Partial<ITaskOperationProps>) => {
         disabled={!(data?.taskId && data.status === TaskStatus.Processing)}
         icon={IconSource.TASKCOMPLETE}
         onClick={onCompleteTaskClick}
+      />
+      <Icon
+        title="个呼占位"
+        icon={IconSource.INTERCOMCALL}
+        onClick={onIntercomCall}
       />
       {isShowEditTaskModal ? <EditTask /> : null}
       {isShowCompleteTaskModal ? <CompleteTask /> : null}
