@@ -3,9 +3,11 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 地图model
  * @Date: 2020-03-31 周二 17:03:31
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-31 周二 17:03:31
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-26 周日 14:25:31
  */
+
+import { store } from '@/store';
 
 /**
  * 地图model
@@ -13,10 +15,20 @@
  */
 const map: IAMapModel = {
   state: {
-    mapInstance: null
+    mapInstance: null,
+    mouseToolType: null,
+    callback: undefined
   },
   reducers: {
-    updateMapInstance: (state, mapInstance) => ({...state, mapInstance})
+    updateState: (state: IAMapState, payload: Partial<IAMapState>): IAMapState => ({
+      ...state,
+      ...payload
+    })
+  },
+  effects: {
+    setState(payload: Partial<IAMapState>): void {
+      store.dispatch.map.updateState(payload);
+    }
   }
 };
 

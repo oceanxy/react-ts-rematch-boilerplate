@@ -3,12 +3,12 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 接口响应数据结构
  * @Date: 2019-12-24 13:58:49
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-19 16:49:28
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-26 周日 17:36:39
  */
 
   // HTTP接口响应
-export interface APIResponse {
+export interface APIResponse<R = any> {
   /**
    * 服务器状态码 数字0:成功 其他：失败
    */
@@ -20,7 +20,7 @@ export interface APIResponse {
   /**
    * 服务器返回数据集
    */
-  data: any;
+  data: R;
 }
 
 // 轮询对象

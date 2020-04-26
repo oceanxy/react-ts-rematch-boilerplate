@@ -7,6 +7,8 @@
  * @LastModifiedTime: 2020-01-02 16:03:27
  */
 
+import Circle = AMap.Circle;
+
 export enum EHTTPMethod {
   POST = 'POST',
   GET = 'GET',
@@ -50,7 +52,17 @@ export interface IConfig {
    * 地图相关设置
    */
   map: {
+    /**
+     * 地图的key
+     */
     mapKey: string,
-    mapVersion: string
+    /**
+     * 地图版本
+     */
+    mapVersion: string,
+    /**
+     * 地图鼠标工具配置 目前只支持圆
+     */
+    mouseTool: Circle.Options
   } & AMap.Map.Options
 }

@@ -3,17 +3,26 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 高德地图POI搜索组件
  * @Date: 2020-03-31 周二 09:03:31
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-31 周二 09:03:31
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-26 周日 14:24:54
  */
 
 import React, { useEffect } from 'react';
 
-interface IMap {
-  updateMapInstance: (map: AMap.Map) => void;
+/**
+ * 高德地图Render Props
+ */
+interface IMapProps {
+  setState: IAMapModel['effects']['setState']
 }
 
-const Map = (props: IMap) => {
+/**
+ * 高德地图组件
+ * @param {IMapProps} props
+ * @returns {null}
+ * @constructor
+ */
+const Map = (props: IMapProps) => {
   useEffect(() => {
     const map = new AMap.Map('mapContainer', {
       viewMode: '3D',
@@ -25,7 +34,7 @@ const Map = (props: IMap) => {
       mapStyle: 'amap://styles/grey'
     });
 
-    props.updateMapInstance(map);
+    props.setState({mapInstance: map});
   }, []);
 
   return null;

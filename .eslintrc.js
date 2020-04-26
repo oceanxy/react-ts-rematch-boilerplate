@@ -18,7 +18,8 @@ module.exports = {
   'globals': {
     'window': true,
     'document': true,
-    'AMap': true
+    'AMap': true,
+    'hjMediaService': true
   },
   'extends': [
     // 'prettier',

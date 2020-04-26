@@ -30,6 +30,24 @@ declare global {
   }
 
   /**
+   * 创建临时组请求参数（平台）
+   */
+  interface ICreateTemporaryGroupRequest {
+    /**
+     * 临时组名称
+     */
+    temporaryGroup: string,
+    /**
+     * 对讲组id （第三方返回的对讲组ID）
+     */
+    intercomGroupId: string,
+    /**
+     * 临时组内人员id，逗号分隔
+     */
+    interlocutorIds: string
+  }
+
+  /**
    * 临时组状态
    */
   interface ITemporaryGroupState {
@@ -37,6 +55,35 @@ declare global {
      * 临时组数据列表
      */
     data: ITemporaryGroup[]
+    /**
+     * 临时组编辑框显示状态
+     */
+    isShowEditModal: boolean
+    /**
+     * 编辑时的回填信息
+     */
+    backFillInfo: {
+      /**
+       * 半径
+       */
+      radius?: number
+      /**
+       * 中心点
+       */
+      center?: AMap.LngLat
+      /**
+       * 边界值
+       */
+      bounds?: string
+      /**
+       * 圆心精度
+       */
+      longitude?: number
+      /**
+       * 圆心纬度
+       */
+      latitude?: number
+    }
   }
 
   /**
@@ -73,7 +120,7 @@ declare global {
        * 创建临时组
        * @returns {Promise<APIResponse>}
        */
-      createTemporaryGroup(): Promise<APIResponse>
+      createTemporaryGroup(reqPayload: ICreateTemporaryGroupRequest): Promise<APIResponse>
     }
   }
 }

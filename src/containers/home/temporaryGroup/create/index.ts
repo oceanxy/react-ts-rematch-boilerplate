@@ -11,11 +11,11 @@ import CreateTemporaryGroup from '@/components/home/temporaryGroup/create';
 import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: RootState) => ({});
 
-});
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
-  createTemporaryGroup: dispatch.temporaryGroup.createTemporaryGroup
+  setState: dispatch.temporaryGroup.setState,
+  setAMapState: dispatch.map.setState
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateTemporaryGroup);

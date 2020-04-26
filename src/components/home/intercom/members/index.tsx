@@ -107,34 +107,26 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
       }
       <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAdd} />
       <Modal
-        width={member.type === 'add' ? 200 : 300}
-        footer={member.type === 'add' ? null : undefined}
-        visible={member.visible}
+        visible={member.visible && member.type === 'remove'}
         confirmLoading={loading}
         onCancel={() => setMember({visible: false, type: null, current: null})}
         onOk={onChangeMember}
       >
-        {
-          member.type === 'remove' ?
-            <>确定从临时组中剔除成员（{member.current?.userName}）吗？</>
-            : (
-              <>
-                <Trigger
-                  name="圆形"
-                  className="hover inter-plat-temp-group-create-modal-item"
-                  width="100%"
-                  // onClick={createTempGroup.bind(null, tempGroup.current!)}
-                />
-                <Trigger
-                  name="矩形"
-                  className="hover inter-plat-temp-group-create-modal-item"
-                  width="100%"
-                  // onClick={createTempGroup.bind(null, tempGroup.current!)}
-                />
-              </>
-            )
-        }
-
+        确定从临时组中剔除成员（{member.current?.userName}）吗？
+      </Modal>
+      <Modal
+        width={200}
+        footer={null}
+        visible={member.visible && member.type === 'add'}
+        onCancel={() => setMember({visible: false, type: null, current: null})}
+        onOk={onChangeMember}
+      >
+        <Trigger
+          name="地图圆形圈选"
+          className="hover inter-plat-temp-group-create-modal-item"
+          width="100%"
+          // onClick={createTempGroup.bind(null, tempGroup.current!)}
+        />
       </Modal>
     </Container>
   );

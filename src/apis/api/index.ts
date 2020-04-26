@@ -31,6 +31,7 @@ export type APIName =
   'createTemporaryGroup' | // 创建临时组
   'removeMember' | // 删除临时组成员
   'addMember' | // 新增临时组成员
+  'fetchEntityByCircle' | // 按圆形搜索监控对象
   // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
   'fetchTestWebsocket' |
@@ -159,15 +160,19 @@ const apis: APIRequestConfig = {
     method: EHTTPMethod.POST
   },
   createTemporaryGroup: {
-    url: '/c',
+    url: '/clbs/web/v1/dispatch/command/addTemporaryGroup',
     method: EHTTPMethod.POST
   },
   removeMember: {
-    url: '/r',
+    url: '/clbs/web/v1/dispatch/command/removeTemporaryGroup',
     method: EHTTPMethod.POST
   },
   addMember: {
-    url: '/a',
+    url: '/clbs/web/v1/dispatch/command/insertTemporaryGroup',
+    method: EHTTPMethod.POST
+  },
+  fetchEntityByCircle: {
+    url: '/clbs/web/v1/dispatch/monitor/search/byCircleRegion',
     method: EHTTPMethod.POST
   }
 };

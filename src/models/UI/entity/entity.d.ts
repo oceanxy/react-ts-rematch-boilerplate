@@ -7,6 +7,7 @@
  * @LastModifiedTime: 2020-04-13 周一 14:16:31
  */
 
+import { APIResponse } from '@/interfaces/api/mock';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
@@ -17,36 +18,36 @@ declare global {
     /**
      * 监控对象ID
      */
-    monitorId: string;
+    monitorId: string
     /**
      * 监控对象名称
      */
-    monitorName: string;
+    monitorName: string
     /**
      * 监控对象类型
      * -1：全部 0：车；1：人；2：物；9：静态物资；10：调度员
      */
-    monitorType: -1| 0 | 1 | 2 | 9 | 10;
+    monitorType: -1 | 0 | 1 | 2 | 9 | 10
     /**
      * 所属分组名称
      */
-    assignmentName: string;
+    assignmentName: string
     /**
      * 设备号
      */
-    deviceNum: number;
+    deviceNum: number
     /**
      * 所属组织名称
      */
-    groupName: string;
+    groupName: string
     /**
      * SIM卡号
      */
-    simCardNum: number;
+    simCardNum: number
     /**
      * 对讲平台使用的监控对象ID
      */
-    userId: number | string;
+    userId: number | string
   }
 
   // 请求参数
@@ -54,19 +55,45 @@ declare global {
     /**
      * 监控对象名称关键字
      */
-    simpleQueryParam: string;
+    simpleQueryParam?: string
     /**
      * 起始记录 默认为0
      */
-    start?: number;
+    start?: number
     /**
      * 返回记录数 默认为10
      */
-    length?: number;
+    length?: number
     /**
      * 多个用逗号隔开, -1 全部 0：车 1 :人 2 :动态物品 9:静态物资 10:调度员
      */
-    supportMonitorType: -1 | 0 | 1 | 2 | 9 | 10;
+    supportMonitorType: -1 | 0 | 1 | 2 | 9 | 10
+  }
+
+  /**
+   * 按圆形搜索监控对象
+   */
+  interface IEntityByCircleRequest extends IEntityRequest {
+    /**
+     * 在/离线状态
+     */
+    onlineStatus?: -1 | 0 | 1
+    /**
+     * 半径 ，单位m
+     */
+    radius: number
+    /**
+     * 圆心经度
+     */
+    longitude: number
+    /**
+     * 圆心纬度
+     */
+    latitude: number
+    /**
+     * 分组ID
+     */
+    assignmentId?: string
   }
 
   /**
@@ -97,6 +124,7 @@ declare global {
     },
     effects: {
       fetchData(reqPayload: IEntityRequest): void
+      fetchDataByCircle(reqPayload?: IEntityByCircleRequest): Promise<APIResponse<{monitors: IEntity[]}>>
       setEntityId(id?: IEntityState['currentEntityId']): void
     }
   }

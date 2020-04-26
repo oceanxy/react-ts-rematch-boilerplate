@@ -8,6 +8,7 @@
  */
 
 import fetchApis from '@/apis';
+import { APIResponse } from '@/interfaces/api/mock';
 import { store } from '@/store';
 
 const defaultData: IEntity = {
@@ -52,6 +53,21 @@ const entity: IEntityModel = {
       }
 
       store.dispatch.entity.updateState(params);
+    },
+    async fetchDataByCircle(reqPayload): Promise<APIResponse<{monitors: IEntity[]}>> {
+      if (!reqPayload) {
+        const temporaryGroup = store.getState().temporaryGroup.backFillInfo;
+
+        reqPayload = {
+          supportMonitorType: -1,
+          onlineStatus: 1,
+          radius: temporaryGroup.radius!,
+          longitude: temporaryGroup.longitude!,
+          latitude: temporaryGroup.latitude!
+        };
+      }
+
+      return await fetchApis.fetchEntityByCircle(reqPayload);
     },
     setEntityId(id): void {
       store.dispatch.entity.updateState({currentEntityId: id || ''});

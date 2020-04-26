@@ -23,7 +23,11 @@ const config: IConfig = {
   // 地图相关配置
   map: {
     mapKey: '3018bf7f400b01e710642d798b80eaf1',
-    mapVersion: '1.4.15'
+    mapVersion: '1.4.15',
+    mouseTool: {
+      fillColor: '#00b0ff',
+      strokeColor: '#80d8ff'
+    }
   }
 };
 

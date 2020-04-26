@@ -17,7 +17,9 @@ import { store } from '@/store';
  */
 const temporaryGroup: ITemporaryGroupModel = {
   state: {
-    data: []
+    data: [],
+    isShowEditModal: false,
+    backFillInfo: {}
   },
   reducers: {
     updateState(state: ITemporaryGroupState, payload: Partial<ITemporaryGroupState>): ITemporaryGroupState {
@@ -43,11 +45,11 @@ const temporaryGroup: ITemporaryGroupModel = {
       // TODO 调用第三方解散临时组接口，然后再调用平台后台的接口，维护平台的后台数据
       return await fetchApis.unbindTemporaryGroup({intercomGroupId});
     },
-    async createTemporaryGroup() {
+    async createTemporaryGroup(reqPayload) {
       // TODO 调用第三方创建临时组接口
 
       // 维护平台后台临时组数据
-      const response = await fetchApis.createTemporaryGroup();
+      const response = await fetchApis.createTemporaryGroup(reqPayload);
 
       if (response.retCode === 0) {
         // 成功创建临时组后，刷新临时组数据
