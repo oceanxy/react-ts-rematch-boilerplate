@@ -12,20 +12,29 @@ import Icon, { IconSource } from '@/components/UI/iconComp';
 import Member from '@/components/UI/member';
 import Modal from '@/components/UI/modal';
 import Trigger from '@/components/UI/triggerComp';
+import { CurActiveGroupType } from '@/models/home/intercom/group';
 import { message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './index.scss';
 
 interface IIntercomMembersProps {
+  curTempGroupState: IIntercomGroupState
   data: IIntercomMembersState['data']
   isActiveIntercom: IIntercomState['active']
   fetchData: IIntercomMembersModel['effects']['fetchData']
   removeMember: IIntercomMembersModel['effects']['removeMember']
   addMember: IIntercomMembersModel['effects']['addMember']
+  setAMapState: IAMapModel['effects']['setState']
+  setTempGroupState: ITemporaryGroupModel['effects']['setState']
 }
 
 const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
-  const {data, isActiveIntercom, fetchData, removeMember, addMember} = props;
+  const {
+    data, isActiveIntercom, fetchData,
+    removeMember, addMember, setAMapState,
+    setTempGroupState, curTempGroupState
+  } = props;
+  const {name, curActiveGroupType} = curTempGroupState!;
   // 解除临时组绑定时，传递给询问对话框的状态
   const [member, setMember] = useState({
     visible: false,
@@ -48,6 +57,32 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
    */
   const handleAdd = () => {
     setMember({visible: true, type: 'add', current: null});
+  };
+
+  /**
+   * 激活高德地图鼠标工具
+   */
+  const loadAMapMouseTool = () => {
+    setMember({visible: false, type: 'add', current: null});
+    setAMapState!({
+      mouseToolType: 'circle',
+      callback: handleMouseTool
+    });
+  };
+
+  /**
+   * 处理地图鼠标事件绘制覆盖物后的回调事件
+   * @param type
+   * @param {AMap.Overlay} overlay 绘制的覆盖物对象
+   * @returns {Promise<void>}
+   */
+  const handleMouseTool = async (type: any, overlay: AMap.Circle) => {
+    const radius = overlay.getRadius();
+    const center = overlay.getCenter();
+
+    const backFillInfo: ITemporaryGroupState['backFillInfo'] = {radius, center, name};
+
+    setTempGroupState!({isShowEditModal: true, backFillInfo});
   };
 
   /**
@@ -112,7 +147,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
         onCancel={() => setMember({visible: false, type: null, current: null})}
         onOk={onChangeMember}
       >
-        确定从临时组中剔除成员（{member.current?.userName}）吗？
+        确定从{curActiveGroupType === CurActiveGroupType.Task ? '任务' : '临时'}组中剔除成员（{member.current?.userName}）吗？
       </Modal>
       <Modal
         width={200}
@@ -125,7 +160,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
           name="地图圆形圈选"
           className="hover inter-plat-temp-group-create-modal-item"
           width="100%"
-          // onClick={createTempGroup.bind(null, tempGroup.current!)}
+          onClick={loadAMapMouseTool}
         />
       </Modal>
     </Container>

@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 创建临时组组件
  * @Date: 2020-04-25 周六 14:58:52
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-25 周六 14:58:52
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-28 周二 14:05:09
  */
 
 import Container from '@/components/UI/containerComp';
@@ -14,7 +14,6 @@ import Modal from '@/components/UI/modal';
 import Trigger from '@/components/UI/triggerComp';
 import { EditTemporaryGroup } from '@/containers/home/temporaryGroup';
 import styledComponent from '@/styled';
-import { message } from 'antd';
 import React, { useState } from 'react';
 import './index.scss';
 
@@ -29,7 +28,7 @@ interface ICreateTempGroupProps {
 const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
   const {setAMapState, setState} = props;
   // 创建临时组时，传递给询问对话框的状态
-  const [tempGroup, setShowTempGroup] = useState({visible: false, current: null as ITemporaryGroup | null});
+  const [showTempGroupModal, setShowTempGroupModal] = useState({visible: false, current: null as ITemporaryGroup | null});
   // 解除绑定loading状态
   const [loading, setLoading] = useState(false);
 
@@ -37,14 +36,14 @@ const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
    * 处理点击‘创建临时组’按钮事件
    */
   const handleClick = () => {
-    setShowTempGroup({visible: true, current: null});
+    setShowTempGroupModal({visible: true, current: null});
   };
 
   /**
    * 激活高德地图鼠标工具
    */
   const loadAMapMouseTool = () => {
-    setShowTempGroup({visible: false, current: null});
+    setShowTempGroupModal({visible: false, current: null});
     setAMapState!({
       mouseToolType: 'circle',
       callback: handleMouseTool
@@ -86,9 +85,9 @@ const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
       <Modal
         width={200}
         title="请选择创建方式"
-        visible={tempGroup.visible}
+        visible={showTempGroupModal.visible}
         footer={null}
-        onCancel={() => setShowTempGroup({visible: false, current: null})}
+        onCancel={() => setShowTempGroupModal({visible: false, current: null})}
       >
         <Trigger
           name="地图圆形圈选"

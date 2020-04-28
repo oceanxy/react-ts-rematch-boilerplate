@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 临时组类型定义
  * @Date: 2020-04-23 周四 13:53:48
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-23 周四 13:53:48
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-28 周二 14:05:22
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
@@ -63,6 +63,10 @@ declare global {
      * 编辑时的回填信息
      */
     backFillInfo: {
+      /**
+       * 临时组名称
+       */
+      name?: string
       /**
        * 半径
        */

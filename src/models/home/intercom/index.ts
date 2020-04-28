@@ -1,7 +1,7 @@
 /**
  * @Author: Oceanxy
  * @Email: xieyang@zwlbs.com
- * @Description: 对讲model入口
+ * @Description: 对讲面板model、对讲model入口
  * @Date: 2020-04-21 周二 11:08:07
  * @LastModified: Oceanxy（xieyang@zwlbs.com）
  * @LastModifiedTime: 2020-04-21 周二 11:08:07

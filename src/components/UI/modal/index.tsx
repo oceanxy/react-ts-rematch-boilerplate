@@ -43,7 +43,6 @@ const Modal = (props: Partial<IModalProps>) => {
       cancelText="取消"
       className={`global-modal${className ? ` ${className}` : ''}`}
       maskClosable={false}
-      getContainer={false}
       okButtonProps={{
         ...okButtonProps,
         className: `okay-btn${okButtonProps?.className ? ` ${okButtonProps?.className}` : ''}`

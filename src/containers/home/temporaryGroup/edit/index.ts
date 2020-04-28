@@ -12,7 +12,7 @@ import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
-  isShowModal: state.temporaryGroup.isShowEditModal
+  state: state.temporaryGroup
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
