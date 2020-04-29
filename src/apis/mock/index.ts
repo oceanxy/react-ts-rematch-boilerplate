@@ -668,13 +668,18 @@ const mocks: Mocks = {
           'monitorName|1': [monitorName, () => Random.cname()],
           'monitorType|1': [0, 1, 2, 9, 10],
           'assignmentName|1': ['分组1', '分组2', '分组3', '分组4'],
-          deviceNum: Math.floor(Math.random() * 10000),
+          deviceNum: () => Math.floor(Math.random() * 10000),
           'groupName|1': ['组织1', '组织2', '组织3', '组织4'],
-          simCardNum: Math.floor(Math.random() * 10000),
-          userId: Random.integer(10000, 99999)
+          simCardNum: () => Math.floor(Math.random() * 10000),
+          userId: () => Random.integer(10000, 99999)
         }
       ]
     }
+  },
+  addLog: {
+    retCode: 0,
+    retMsg: '',
+    data: null
   }
 };
 

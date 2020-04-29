@@ -8,7 +8,9 @@
  */
 
 import fetchApis from '@/apis';
+import { LogType } from '@/models/UI/log';
 import { store } from '@/store';
+import { message } from 'antd';
 
 /**
  * 呼叫模式
@@ -385,6 +387,73 @@ const monitoringDispatch: IMonitoringDispatchModel = {
         hjMediaEngine.audioEngine.login();
       }
     },
+    startCalling(request: StartCallingRequest): void {
+      const {hjMediaEngine} = store.getState().monitoringDispatch;
+
+      if (hjMediaEngine) {
+        hjMediaEngine.audioEngine.startCalling(request);
+      } else {
+        message.error('第三方对讲服务未启动！');
+      }
+    },
+    stopCalling(): void {
+      const {hjMediaEngine} = store.getState().monitoringDispatch;
+
+      if (hjMediaEngine) {
+        hjMediaEngine.audioEngine.stopCalling();
+      } else {
+        message.error('第三方对讲服务已断开！');
+      }
+    },
+    exitGroup(request): void {
+      const {hjMediaEngine} = store.getState().monitoringDispatch;
+
+      if (hjMediaEngine) {
+        hjMediaEngine.audioEngine.exitGroup(request);
+      } else {
+        message.error('第三方对讲服务未启动！');
+      }
+    },
+    removeGroupMember(request: RemoveGroupMemberRequest): void {
+      const {hjMediaEngine} = store.getState().monitoringDispatch;
+
+      if (hjMediaEngine) {
+        hjMediaEngine.audioEngine.removeGroupMember(request);
+      } else {
+        message.error('第三方对讲服务未启动！');
+      }
+    },
+    removeTempGroupMember(request: RemoveTempGroupMemberRequest): void {
+      const {hjMediaEngine} = store.getState().monitoringDispatch;
+
+      if (hjMediaEngine) {
+        hjMediaEngine.audioEngine.removeTempGroupMember(request);
+      } else {
+        message.error('第三方对讲服务未启动！');
+      }
+    },
+    addTempGroupMember(request: AddTempGroupMemberRequest): void {
+      const {hjMediaEngine} = store.getState().monitoringDispatch;
+
+      if (hjMediaEngine) {
+        hjMediaEngine.audioEngine.addTempGroupMember(request);
+      } else {
+        message.error('第三方对讲服务未启动！');
+      }
+    },
+    createTempGroup(request: CreateTempGroupRequest): void {
+      const {hjMediaEngine} = store.getState().monitoringDispatch;
+
+      if (hjMediaEngine) {
+        hjMediaEngine.audioEngine.createTempGroup(request);
+      } else {
+        message.error('第三方对讲服务未启动！');
+      }
+    },
+    deleteTempGroup(tempGroupId: number): void {
+
+    },
+
     onLoginResponse(response) {
       if (response.result === LoginResultEnum.LOGIN_RESULT_SUCCESS) {
         // 设置登录状态
@@ -398,19 +467,51 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       // TODO 更新临时组数据
     },
     onCallingStartResponse(response): void {
-      // TODO 主呼开始的响应事件1
+      store.dispatch.log.addLog({
+        type: LogType.GroupCall,
+        id: store.getState().intercomGroup.id
+      });
     },
     onCallingStop(response): void {
-      // TODO 主呼停止事件处理
+      // TODO 主呼停止事件处理（非主动停止主呼时）
     },
-    onCreateTempGroupResponse(response): void {
-      // TODO 创建临时组事件
+    async onCreateTempGroupResponse(response) {
+      // 关闭创建临时组loading状态以及关闭创建临时组对话框
+      store.dispatch.temporaryGroup.setState({loading: false, isShowEditModal: false});
+
+      if (response.result === 0) {
+        // 获取所有成员ID
+        const ids = response.addGroupMemberResult.reduce((ids, member) => {
+          if (member.result === 0) {
+            ids.push(member.groupMemberMsId);
+          }
+
+          return ids;
+        }, <number[]> []).join(',');
+
+        // 维护平台后台临时组数据
+        const res = await fetchApis.createTemporaryGroup(<ICreateTemporaryGroupRequest> {
+          temporaryGroup: response.tempGroupName,
+          intercomGroupId: response.tempGroupId,
+          userIds: ids
+        });
+
+        message.destroy();
+        if (Number(res.retCode) === 0) {
+          // 成功创建临时组后，刷新临时组数据
+          store.dispatch.temporaryGroup.fetchData();
+          message.success('创建临时组成功！');
+        } else {
+          message.warning('创建临时组失败，请稍候再试！');
+        }
+      } else {
+        message.warning('创建临时组失败，请稍候再试！');
+      }
     },
     onTempGroupUpdate(response): void {
       // TODO 临时组更新
     },
     onAddTempGroupMemberResponse(response): void {
-      // TODO 添加临时组成员
     }
   }
 };

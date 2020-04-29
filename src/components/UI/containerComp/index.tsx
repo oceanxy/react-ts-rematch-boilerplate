@@ -82,7 +82,7 @@ const Container = (props: IContainerProps<any>) => {
     >
       {
         close ? (
-          <div title='退出对讲' className="global-container-close" onClick={onClose}><span /></div>
+          <div title="退出对讲" className="global-container-close" onClick={onClose}><span /></div>
         ) : null
       }
       {props.children}

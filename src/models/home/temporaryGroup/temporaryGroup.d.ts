@@ -40,11 +40,11 @@ declare global {
     /**
      * 对讲组id （第三方返回的对讲组ID）
      */
-    intercomGroupId: string,
+    intercomGroupId?: number,
     /**
-     * 临时组内人员id，逗号分隔
+     * 临时组内人员id（第三方返回的userId），逗号分隔
      */
-    interlocutorIds: string
+    userIds: string
   }
 
   /**
@@ -59,6 +59,10 @@ declare global {
      * 临时组编辑框显示状态
      */
     isShowEditModal: boolean
+    /**
+     * 创建时临时组时，按钮的loading状态
+     */
+    loading: boolean
     /**
      * 编辑时的回填信息
      */
@@ -124,7 +128,7 @@ declare global {
        * 创建临时组
        * @returns {Promise<APIResponse>}
        */
-      createTemporaryGroup(reqPayload: ICreateTemporaryGroupRequest): Promise<APIResponse>
+      createTemporaryGroup(reqPayload: ICreateTemporaryGroupRequest): void
     }
   }
 }

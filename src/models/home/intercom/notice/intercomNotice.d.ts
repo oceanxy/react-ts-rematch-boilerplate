@@ -11,13 +11,6 @@ import { ModelConfig } from '@rematch/core';
 
 declare global {
   /**
-   * 对讲通知请求参数
-   */
-  interface IIntercomNoticeRequest {
-
-  }
-
-  /**
    * 对讲通知state
    */
   interface IIntercomNoticeState {
@@ -48,9 +41,9 @@ declare global {
     effects: {
       /**
        * 请求服务端对讲成员数据
-       * @param {IIntercomNoticeRequest} reqPayload
+       * @param {SMSRequest} reqPayload
        */
-      sendData(reqPayload?: IIntercomNoticeRequest): void
+      sendData(reqPayload?: SMSRequest): void
       setState(payload: Partial<IIntercomNoticeState>): void
     }
   }

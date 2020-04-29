@@ -8,7 +8,7 @@
  */
 
 import Modal from '@/components/UI/modal';
-import { Button, Checkbox, Form, Input, message, Row } from 'antd';
+import { Button, Checkbox, Form, Input, Row } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { CheckboxValueType } from 'antd/es/checkbox/Group';
 import React, { useEffect, useState } from 'react';
@@ -32,11 +32,7 @@ interface IEditTaskProps {
  */
 const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   const {state, setState, createTemporaryGroup, fetchDataByCircle} = props;
-  const {isShowEditModal, backFillInfo: {name}} = state!;
-  /**
-   * 提交修改按钮的loading状态
-   */
-  const [loading, setLoading] = useState(false);
+  const {isShowEditModal, loading, backFillInfo: {name}} = state!;
   /**
    * antd hooks
    */
@@ -59,23 +55,18 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
    * @param values
    * @returns {Promise<void>}
    */
-  const onFinish = async (values: any) => {
+  const onFinish = (values: any) => {
     const reqPayload = {
-      temporaryGroup: '',
-      intercomGroupId: '',
-      interlocutorIds: ''
+      temporaryGroup: values.temporaryGroup,
+      userIds: values.interlocutorIds.join(',')
     };
 
-    setLoading(true);
-    const response = await createTemporaryGroup!(reqPayload);
-    setLoading(false);
-
-    message.destroy();
-    if (Number(response.retCode) === 0) {
-      message.success('创建临时组成功！');
-    } else {
-      message.warning('创建临时组失败，请稍候再试！');
-    }
+    // 开始创建临时组，进入loading状态
+    // 注意：因为第三方提供的API非直接返回创建状态，而是通过监听创建临时组事件来返回创建状态，
+    // 所以要到 IMonitoringDispatchModel > onCreateTempGroupResponse事件去关闭
+    // loading状态
+    setState!({loading: true});
+    createTemporaryGroup!(reqPayload);
   };
 
   /**
@@ -89,7 +80,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
    * 获取实体的id集合
    * @returns {string[]}
    */
-  const getEntityIds = () => tempEntities.map((entity) => entity.monitorId);
+  const getEntityIds = () => tempEntities.map((entity) => entity.userId);
 
   /**
    * 全选事件
@@ -109,15 +100,15 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
    * @param {CheckboxChangeEvent} e
    */
   const checkInvert = (e: CheckboxChangeEvent) => {
-    const allCheckedEntities = tempEntities.map((entity) => entity.monitorId);
+    const allCheckedEntities = tempEntities.map((entity) => entity.userId);
     const curCheckedEntities = form.getFieldValue('interlocutorIds');
-    const invertCheckedEntities = allCheckedEntities.reduce((invertCheckedEntities, entityId) => {
-      if (!curCheckedEntities.includes(entityId)) {
-        invertCheckedEntities.push(entityId);
+    const invertCheckedEntities = allCheckedEntities.reduce((invertCheckedEntities, userId) => {
+      if (!curCheckedEntities.includes(userId)) {
+        invertCheckedEntities.push(userId!);
       }
 
       return invertCheckedEntities;
-    }, [] as string[]);
+    }, [] as number[]);
 
     form.setFieldsValue({
       interlocutorIds: invertCheckedEntities
@@ -208,7 +199,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                   <Checkbox.Group onChange={listenersCheck}>
                     {
                       (getFieldValue('entities') || []).map((entity: IEntity, index: number) => (
-                        <Checkbox key={`temp-group-edit-modal-entity-${index}`} value={entity.monitorId}>
+                        <Checkbox key={`temp-group-edit-modal-entity-${index}`} value={entity.userId}>
                           {entity.monitorName}
                         </Checkbox>
                       ))

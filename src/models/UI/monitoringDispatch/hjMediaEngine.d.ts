@@ -11,6 +11,7 @@ import {
   CallingStartResultEnum,
   CallingStopCauseEnum,
   CallModeEnum,
+  GroupIDTypeEnum,
   LoginResultEnum,
   UserIDTypeEnum
 } from '@/models/UI/monitoringDispatch/index';
@@ -44,6 +45,41 @@ declare global {
      * 临时组成员用户ID列表
      */
     tempGroupMemberMsId: []
+  }
+
+  /**
+   * 开始主呼request
+   */
+  interface StartCallingRequest {
+    /**
+     * 呼叫模式，包括组呼,个呼,双工,全呼;
+     */
+    callMode: CallModeEnum
+    /**
+     * 呼叫对象ID类型
+     * 呼叫模式是组呼时，呼叫对象ID类型定义参考 GroupIDTypeEnum;
+     * 呼叫模式是个呼或者双工时，呼叫对象ID类型参考 UserIDTypeEnum;
+     * 呼叫模式是全呼时，呼叫对象ID类型为空
+     */
+    targetIdType?: GroupIDTypeEnum | UserIDTypeEnum
+    /**
+     * 呼叫对象ID;
+     * 呼叫模式是组呼时，呼叫对象ID是群组ID;
+     * 呼叫模式是个呼或者双工时，呼叫对象ID是用户ID;
+     * 呼叫模式是全呼时，呼叫对象ID为空
+     */
+    targetId?: number
+  }
+
+  /**
+   * 主呼停止事件处理
+   * 主呼停止事件是由服务器后台触发或者底层网络中断触发
+   */
+  interface StopCallingRequest {
+    /**
+     * 主呼停止原因
+     */
+    cause: CallingStopCauseEnum
   }
 
   /**
@@ -124,7 +160,7 @@ declare global {
        * 添加成员成功结果 0：成功
        */
       result: number
-    }
+    }[]
   }
 
   /**
@@ -263,9 +299,91 @@ declare global {
     readonly TAG: 'HiJoyEngine'
   }
 
-  interface VideoEngine {
-
+  /**
+   * 短消息发送对象列表
+   */
+  interface TargetObjectList {
+    /**
+     * 对象类型 0：群组 1：用户
+     */
+    objectType: 0 | 1
+    /**
+     * 对象ID（群组ID或者用户ID）
+     */
+    objectId: number
   }
+
+  /**
+   * SMS消息发送request
+   */
+  interface SMSRequest {
+    /**
+     * 短消息类型 0：普通短消息 1：广播短消息
+     */
+    smsType: 0 | 1
+    /**
+     * 短消息发送对象列表
+     */
+    targetObjectList: TargetObjectList[]
+    /**
+     * 短消息内容，UTF-8编码，长度不能超过256
+     */
+    smsContent: string
+  }
+
+  /**
+   * 退出群组request
+   */
+  interface ExitGroupRequest {
+    /**
+     * 退出群主ID
+     */
+    groupId: number
+  }
+
+  /**
+   * 删除群组成员request
+   */
+  interface RemoveGroupMemberRequest {
+    /**
+     * 群组ID
+     */
+    groupId: number
+    /**
+     * 群组成员用户ID
+     */
+    groupMemberMsId?: []
+  }
+
+  /**
+   * 删除临时组成员request
+   */
+  interface RemoveTempGroupMemberRequest {
+    /**
+     * 临时组ID
+     */
+    tempGroupId: number
+    /**
+     * 临时组成员用户ID列表
+     */
+    tempGroupMemberMsIdList?: []
+  }
+
+  /**
+   * 添加临时组成员request
+   */
+  interface AddTempGroupMemberRequest {
+    /**
+     * 临时组ID
+     */
+    tempGroupId: number
+    /**
+     * 临时组成员用户ID列表
+     */
+    tempGroupMemberMsIdList: string[]
+  }
+
+  interface VideoEngine {}
 
   /**
    *
@@ -290,18 +408,52 @@ declare global {
     onLogout(): void
 
     /**
+     * 开始主呼
+     */
+    startCalling(request: StartCallingRequest): void
+
+    /**
+     * 停止主呼
+     * 主动停止主呼时不会触发主呼停止事件
+     */
+    stopCalling(): void
+
+    /**
+     * 退出群组
+     */
+    exitGroup(request: ExitGroupRequest): void
+
+    /**
+     * 删除群组成员
+     * @param {RemoveGroupMemberRequest} request
+     */
+    removeGroupMember(request: RemoveGroupMemberRequest): void
+
+    /**
+     * 删除临时组成员
+     * @param {RemoveTempGroupMemberRequest} request
+     */
+    removeTempGroupMember(request: RemoveTempGroupMemberRequest): void
+
+    /**
+     * 添加临时组成员
+     * @param {AddTempGroupMemberRequest} request
+     */
+    addTempGroupMember(request: AddTempGroupMemberRequest): void
+
+    /**
      * 主呼发起响应事件
      * 开始主呼会触发主呼开始响应事件；
      * 双工主呼在触发双工主叫响铃事件后，如果双工被叫接听，会触发主呼开始响应事件；
-     * @param {CallingStartResponse} event
+     * @param {CallingStartResponse} response
      */
-    onCallingStartResponse(event: CallingStartResponse): void
+    onCallingStartResponse(response: CallingStartResponse): void
 
     /**
      * 主呼停止事件
-     * @param {{cause: CallingStopCauseEnum}} event
+     * @param {{cause: CallingStopCauseEnum}} response
      */
-    onCallingStop(event: CallingStopResponse): void
+    onCallingStop(response: CallingStopResponse): void
 
     onCalledStart(): void
 
@@ -316,10 +468,16 @@ declare global {
     onDuplexCalledRing(): void
 
     /**
-     * 创建临时组事件
+     * 创建临时组
      * @param {CreateTempGroupRequest} request
      */
     createTempGroup(request: CreateTempGroupRequest): void
+
+    /**
+     * 删除临时组
+     * @param {number} tempGroupId 要删除的临时组ID
+     */
+    deleteTempGroup(tempGroupId: number): void
 
     /**
      * 创建临时组响应事件
@@ -331,7 +489,7 @@ declare global {
      * 添加临时组成员响应事件
      * @returns {any}
      */
-    onAddTempGroupMemberResponse(): void
+    onAddTempGroupMemberResponse(response: AddTempGroupMemberResponse): void
 
     onInterceptedAudioStart(): void
 
@@ -349,10 +507,9 @@ declare global {
     onTempGroupUpdate(response: TempGroupUpdateResponse): void
 
     /**
-     * 添加临时组成员响应事件处理
-     * @param {AddTempGroupMemberResponse} response
+     * 添加监听对象响应事件处理
      */
-    onAddInterceptObjectResponse(response: AddTempGroupMemberResponse): void
+    onAddInterceptObjectResponse(): void
 
     onRtcOfferOrAnswer(): void
 
@@ -364,11 +521,15 @@ declare global {
      */
     onTempGroupList(response: {tempGroupList: TemporaryGroup[]}): void
 
+    /**
+     * 发送短消息/通知
+     * @param reqPayload
+     */
+    sendSMS(reqPayload: SMSRequest): void
+
     readonly TAG: 'HiJoyAudioEngine'
   }
 
-  /**
-   *
-   */
+  // eslint-disable-next-line no-redeclare
   const hjMediaService: HJMediaService;
 }

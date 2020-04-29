@@ -19,7 +19,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   fetchData: dispatch.temporaryGroup.fetchData,
-  setState: dispatch.intercomGroup.setState,
+  setIntercomGroupState: dispatch.intercomGroup.setState,
   unbindTemporaryGroup: dispatch.temporaryGroup.unbindTemporaryGroup
 });
 

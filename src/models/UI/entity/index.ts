@@ -19,7 +19,7 @@ const defaultData: IEntity = {
   deviceNum: 0,
   groupName: '',
   simCardNum: 0,
-  userId: ''
+  userId: undefined
 };
 
 /**

@@ -4,10 +4,11 @@
  * @Description: 监控调度类型定义
  * @Date: 2020-04-24 周五 13:42:22
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-25 周六 14:18:50
+ * @LastModifiedTime: 2020-04-28 周二 15:22:54
  */
 
-import { CallModeEnum, UserIDTypeEnum } from '@/models/UI/monitoringDispatch/index';
+import { StartCallingRequest } from '@/models/UI/monitoringDispatch/hjMediaEngine';
+import { CallModeEnum } from '@/models/UI/monitoringDispatch/index';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
@@ -117,7 +118,7 @@ declare global {
     /**
      * 第三方调度服务引擎
      */
-    hjMediaEngine: HiJoyEventEngine | null,
+    hjMediaEngine: HiJoyEngine | null,
     /**
      * 当前呼叫模式
      */
@@ -163,6 +164,49 @@ declare global {
        */
       login(): void
       /**
+       * 开始主呼
+       */
+      startCalling(request: StartCallingRequest): void
+      /**
+       * 停止主呼
+       * 主动停止主呼时不会触发主呼停止事件
+       */
+      stopCalling(): void
+      /**
+       * 退出群组
+       */
+      exitGroup(request: ExitGroupRequest): void
+      /**
+       * 删除群组成员
+       * @param {RemoveGroupMemberRequest} request
+       */
+      removeGroupMember(request: RemoveGroupMemberRequest): void
+
+      /**
+       * 删除临时组成员
+       * @param {RemoveTempGroupMemberRequest} request
+       */
+      removeTempGroupMember(request: RemoveTempGroupMemberRequest): void
+
+      /**
+       * 添加临时组成员
+       * @param {AddTempGroupMemberRequest} request
+       */
+      addTempGroupMember(request: AddTempGroupMemberRequest): void
+
+      /**
+       * 创建临时组
+       * @param {CreateTempGroupRequest} request
+       */
+      createTempGroup(request: CreateTempGroupRequest): void
+
+      /**
+       * 删除临时组
+       * @param {number} tempGroupId 要删除的临时组ID
+       */
+      deleteTempGroup(tempGroupId: number): void
+
+      /**
        * 登录响应事件
        * @param {LoginResponse} response
        */
@@ -175,26 +219,27 @@ declare global {
        * 调度服务临时组列表事件
        * 在登陆成功后，对讲服务会推送临时组列表信息给用户
        */
-      onTempGroupList(event: {tempGroupList: TemporaryGroup[]}): void
+      onTempGroupList(response: {tempGroupList: TemporaryGroup[]}): void
       /**
        * 主呼响应事件
        * 开始主呼会触发主呼开始响应事件；
        * 双工主呼在触发双工主叫响铃事件后，如果双工被叫接听，会触发主呼开始响应事件；
        */
-      onCallingStartResponse(event: CallingStartResponse): void
+      onCallingStartResponse(response: CallingStartResponse): void
       /**
        * 主呼停止事件
        */
-      onCallingStop(event: CallingStopResponse): void
+      onCallingStop(response: CallingStopResponse): void
       /**
        * 创建临时组响应事件
+       * 主动停止主呼时不会触发主呼停止事件
        */
-      onCreateTempGroupResponse(event: CreateTempGroupResponse): void
+      onCreateTempGroupResponse(response: CreateTempGroupResponse): void
       /**
        * 临时组更新事件
        * 在其它用户创建或者删除临时组后，对讲服务会推送新的临时组信息
        */
-      onTempGroupUpdate(event: TempGroupUpdateResponse): void
+      onTempGroupUpdate(response: TempGroupUpdateResponse): void
       /**
        * 添加临时组成员响应事件
        * @param {AddTempGroupMemberResponse} response

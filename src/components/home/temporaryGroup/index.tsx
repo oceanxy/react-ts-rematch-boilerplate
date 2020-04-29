@@ -20,7 +20,7 @@ interface ITemporaryGroupProps {
   data: ITemporaryGroupState['data']
   intercomGroupState: IIntercomGroupState
   fetchData: ITemporaryGroupModel['effects']['fetchData']
-  setState: IIntercomGroupModel['effects']['setState']
+  setIntercomGroupState: IIntercomGroupModel['effects']['setState']
   unbindTemporaryGroup: ITemporaryGroupModel['effects']['unbindTemporaryGroup']
 }
 
@@ -28,7 +28,10 @@ interface ITemporaryGroupProps {
  * 临时组组件
  */
 const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
-  const {data, fetchData, intercomGroupState, setState, unbindTemporaryGroup} = props;
+  const {
+    data, fetchData, intercomGroupState,
+    setIntercomGroupState, unbindTemporaryGroup
+  } = props;
   const {id, curActiveGroupType, name} = intercomGroupState!;
   // 解除临时组绑定时，传递给询问对话框的状态
   const [tempGroup, setShowTempGroup] = useState({visible: false, current: null as ITemporaryGroup | null});
@@ -41,7 +44,7 @@ const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
    */
   const onClick = (tempGroup: ITemporaryGroup) => {
     if (curActiveGroupType === CurActiveGroupType.Null) {
-      setState!({
+      setIntercomGroupState!({
         name: tempGroup.name,
         id: tempGroup.intercomGroupId,
         curActiveGroupType: CurActiveGroupType.Temporary
@@ -89,7 +92,7 @@ const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
 
       // 如果解散临时组时，该临时组的对讲面板处于激活状态，则清空该临时组的对讲面板的所有状态
       if (id === tempGroup.intercomGroupId) {
-        setState!({name: '', id: '', curActiveGroupType: CurActiveGroupType.Null});
+        setIntercomGroupState!({name: '', id: '', curActiveGroupType: CurActiveGroupType.Null});
       }
     } else {
       message.success(`未能解散临时组（${tempGroup.name}），请稍后再试。`);
@@ -114,7 +117,7 @@ const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
                 name={tempGroup.name}
                 type={ETriggerType.CLOSE}
                 active={tempGroup.intercomGroupId === id}
-                triggerTitle='解散临时组'
+                triggerTitle="解散临时组"
                 onClick={onClick.bind(null, tempGroup)}
                 onTriggerClick={() => setShowTempGroup({visible: true, current: tempGroup})}
               />

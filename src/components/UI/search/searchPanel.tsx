@@ -79,7 +79,7 @@ function handleSearchPanelElement(searchCondition: SearchCondition, data?: Searc
             <li className="inter-plat-search-display-item" key={`monitor-item-${index}`}>
               <Icon
                 text={item.monitorName}
-                icon={monitorTypeIcon[item.monitorType] as IconSource}
+                icon={monitorTypeIcon[item.monitorType!] as IconSource}
                 iconHover={monitorTypeIcon[`${item.monitorType}_hover`] as IconSourceHover}
               />
             </li>

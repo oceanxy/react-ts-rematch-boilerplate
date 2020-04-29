@@ -19,7 +19,8 @@ const temporaryGroup: ITemporaryGroupModel = {
   state: {
     data: [],
     isShowEditModal: false,
-    backFillInfo: {}
+    backFillInfo: {},
+    loading: false
   },
   reducers: {
     updateState(state: ITemporaryGroupState, payload: Partial<ITemporaryGroupState>): ITemporaryGroupState {
@@ -39,24 +40,23 @@ const temporaryGroup: ITemporaryGroupModel = {
       store.dispatch.temporaryGroup.updateState(payload);
     },
     async unbindTemporaryGroup(intercomGroupId: string): Promise<APIResponse> {
+      // 调用第三方解散临时组接口
+      store.dispatch.monitoringDispatch.deleteTempGroup();
+
+      // 调用平台后台的接口，维护平台的后台数据
+      const response = await fetchApis.unbindTemporaryGroup({intercomGroupId});
+
       // 成功解散临时组后，刷新临时组数据
       store.dispatch.temporaryGroup.fetchData();
 
-      // TODO 调用第三方解散临时组接口，然后再调用平台后台的接口，维护平台的后台数据
-      return await fetchApis.unbindTemporaryGroup({intercomGroupId});
+      return response;
     },
     async createTemporaryGroup(reqPayload) {
-      // TODO 调用第三方创建临时组接口
-
-      // 维护平台后台临时组数据
-      const response = await fetchApis.createTemporaryGroup(reqPayload);
-
-      if (response.retCode === 0) {
-        // 成功创建临时组后，刷新临时组数据
-        store.dispatch.temporaryGroup.fetchData();
-      }
-
-      return response;
+      // 调用第三方创建临时组接口
+      store.dispatch.monitoringDispatch.createTempGroup({
+        tempGroupName: reqPayload.temporaryGroup,
+        tempGroupMemberMsIdList: reqPayload.userIds.split(',')
+      } as CreateTempGroupRequest);
     }
   }
 };

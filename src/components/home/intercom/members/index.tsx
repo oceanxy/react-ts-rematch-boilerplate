@@ -39,17 +39,20 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
   const [member, setMember] = useState({
     visible: false,
     type: null as 'add' | 'remove' | null,
-    current: null as IIntercomMember | null
+    current: null as IEntity | null
   });
   // loading状态
   const [loading, setLoading] = useState(false);
 
   /**
    * 处理删除成员事件
-   * @param {IIntercomMember} member
+   * @param {IEntity} member
    */
-  const handleRemove = (member: IIntercomMember) => {
-    setMember({visible: true, type: 'remove', current: member});
+  const handleRemove = (member: IEntity) => {
+    // 只有临时组能踢人
+    if (curTempGroupState?.curActiveGroupType === CurActiveGroupType.Temporary) {
+      setMember({visible: true, type: 'remove', current: member});
+    }
   };
 
   /**
@@ -92,7 +95,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
   const onChangeMember = async () => {
     if (member.type === 'remove') {
       setLoading(true);
-      const response = await removeMember!();
+      const response = await removeMember!(member.current!);
       setLoading(false);
 
       message.destroy();
@@ -102,17 +105,15 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
         message.success('剔除成员失败， 请稍后再试！');
       }
     } else if (member.type === 'add') {
-      // TODO 调用高德地图框选范围API
-
       setLoading(true);
-      const response = await addMember!();
+      const response = await addMember!(member.current!);
       setLoading(false);
 
       message.destroy();
       if (response.retCode === 0) {
-        message.success(`已成功剔除成员：（${member.current?.userName}）`);
+        message.success('添加成员成功');
       } else {
-        message.success('剔除成员失败， 请稍后再试！');
+        message.success('添加成员失败， 请稍后再试！');
       }
     }
 
@@ -133,14 +134,19 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
             <Member
               key={`inter-plat-intercom-member-${index}`}
               title={member.userName}
-              name={member.userName}
+              name={member.userName!}
               online={member.audioOnlineStatus}
               onClick={handleRemove.bind(null, member)}
             />
           );
         }) ?? null
       }
-      <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAdd} />
+      {
+        // 只有临时组能加人
+        curTempGroupState?.curActiveGroupType === CurActiveGroupType.Temporary ? (
+          <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAdd} />
+        ) : null
+      }
       <Modal
         visible={member.visible && member.type === 'remove'}
         confirmLoading={loading}

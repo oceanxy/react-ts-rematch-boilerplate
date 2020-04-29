@@ -1,4 +1,5 @@
 import LngLat = AMap.LngLat;
+import moment from 'moment';
 
 const headElement = document.body || document.getElementsByTagName('body')[0];
 const _importedScript: {[src: string]: true} = {};

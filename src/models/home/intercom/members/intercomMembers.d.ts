@@ -26,50 +26,31 @@ declare global {
   }
 
   /**
-   * 对讲成员
+   * 临时组拉人request
    */
-  interface IIntercomMember {
+  interface IIntercomAddMembersRequest {
     /**
-     * 对讲成员在线状态 1:在线 ，0：不在线
+     * 对讲组id
      */
-    audioOnlineStatus: 0 | 1
+    intercomGroupId: IIntercomGroupState['id']
     /**
-     * 对讲成员名称
+     * 对讲对象id 逗号分隔
      */
-    userName: string
-    /**
-     * 设备类型 0：普通对讲设备 1：调度员 2：Ⅱ类账号
-     */
-    type: 0 | 1 | 2
-    /**
-     * 用户ID
-     */
-    userId: number | null
-    /**
-     * 设备号
-     */
-    deviceId: string
-    /**
-     * 型号名称
-     */
-    modelName: string
+    interlocutorIds: IEntity['monitorId']
+  }
 
-    // sensorAbility: 0
-    // sensorOnlineStatus: 0
-    // defaultGroupId: 4294947295
-    // isApp: 0
-    // gpsFunction: 1
-    // fenceEnable: 0
-    // patrolEnable: 0
-    // videoOnlineStatus: 0
-    // beStunned: 0
-    // videoFunction: 0
-    // iconSkin: string
-    // gisAbility: 0
-    // audioAbility: 1
-    // custId: 94
-    // userNumber: 93446
-    // locatestatus:
+  /**
+   * 临时组踢人request
+   */
+  interface IIntercomRemoveMembersRequest {
+    /**
+     * 对讲组id
+     */
+    intercomGroupId: IIntercomGroupState['id']
+    /**
+     * 对讲对象id
+     */
+    interlocutorId: IEntity['monitorId']
   }
 
   /**
@@ -79,7 +60,7 @@ declare global {
     /**
      * 对讲成员数据集
      */
-    data: IIntercomMember[]
+    data: IEntity[]
   }
 
   /**
@@ -106,8 +87,8 @@ declare global {
        * 删除成员
        * @returns {Promise<APIResponse>}
        */
-      removeMember(): Promise<APIResponse>
-      addMember(): Promise<APIResponse>
+      removeMember(member: IEntity): Promise<APIResponse>
+      addMember(member: IEntity): Promise<APIResponse>
     }
   }
 }

@@ -7,7 +7,9 @@
  * @LastModifiedTime: 2020-04-23 周四 10:42:05
  */
 
+import { CurActiveGroupType } from '@/models/home/intercom/group';
 import { store } from '@/store';
+import { message } from 'antd';
 
 const notice: IIntercomNoticeModel = {
   state: {
@@ -24,21 +26,36 @@ const notice: IIntercomNoticeModel = {
   },
   effects: {
     async sendData(reqPayload) {
-      if (!reqPayload) {
-        const state = store.getState();
+      const state = store.getState();
+      const {
+        monitoringDispatch: {
+          hjMediaEngine
+        },
+        intercomNotice: {value},
+        intercomGroup: {curActiveGroupType, intercomId}
+      } = state;
 
+      if (!reqPayload) {
         reqPayload = {
-          // TODO 以下notice字段为临时占位，根据实际情况修改
-          notice: state.intercomNotice.value
+          smsType: 0,
+          smsContent: value,
+          targetObjectList: [{
+            objectType: curActiveGroupType === CurActiveGroupType.Entity ? 1 : 0,
+            objectId: intercomId
+          }]
         };
       }
 
-      console.log('调用第三方发送消息接口');
-      // TODO 对接第三方对讲通知发送接口
-      // const response = await fetchApis.fetchIntercomMembers(reqPayload);
-      // store.dispatch.intercomMembers.updateState({data: response.data.interlocutorMemberList});
+      // 检查第三方引擎是否初始化
+      if (hjMediaEngine) {
+        hjMediaEngine.audioEngine.sendSMS(reqPayload);
+        // 至开发时，第三方未提供发送消息的返回以及发送消息的事件监听，故不能获取发送消息后的状态（是否发送成功等）
+        message.success('通知已发送！');
+      } else {
+        message.error('第三方对讲服务未启动');
+      }
 
-      // TODO 成功发送消息之后，关闭消息框
+      // 成功发送消息之后，退出消息编辑框模块
       store.dispatch.intercomNotice.updateState({active: false, value: ''});
     },
     setState(payload) {
