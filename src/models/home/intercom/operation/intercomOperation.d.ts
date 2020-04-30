@@ -7,6 +7,7 @@
  * @LastModifiedTime: 2020-04-29 周三 11:30:40
  */
 
+import { CallModeEnum } from '@/models/UI/monitoringDispatch';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
@@ -17,14 +18,19 @@ declare global {
   interface IIntercomOperationModel extends ModelConfig {
     effects: {
       /**
-       * 组呼
+       * 主呼 （注意不是组呼，主呼包含组呼、个呼、双工等模式）
+       * @param {CallModeEnum} callMode
        */
-      intercomGroupCall(request?: StartCallingRequest): void
+      intercomGroupCall(callMode: CallModeEnum): void
       /**
-       * 停止组呼
+       * 停止主呼
        * 主动停止主呼时不会触发主呼停止事件
        */
       stopIntercomGroupCall(): void
+      /**
+       * 实体（监控对象）禁言、解除禁言
+       */
+      entityControl(request?: RemoteControlMsRequest): void
     }
   }
 }

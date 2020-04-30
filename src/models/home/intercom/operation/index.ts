@@ -7,31 +7,42 @@
  * @LastModifiedTime: 2020-04-21 周二 11:14:41
  */
 
-import { CallModeEnum, GroupIDTypeEnum } from '@/models/UI/monitoringDispatch';
+import { CallModeEnum, ControlCmd, GroupIDTypeEnum, UserIDTypeEnum } from '@/models/UI/monitoringDispatch';
 import { store } from '@/store';
 
 const operation: IIntercomOperationModel = {
   state: {},
   reducers: {},
   effects: {
-    async intercomGroupCall(request: StartCallingRequest) {
+    async intercomGroupCall(callMode: CallModeEnum) {
       const state = store.getState();
       const {
         intercomGroup: {intercomId}
       } = state;
 
-      if (!request) {
-        request = {
-          callMode: CallModeEnum.GROUP_CALL_MODE,
-          targetIdType: GroupIDTypeEnum.GROUP_ID_TYPE_ID,
-          targetId: intercomId
-        };
-      }
+      const request = {
+        callMode: callMode,
+        targetIdType: callMode === CallModeEnum.GROUP_CALL_MODE ?
+          GroupIDTypeEnum.GROUP_ID_TYPE_ID :
+          UserIDTypeEnum.USER_ID_TYPE_ID,
+        targetId: intercomId
+      };
 
       store.dispatch.monitoringDispatch.startCalling(request);
     },
     async stopIntercomGroupCall() {
       store.dispatch.monitoringDispatch.stopCalling();
+    },
+    entityControl(request: RemoteControlMsRequest): void {
+      // TODO 获取当前监控对象ID
+      if (!request) {
+        request = {
+          controlCmd: ControlCmd.BAN,
+          targetMsId: 0
+        };
+      }
+
+      store.dispatch.monitoringDispatch.remoteControlMs(request);
     }
   }
 };

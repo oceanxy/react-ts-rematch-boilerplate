@@ -10,7 +10,7 @@
 import {
   CallingStartResultEnum,
   CallingStopCauseEnum,
-  CallModeEnum,
+  CallModeEnum, ControlCmd,
   GroupIDTypeEnum,
   LoginResultEnum,
   UserIDTypeEnum
@@ -383,6 +383,21 @@ declare global {
     tempGroupMemberMsIdList: number[]
   }
 
+  /**
+   * 远程控制用户
+   * 遥晕（禁言）、遥醒（解除禁言）、遥毙（）
+   */
+  interface RemoteControlMsRequest {
+    /**
+     * 控制命令 0：遥晕 1：遥醒 2：遥毙
+     */
+    controlCmd: ControlCmd
+    /**
+     * 对象用户ID
+     */
+    targetMsId: number
+  }
+
   interface VideoEngine {}
 
   /**
@@ -440,6 +455,12 @@ declare global {
      * @param {AddTempGroupMemberRequest} request
      */
     addTempGroupMember(request: AddTempGroupMemberRequest): void
+
+    /**
+     * 远程控制用户 遥晕（禁言）、遥醒（解除禁言）、遥毙（）
+     * @param {RemoteControlMsRequest} request
+     */
+    remoteControlMs(request: RemoteControlMsRequest): void
 
     /**
      * 主呼发起响应事件

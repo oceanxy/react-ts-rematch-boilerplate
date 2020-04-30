@@ -10,6 +10,7 @@
 import Container from '@/components/UI/containerComp';
 import Icon, { iconName, IconSource } from '@/components/UI/iconComp';
 import { CurActiveGroupType } from '@/models/home/intercom/group';
+import { CallModeEnum, ControlCmd } from '@/models/UI/monitoringDispatch';
 import moment from 'moment';
 import React, { useState } from 'react';
 import Timing from '../timing';
@@ -32,18 +33,29 @@ interface IIntercomOperationProps {
  * @constructor
  */
 const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
+  // 监控对象是否被禁言
+  const isBan = false;
+
   const {curActiveGroupType, intercomNoticeState, intercomNoticeDispatch, dispatches} = props;
   const {active, value} = intercomNoticeState!;
   const {setState, sendData} = intercomNoticeDispatch!;
-  const {intercomGroupCall, stopIntercomGroupCall} = dispatches!;
+  const {intercomGroupCall, stopIntercomGroupCall, entityControl} = dispatches!;
   /**
    * 计时状态
    */
   const [timing, setTiming] = useState(false);
   /**
-   * 组呼状态
+   * 个呼、组呼状态
    */
   const [intercomCallProcessing, setIntercomCallProcessing] = useState(false);
+  /**
+   * 电话状态
+   */
+  const [callProcessing, setCallProcessing] = useState(false);
+  /**
+   * 当前监控对象禁言状态
+   */
+  const [ban, setBan] = useState(isBan);
 
   /**
    * 对讲通知组件状态控制
@@ -61,13 +73,25 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   };
 
   /**
-   * 组呼
+   * 处理个呼、组呼、电话（双工）
    * @constructor
    */
-  const onIntercomGroupCall = () => {
+  const handleCallModel = (callMode: CallModeEnum) => {
+    if (callMode === CallModeEnum.DUPLEX_CALL_MODE) {
+      onCall();
+    } else {
+      onIntercomGroupCall(callMode);
+    }
+  };
+
+  /**
+   * 组呼、个呼
+   * @param {CallModeEnum} callMode
+   */
+  const onIntercomGroupCall = (callMode: CallModeEnum) => {
     if (!intercomCallProcessing) {
       setIntercomCallState(true);
-      intercomGroupCall();
+      intercomGroupCall(callMode);
     } else {
       setIntercomCallState(false);
       stopIntercomGroupCall();
@@ -75,7 +99,33 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   };
 
   /**
-   * 设置组呼状态
+   * 电话
+   */
+  const onCall = () => {
+    if (!callProcessing) {
+      setTiming(true);
+      setCallProcessing(true);
+      intercomGroupCall(CallModeEnum.DUPLEX_CALL_MODE);
+    } else {
+      setTiming(false);
+      setCallProcessing(false);
+      stopIntercomGroupCall();
+    }
+  };
+
+  /**
+   * 禁言/解除禁言
+   */
+  const onBan = () => {
+    entityControl({
+      controlCmd: ban ? ControlCmd.LIFT_BAN : ControlCmd.BAN,
+      targetMsId: 0 // 监控对象ID
+    });
+    setBan(!ban);
+  };
+
+  /**
+   * 设置个呼、组呼、电话状态
    * @param {boolean} state
    */
   const setIntercomCallState = (state: boolean) => {
@@ -99,6 +149,7 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
    */
   const buttons = () => {
     if (active) {
+      // 通知面板按钮
       return (<>
         <Icon
           icon={IconSource.RETURN}
@@ -113,20 +164,38 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
         />
       </>);
     } else {
-      if (curActiveGroupType === CurActiveGroupType.Task || curActiveGroupType === CurActiveGroupType.Temporary) {
+      if (curActiveGroupType !== CurActiveGroupType.Null) {
         return (<>
           <Icon
             icon={!intercomCallProcessing ? IconSource.INTERCOMCALL : IconSource.INTERCOMCALLING}
-            onClick={onIntercomGroupCall}
-            title={!intercomCallProcessing ? '组呼' : '停止组呼'}
+            onClick={handleCallModel.bind(
+              null,
+              curActiveGroupType === CurActiveGroupType.Entity ?
+                CallModeEnum.INDIVIDUAL_CALL_MODE :
+                CallModeEnum.GROUP_CALL_MODE
+            )}
+            title={
+              intercomCallProcessing ?
+                '停止' :
+                curActiveGroupType === CurActiveGroupType.Entity ? '个呼' : '组呼'
+            }
+            disabled={callProcessing}
           />
-          <Icon icon={IconSource.NOTICE} onClick={onNotice.bind(null, true)} title="通知" />
-        </>);
-      } else if (curActiveGroupType === CurActiveGroupType.Entity) {
-        return (<>
-          <Icon icon={IconSource.INTERCOMCALL} title="个呼" />
-          <Icon icon={IconSource.CALL} title="电话" />
-          <Icon icon={IconSource.FORBIDDEN} title="禁言" />
+          {
+            curActiveGroupType === CurActiveGroupType.Entity ? (<>
+              <Icon
+                icon={callProcessing ? IconSource.HANGUP : IconSource.CALL}
+                onClick={handleCallModel.bind(null, CallModeEnum.DUPLEX_CALL_MODE)}
+                title={callProcessing ? '挂断' : '电话'}
+                disabled={intercomCallProcessing}
+              />
+              <Icon
+                icon={ban ? IconSource.BANNED : IconSource.BAN}
+                onClick={onBan}
+                title={ban ? '解除禁言' : '禁言'}
+              />
+            </>) : null
+          }
           <Icon icon={IconSource.NOTICE} onClick={onNotice.bind(null, true)} title="通知" />
         </>);
       }

@@ -60,6 +60,15 @@ export enum UserIDTypeEnum {
 }
 
 /**
+ * 控制监控对象
+ * 控制命令 0：遥晕 1：遥醒 2：遥毙
+ */
+export enum ControlCmd {
+  BAN = 0,
+  LIFT_BAN = 1
+}
+
+/**
  * 群组ID类型
  */
 export enum GroupIDTypeEnum {
@@ -465,6 +474,23 @@ const monitoringDispatch: IMonitoringDispatchModel = {
         message.error('第三方对讲服务未启动！');
       }
     },
+    remoteControlMs(request: RemoteControlMsRequest): void {
+      const {hjMediaEngine} = store.getState().monitoringDispatch;
+
+      if (hjMediaEngine) {
+        hjMediaEngine.audioEngine.remoteControlMs(request);
+
+        // 记录日志
+        store.dispatch.log.addLog({
+          type: request.controlCmd === ControlCmd.BAN ?
+            LogType.Ban :
+            LogType.LiftBan,
+          id: store.getState().intercomGroup.id
+        });
+      } else {
+        message.error('第三方对讲服务未启动！');
+      }
+    },
 
     onLoginResponse(response) {
       if (response.result === LoginResultEnum.LOGIN_RESULT_SUCCESS) {
@@ -479,10 +505,31 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       // TODO 更新临时组数据
     },
     onCallingStartResponse(response): void {
+      let type = null;
+
+      switch (response.callMode) {
+        case CallModeEnum.GROUP_CALL_MODE:
+          type = LogType.GroupCall;
+          break;
+        case CallModeEnum.DUPLEX_CALL_MODE:
+          type = LogType.Call;
+          break;
+        case CallModeEnum.INDIVIDUAL_CALL_MODE:
+        default:
+          type = LogType.EntityCall;
+          break;
+      }
+
+      // 记录日志
       store.dispatch.log.addLog({
-        type: LogType.GroupCall,
+        type,
         id: store.getState().intercomGroup.id
       });
+
+      // 呼叫成功
+      if (response.result !== CallingStartResultEnum.CALLING_START_SUCCESS) {
+        message.error('呼叫失败，请稍候重试！');
+      }
     },
     onCallingStop(response): void {
       // TODO 主呼停止事件处理（非主动停止主呼时）

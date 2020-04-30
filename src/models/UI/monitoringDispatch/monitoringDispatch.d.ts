@@ -7,7 +7,6 @@
  * @LastModifiedTime: 2020-04-28 周二 15:22:54
  */
 
-import { StartCallingRequest } from '@/models/UI/monitoringDispatch/hjMediaEngine';
 import { CallModeEnum } from '@/models/UI/monitoringDispatch/index';
 import { ModelConfig } from '@rematch/core';
 
@@ -205,6 +204,12 @@ declare global {
        * @param {number} tempGroupId 要删除的临时组ID
        */
       deleteTempGroup(tempGroupId: number): void
+
+      /**
+       * 远程控制用户 遥晕（禁言）、遥醒（解除禁言）、遥毙（）
+       * @param {RemoteControlMsRequest} request
+       */
+      remoteControlMs(request: RemoteControlMsRequest): void
 
       /**
        * 登录响应事件

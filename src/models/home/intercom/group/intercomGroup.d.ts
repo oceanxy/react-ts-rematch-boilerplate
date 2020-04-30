@@ -20,11 +20,11 @@ declare global {
      */
     name: string
     /**
-     * 群组ID（平台）
+     * 【平台】群组ID/实体（监控对象）ID
      */
     id: string
     /**
-     * 对讲ID（第三方平台群组/监控对象的ID）
+     * 【第三方平台】对讲ID（群组/监控对象的ID）
      */
     intercomId: number,
     /**
