@@ -4,7 +4,7 @@
  * @Description: 编辑临时组
  * @Date: 2020-04-26 周日 16:11:02
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-26 周日 16:11:02
+ * @LastModifiedTime: 2020-04-30 周四 10:44:08
  */
 
 import EditTemporaryGroup from '@/components/home/temporaryGroup/edit';
@@ -18,6 +18,7 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   setState: dispatch.temporaryGroup.setState,
   createTemporaryGroup: dispatch.temporaryGroup.createTemporaryGroup,
+  addTempGroupMember: dispatch.monitoringDispatch.addTempGroupMember,
   fetchDataByCircle: dispatch.entity.fetchDataByCircle
 });
 

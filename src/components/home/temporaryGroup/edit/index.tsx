@@ -4,7 +4,7 @@
  * @Description: 编辑临时组信息
  * @Date: 2020-04-26 周日 16:06:54
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-28 周二 14:04:51
+ * @LastModifiedTime: 2020-04-30 周四 09:49:43
  */
 
 import Modal from '@/components/UI/modal';
@@ -22,6 +22,7 @@ interface IEditTaskProps {
   setState: ITemporaryGroupModel['effects']['setState']
   createTemporaryGroup: ITemporaryGroupModel['effects']['createTemporaryGroup']
   fetchDataByCircle: IEntityModel['effects']['fetchDataByCircle']
+  addTempGroupMember: IMonitoringDispatchModel['effects']['addTempGroupMember']
 }
 
 /**
@@ -31,11 +32,8 @@ interface IEditTaskProps {
  * @constructor
  */
 const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
-  const {state, setState, createTemporaryGroup, fetchDataByCircle} = props;
-  const {isShowEditModal, loading, backFillInfo: {name}} = state!;
-  /**
-   * antd hooks
-   */
+  const {state, setState, createTemporaryGroup, fetchDataByCircle, addTempGroupMember} = props;
+  const {isShowEditModal, title, loading, backFillInfo: {name}} = state!;
   const [form] = Form.useForm();
   /**
    * 根据圈选范围获取的监控对象临时数组状态
@@ -56,17 +54,21 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
    * @returns {Promise<void>}
    */
   const onFinish = (values: any) => {
-    const reqPayload = {
-      temporaryGroup: values.temporaryGroup,
-      userIds: values.interlocutorIds.join(',')
-    };
-
-    // 开始创建临时组，进入loading状态
-    // 注意：因为第三方提供的API非直接返回创建状态，而是通过监听创建临时组事件来返回创建状态，
-    // 所以要到 IMonitoringDispatchModel > onCreateTempGroupResponse事件去关闭
-    // loading状态
+    // 进入loading状态
+    // 注意：因为第三方提供的API非直接返回调用接口的状态，而是通过监听事件的方式返回结果，
+    // 所以要到 IMonitoringDispatchModel 去关闭loading状态以及对话框
     setState!({loading: true});
-    createTemporaryGroup!(reqPayload);
+    // 检查是创建临时组还是添加临时组成员
+    if (title.includes('创建')) {
+      const reqPayload = {
+        temporaryGroup: values.temporaryGroup,
+        userIds: values.interlocutorIds
+      };
+
+      createTemporaryGroup!(reqPayload);
+    } else {
+      addTempGroupMember!(values.interlocutorIds);
+    }
   };
 
   /**
@@ -137,10 +139,12 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   useEffect(() => {
     if (isShowEditModal) {
       (async () => {
+        // 获取地图已圈选范围内的所有实体（监控对象）数据
         const response = await fetchDataByCircle!();
         setTempEntities(response.data.monitors);
 
         if (response.retCode === 0) {
+          // 将实体数据回填到antd form上
           form.setFieldsValue({
             temporaryGroup: name,
             entities: response.data.monitors,
@@ -155,7 +159,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
     <Modal
       width={500}
       className="temp-group-edit-modal"
-      title="创建临时组"
+      title={title ? title : '创建临时组'}
       visible={isShowEditModal}
       onCancel={editTempGroupCancel}
       footer={null}

@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 对讲成员model
  * @Date: 2020-04-21 周二 11:32:16
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-21 周二 11:32:16
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-30 周四 09:15:59
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
@@ -34,9 +34,9 @@ declare global {
      */
     intercomGroupId: IIntercomGroupState['id']
     /**
-     * 对讲对象id 逗号分隔
+     * 对讲对象id集合
      */
-    interlocutorIds: IEntity['monitorId']
+    userIds: IEntity['userId'][]
   }
 
   /**
@@ -61,6 +61,10 @@ declare global {
      * 对讲成员数据集
      */
     data: IEntity[]
+    /**
+     * 提交按钮loading状态（因第三方API的缘故，需要一个全局状态来控制）
+     */
+    loading: boolean
   }
 
   /**
@@ -84,11 +88,20 @@ declare global {
        */
       fetchData(reqPayload?: IIntercomMembersRequest): void
       /**
+       * 设置本地状态
+       * @param {Partial<IIntercomMembersState>} payload
+       */
+      setState(payload: Partial<IIntercomMembersState>): void
+      /**
        * 删除成员
        * @returns {Promise<APIResponse>}
        */
       removeMember(member: IEntity): Promise<APIResponse>
-      addMember(member: IEntity): Promise<APIResponse>
+      /**
+       * 添加成员
+       * @param {number[]} memberIds
+       */
+      addMember(memberIds: number[]): Promise<APIResponse>
     }
   }
 }

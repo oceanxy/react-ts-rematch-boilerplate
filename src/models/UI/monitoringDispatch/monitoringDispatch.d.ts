@@ -190,9 +190,9 @@ declare global {
 
       /**
        * 添加临时组成员
-       * @param {AddTempGroupMemberRequest} request
+       * @param {number[]} memberIds
        */
-      addTempGroupMember(request: AddTempGroupMemberRequest): void
+      addTempGroupMember(memberIds: number[]): void
 
       /**
        * 创建临时组

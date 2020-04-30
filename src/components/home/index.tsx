@@ -27,7 +27,8 @@ const Home = () => {
       <Container className="inter-plat-header">
         <Container className="inter-plat-logo-container">
           <a href="/" className="inter-plat-logo" />
-          <span className="inter-plat-name">中位物联网监视平台</span>
+          <span className="inter-plat-name">江苏慧众科技指挥平台</span>
+          {/*<span className="inter-plat-name">中位物联网监视平台</span>*/}
         </Container>
         <Container className="inter-plat-nav-container">
           {renderRoutes.map((route, index) => {

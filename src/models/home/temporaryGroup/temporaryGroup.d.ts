@@ -4,7 +4,7 @@
  * @Description: 临时组类型定义
  * @Date: 2020-04-23 周四 13:53:48
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-28 周二 14:05:22
+ * @LastModifiedTime: 2020-04-30 周四 10:55:07
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
@@ -44,7 +44,7 @@ declare global {
     /**
      * 临时组内人员id（第三方返回的userId），逗号分隔
      */
-    userIds: string
+    userIds: number[]
   }
 
   /**
@@ -63,6 +63,10 @@ declare global {
      * 创建时临时组时，按钮的loading状态
      */
     loading: boolean
+    /**
+     * 编辑对话框名称
+     */
+    title: string
     /**
      * 编辑时的回填信息
      */

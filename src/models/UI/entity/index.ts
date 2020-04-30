@@ -1,7 +1,7 @@
 /**
  * @Author: Oceanxy
  * @Email: xieyang@zwlbs.com
- * @Description: 围栏model
+ * @Description: 实体（监控对象）model
  * @Date: 2020-04-09 周四 09:40:08
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
  * @LastModifiedTime: 2020-04-10 周五 16:26:37

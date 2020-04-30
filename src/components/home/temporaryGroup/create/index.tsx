@@ -4,7 +4,7 @@
  * @Description: 创建临时组组件
  * @Date: 2020-04-25 周六 14:58:52
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-28 周二 14:05:09
+ * @LastModifiedTime: 2020-04-30 周四 10:13:56
  */
 
 import Container from '@/components/UI/containerComp';
@@ -28,7 +28,10 @@ interface ICreateTempGroupProps {
 const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
   const {setAMapState, setState} = props;
   // 创建临时组时，传递给询问对话框的状态
-  const [showTempGroupModal, setShowTempGroupModal] = useState({visible: false, current: null as ITemporaryGroup | null});
+  const [showTempGroupModal, setShowTempGroupModal] = useState({
+    visible: false,
+    current: null as ITemporaryGroup | null
+  });
   // 解除绑定loading状态
   const [loading, setLoading] = useState(false);
 
@@ -62,7 +65,7 @@ const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
 
     const backFillInfo: ITemporaryGroupState['backFillInfo'] = {radius, center};
 
-    setState!({isShowEditModal: true, backFillInfo});
+    setState!({isShowEditModal: true, title: '创建临时组', backFillInfo});
   };
 
   return (

@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 临时组model
  * @Date: 2020-04-23 周四 13:51:12
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-23 周四 13:51:12
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-04-30 周四 10:09:06
  */
 
 import fetchApis from '@/apis';
@@ -20,7 +20,8 @@ const temporaryGroup: ITemporaryGroupModel = {
     data: [],
     isShowEditModal: false,
     backFillInfo: {},
-    loading: false
+    loading: false,
+    title: ''
   },
   reducers: {
     updateState(state: ITemporaryGroupState, payload: Partial<ITemporaryGroupState>): ITemporaryGroupState {
@@ -55,7 +56,7 @@ const temporaryGroup: ITemporaryGroupModel = {
       // 调用第三方创建临时组接口
       store.dispatch.monitoringDispatch.createTempGroup({
         tempGroupName: reqPayload.temporaryGroup,
-        tempGroupMemberMsIdList: reqPayload.userIds.split(',')
+        tempGroupMemberMsIdList: reqPayload.userIds
       } as CreateTempGroupRequest);
     }
   }

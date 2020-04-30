@@ -125,7 +125,7 @@ declare global {
     /**
      * 临时组成员用户ID列表
      */
-    tempGroupMemberMsIdList: []
+    tempGroupMemberMsIdList: number[]
   }
 
   /**
@@ -242,7 +242,7 @@ declare global {
        * 添加成员结果 0:成功
        */
       result: number
-    }
+    }[]
   }
 
   /**
@@ -380,7 +380,7 @@ declare global {
     /**
      * 临时组成员用户ID列表
      */
-    tempGroupMemberMsIdList: string[]
+    tempGroupMemberMsIdList: number[]
   }
 
   interface VideoEngine {}

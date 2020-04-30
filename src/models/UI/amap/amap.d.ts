@@ -20,7 +20,7 @@ declare global {
      */
     mouseToolType: 'circle' | 'polygon' | null
     /**
-     * 触发鼠标事件后需要执行的回调函数
+     * 触发鼠标事件，且鼠标事件操作完成后需要执行的回调函数
      */
     callback?: (type: any, overlay: AMap.Circle) => void
   }

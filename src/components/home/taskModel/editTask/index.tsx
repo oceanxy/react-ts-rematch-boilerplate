@@ -188,7 +188,7 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
             <Radio value={TaskLevel.Urgent}>{taskLevelText[TaskLevel.Urgent]}</Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="任务时间" name="taskTime" rules={[{required: true, message: '请选择任务等级'}]}>
+        <Form.Item label="任务时间" name="taskTime" rules={[{required: true, message: '请选择任务时间'}]}>
           <DatePicker.RangePicker
             locale={locale}
             ranges={{

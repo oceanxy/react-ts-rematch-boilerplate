@@ -432,11 +432,17 @@ const monitoringDispatch: IMonitoringDispatchModel = {
         message.error('第三方对讲服务未启动！');
       }
     },
-    addTempGroupMember(request: AddTempGroupMemberRequest): void {
-      const {hjMediaEngine} = store.getState().monitoringDispatch;
+    addTempGroupMember(memberIds: number[]): void {
+      const {
+        monitoringDispatch: {hjMediaEngine},
+        intercomGroup: {intercomId}
+      } = store.getState();
 
       if (hjMediaEngine) {
-        hjMediaEngine.audioEngine.addTempGroupMember(request);
+        hjMediaEngine.audioEngine.addTempGroupMember({
+          tempGroupId: intercomId,
+          tempGroupMemberMsIdList: memberIds
+        });
       } else {
         message.error('第三方对讲服务未启动！');
       }
@@ -451,7 +457,13 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       }
     },
     deleteTempGroup(tempGroupId: number): void {
+      const {hjMediaEngine} = store.getState().monitoringDispatch;
 
+      if (hjMediaEngine) {
+        hjMediaEngine.audioEngine.deleteTempGroup(tempGroupId);
+      } else {
+        message.error('第三方对讲服务未启动！');
+      }
     },
 
     onLoginResponse(response) {
@@ -487,7 +499,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
           }
 
           return ids;
-        }, <number[]> []).join(',');
+        }, <number[]> []);
 
         // 维护平台后台临时组数据
         const res = await fetchApis.createTemporaryGroup(<ICreateTemporaryGroupRequest> {
@@ -511,7 +523,40 @@ const monitoringDispatch: IMonitoringDispatchModel = {
     onTempGroupUpdate(response): void {
       // TODO 临时组更新
     },
-    onAddTempGroupMemberResponse(response): void {
+    async onAddTempGroupMemberResponse(response) {
+      // 关闭loading状态以及关闭对话框
+      store.dispatch.temporaryGroup.setState({loading: false, isShowEditModal: false});
+
+      if (response.addGroupMemberResult?.length) {
+        // 获取所有成员ID
+        const ids = response.addGroupMemberResult.reduce((ids, member) => {
+          if (member.result === 0) {
+            ids.push(member.groupMemberMsId);
+          }
+
+          return ids;
+        }, <number[]> []);
+
+        // 维护平台后台临时组数据
+        const res = await store.dispatch.intercomMembers.addMember(ids);
+
+        message.destroy();
+        if (Number(res.retCode) === 0) {
+          // 成功创建临时组后，刷新临时组数据
+          store.dispatch.temporaryGroup.fetchData();
+
+          // 添加日志
+          await store.dispatch.log.addLog({
+            type: LogType.AddIntercomGroup,
+            id: store.getState().intercomGroup.id
+          });
+          message.success('添加成功！');
+        } else {
+          message.warning('添加失败失败，请稍候再试！');
+        }
+      } else {
+        message.warning('添加失败，请稍候再试！');
+      }
     }
   }
 };

@@ -4,7 +4,7 @@
  * @Description: 对讲成员组件
  * @Date: 2020-04-21 周二 15:45:40
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-21 周二 15:57:26
+ * @LastModifiedTime: 2020-04-30 周四 09:12:10
  */
 
 import Container from '@/components/UI/containerComp';
@@ -19,36 +19,33 @@ import './index.scss';
 
 interface IIntercomMembersProps {
   curTempGroupState: IIntercomGroupState
-  data: IIntercomMembersState['data']
+  state: IIntercomMembersState
+  dispatches: IIntercomMembersModel['effects']
   isActiveIntercom: IIntercomState['active']
-  fetchData: IIntercomMembersModel['effects']['fetchData']
-  removeMember: IIntercomMembersModel['effects']['removeMember']
-  addMember: IIntercomMembersModel['effects']['addMember']
   setAMapState: IAMapModel['effects']['setState']
   setTempGroupState: ITemporaryGroupModel['effects']['setState']
 }
 
 const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
   const {
-    data, isActiveIntercom, fetchData,
-    removeMember, addMember, setAMapState,
-    setTempGroupState, curTempGroupState
+    state, isActiveIntercom, dispatches,
+    setAMapState, setTempGroupState, curTempGroupState
   } = props;
+  const {data, loading} = state!;
+  const {fetchData, setState, removeMember} = dispatches!;
   const {name, curActiveGroupType} = curTempGroupState!;
-  // 解除临时组绑定时，传递给询问对话框的状态
+  // 触发新增/删除成员时，传递给询问对话框的状态
   const [member, setMember] = useState({
     visible: false,
     type: null as 'add' | 'remove' | null,
     current: null as IEntity | null
   });
-  // loading状态
-  const [loading, setLoading] = useState(false);
 
   /**
    * 处理删除成员事件
    * @param {IEntity} member
    */
-  const handleRemove = (member: IEntity) => {
+  const handleRemoveMember = (member: IEntity) => {
     // 只有临时组能踢人
     if (curTempGroupState?.curActiveGroupType === CurActiveGroupType.Temporary) {
       setMember({visible: true, type: 'remove', current: member});
@@ -58,7 +55,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
   /**
    * 处理新增成员事件
    */
-  const handleAdd = () => {
+  const handleAddMembers = () => {
     setMember({visible: true, type: 'add', current: null});
   };
 
@@ -66,7 +63,9 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
    * 激活高德地图鼠标工具
    */
   const loadAMapMouseTool = () => {
-    setMember({visible: false, type: 'add', current: null});
+    // 初始化本组件所有状态
+    setMember({visible: false, type: null, current: null});
+    // 设置地图鼠标工具组件状态，进行地图圈选
     setAMapState!({
       mouseToolType: 'circle',
       callback: handleMouseTool
@@ -80,41 +79,29 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
    * @returns {Promise<void>}
    */
   const handleMouseTool = async (type: any, overlay: AMap.Circle) => {
+    // 圈选地图范围后，获取高德地图鼠标工具返回的信息
     const radius = overlay.getRadius();
     const center = overlay.getCenter();
-
     const backFillInfo: ITemporaryGroupState['backFillInfo'] = {radius, center, name};
 
-    setTempGroupState!({isShowEditModal: true, backFillInfo});
+    // 设置编辑临时组对话框组件状态
+    setTempGroupState!({isShowEditModal: true, title: '添加临时组成员', backFillInfo});
   };
 
   /**
-   * 新增/剔除成员
+   * 删除成员
    * @returns {Promise<void>}
    */
-  const onChangeMember = async () => {
-    if (member.type === 'remove') {
-      setLoading(true);
-      const response = await removeMember!(member.current!);
-      setLoading(false);
+  const onRemoveMember = async () => {
+    setState({loading: true});
+    const response = await removeMember!(member.current!);
+    setState({loading: false});
 
-      message.destroy();
-      if (response.retCode === 0) {
-        message.success(`已成功剔除成员：（${member.current?.userName}）`);
-      } else {
-        message.success('剔除成员失败， 请稍后再试！');
-      }
-    } else if (member.type === 'add') {
-      setLoading(true);
-      const response = await addMember!(member.current!);
-      setLoading(false);
-
-      message.destroy();
-      if (response.retCode === 0) {
-        message.success('添加成员成功');
-      } else {
-        message.success('添加成员失败， 请稍后再试！');
-      }
+    message.destroy();
+    if (response.retCode === 0) {
+      message.success(`已成功删除成员：（${member.current?.userName}）`);
+    } else {
+      message.success('删除成员失败， 请稍后再试！');
     }
 
     setMember({visible: false, type: null, current: null});
@@ -136,7 +123,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
               title={member.userName}
               name={member.userName!}
               online={member.audioOnlineStatus}
-              onClick={handleRemove.bind(null, member)}
+              onClick={handleRemoveMember.bind(null, member)}
             />
           );
         }) ?? null
@@ -144,23 +131,24 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
       {
         // 只有临时组能加人
         curTempGroupState?.curActiveGroupType === CurActiveGroupType.Temporary ? (
-          <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAdd} />
+          <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAddMembers} />
         ) : null
       }
       <Modal
+        width={350}
         visible={member.visible && member.type === 'remove'}
         confirmLoading={loading}
         onCancel={() => setMember({visible: false, type: null, current: null})}
-        onOk={onChangeMember}
+        onOk={onRemoveMember}
       >
-        确定从{curActiveGroupType === CurActiveGroupType.Task ? '任务' : '临时'}组中剔除成员（{member.current?.userName}）吗？
+        确定从{curActiveGroupType === CurActiveGroupType.Task ? '任务' : '临时'}组中删除成员（{member.current?.userName}）吗？
       </Modal>
       <Modal
-        width={200}
+        title="选择添加临时组成员方式"
+        width={300}
         footer={null}
         visible={member.visible && member.type === 'add'}
         onCancel={() => setMember({visible: false, type: null, current: null})}
-        onOk={onChangeMember}
       >
         <Trigger
           name="地图圆形圈选"
