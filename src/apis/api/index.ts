@@ -33,6 +33,7 @@ export type APIName =
   'addMember' | // 新增临时组成员
   'addLog' | // 记录日志
   'fetchEntityByCircle' | // 按圆形搜索监控对象
+  'fetchMassPoint' | // 获取地图海量点信息
   // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
   'fetchTestWebsocket' |
@@ -178,6 +179,10 @@ const apis: APIRequestConfig = {
   },
   addLog: {
     url: '/clbs/web/v1/dispatch/command/addLog',
+    method: EHTTPMethod.POST
+  },
+  fetchMassPoint: {
+    url: '/clbs/web/v1/dispatch/map/getMassPoint',
     method: EHTTPMethod.POST
   }
 };

@@ -4,7 +4,7 @@
  * @Description: amap组件
  * @Date: 2020-03-31 周二 17:03:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-26 周日 14:24:45
+ * @LastModifiedTime: 2020-04-30 周四 17:57:10
  */
 
 import AMap from '@/components/UI/amap';
@@ -14,12 +14,10 @@ import Boundary from './boundary';
 import POI from './POI';
 
 const mapStateToProps = (state: RootState) => ({
-  map: state.map.mapInstance,
-  callback: state.map.callback,
-  mouseToolType: state.map.mouseToolType
+  state: state.map
 });
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
-  setState: dispatch.map.setState
+  dispatches: dispatch.map
 });
 
 export { POI, Boundary };

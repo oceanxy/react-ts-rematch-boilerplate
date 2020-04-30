@@ -680,6 +680,62 @@ const mocks: Mocks = {
     retCode: 0,
     retMsg: '',
     data: null
+  },
+  fetchMassPoint: {
+    retCode: 0,
+    retMsg: '',
+    data: {
+      'positionList': [
+        {
+          'happenEvent': '0',
+          'style': 1,
+          'iconUrl': 'http://192.168.110.161:8080/clbs/resources/img/vico/v_21.png',
+          'lnglat': [106.511478, 29.536341],
+          'monitorId': '9712b799-c1f9-45f9-bc91-13bf1d2f1cf9',
+          'monitorName': '川0002',
+          'monitorType': '0',
+          'userId': '7170'
+        },
+        {
+          'happenEvent': '1',
+          'style': 2,
+          'iconUrl': 'http://192.168.24.144:8799/mediaserver/profesionalpic/158460843067823.png',
+          'lnglat': [106.512563, 29.535608],
+          'monitorId': '31a2bb1e-2168-4239-89b0-951a41d247a0',
+          'monitorName': 'IW2538人',
+          'monitorType': '1',
+          'userId': '7352'
+        },
+        {
+          'happenEvent': '1',
+          'style': 15,
+          'iconUrl': 'http://192.168.24.144:8799/mediaserver/profesionalpic/15764632195261.png',
+          'lnglat': [106.511299, 29.535588],
+          'monitorId': '6bb4ee46-c5cd-4d36-8918-8008bdc28a46',
+          'monitorName': 'IW2542人',
+          'monitorType': '1',
+          'userId': '7353'
+        },
+        {
+          'happenEvent': '0',
+          'style': 312,
+          'iconUrl': 'http://192.168.110.161:8080/clbs/resources/img/vico/dispatch-thing.png',
+          'lnglat': [107.389003, 29.707293],
+          'monitorId': '6cf651cd-340d-440f-aad5-3be82a6ffc6e',
+          'monitorName': 'Pen0001',
+          'monitorType': '2',
+          'userId': '7173'
+        }
+      ],
+      'iconSortList': [
+        'http://192.168.24.144:8799/mediaserver/profesionalpic/158452428941261.png',
+        'http://192.168.24.144:8799/mediaserver/profesionalpic/158452425135653.png',
+        'http://192.168.110.161:8080/clbs/resources/img/vico/v_1.png',
+        'http://192.168.110.161:8080/clbs/resources/img/vico/dispatch-car.png',
+        'http://192.168.110.161:8080/clbs/resources/img/vico/dispatch-people.png',
+        'http://192.168.110.161:8080/clbs/resources/img/vico/dispatch-thing.png'
+      ]
+    }
   }
 };
 

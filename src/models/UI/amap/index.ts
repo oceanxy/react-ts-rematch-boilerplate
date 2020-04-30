@@ -4,9 +4,11 @@
  * @Description: 地图model
  * @Date: 2020-03-31 周二 17:03:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-26 周日 14:25:31
+ * @LastModifiedTime: 2020-04-30 周四 17:52:38
  */
 
+import fetchApis from '@/apis';
+import { APIResponse } from '@/interfaces/api/mock';
 import { store } from '@/store';
 
 /**
@@ -17,7 +19,11 @@ const map: IAMapModel = {
   state: {
     mapInstance: null,
     mouseToolType: null,
-    callback: undefined
+    callback: undefined,
+    massPoints: {
+      positionList: [],
+      iconSortList: []
+    }
   },
   reducers: {
     updateState: (state: IAMapState, payload: Partial<IAMapState>): IAMapState => ({
@@ -28,6 +34,16 @@ const map: IAMapModel = {
   effects: {
     setState(payload: Partial<IAMapState>): void {
       store.dispatch.map.updateState(payload);
+    },
+    async fetchMassPoint(monitorType: IEntity['monitorType']) {
+      const response: APIResponse<MassPointResponse> = await fetchApis.fetchMassPoint(monitorType);
+
+      store.dispatch.map.updateState({
+        massPoints: {
+          positionList: response.data.positionList || [],
+          iconSortList: response.data.iconSortList || []
+        }
+      });
     }
   }
 };

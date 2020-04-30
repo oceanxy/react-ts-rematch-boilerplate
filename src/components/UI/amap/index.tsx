@@ -7,6 +7,7 @@
  * @LastModifiedTime: 2020-04-26 周日 09:55:39
  */
 
+import MassPoint from '@/components/UI/amap/massPoint';
 import Container, { IContainerProps } from '@/components/UI/containerComp';
 import config from '@/config';
 import { useScript } from '@/utils/hooks/loadScript';
@@ -29,23 +30,26 @@ const UseMap = useScript(`https://webapi.amap.com/maps?v=${config.map.mapVersion
  * 地图组件Render Props
  */
 export interface IZWMapProps extends IContainerProps<any> {
-  map: IAMapState['mapInstance']
-  mouseToolType: IAMapState['mouseToolType']
-  callback: IAMapState['callback']
-  setState: IAMapModel['effects']['setState']
+  state: IAMapState,
+  dispatches: IAMapModel['effects']
 }
 
 /**
  * 地图组件
  */
 const ZWMap = (props: Partial<IZWMapProps>) => {
-  const {map, setState, mouseToolType, callback} = props;
+  const {state, dispatches} = props;
+  const {setState, fetchMassPoint} = dispatches!;
+  const {mapInstance: map, mouseToolType, callback, massPoints} = state!;
 
   return (
     <Container id="mapContainer" className="inter-plat-map" {...props}>
       {
         map ?
-          <MouseTool map={map} mouseToolType={mouseToolType} callback={callback} setState={setState} /> :
+          (<>
+            <MouseTool map={map} mouseToolType={mouseToolType} callback={callback} setState={setState} />
+            <MassPoint map={map} fetchMassPoint={fetchMassPoint} data={massPoints} />
+          </>) :
           <UseMap setState={setState} />
       }
     </Container>

@@ -17,6 +17,7 @@ declare global {
   interface IEntity {
     /**
      * 监控对象ID（平台ID）
+     * 若是调度员时，是用户uuid
      */
     monitorId?: string
     /**
@@ -31,7 +32,7 @@ declare global {
      * 监控对象类型
      * -1：全部 0：车；1：人；2：物；9：静态物资；10：调度员
      */
-    monitorType?: -1 | 0 | 1 | 2 | 9 | 10
+    monitorType?: -1 | 0 | 1 | 2 | 9 | 10 | IEntity['monitorType'][]
     /**
      * 所属分组名称
      */
