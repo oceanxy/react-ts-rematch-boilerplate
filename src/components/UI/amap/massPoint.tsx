@@ -8,7 +8,7 @@
  */
 
 import config from '@/config';
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import './index.scss';
 
 interface MassPointProps {
@@ -53,18 +53,36 @@ const MassPoint = (props: MassPointProps) => {
     cursor: 'pointer'
   });
 
-  // const marker = new AMap.Marker({content: '', map});
+  const marker = new AMap.Marker({content: '', map});
 
-  // mass.on('mouseover', (e: any) => {
-  //   marker.setPosition(e.data.lnglat);
-  //   marker.setLabel({content: e.data.name});
-  // });
+  const openInfo = (e: any) => {
+    let infoWindow;
+
+    const info = [];
+    info.push('<div><div><img src=" https://webapi.amap.com/images/autonavi.png "/></div>');
+    info.push('<div><h4>高德软件</h4>');
+    info.push('<p >电话 : 010-84107000   邮编 : 100102</p>');
+    info.push('<p >地址 :北京市朝阳区望京阜荣街10号首开广场4层</p></div></div>');
+
+    infoWindow = new AMap.InfoWindow({
+      content: info.join('')  //使用默认信息窗体框样式，显示信息内容
+    });
+
+    infoWindow.open(map, e.data.lnglat);
+  };
+
+  mass.on('click', (e: any) => {
+    // marker.setPosition(e.data.lnglat);
+    // marker.setLabel({content: e.data.name});
+
+    openInfo(e);
+  });
 
   mass.setMap(map);
 
   useEffect(() => {
     fetchMassPoint(-1);
-  }, [data]);
+  }, []);
 
   return null;
 };
