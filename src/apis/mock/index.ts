@@ -736,6 +736,43 @@ const mocks: Mocks = {
         'http://192.168.110.161:8080/clbs/resources/img/vico/dispatch-thing.png'
       ]
     }
+  },
+  fetchWindowInfo: {
+    retMsg: '',
+    retCode: 0,
+    data: {
+      'monitor': {
+        'assignmentName': 'tb-group02,tb-group01,tb-group09',
+        'curAssignmentName': 'tb-group09',
+        'curAssignmentType': '1',
+        'deviceNum': '0002527',
+        'groupName': '回归测试',
+        'hasForbiddenWord': false,
+        'iconUrl': 'http://192.168.110.161:8080/clbs/resources/img/vico/v_21.png',
+        'monitorId': '72eaf419-3da4-4d5b-9e03-0ac54e78c2f4',
+        'monitorName': monitorName,
+        'monitorType|1': [0, 1, 2, 9, 10],
+        'onlineStatus|1': [0, 1],
+        'plateColor': '黄色',
+        'simCardNum': '18600332931',
+        'userId': 7349,
+        'userNumber': '93446'
+      },
+      'location': {
+        'address': '重庆市渝中区石油路街道长江二路172号龙湖重庆时代天街',
+        'latitude': '29.535635',
+        'gpsTime': '2020-03-26 19:06:39',
+        'longitude': '106.514349'
+      },
+      'eventNames': '超时长停留',
+      'tasks|3-5': [
+        {
+          'taskName': () => ['去哪里', '到哪里', '定时任务'][Random.integer(0, 2)],
+          'taskLevel|1': [1, 2, 3],
+          'status|1': [0, 1, 2]
+        }
+      ]
+    }
   }
 };
 

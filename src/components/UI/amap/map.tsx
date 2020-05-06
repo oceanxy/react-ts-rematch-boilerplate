@@ -25,7 +25,7 @@ interface IMapProps {
 const Map = (props: IMapProps) => {
   useEffect(() => {
     const map = new AMap.Map('mapContainer', {
-      viewMode: '3D',
+      // viewMode: '3D',
       pitch: 50,
       zoom: 14,
       resizeEnable: true,

@@ -8,78 +8,147 @@
  */
 
 import config from '@/config';
-import React, {useEffect} from 'react';
-import './index.scss';
+import { message } from 'antd';
 
-interface MassPointProps {
+import React, { useEffect } from 'react';
+import carPng from './images/dispatch-car.png';
+import peoplePng from './images/dispatch-people.png';
+import thingPng from './images/dispatch-thing.png';
+import './index.scss';
+import infoWindowTemplate from './infoWindow';
+
+export interface MassPointProps {
   map: IAMapState['mapInstance']
   fetchMassPoint: IAMapModel['effects']['fetchMassPoint']
+  fetchWindowInfo: IAMapModel['effects']['fetchWindowInfo']
   data: IAMapState['massPoints']
+}
+
+function closeInfoWindow(infoWindow: AMap.InfoWindow, e: Event) {
+  if ((e.target as HTMLDivElement)?.className === 'inter-plat-map-info-window-close') {
+    infoWindow.close();
+  }
+}
+
+/**
+ * 设置窗体
+ * @returns {AMap.InfoWindow<any>}
+ */
+function setInfoWindow() {
+  return new AMap.InfoWindow({
+    content: undefined,  //使用默认信息窗体框样式，显示信息内容
+    closeWhenClickMap: true,
+    autoMove: true,
+    isCustom: true,
+    showShadow: false,
+    offset: new AMap.Pixel(0, 6)
+  });
+}
+
+/**
+ * 设置海量点
+ * @param {Pick<MassPointProps, "data">} props
+ */
+function setMass(props: Pick<MassPointProps, 'data' | 'map'>) {
+  const {data} = props;
+
+  // 海量点图标样式
+  let style;
+  if (!config.mock) {
+    style = data.iconSortList.map((icon) => ({
+      url: icon,
+      anchor: new AMap.Pixel(0, 0),
+      size: new AMap.Size(24, 24)
+    }));
+  } else {
+    style = [{
+      url: peoplePng,
+      anchor: new AMap.Pixel(12, -5),
+      size: new AMap.Size(24, 24)
+    }, {
+      url: carPng,
+      anchor: new AMap.Pixel(12, -5),
+      size: new AMap.Size(24, 24)
+    }, {
+      url: thingPng,
+      anchor: new AMap.Pixel(12, -5),
+      size: new AMap.Size(24, 24)
+    }];
+  }
+
+  return new AMap.MassMarks(data.positionList, {
+    zIndex: 100, // 海量点图层叠加的顺序
+    style, // 设置样式对象
+    cursor: 'pointer'
+  });
 }
 
 /**
  * 海量点组件
  */
 const MassPoint = (props: MassPointProps) => {
-  const {fetchMassPoint, data} = props;
+  const {fetchMassPoint, data, fetchWindowInfo} = props;
   const map = props.map!;
-
-  let style;
-  if (!config.mock) {
-    style = data.iconSortList.map((icon) => ({
-      url: icon,
-      anchor: new AMap.Pixel(6, 6),
-      size: new AMap.Size(24, 24)
-    }));
-  } else {
-    style = [{
-      url: 'https://a.amap.com/jsapi_demos/static/images/mass0.png',
-      anchor: new AMap.Pixel(6, 6),
-      size: new AMap.Size(24, 24)
-    }, {
-      url: 'https://a.amap.com/jsapi_demos/static/images/mass1.png',
-      anchor: new AMap.Pixel(4, 4),
-      size: new AMap.Size(24, 24)
-    }, {
-      url: 'https://a.amap.com/jsapi_demos/static/images/mass2.png',
-      anchor: new AMap.Pixel(3, 3),
-      size: new AMap.Size(24, 24)
-    }];
-  }
-
-  const mass = new AMap.MassMarks(data.positionList, {
-    zIndex: 5, // 海量点图层叠加的顺序
-    style, // 设置样式对象
-    cursor: 'pointer'
-  });
-
+  // 事件弹窗实例
+  let infoWindow: any;
+  // 海量点实例
+  let mass: any;
+  // 标注实例
   const marker = new AMap.Marker({content: '', map});
 
-  const openInfo = (e: any) => {
-    let infoWindow;
+  if (!infoWindow) {
+    infoWindow = setInfoWindow();
+  }
 
-    const info = [];
-    info.push('<div><div><img src=" https://webapi.amap.com/images/autonavi.png "/></div>');
-    info.push('<div><h4>高德软件</h4>');
-    info.push('<p >电话 : 010-84107000   邮编 : 100102</p>');
-    info.push('<p >地址 :北京市朝阳区望京阜荣街10号首开广场4层</p></div></div>');
+  if (!mass) {
+    mass = setMass(props);
+  }
 
-    infoWindow = new AMap.InfoWindow({
-      content: info.join('')  //使用默认信息窗体框样式，显示信息内容
+  // 在地图上设置海量点
+  if (mass && data.positionList.length) {
+    mass.setMap(map);
+  }
+
+  /**
+   * 数据更新时，更新地图上的海量点
+   */
+  useEffect(() => {
+    /**
+     * 海量点点击事件
+     */
+    mass.on('click', async (e: any) => {
+      console.log(e.data);
+      const response = await fetchWindowInfo({
+        monitorId: e.data.monitorId,
+        monitorType: e.data.monitorType
+      });
+
+      if (+response.retCode === 0) {
+        infoWindow.setContent(infoWindowTemplate(response.data));
+        infoWindow.open(map!, e.data.lnglat);
+      } else {
+        message.error('获取信息失败，请稍候再试！');
+      }
     });
 
-    infoWindow.open(map, e.data.lnglat);
-  };
+    // 监听海量点弹窗关闭
+    document
+      .getElementsByClassName('amap-maps')[0]
+      .addEventListener('click', closeInfoWindow.bind(null, infoWindow));
 
-  mass.on('click', (e: any) => {
-    // marker.setPosition(e.data.lnglat);
-    // marker.setLabel({content: e.data.name});
+    return () => {
+      // 移除事件
+      mass.off('click', () => {
+      });
+      document
+        .getElementsByClassName('amap-maps')[0]
+        .removeEventListener('click', closeInfoWindow.bind(null, infoWindow));
+    };
+  }, [JSON.stringify(props.data.positionList)]);
 
-    openInfo(e);
-  });
-
-  mass.setMap(map);
-
+  /**
+   * 初始化组件时请求数据
+   */
   useEffect(() => {
     fetchMassPoint(-1);
   }, []);

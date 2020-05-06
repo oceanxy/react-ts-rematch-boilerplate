@@ -7,9 +7,105 @@
  * @LastModifiedTime: 2020-04-30 周四 17:52:46
  */
 
+import { APIResponse } from '@/interfaces/api/mock';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
+  /**
+   * 弹窗request
+   */
+  interface InfoWindowRequest {
+    /**
+     * 监控对象ID
+     */
+    monitorId: string
+    /**
+     * 监控对象类型
+     */
+    monitorType: IEntity['monitorType']
+    /**
+     * 默认0。0:按监控对象 1:按事件
+     */
+    queryType?: 0 | 1
+    /**
+     * 事件开始时间，按事件查询时必填
+     */
+    startTime?: Date | null
+    /**
+     * 事件类型，按事件查询时必填
+     */
+    eventType?: IEvent['eventType']
+  }
+
+  interface InfoWindowResponse {
+    /**
+     * 监控对象详情
+     */
+    monitor: {
+      /**
+       * 监控对象ID
+       */
+      monitorId: string
+      /**
+       * 监控对象类型 0：车 1 :人 2 :动态物品 9:静态物资 10:调度员
+       */
+      monitorType: 0 | 1 | 2 | 9 | 10
+      /**
+       * 监控对象名称
+       */
+      monitorName: string
+      /**
+       * 当前群组
+       */
+      curAssignmentName: string
+      /**
+       * 当前组类型，1：固定组 2：任务组 3：临时组
+       */
+      curAssignmentType: 1 | 2 | 3
+      /**
+       * 设备在线状态 0：离线 1：在线
+       */
+      onlineStatus: 0 | 1
+      /**
+       * 是否被禁言
+       */
+      hasForbiddenWord: boolean
+      /**
+       * 物资类型名称
+       */
+      thingTypeName: string
+    },
+    /**
+     * 定位信息
+     */
+    location: {
+      /**
+       * 定位时间
+       */
+      gpsTime: string
+      /**
+       * 地址
+       */
+      address: string
+      /**
+       * 经度
+       */
+      longitude: number
+      /**
+       * 纬度
+       */
+      latitude: number
+    },
+    /**
+     * 任务列表
+     */
+    tasks: ITask[],
+    /**
+     * 告警事件名称
+     */
+    eventNames: string
+  }
+
   /**
    * 海量点
    */
@@ -89,7 +185,17 @@ declare global {
        * @param {Partial<IAMapState>} payload
        */
       setState(payload: Partial<IAMapState>): void
+      /**
+       * 获取海量点数据
+       * @param {IEntity["monitorType"]} monitorType
+       */
       fetchMassPoint(monitorType: IEntity['monitorType']): void
+      /**
+       * 获取弹窗信息
+       * @param {InfoWindowRequest} reqPayload
+       * @returns {Promise<APIResponse<InfoWindowResponse>>}
+       */
+      fetchWindowInfo(reqPayload: InfoWindowRequest): Promise<APIResponse<InfoWindowResponse>>
     }
   }
 }

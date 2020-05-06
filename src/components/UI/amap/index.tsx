@@ -39,7 +39,7 @@ export interface IZWMapProps extends IContainerProps<any> {
  */
 const ZWMap = (props: Partial<IZWMapProps>) => {
   const {state, dispatches} = props;
-  const {setState, fetchMassPoint} = dispatches!;
+  const {setState, fetchMassPoint, fetchWindowInfo} = dispatches!;
   const {mapInstance: map, mouseToolType, callback, massPoints} = state!;
 
   return (
@@ -48,7 +48,7 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
         map ?
           (<>
             <MouseTool map={map} mouseToolType={mouseToolType} callback={callback} setState={setState} />
-            <MassPoint map={map} fetchMassPoint={fetchMassPoint} data={massPoints} />
+            <MassPoint map={map} fetchMassPoint={fetchMassPoint} data={massPoints} fetchWindowInfo={fetchWindowInfo} />
           </>) :
           <UseMap setState={setState} />
       }

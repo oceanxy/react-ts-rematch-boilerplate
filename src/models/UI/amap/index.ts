@@ -44,6 +44,9 @@ const map: IAMapModel = {
           iconSortList: response.data.iconSortList || []
         }
       });
+    },
+    async fetchWindowInfo(reqPayload: InfoWindowRequest): Promise<APIResponse<InfoWindowResponse>> {
+      return await fetchApis.fetchWindowInfo(reqPayload);
     }
   }
 };

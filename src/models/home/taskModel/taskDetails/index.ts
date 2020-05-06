@@ -86,7 +86,7 @@ export enum TaskStatus {
 }
 
 /**
- * 任务类型状态对应文字
+ * 任务状态对应文字
  * @type {string[]}
  */
 export const taskTypeStatus = ['未开始', '执行中', '已完成'];
