@@ -22,7 +22,7 @@ interface IEventListProps {
   setCurMonitorId: IEventListModel['effects']['setCurId'];
   fetchData: IEventListModel['effects']['fetchData'];
   clearEventDetailsData: IEventDetailsModel['reducers']['clearData'];
-  itemClick: IEventListModel['effects']['itemClick'];
+  setEventDetailsState: IEventDetailsModel['effects']['setState'];
 }
 
 /**
@@ -38,7 +38,7 @@ export const eventTypeStatus = ['未处理', '处理中'];
  * @constructor
  */
 const EventDetails = (props: Partial<IEventListProps>) => {
-  const { data, curSelectedMonitorId, setCurMonitorId } = props;
+  const {data, curSelectedMonitorId, setCurMonitorId} = props;
   const [isInit, setInit] = useState(true);
 
   /**
@@ -46,14 +46,14 @@ const EventDetails = (props: Partial<IEventListProps>) => {
    * @param {IEventDetailsRequest} payload
    */
   const onClick = (payload: IEventDetailsRequest) => {
-    const { itemClick, clearEventDetailsData } = props;
+    const {setEventDetailsState, clearEventDetailsData} = props;
 
     // 检测当前点击的监控对象是否选中。如果已选中，则取消选中；反之则选中。
     if (curSelectedMonitorId === payload.monitorId) {
       clearEventDetailsData!();
       setCurMonitorId?.('');
     } else {
-      itemClick!(payload);
+      setEventDetailsState!({queryParams: payload});
       setCurMonitorId?.(payload.monitorId);
     }
   };
@@ -75,21 +75,21 @@ const EventDetails = (props: Partial<IEventListProps>) => {
     <Container className="event-list-container">
       {data && data.length
         ? data.map((item, index) => (
-            <ListItem
-              key={`event-list-${index}`}
-              className={curSelectedMonitorId === item.monitorId ? 'active' : ''}
-              name={item.eventName}
-              status={eventTypeStatus[item.eventStatus]}
-              iconColor={eventTypeColor[item.eventLevel]}
-              time={item.startTime}
-              monitorName={item.monitorName}
-              onClick={onClick.bind(null, {
-                startTime: item.startTime,
-                monitorId: item.monitorId,
-                eventType: item.eventType
-              })}
-            />
-          ))
+          <ListItem
+            key={`event-list-${index}`}
+            className={curSelectedMonitorId === item.monitorId ? 'active' : ''}
+            name={item.eventName}
+            status={eventTypeStatus[item.eventStatus]}
+            iconColor={eventTypeColor[item.eventLevel]}
+            time={item.startTime}
+            monitorName={item.monitorName}
+            onClick={onClick.bind(null, {
+              startTime: item.startTime,
+              monitorId: item.monitorId,
+              eventType: item.eventType
+            })}
+          />
+        ))
         : null}
     </Container>
   );

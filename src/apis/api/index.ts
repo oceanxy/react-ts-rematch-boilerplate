@@ -35,6 +35,7 @@ export type APIName =
   'fetchEntityByCircle' | // 按圆形搜索监控对象
   'fetchMassPoint' | // 获取地图海量点信息
   'fetchWindowInfo' | // 获取地图弹窗信息
+  'handleEvent' | // 处理监控对象事件
   // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
   'fetchTestWebsocket' |
@@ -188,6 +189,10 @@ const apis: APIRequestConfig = {
   },
   fetchWindowInfo: {
     url: '/clbs/web/v1/dispatch/map/pointInfo',
+    method: EHTTPMethod.POST
+  },
+  handleEvent: {
+    url: '/clbs/web/v1/dispatch/event/handle',
     method: EHTTPMethod.POST
   }
 };

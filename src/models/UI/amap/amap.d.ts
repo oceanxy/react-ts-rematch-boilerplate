@@ -74,7 +74,7 @@ declare global {
        * 物资类型名称
        */
       thingTypeName: string
-    },
+    }
     /**
      * 定位信息
      */
@@ -95,15 +95,19 @@ declare global {
        * 纬度
        */
       latitude: number
-    },
+    }
     /**
      * 任务列表
      */
-    tasks: ITask[],
+    tasks: ITask[]
     /**
-     * 告警事件名称
+     * 告警事件名称（多个用逗号隔开）
      */
     eventNames: string
+    /**
+     * 事件列表
+     */
+    eventList: IEvent[]
   }
 
   /**

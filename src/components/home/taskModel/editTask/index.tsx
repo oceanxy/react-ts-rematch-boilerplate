@@ -266,7 +266,7 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
         >
           <Input.TextArea placeholder="请输入任务描述" rows={3} />
         </Form.Item>
-        <Row justify="end" className="task-operation-modal-row">
+        <Row justify="end" className="modal-row">
           <Button size="small" type="primary" htmlType="submit" loading={loading}>提 交</Button>
           <Button size="small" type="primary" onClick={editTaskCancel}>取 消</Button>
         </Row>

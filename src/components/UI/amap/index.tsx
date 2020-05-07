@@ -48,7 +48,12 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
         map ?
           (<>
             <MouseTool map={map} mouseToolType={mouseToolType} callback={callback} setState={setState} />
-            <MassPoint map={map} fetchMassPoint={fetchMassPoint} data={massPoints} fetchWindowInfo={fetchWindowInfo} />
+            <MassPoint
+              map={map}
+              fetchMassPoint={fetchMassPoint}
+              data={massPoints}
+              fetchWindowInfo={fetchWindowInfo}
+            />
           </>) :
           <UseMap setState={setState} />
       }

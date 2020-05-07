@@ -7,30 +7,9 @@
  * @LastModifiedTime: 2020-04-25 周六 15:20:19
  */
 
-import apis, { APIName, APIRequestConfig } from '@/apis/api';
+import { APIName } from '@/apis/api';
 import { APIResponse } from '@/interfaces/api/mock';
 import { mock, Random } from 'mockjs';
-
-/**
- * mock数据集
- */
-export type Mocks = {
-  [K in APIName]: APIResponse;
-};
-
-/**
- * 按接口生成mock数据
- * @param fetchName {keyof FetchAPIs} 接口名
- * @param isWebsocket {boolean} 是否是websocket访问
- */
-export const productionData = (fetchName: keyof APIRequestConfig, isWebsocket?: boolean) => {
-  // 如果是websocket长链接，则自定义请求路径，以便采用HTTP轮询的方式模拟数据
-  if (isWebsocket) {
-    mock(`/${fetchName}`, mocks[fetchName]);
-  }
-
-  mock(apis[fetchName].url, mocks[fetchName]);
-};
 
 // 生成车牌
 function monitorName() {
@@ -73,7 +52,7 @@ function monitorName() {
  * Mock数据生成规则
  * 注意返回对象内的fetchAPI名称需要与api目录内的相应名称对应
  */
-const mocks: Mocks = {
+const mocks: {[K in APIName]?: APIResponse} = {
   // 测试接口
   fetchTest: {
     retCode: 0,

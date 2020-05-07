@@ -4,7 +4,7 @@
  * @Description: amap组件
  * @Date: 2020-03-31 周二 17:03:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-30 周四 17:57:10
+ * @LastModifiedTime: 2020-05-07 周四 10:59:37
  */
 
 import AMap from '@/components/UI/amap';
@@ -16,6 +16,7 @@ import POI from './POI';
 const mapStateToProps = (state: RootState) => ({
   state: state.map
 });
+
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   dispatches: dispatch.map
 });

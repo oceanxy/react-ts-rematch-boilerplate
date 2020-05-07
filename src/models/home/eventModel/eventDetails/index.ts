@@ -4,7 +4,8 @@
  * @Description: 事件详情model
  * @Date: 2020-03-19 16:31:44
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-03 周五 17:38:01
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-07 周四 10:51:09
  */
 
 import fetchApis from '@/apis';
@@ -69,25 +70,48 @@ const defaultData: IEventDetailsData = {
   eventId: ''
 };
 
+const defaultQueryParams: Partial<IEventDetailsRequest> = {
+  startTime: null,
+  monitorId: '',
+  eventType: -1
+};
+
 const eventDetails: IEventDetailsModel = {
   state: {
+    queryParams: {},
     data: defaultData
   },
   reducers: {
-    updateData: (state, data) => {
+    updateData: (state, payload) => {
       return {
         ...state,
-        data
+        ...payload
       };
     },
     clearData() {
-      return { data: defaultData };
+      return {
+        data: defaultData,
+        queryParams: defaultQueryParams
+      };
     }
   },
   effects: {
-    async getData(reqPayload: IEventDetailsRequest) {
-      const { data } = await fetchApis.fetchEventDetails(reqPayload);
-      store.dispatch.eventDetails.updateData(data);
+    async fetchData(reqPayload: IEventDetailsRequest) {
+      if (!reqPayload) {
+        const state = store.getState();
+
+        reqPayload = {
+          startTime: state.eventDetails.queryParams.startTime!,
+          monitorId: state.eventList.curSelectedMonitorId,
+          eventType: state.eventDetails.queryParams.eventType!
+        };
+      }
+
+      const {data} = await fetchApis.fetchEventDetails(reqPayload);
+      store.dispatch.eventDetails.updateData({data});
+    },
+    setState(payload: Partial<IEventDetailsState>) {
+      store.dispatch.eventDetails.updateData(payload);
     }
   }
 };

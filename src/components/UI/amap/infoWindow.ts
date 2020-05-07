@@ -15,13 +15,13 @@ import { taskTypeColor, taskTypeStatus } from '@/models/home/taskModel/taskDetai
  * @returns {string[]}
  */
 function getTasks(tasks: ITask[]) {
-  return tasks.map((task) => {
-    return `<li>
+  return tasks.reduce((liStr, task) => {
+    return liStr + `<li>
         <span style="color: ${taskTypeColor[task.taskLevel]}"> </span>
         <span>${task.taskName}</span>
         <span>${taskTypeStatus[task.status]}</span>
       </li>`;
-  });
+  }, '');
 }
 
 /**
@@ -44,7 +44,6 @@ function getEntityType(type: number) {
     default:
       return '-';
   }
-
 }
 
 const infoWindowTemplate = (data: InfoWindowResponse) => {
@@ -54,28 +53,28 @@ const infoWindowTemplate = (data: InfoWindowResponse) => {
       <div class="inter-plat-map-info-window-container">
         <div class="inter-plat-map-info-window-close"></div>
         <div class="inter-plat-map-info-window-content">
-          <div class="info-window-item">
+          <div class="info-window-item" title="监控对象最近一次上报的定位时间">
             <span class="key">时间</span>
             <span class="value">${location.gpsTime}</span>
           </div>
-          <div class="info-window-item">
-            <span class="key">事件</span>
+          <div class="info-window-item" title="事件名称">
+            <span class="key">事件名称</span>
             <span class="value">${eventNames}</span>
           </div>
-          <div class="info-window-item">
+          <div class="info-window-item" title="上报事件的监控对象名称">
             <span class="key">监控对象</span>
             <span class="value">${monitor.monitorName}</span>
           </div>
-          <div class="info-window-item">
+          <div class="info-window-item" title="监控对象的类型">
             <span class="key">类型</span>
             <span class="value">${getEntityType(+monitor.monitorType)}</span>
           </div>
-          <div class="info-window-item">
+          <div class="info-window-item" title="监控对象最近一次上报的位置描述">
             <span class="key">位置</span>
             <span class="value">${location.address}</span>
           </div>
           <div class="info-window-item icon-box">
-            <input type="button" class="icon-comp" title="直接处理" />
+            <input type="button" class="icon-comp handle-Event" title="直接处理" />
             <input type="button" class="icon-comp" title="任务处理" disabled />
             <input type="button" class="icon-comp" title="事件过程" disabled />
           </div>

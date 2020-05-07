@@ -12,19 +12,24 @@ import ItemLegend from '@/components/UI/itemLegend';
 import KeyValue from '@/components/UI/keyValue';
 import { eventTypeColor, eventTypeText } from '@/models/home/eventModel/eventDetails';
 import styledComponent from '@/styled';
-import React from 'react';
+import React, { useEffect } from 'react';
 import './index.scss';
 
 interface IEventDetailsProps {
   data: IEventDetailsData;
-  getData: () => void;
+  fetchData: IEventDetailsModel['effects']['fetchData'];
+  curSelectedMonitorId: IEventListState['curSelectedMonitorId']
 }
 
 const EventDetails = (props: Partial<IEventDetailsProps>) => {
-  const { data } = props;
+  const {data, curSelectedMonitorId, fetchData} = props;
+
+  useEffect(() => {
+    fetchData!();
+  }, [curSelectedMonitorId]);
 
   return (
-    <Container conTheme="style1" style={{ marginTop: 10 }}>
+    <Container conTheme="style1" style={{marginTop: 10}}>
       <ItemLegend
         name="事件详情"
         iconColor={eventTypeColor[data!.eventLevel]}

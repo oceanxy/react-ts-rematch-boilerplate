@@ -27,7 +27,7 @@ const Map = (props: IMapProps) => {
     const map = new AMap.Map('mapContainer', {
       // viewMode: '3D',
       pitch: 50,
-      zoom: 14,
+      zoom: 12,
       resizeEnable: true,
       // center: [116.397428, 39.90923], //地图中心点
       keyboardEnable: false,

@@ -11,6 +11,7 @@ import apis, { APIName, APIRequestConfig } from '@/apis/api';
 import { APIResponse } from '@/interfaces/api/mock';
 import _ from 'lodash';
 import { mock, Random } from 'mockjs';
+import moment from 'moment';
 
 /**
  * mock数据集
@@ -33,7 +34,10 @@ export const productionData = (fetchName: keyof APIRequestConfig, isWebsocket?: 
   mock(apis[fetchName].url, mocks[fetchName]);
 };
 
-// 生成车牌
+/**
+ * 生成车牌
+ * @returns {string}
+ */
 function monitorName() {
   const p = [
     '皖',
@@ -64,9 +68,20 @@ function monitorName() {
     '港',
     '澳'
   ][Math.floor(Math.random() * 27)];
-  const r = mock(/[\dA-Z]{5}/);
+  const r = mock(/[A-Z]·[\dA-Z]{5}/);
 
   return `${p}${r}`;
+}
+
+/**
+ * 获取重庆主城内随机经纬度
+ * @returns {number[]}
+ */
+function getLngLat() {
+  return [
+    Random.float(106.258848, 106.708944, 6, 8),
+    Random.float(29.373039, 29.644338, 6, 8)
+  ];
 }
 
 /**
@@ -217,6 +232,22 @@ const mocks: Mocks = {
         startTime: '@datetime',
         monitorName: monitorName,
         eventId: '@guid'
+      }
+    }
+  },
+  handleEvent: {
+    retCode: 0,
+    retMsg: '',
+    data: {
+      handledEventList: {
+        monitorId: '@guid',
+        startTime: moment(),
+        eventType: 0,
+        monitorName,
+        eventStatus: 2,
+        eventName: '上班未到岗',
+        eventLevel: 1,
+        'description': '单个监控对象事件批量处理测试'
       }
     }
   },
@@ -685,46 +716,16 @@ const mocks: Mocks = {
     retCode: 0,
     retMsg: '',
     data: {
-      'positionList': [
+      'positionList|150-200': [
         {
           'happenEvent': '0',
-          'style': 1,
+          'style': () => Random.integer(0, 2),
           'iconUrl': 'http://192.168.110.161:8080/clbs/resources/img/vico/v_21.png',
-          'lnglat': [106.511478, 29.536341],
-          'monitorId': '9712b799-c1f9-45f9-bc91-13bf1d2f1cf9',
-          'monitorName': '川0002',
-          'monitorType': '0',
-          'userId': '7170'
-        },
-        {
-          'happenEvent': '1',
-          'style': 2,
-          'iconUrl': 'http://192.168.24.144:8799/mediaserver/profesionalpic/158460843067823.png',
-          'lnglat': [106.512563, 29.535608],
-          'monitorId': '31a2bb1e-2168-4239-89b0-951a41d247a0',
-          'monitorName': 'IW2538人',
-          'monitorType': '1',
-          'userId': '7352'
-        },
-        {
-          'happenEvent': '1',
-          'style': 15,
-          'iconUrl': 'http://192.168.24.144:8799/mediaserver/profesionalpic/15764632195261.png',
-          'lnglat': [106.511299, 29.535588],
-          'monitorId': '6bb4ee46-c5cd-4d36-8918-8008bdc28a46',
-          'monitorName': 'IW2542人',
-          'monitorType': '1',
-          'userId': '7353'
-        },
-        {
-          'happenEvent': '0',
-          'style': 312,
-          'iconUrl': 'http://192.168.110.161:8080/clbs/resources/img/vico/dispatch-thing.png',
-          'lnglat': [107.389003, 29.707293],
-          'monitorId': '6cf651cd-340d-440f-aad5-3be82a6ffc6e',
-          'monitorName': 'Pen0001',
-          'monitorType': '2',
-          'userId': '7173'
+          'lnglat': getLngLat,
+          'monitorId': '@guid',
+          'monitorName': monitorName,
+          'monitorType|1': [0, 1, 2, 9, 10],
+          'userId': () => Random.integer()
         }
       ],
       'iconSortList': [
@@ -764,14 +765,27 @@ const mocks: Mocks = {
         'gpsTime': '2020-03-26 19:06:39',
         'longitude': '106.514349'
       },
-      'eventNames': '超时长停留',
+      'eventNames|1': ['超时长停留', '超时长停留，上班未到岗', '上班未到岗，SOS报警', 'SOS报警', '上班未到岗'],
       'tasks|3-5': [
         {
           'taskName': () => ['去哪里', '到哪里', '定时任务'][Random.integer(0, 2)],
           'taskLevel|1': [1, 2, 3],
           'status|1': [0, 1, 2]
         }
-      ]
+      ],
+      'eventList|10-15': [
+        {
+          description: null,
+          'eventLevel|1-4': 1,
+          'eventName|1': ['上班未到岗', '超时长停留'],
+          'eventStatus|0-1': 0,
+          eventType: '154',
+          monitorId: '@guid',
+          monitorName: monitorName,
+          startTime: '@datetime',
+          eventId: '@guid'
+        }
+      ],
     }
   }
 };

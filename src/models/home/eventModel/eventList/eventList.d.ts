@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 事件列表类型定义
  * @Date: 2020-04-13 周一 13:32:43
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-13 周一 13:32:43
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-07 周四 10:53:02
  */
 
 import { IEventStatisticsState } from '@/models/home/eventModel/eventStatistics';
@@ -121,7 +121,6 @@ declare global {
     };
     effects: {
       fetchData(reqPayload: IEventListRequest): void;
-      itemClick(reqPayload: IEventDetailsRequest): void;
       setCurId(curSelectedMonitorId: IEventListState['IEventListState']): void;
     };
   }

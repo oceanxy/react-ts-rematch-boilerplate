@@ -3,9 +3,10 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 事件详情类型定义
  * @Date: 2020-04-13 周一 11:49:28
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-13 周一 11:49:28
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-07 周四 10:32:40
  */
+
 import { ModelConfig } from '@rematch/core';
 
 declare global {
@@ -16,15 +17,15 @@ declare global {
     /**
      * 事件开始时间 格式yyyy-MM-dd HH:mm:ss
      */
-    startTime: Date | null;
+    startTime: Date | null
     /**
      * 监控对象ID
      */
-    monitorId: string;
+    monitorId: string
     /**
      * 事件类型
      */
-    eventType: number;
+    eventType: number
   }
 
   /**
@@ -93,17 +94,43 @@ declare global {
    * 事件详情状态
    */
   interface IEventDetailsState {
-    data: IEventDetailsData;
+    /**
+     * 用于查询数据的参数（注意：此对象内的monitorId暂未使用，现在统一使用的是eventList里面的curSelectedMonitorId）
+     */
+    queryParams: Partial<IEventDetailsRequest>
+    /**
+     * 数据
+     */
+    data: IEventDetailsData
   }
 
   interface IEventDetailsModel extends ModelConfig {
     state: IEventDetailsState
     reducers: {
-      updateData(state: IEventDetailsState, data: IEventDetailsData): IEventDetailsState
+      /**
+       * 更新本地状态
+       * @param {IEventDetailsState} state
+       * @param {Partial<IEventDetailsState>} payload
+       * @returns {IEventDetailsState}
+       */
+      updateData(state: IEventDetailsState, payload: Partial<IEventDetailsState>): IEventDetailsState
+      /**
+       * 快速清除数据
+       * @returns {IEventDetailsState}
+       */
       clearData(): IEventDetailsState
     }
     effects: {
-      getData(reqPayload: IEventDetailsRequest): void
+      /**
+       * 设置状态
+       * @param {Partial<IEventDetailsState>} payload
+       */
+      setState(payload: Partial<IEventDetailsState>): void
+      /**
+       * 获取数据
+       * @param {IEventDetailsRequest} reqPayload
+       */
+      fetchData(reqPayload?: IEventDetailsRequest): void
     }
   }
 }

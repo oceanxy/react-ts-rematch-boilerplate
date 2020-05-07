@@ -32,8 +32,6 @@ const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
     visible: false,
     current: null as ITemporaryGroup | null
   });
-  // 解除绑定loading状态
-  const [loading, setLoading] = useState(false);
 
   /**
    * 处理点击‘创建临时组’按钮事件
@@ -79,7 +77,6 @@ const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
             title="创建临时组"
             className="inter-plat-temp-group-create-icon"
             onClick={handleClick}
-            disabled={loading}
           />
         }
         nameStyled={styledComponent.centerTitle}

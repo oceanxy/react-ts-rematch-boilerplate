@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 const mapStateToProps = (state: RootState) => state.eventList;
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   fetchData: dispatch.eventList.fetchData,
-  itemClick: dispatch.eventList.itemClick,
+  setEventDetailsState: dispatch.eventDetails.setState,
   clearEventDetailsData: dispatch.eventDetails.clearData,
   setCurMonitorId: dispatch.eventList.setCurId
 });

@@ -4,7 +4,7 @@
  * @Description: 事件列表model
  * @Date: 2020-03-23 14:59:49
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-01 周三 11:04:01
+ * @LastModifiedTime: 2020-05-07 周四 10:43:13
  */
 
 import fetchApis from '@/apis';
@@ -40,17 +40,13 @@ const eventList: IEventListModel = {
 
       // 更新事件详情
       if (eventList?.length && !reqPayload.isStatisticsMethodChanged) {
-        store.dispatch.eventDetails.updateData(latestEventDetails);
+        store.dispatch.eventDetails.updateData({data: latestEventDetails});
       }
 
       // 更新事件数量
       store.dispatch.eventStatistics.updateData(eventStatistics);
       // 更新事件列表
       store.dispatch.eventList.updateData(eventList);
-    },
-    async itemClick(reqPayload) {
-      // 根据请求参数获取事件详情数据
-      await store.dispatch.eventDetails.getData(reqPayload);
     },
     async setCurId(curSelectedMonitorId) {
       store.dispatch.eventList.updateCurId(curSelectedMonitorId);
