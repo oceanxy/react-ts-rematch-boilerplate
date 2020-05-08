@@ -23,6 +23,37 @@ const defaultData: IEntity = {
 };
 
 /**
+ * 实体（监控对象）类型
+ */
+export enum EntityType {
+  /**
+   * 车
+   * @type {number}
+   */
+  Car = 0,
+  /**
+   * 人
+   * @type {number}
+   */
+  People = 1,
+  /**
+   * 动态物品
+   * @type {number}
+   */
+  Thing = 2,
+  /**
+   * 静态物资
+   * @type {number}
+   */
+  Supplies = 9,
+  /**
+   * 调度员
+   * @type {number}
+   */
+  Dispatcher = 10
+}
+
+/**
  * 实体model
  * @type {IEntityModel}
  */

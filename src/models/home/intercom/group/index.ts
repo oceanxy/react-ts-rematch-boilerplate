@@ -54,7 +54,6 @@ const group: IIntercomGroupModel = {
     setState(payload: Partial<IIntercomGroupState>): void {
       // 根据当前激活群组类型自动打开/关闭对讲面板
       store.dispatch.intercom.setActive(Boolean(payload.curActiveGroupType));
-      // 更新对讲群组状态
       store.dispatch.intercomGroup.updateState(payload);
     }
   }

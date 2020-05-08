@@ -10,6 +10,7 @@
 import Icon, { IconSource, IconSourceHover } from '@/components/UI/iconComp';
 import { ISearchProps } from '@/components/UI/search/index';
 import { POI } from '@/containers/UI/amap';
+import { EntityType } from '@/models/UI/entity';
 import { monitorTypeIcon, SearchCondition } from '@/models/UI/search';
 import React, { useEffect, useRef } from 'react';
 import styled, { StyledComponent } from 'styled-components';
@@ -79,7 +80,7 @@ function handleSearchPanelElement(searchCondition: SearchCondition, data?: Searc
             <li className="inter-plat-search-display-item" key={`monitor-item-${index}`}>
               <Icon
                 text={item.monitorName}
-                icon={monitorTypeIcon[item.monitorType!] as IconSource}
+                icon={monitorTypeIcon[item.monitorType! as EntityType] as IconSource}
                 iconHover={monitorTypeIcon[`${item.monitorType}_hover`] as IconSourceHover}
               />
             </li>

@@ -86,7 +86,15 @@
           width: 40px;
           height: 28px;
           cursor: pointer;
-          background: url(../iconComp/images/taskDetails/task_details_complete.png) no-repeat center / auto 80%;
+          background: no-repeat center / auto 80%;
+
+          &.handle-event {
+            background-image: url(../iconComp/images/taskDetails/task_details_complete.png);
+          }
+
+          &.intercom-call {
+            background-image: url(../iconComp/images/intercom/intercom-call.png);
+          }
 
           &:hover {
             background-color: rgba(2, 62, 93, .5);

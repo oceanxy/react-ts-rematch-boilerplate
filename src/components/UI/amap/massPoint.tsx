@@ -4,24 +4,40 @@
  * @Description: 海量点组件
  * @Date: 2020-01-14 17:50:59
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-07 周四 10:59:56
+ * @LastModifiedTime: 2020-05-08 周五 14:41:59
  */
 
 import config from '@/config';
 import { HandleEvent } from '@/containers/home/eventModel';
+import { CurActiveGroupType } from '@/models/home/intercom/group';
 import { message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import carPng from './images/dispatch-car.png';
 import peoplePng from './images/dispatch-people.png';
+import suppliesPng from './images/dispatch-supplies.png';
 import thingPng from './images/dispatch-thing.png';
 import './index.scss';
 import infoWindowTemplate from './infoWindow';
 
+/**
+ * 海量点组件Render Props
+ */
 export interface MassPointProps {
   map: IAMapState['mapInstance']
   fetchMassPoint: IAMapModel['effects']['fetchMassPoint']
   fetchWindowInfo: IAMapModel['effects']['fetchWindowInfo']
   data: IAMapState['massPoints']
+  intercomGroupState: IIntercomGroupState,
+  setIntercomGroupState: IIntercomGroupModel['effects']['setState']
+}
+
+/**
+ * 实体对讲Props
+ */
+interface EntityIntercomCallProps {
+  intercomGroupState: IIntercomGroupState,
+  setIntercomGroupState: IIntercomGroupModel['effects']['setState'],
+  curMassPointInfo: InfoWindowResponse
 }
 
 /**
@@ -56,15 +72,19 @@ function setMass(props: Pick<MassPointProps, 'data' | 'map'>): AMap.MassMarks {
     }));
   } else {
     style = [{
-      url: peoplePng,
-      anchor: new AMap.Pixel(12, -5),
-      size: new AMap.Size(24, 24)
-    }, {
       url: carPng,
       anchor: new AMap.Pixel(12, -5),
       size: new AMap.Size(24, 24)
     }, {
+      url: peoplePng,
+      anchor: new AMap.Pixel(12, -5),
+      size: new AMap.Size(24, 24)
+    }, {
       url: thingPng,
+      anchor: new AMap.Pixel(12, -5),
+      size: new AMap.Size(24, 24)
+    }, {
+      url: suppliesPng,
       anchor: new AMap.Pixel(12, -5),
       size: new AMap.Size(24, 24)
     }];
@@ -78,10 +98,53 @@ function setMass(props: Pick<MassPointProps, 'data' | 'map'>): AMap.MassMarks {
 }
 
 /**
+ * 打开对讲面板
+ * @param {EntityIntercomCallProps} intercomParams
+ */
+const openIntercomCall = (intercomParams: EntityIntercomCallProps) => {
+  const {intercomGroupState, setIntercomGroupState, curMassPointInfo} = intercomParams;
+  const {curActiveGroupType, id, name} = intercomGroupState;
+  const {monitorName, monitorId, userId} = curMassPointInfo.monitor;
+
+  if (curActiveGroupType === CurActiveGroupType.Null) {
+    setIntercomGroupState!({
+      name: monitorName,
+      intercomId: userId,
+      id: monitorId,
+      curActiveGroupType: CurActiveGroupType.Entity
+    });
+  } else if (curActiveGroupType === CurActiveGroupType.Task) {
+    message.destroy();
+    message.warning((
+      <span>任务组（<span className="highlight"> {name} </span>）正在进行对讲，暂不能进行此操作！</span>
+    ));
+  } else if (curActiveGroupType === CurActiveGroupType.Temporary) {
+    message.destroy();
+    message.warning((
+      <span>临时组（<span className="highlight"> {name} </span>）正在进行对讲，暂不能进行此操作！</span>
+    ));
+  } else {
+    message.destroy();
+
+    if (id === curMassPointInfo.monitor.monitorId) {
+      message.destroy();
+      message.info((
+        <span>当前监控对象（<span className="highlight"> {name} </span>）已激活对讲功能，请勿重复操作！</span>
+      ));
+    } else {
+      message.destroy();
+      message.warning((
+        <span>其他监控对象（<span className="highlight"> {name} </span>）正在进行对讲，暂不能进行此操作！</span>
+      ));
+    }
+  }
+};
+
+/**
  * 海量点组件
  */
 const MassPoint = (props: MassPointProps) => {
-  const {fetchMassPoint, data, fetchWindowInfo} = props;
+  const {fetchMassPoint, data, fetchWindowInfo, intercomGroupState, setIntercomGroupState} = props;
   const map = props.map!;
   /**
    * 处理事件对话框显示状态
@@ -112,42 +175,59 @@ const MassPoint = (props: MassPointProps) => {
   }
 
   /**
-   * 处理事件对话框
+   * 处理窗体按钮事件
    * @param {Event} e
    */
-  const openHandleEvent = (e: Event) => {
-    if ((e.target as HTMLButtonElement)?.className.includes('handle-Event')) {
+  const handleButtonEvent = (e: Event) => {
+    const ele = (e.target as HTMLButtonElement);
+
+    if (ele?.className.includes('handle-event')) {
       infoWindow.close();
       setIsShowModal(true);
+    } else if (ele?.className.includes('intercom-call')) {
+      const intercomParams = {
+        intercomGroupState,
+        setIntercomGroupState,
+        curMassPointInfo: curMassPointInfo as InfoWindowResponse
+      };
+
+      openIntercomCall(intercomParams);
     }
   };
 
   /**
-   * 关闭窗体事件
+   * 关闭海量点弹窗
    * @param {Event} e
    */
   const closeInfoWindow = (e: Event) => {
     if ((e.target as HTMLDivElement)?.className === 'inter-plat-map-info-window-close') {
+      // 关闭海量点信息弹窗
       infoWindow.close();
+      // 关闭时间处理对话框
       setIsShowModal(false);
+      // 清空当前选中的海量点信息
+      setCurMassPointInfo(undefined);
     }
   };
 
   /**
-   * 数据更新时，更新地图上的海量点
+   * 海量点数据更新时，重新渲染海量点及绑定事件
    */
   useEffect(() => {
     // 获取元素
     const amapContainer = document.querySelector('.amap-maps');
     const amapOverlays = document.querySelector('.amap-overlays');
 
-    // 监听海量点弹窗关闭事件
+    // 监听按钮事件
+    amapContainer?.removeEventListener('click', closeInfoWindow);
     amapContainer?.addEventListener('click', closeInfoWindow);
+    amapOverlays?.removeEventListener('click', handleButtonEvent);
+    amapOverlays?.addEventListener('click', handleButtonEvent);
 
     /**
      * 海量点点击事件
      */
-    mass.on('click', async (e: any) => {
+    mass.off('click').on('click', async (e: any) => {
       const {monitorId, monitorType} = e.data;
       // 请求弹窗内的数据
       const response = await fetchWindowInfo({
@@ -157,12 +237,9 @@ const MassPoint = (props: MassPointProps) => {
 
       if (+response.retCode === 0) {
         // 窗体绑定数据并显示
-        infoWindow.setContent(infoWindowTemplate(response.data));
+        infoWindow.setContent(infoWindowTemplate(response.data, e.data as MassPoint));
         infoWindow.open(map!, e.data.lnglat);
         setCurMassPointInfo(response.data);
-
-        // 监听点击处理事件按钮事件
-        amapOverlays?.addEventListener('click', openHandleEvent);
       } else {
         setCurMassPointInfo(undefined);
         message.error('获取信息失败，请稍候再试！');
@@ -173,9 +250,9 @@ const MassPoint = (props: MassPointProps) => {
       // 移除事件
       mass.off('click');
       amapContainer?.removeEventListener('click', closeInfoWindow);
-      amapOverlays?.removeEventListener('click', openHandleEvent);
+      amapOverlays?.removeEventListener('click', handleButtonEvent);
     };
-  }, [JSON.stringify(props.data.positionList)]);
+  }, [JSON.stringify(props.data.positionList), intercomGroupState, JSON.stringify(curMassPointInfo)]);
 
   /**
    * 初始化组件时请求数据

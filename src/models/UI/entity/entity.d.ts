@@ -8,6 +8,7 @@
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
+import { EntityType } from '@/models/UI/entity/index';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
@@ -32,7 +33,7 @@ declare global {
      * 监控对象类型
      * -1：全部 0：车；1：人；2：物；9：静态物资；10：调度员
      */
-    monitorType?: -1 | 0 | 1 | 2 | 9 | 10 | IEntity['monitorType'][]
+    monitorType?: -1 | EntityType | EntityType[]
     /**
      * 所属分组名称
      */

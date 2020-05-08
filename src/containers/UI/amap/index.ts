@@ -4,7 +4,7 @@
  * @Description: amap组件
  * @Date: 2020-03-31 周二 17:03:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-07 周四 10:59:37
+ * @LastModifiedTime: 2020-05-08 周五 15:01:34
  */
 
 import AMap from '@/components/UI/amap';
@@ -14,11 +14,13 @@ import Boundary from './boundary';
 import POI from './POI';
 
 const mapStateToProps = (state: RootState) => ({
-  state: state.map
+  state: state.map,
+  intercomGroupState: state.intercomGroup
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
-  dispatches: dispatch.map
+  dispatches: dispatch.map,
+  setIntercomGroupState: dispatch.intercomGroup.setState
 });
 
 export { POI, Boundary };

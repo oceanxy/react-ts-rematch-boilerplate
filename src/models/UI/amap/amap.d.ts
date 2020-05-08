@@ -43,9 +43,13 @@ declare global {
      */
     monitor: {
       /**
-       * 监控对象ID
+       * 监控对象ID（平台）
        */
       monitorId: string
+      /**
+       * 监控对象ID（第三方平台）
+       */
+      userId: number
       /**
        * 监控对象类型 0：车 1 :人 2 :动态物品 9:静态物资 10:调度员
        */

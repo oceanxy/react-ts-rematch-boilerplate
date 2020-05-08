@@ -718,13 +718,15 @@ const mocks: Mocks = {
     data: {
       'positionList|150-200': [
         {
-          'happenEvent': '0',
-          'style': () => Random.integer(0, 2),
+          'happenEvent|1': [0, 1],
+          // 'style|+1': [0, 1, 2, 3, 4],
+          // 'monitorType|+1': [0, 1, 2, 9, 10],
+          'style|+1': [0, 1, 2, 3],
+          'monitorType|+1': [0, 1, 2, 9],
           'iconUrl': 'http://192.168.110.161:8080/clbs/resources/img/vico/v_21.png',
           'lnglat': getLngLat,
           'monitorId': '@guid',
           'monitorName': monitorName,
-          'monitorType|1': [0, 1, 2, 9, 10],
           'userId': () => Random.integer()
         }
       ],
@@ -750,7 +752,7 @@ const mocks: Mocks = {
         'groupName': '回归测试',
         'hasForbiddenWord': false,
         'iconUrl': 'http://192.168.110.161:8080/clbs/resources/img/vico/v_21.png',
-        'monitorId': '72eaf419-3da4-4d5b-9e03-0ac54e78c2f4',
+        'monitorId': '@guid',
         'monitorName': monitorName,
         'monitorType|1': [0, 1, 2, 9, 10],
         'onlineStatus|1': [0, 1],

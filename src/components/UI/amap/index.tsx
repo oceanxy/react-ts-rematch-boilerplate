@@ -32,13 +32,15 @@ const UseMap = useScript(`https://webapi.amap.com/maps?v=${config.map.mapVersion
 export interface IZWMapProps extends IContainerProps<any> {
   state: IAMapState,
   dispatches: IAMapModel['effects']
+  intercomGroupState: IIntercomGroupState,
+  setIntercomGroupState: IIntercomGroupModel['effects']['setState']
 }
 
 /**
  * 地图组件
  */
 const ZWMap = (props: Partial<IZWMapProps>) => {
-  const {state, dispatches} = props;
+  const {state, dispatches, intercomGroupState, setIntercomGroupState} = props;
   const {setState, fetchMassPoint, fetchWindowInfo} = dispatches!;
   const {mapInstance: map, mouseToolType, callback, massPoints} = state!;
 
@@ -53,6 +55,8 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
               fetchMassPoint={fetchMassPoint}
               data={massPoints}
               fetchWindowInfo={fetchWindowInfo}
+              intercomGroupState={intercomGroupState!}
+              setIntercomGroupState={setIntercomGroupState!}
             />
           </>) :
           <UseMap setState={setState} />

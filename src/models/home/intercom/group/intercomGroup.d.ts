@@ -18,9 +18,8 @@ declare global {
     /**
      * 群组名称
      */
-    name: string
-    /**
-     * 【平台】群组ID/实体（监控对象）ID
+    name: string/**
+     * 【平台】群组ID或实体ID（监控对象ID）
      */
     id: string
     /**
