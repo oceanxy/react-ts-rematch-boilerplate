@@ -241,7 +241,7 @@ const mocks: Mocks = {
     data: {
       handledEventList: {
         monitorId: '@guid',
-        startTime: moment(),
+        startTime: moment().format('YYYY-MM-dd HH:mm:ss'),
         eventType: 0,
         monitorName,
         eventStatus: 2,
@@ -785,7 +785,7 @@ const mocks: Mocks = {
           startTime: '@datetime',
           eventId: '@guid'
         }
-      ],
+      ]
     }
   }
 };

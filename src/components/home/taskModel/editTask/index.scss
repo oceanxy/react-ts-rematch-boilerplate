@@ -27,6 +27,15 @@
   &:hover {
     @include bg_hover;
   }
+
+  &[disabled] {
+    filter: grayscale(100%);
+
+    &:hover {
+      background-color: #1d1d1d;
+      color: #838383;
+    }
+  }
 }
 
 .task-operation-modal.ant-model {

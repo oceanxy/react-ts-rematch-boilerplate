@@ -1,8 +1,28 @@
-.inter-plat-handle-event.inter-plat-handle-event {
-  resize: none;
-  background: rgba(45, 60, 76, .3);
-  border: 1px solid rgba(45, 60, 76, .8);
-  outline: none;
-  color: #dbe7f5;
-  font-size: 12px;
+.inter-plat-handle-event-modal {
+  &.ant-modal .modal-row {
+    margin: 10px 0;
+  }
+
+  .ant-modal-body {
+    max-height: 600px;
+    overflow-y: auto;
+
+    .inter-plat-handle-event-name {
+      border-top: 1px solid rgba(45, 60, 76, .8);
+    }
+  }
+
+  .inter-plat-handle-event {
+    resize: none;
+    background: rgba(45, 60, 76, .3);
+    border: 1px solid rgba(45, 60, 76, .8);
+    outline: none;
+    color: #dbe7f5;
+    font-size: 12px;
+
+    &[disabled] {
+      filter: grayscale(100%);
+      background: rgba(45, 60, 76, .5);
+    }
+  }
 }
