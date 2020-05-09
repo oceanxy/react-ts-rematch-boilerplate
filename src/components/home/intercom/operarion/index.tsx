@@ -4,7 +4,7 @@
  * @Description: 对讲组名称组件
  * @Date: 2020-04-21 周二 15:07:10
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-29 周三 11:29:09
+ * @LastModifiedTime: 2020-05-09 周六 15:31:08
  */
 
 import Container from '@/components/UI/containerComp';
@@ -20,10 +20,11 @@ import './index.scss';
  * 对讲操作组件Render Props
  */
 interface IIntercomOperationProps {
-  curActiveGroupType: IIntercomGroupState['curActiveGroupType']
+  intercomGroupState: IIntercomGroupState
   intercomNoticeState: IIntercomNoticeState
   intercomNoticeDispatch: IIntercomNoticeModel['effects']
   dispatches: IIntercomOperationModel['effects']
+  curMassPoint: IAMapState['curMassPoint']
 }
 
 /**
@@ -33,13 +34,11 @@ interface IIntercomOperationProps {
  * @constructor
  */
 const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
-  // 监控对象是否被禁言
-  const isBan = false;
-
-  const {curActiveGroupType, intercomNoticeState, intercomNoticeDispatch, dispatches} = props;
+  const {intercomGroupState, intercomNoticeState, intercomNoticeDispatch, dispatches, curMassPoint} = props;
   const {active, value} = intercomNoticeState!;
   const {setState, sendData} = intercomNoticeDispatch!;
   const {intercomGroupCall, stopIntercomGroupCall, entityControl} = dispatches!;
+  const {curActiveGroupType, intercomId} = intercomGroupState!;
   /**
    * 计时状态
    */
@@ -55,7 +54,7 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   /**
    * 当前监控对象禁言状态
    */
-  const [ban, setBan] = useState(isBan);
+  const [ban, setBan] = useState(curMassPoint?.monitor.hasForbiddenWord);
 
   /**
    * 对讲通知组件状态控制
@@ -99,7 +98,7 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   };
 
   /**
-   * 电话
+   * 拨打电话
    */
   const onCall = () => {
     if (!callProcessing) {
@@ -119,7 +118,7 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   const onBan = () => {
     entityControl({
       controlCmd: ban ? ControlCmd.LIFT_BAN : ControlCmd.BAN,
-      targetMsId: 0 // 监控对象ID
+      targetMsId: intercomId // 对讲ID（第三方平台）
     });
     setBan(!ban);
   };
@@ -134,12 +133,17 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   };
 
   /**
-   * 超时退出组呼
+   * 超时退出组呼/个呼/电话
    * @param {number} timing
    */
   const exitCallingWhenTimeout = (timing: number) => {
-    if (timing > 35) {
+    if (intercomCallProcessing && timing <= 0) {
       setIntercomCallState(false);
+    }
+
+    if (callProcessing && timing <= 0) {
+      setTiming(false);
+      setCallProcessing(false);
     }
   };
 
@@ -206,7 +210,14 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
 
   return (
     <Container className="inter-plat-intercom-operation">
-      {timing ? <Timing startTime={moment()} getTiming={exitCallingWhenTimeout} /> : null}
+      {timing ? (
+        <Timing
+          isCountdown={true}
+          countdownDuration={callProcessing ? 30000 : 35000} // 持续时长：个呼/组呼默认35秒，电话30秒
+          startTime={moment()}
+          getTiming={exitCallingWhenTimeout}
+        />
+      ) : null}
       <Container className="inter-plat-intercom-button-container">{buttons()}</Container>
     </Container>
   );

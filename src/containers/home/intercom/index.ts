@@ -3,13 +3,14 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 对讲入口
  * @Date: 2020-04-21 周二 15:04:21
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-21 周二 15:04:21
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-09 周六 11:54:19
  */
 
 import IntercomPanel from '@/components/home/intercom';
 import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
+import IntercomEntityCall from './entityCall';
 import IntercomGroup from './group';
 import IntercomMembers from './members';
 import IntercomNotice from './notice';
@@ -17,6 +18,7 @@ import IntercomOperation from './operation';
 
 const mapStateToProps = (state: RootState) => ({
   active: state.intercom.active,
+  curActiveGroupType: state.intercomGroup.curActiveGroupType,
   isIntercomNoticeActive: state.intercomNotice.active
 });
 
@@ -26,4 +28,4 @@ const mapDispatchToProps = (dispatch: Dispatch): any => ({
 
 const Intercom = connect(mapStateToProps, mapDispatchToProps)(IntercomPanel);
 
-export { IntercomGroup, IntercomMembers, IntercomOperation, Intercom, IntercomNotice };
+export { IntercomGroup, IntercomMembers, IntercomOperation, Intercom, IntercomNotice, IntercomEntityCall };

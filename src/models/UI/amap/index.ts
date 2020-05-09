@@ -20,6 +20,7 @@ const map: IAMapModel = {
     mapInstance: null,
     mouseToolType: null,
     callback: undefined,
+    curMassPoint: undefined,
     massPoints: {
       positionList: [],
       iconSortList: []
@@ -34,6 +35,9 @@ const map: IAMapModel = {
   effects: {
     setState(payload: Partial<IAMapState>): void {
       store.dispatch.map.updateState(payload);
+    },
+    clearCurMassPoint() {
+      store.dispatch.map.updateState({curMassPoint: undefined});
     },
     async fetchMassPoint(monitorType: IEntity['monitorType']) {
       const response: APIResponse<MassPointResponse> = await fetchApis.fetchMassPoint(monitorType);

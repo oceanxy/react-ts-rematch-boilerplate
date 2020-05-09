@@ -4,11 +4,18 @@
  * @Description: 对讲组件
  * @Date: 2020-01-14 14:24:28
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-21 周二 16:11:30
+ * @LastModifiedTime: 2020-05-09 周六 11:57:05
  */
 
 import Container from '@/components/UI/containerComp';
-import { IntercomGroup, IntercomMembers, IntercomNotice, IntercomOperation } from '@/containers/home/intercom';
+import {
+  IntercomEntityCall,
+  IntercomGroup,
+  IntercomMembers,
+  IntercomNotice,
+  IntercomOperation
+} from '@/containers/home/intercom';
+import { CurActiveGroupType } from '@/models/home/intercom/group';
 import React from 'react';
 import './index.scss';
 
@@ -19,13 +26,14 @@ interface IIntercomProps {
   active: IIntercomState['active']
   setActive: IIntercomModel['effects']['setActive']
   isIntercomNoticeActive: IIntercomNoticeState['active']
+  curActiveGroupType: IIntercomGroupState['curActiveGroupType']
 }
 
 /**
  * 临时组组件
  */
 const Intercom = (props: Partial<IIntercomProps>) => {
-  const {active, setActive, isIntercomNoticeActive} = props;
+  const {active, setActive, isIntercomNoticeActive, curActiveGroupType} = props;
 
   /**
    * 关闭事件
@@ -43,7 +51,12 @@ const Intercom = (props: Partial<IIntercomProps>) => {
     >
       <IntercomGroup />
       <Container className="inter-plat-intercom-content">
-        {isIntercomNoticeActive ? <IntercomNotice /> : <IntercomMembers />}
+        {isIntercomNoticeActive ?
+          <IntercomNotice /> :
+          curActiveGroupType === CurActiveGroupType.Entity ?
+            <IntercomEntityCall /> :
+            <IntercomMembers />
+        }
         <IntercomOperation />
       </Container>
     </Container>

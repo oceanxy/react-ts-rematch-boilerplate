@@ -4,7 +4,7 @@
  * @Description: 海量点组件
  * @Date: 2020-01-14 17:50:59
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-08 周五 14:41:59
+ * @LastModifiedTime: 2020-05-09 周六 14:29:04
  */
 
 import config from '@/config';
@@ -24,11 +24,13 @@ import infoWindowTemplate from './infoWindow';
  */
 export interface MassPointProps {
   map: IAMapState['mapInstance']
+  curMassPoint: IAMapState['curMassPoint']
   fetchMassPoint: IAMapModel['effects']['fetchMassPoint']
   fetchWindowInfo: IAMapModel['effects']['fetchWindowInfo']
   data: IAMapState['massPoints']
   intercomGroupState: IIntercomGroupState,
   setIntercomGroupState: IIntercomGroupModel['effects']['setState']
+  mapDispatchers: IAMapModel['effects']
 }
 
 /**
@@ -141,16 +143,16 @@ const openIntercomCall = (intercomParams: EntityIntercomCallProps) => {
  * 海量点组件
  */
 const MassPoint = (props: MassPointProps) => {
-  const {fetchMassPoint, data, fetchWindowInfo, intercomGroupState, setIntercomGroupState} = props;
+  const {
+    fetchMassPoint, data, fetchWindowInfo, curMassPoint,
+    intercomGroupState, setIntercomGroupState, mapDispatchers
+  } = props;
   const map = props.map!;
+  const {setState, clearCurMassPoint} = mapDispatchers;
   /**
    * 处理事件对话框显示状态
    */
   const [isShowModal, setIsShowModal] = useState(false);
-  /**
-   * 当前实体（监控对象）信息
-   */
-  const [curMassPointInfo, setCurMassPointInfo] = useState(undefined as undefined | InfoWindowResponse);
   // 事件弹窗实例
   let infoWindow: any;
   // 海量点实例
@@ -165,15 +167,16 @@ const MassPoint = (props: MassPointProps) => {
   const handleButtonEvent = (e: Event) => {
     const ele = (e.target as HTMLButtonElement);
 
-    if (curMassPointInfo) {
+    if (curMassPoint) {
       if (ele?.className.includes('handle-event')) {
         map.clearInfoWindow();
+        clearCurMassPoint();
         setIsShowModal(true);
       } else if (ele?.className.includes('intercom-call')) {
         const intercomParams = {
           intercomGroupState,
           setIntercomGroupState,
-          curMassPointInfo: curMassPointInfo as InfoWindowResponse
+          curMassPointInfo: curMassPoint
         };
 
         openIntercomCall(intercomParams);
@@ -192,7 +195,7 @@ const MassPoint = (props: MassPointProps) => {
       // 关闭时间处理对话框
       setIsShowModal(false);
       // 清空当前选中的海量点信息
-      setCurMassPointInfo(undefined);
+      clearCurMassPoint();
     }
   };
 
@@ -236,9 +239,9 @@ const MassPoint = (props: MassPointProps) => {
         // 窗体绑定数据并显示
         infoWindow.setContent(infoWindowTemplate(response.data, e.data as MassPoint));
         infoWindow.open(map!, e.data.lnglat);
-        setCurMassPointInfo(response.data);
+        setState({curMassPoint: response.data});
       } else {
-        setCurMassPointInfo(undefined);
+        clearCurMassPoint();
         message.error('获取信息失败，请稍候再试！');
       }
     });
@@ -258,12 +261,12 @@ const MassPoint = (props: MassPointProps) => {
       amapContainer?.removeEventListener('click', closeInfoWindow);
       amapOverlays?.removeEventListener('click', handleButtonEvent);
     };
-  }, [intercomGroupState, JSON.stringify(curMassPointInfo)]);
+  }, [intercomGroupState, JSON.stringify(curMassPoint)]);
 
   return (
     <HandleEvent
       visible={isShowModal}
-      curMassPointInfo={curMassPointInfo}
+      curMassPointInfo={curMassPoint}
       setIsShowModal={setIsShowModal}
     />
   );

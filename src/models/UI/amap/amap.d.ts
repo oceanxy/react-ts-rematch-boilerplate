@@ -168,6 +168,10 @@ declare global {
      * 海量点数据
      */
     massPoints: MassPointResponse
+    /**
+     * 当前弹框的海量点信息
+     */
+    curMassPoint?: InfoWindowResponse
   }
 
   /**
@@ -193,6 +197,10 @@ declare global {
        * @param {Partial<IAMapState>} payload
        */
       setState(payload: Partial<IAMapState>): void
+      /**
+       * 清除当前弹框的海量点信息
+       */
+      clearCurMassPoint(): void
       /**
        * 获取海量点数据
        * @param {IEntity["monitorType"]} monitorType

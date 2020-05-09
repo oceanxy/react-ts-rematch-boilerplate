@@ -34,11 +34,10 @@ const operation: IIntercomOperationModel = {
       store.dispatch.monitoringDispatch.stopCalling();
     },
     entityControl(request: RemoteControlMsRequest): void {
-      // TODO 获取当前监控对象ID
       if (!request) {
         request = {
           controlCmd: ControlCmd.BAN,
-          targetMsId: 0
+          targetMsId: store.getState().intercomGroup.intercomId
         };
       }
 

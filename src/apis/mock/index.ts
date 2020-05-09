@@ -750,7 +750,7 @@ const mocks: Mocks = {
         'curAssignmentType': '1',
         'deviceNum': '0002527',
         'groupName': '回归测试',
-        'hasForbiddenWord': false,
+        'hasForbiddenWord|1': [true, false],
         'iconUrl': 'http://192.168.110.161:8080/clbs/resources/img/vico/v_21.png',
         'monitorId': '@guid',
         'monitorName': monitorName,

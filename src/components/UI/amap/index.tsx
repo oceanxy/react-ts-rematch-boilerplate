@@ -51,6 +51,8 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
           (<>
             <MouseTool map={map} mouseToolType={mouseToolType} callback={callback} setState={setState} />
             <MassPoint
+              mapDispatchers={dispatches!}
+              curMassPoint={state?.curMassPoint}
               map={map}
               fetchMassPoint={fetchMassPoint}
               data={massPoints}

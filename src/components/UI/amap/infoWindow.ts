@@ -9,6 +9,7 @@
 
 import { taskTypeColor, taskTypeStatus } from '@/models/home/taskModel/taskDetails';
 import { EntityType } from '@/models/UI/entity';
+import { getEntityTypeText } from '@/utils/helper';
 
 /**
  * 获取任务HTML element
@@ -37,28 +38,6 @@ function generatorTaskItems(tasks: ITask[]) {
       <span>${taskTypeStatus[task.status]}</span>
     </li>`;
   }, '');
-}
-
-/**
- * 获取监控对象类型对应的文本
- * @param {number} type
- * @returns {string}
- */
-function getEntityType(type: number) {
-  switch (type) {
-    case EntityType.Car:
-      return '车';
-    case EntityType.People:
-      return '人';
-    case EntityType.Thing:
-      return '动态物品';
-    case EntityType.Supplies:
-      return '静态物资';
-    case EntityType.Dispatcher:
-      return '调度员';
-    default:
-      return '-';
-  }
 }
 
 /**
@@ -109,20 +88,30 @@ function setWindowFields(data: InfoWindowResponse, massPointData: MassPoint) {
  * 设置窗体按钮
  * @param {MassPoint} massPointData
  * @param {ITask[]} tasks
+ * @param {boolean} onlineStatus
  * @returns {string}
  */
-function setWindowButton(massPointData: MassPoint, tasks: ITask[]) {
+function setWindowButton(massPointData: MassPoint, tasks: ITask[], onlineStatus: boolean) {
   let str = '';
 
+  // 静态物资没有以下功能
   if (massPointData.monitorType !== EntityType.Supplies) {
-    str += '<div class="info-window-item icon-box">';
-    str += '<input type="button" class="icon-comp intercom-call" title="打开对讲" />';
+    let btn = '';
 
-    if (massPointData.happenEvent) {
-      str += '<input type="button" class="icon-comp handle-event" title="直接处理" />';
+    // 是否在线
+    if (onlineStatus) {
+      btn += '<input type="button" class="icon-comp intercom-call" title="打开对讲" />';
     }
 
-    str += '</div>';
+    // 是否有事件发生
+    if (massPointData.happenEvent) {
+      btn += '<input type="button" class="icon-comp handle-event" title="直接处理" />';
+    }
+
+    if (btn) {
+      str = `<div class="info-window-item icon-box">${btn}</div>`;
+    }
+
     str += massPointData.happenEvent ? getTasks(tasks) : '';
   }
 
@@ -153,13 +142,13 @@ const infoWindowTemplate = (data: InfoWindowResponse, massPointData: MassPoint) 
         </div>
         <div class="info-window-item" title="监控对象的类型">
           <span class="key">类型</span>
-          <span class="value">${getEntityType(+massPointData.monitorType!)}</span>
+          <span class="value">${getEntityTypeText(+massPointData.monitorType!)}</span>
         </div>
         <div class="info-window-item" title="监控对象最近一次上报的位置描述">
           <span class="key">位置</span>
           <span class="value">${location.address}</span>
         </div>
-        ${setWindowButton(massPointData, tasks)}
+        ${setWindowButton(massPointData, tasks, !!data.monitor.onlineStatus)}
       </div>
       <div class="inter-plat-map-info-window-content-sharp"></div>
     </d

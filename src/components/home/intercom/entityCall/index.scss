@@ -1,0 +1,24 @@
+.inter-plat-intercom-entity-call {
+  display: flex;
+  overflow-y: auto;
+  width: 280px;
+  height: 74px;
+  justify-content: center;
+  box-shadow: rgba(82, 169, 255, 0.24) 0 0 12px 3px inset;
+  padding: 10px;
+  margin-top: 10px;
+
+  .member-name {
+    width: 100px;
+  }
+
+  .icon-container {
+    width: unset;
+    cursor: pointer;
+
+    .icon-img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

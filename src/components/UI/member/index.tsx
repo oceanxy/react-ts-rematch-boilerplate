@@ -21,7 +21,7 @@ interface IMemberProps {
   /**
    * 成员名称
    */
-  name: string,
+  name?: string,
   /**
    * 成员头像src路径
    */
@@ -62,7 +62,7 @@ const Member = (props: IMemberProps) => {
   return (
     <StyledMember
       className={`inter-plat-member${online ? '' : ' offline'}`}
-      title={`${title}${online ? '' : '(离线)'}`}
+      title={`${title ?? ''}${online ? '' : '(离线)'}`}
       styled={props.styled}
       style={props.style}
       onClick={onClick}

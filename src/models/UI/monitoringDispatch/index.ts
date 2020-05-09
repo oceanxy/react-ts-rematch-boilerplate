@@ -387,6 +387,8 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       hjMediaEngine.audioEngine.onCreateTempGroupResponse = onCreateTempGroupResponse;
       hjMediaEngine.audioEngine.onTempGroupUpdate = onTempGroupUpdate;
       hjMediaEngine.audioEngine.onAddTempGroupMemberResponse = onAddTempGroupMemberResponse;
+
+      // todo 加一个电话接通事件
     },
     login(): void {
       const {hjMediaEngine} = store.getState().monitoringDispatch;

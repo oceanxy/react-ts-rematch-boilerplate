@@ -1,5 +1,5 @@
 import LngLat = AMap.LngLat;
-import moment from 'moment';
+import { EntityType } from '@/models/UI/entity';
 
 const headElement = document.body || document.getElementsByTagName('body')[0];
 const _importedScript: {[src: string]: true} = {};
@@ -67,4 +67,26 @@ export function boundsToString(bounds: LngLat[][] | undefined) {
   }
 
   return boundsStr.join('-');
+}
+
+/**
+ * 获取监控对象类型对应的文本
+ * @param {number} type
+ * @returns {string}
+ */
+export function getEntityTypeText(type: number) {
+  switch (type) {
+    case EntityType.Car:
+      return '车';
+    case EntityType.People:
+      return '人';
+    case EntityType.Thing:
+      return '动态物品';
+    case EntityType.Supplies:
+      return '静态物资';
+    case EntityType.Dispatcher:
+      return '调度员';
+    default:
+      return '-';
+  }
 }
