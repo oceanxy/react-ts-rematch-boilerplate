@@ -44,24 +44,21 @@ interface EntityIntercomCallProps {
  * 设置窗体
  * @returns {AMap.InfoWindow<any>}
  */
-function setInfoWindow(): AMap.InfoWindow {
+const setInfoWindow = (): AMap.InfoWindow => {
   return new AMap.InfoWindow({
-    content: undefined,  //使用默认信息窗体框样式，显示信息内容
     closeWhenClickMap: true,
     autoMove: true,
     isCustom: true,
     showShadow: false,
     offset: new AMap.Pixel(0, 6)
   });
-}
+};
 
 /**
  * 设置海量点
- * @param {Pick<MassPointProps, "data">} props
+ * @param {IAMapState['massPoints']} data
  */
-function setMass(props: Pick<MassPointProps, 'data' | 'map'>): AMap.MassMarks {
-  const {data} = props;
-
+const setMass = (data: IAMapState['massPoints']): AMap.MassMarks => {
   // 海量点图标样式
   let style;
   if (!config.mock) {
@@ -95,7 +92,7 @@ function setMass(props: Pick<MassPointProps, 'data' | 'map'>): AMap.MassMarks {
     style, // 设置样式对象
     cursor: 'pointer'
   });
-}
+};
 
 /**
  * 打开对讲面板
@@ -161,19 +158,6 @@ const MassPoint = (props: MassPointProps) => {
   // 标注实例
   // const marker = new AMap.Marker({content: '', map});
 
-  if (!infoWindow) {
-    infoWindow = setInfoWindow();
-  }
-
-  if (!mass) {
-    mass = setMass(props);
-  }
-
-  // 在地图上设置海量点
-  if (mass && data.positionList.length) {
-    mass.setMap(map);
-  }
-
   /**
    * 处理窗体按钮事件
    * @param {Event} e
@@ -181,17 +165,19 @@ const MassPoint = (props: MassPointProps) => {
   const handleButtonEvent = (e: Event) => {
     const ele = (e.target as HTMLButtonElement);
 
-    if (ele?.className.includes('handle-event')) {
-      infoWindow.close();
-      setIsShowModal(true);
-    } else if (ele?.className.includes('intercom-call')) {
-      const intercomParams = {
-        intercomGroupState,
-        setIntercomGroupState,
-        curMassPointInfo: curMassPointInfo as InfoWindowResponse
-      };
+    if (curMassPointInfo) {
+      if (ele?.className.includes('handle-event')) {
+        map.clearInfoWindow();
+        setIsShowModal(true);
+      } else if (ele?.className.includes('intercom-call')) {
+        const intercomParams = {
+          intercomGroupState,
+          setIntercomGroupState,
+          curMassPointInfo: curMassPointInfo as InfoWindowResponse
+        };
 
-      openIntercomCall(intercomParams);
+        openIntercomCall(intercomParams);
+      }
     }
   };
 
@@ -202,7 +188,7 @@ const MassPoint = (props: MassPointProps) => {
   const closeInfoWindow = (e: Event) => {
     if ((e.target as HTMLDivElement)?.className === 'inter-plat-map-info-window-close') {
       // 关闭海量点信息弹窗
-      infoWindow.close();
+      map.clearInfoWindow();
       // 关闭时间处理对话框
       setIsShowModal(false);
       // 清空当前选中的海量点信息
@@ -210,25 +196,36 @@ const MassPoint = (props: MassPointProps) => {
     }
   };
 
+  useEffect(() => {
+    // 获取海量点数据
+    fetchMassPoint(-1);
+  }, []);
+
   /**
-   * 海量点数据更新时，重新渲染海量点及绑定事件
+   * 初始化地图组件及地图相关元素和数据
    */
   useEffect(() => {
-    // 获取元素
-    const amapContainer = document.querySelector('.amap-maps');
-    const amapOverlays = document.querySelector('.amap-overlays');
+    if (!mass) {
+      mass = setMass(props.data);
+    } else {
+      mass.setData(props.data);
+    }
 
-    // 监听按钮事件
-    amapContainer?.removeEventListener('click', closeInfoWindow);
-    amapContainer?.addEventListener('click', closeInfoWindow);
-    amapOverlays?.removeEventListener('click', handleButtonEvent);
-    amapOverlays?.addEventListener('click', handleButtonEvent);
+    if (!infoWindow) {
+      infoWindow = setInfoWindow();
+    }
+
+    // 在地图上设置海量点
+    if (data.positionList.length) {
+      mass.setMap(map);
+    }
 
     /**
      * 海量点点击事件
      */
     mass.off('click').on('click', async (e: any) => {
       const {monitorId, monitorType} = e.data;
+
       // 请求弹窗内的数据
       const response = await fetchWindowInfo({
         monitorId,
@@ -245,21 +242,23 @@ const MassPoint = (props: MassPointProps) => {
         message.error('获取信息失败，请稍候再试！');
       }
     });
+  }, [JSON.stringify(props.data.positionList)]);
+
+  useEffect(() => {
+    // 获取地图元素
+    const amapOverlays = document.querySelector('.amap-overlays');
+    const amapContainer = document.querySelector('.amap-maps');
+
+    // 监听地图弹窗关闭事件
+    amapContainer?.addEventListener('click', closeInfoWindow);
+    // 监听功能按钮事件
+    amapOverlays?.addEventListener('click', handleButtonEvent);
 
     return () => {
-      // 移除事件
-      mass.off('click');
       amapContainer?.removeEventListener('click', closeInfoWindow);
       amapOverlays?.removeEventListener('click', handleButtonEvent);
     };
-  }, [JSON.stringify(props.data.positionList), intercomGroupState, JSON.stringify(curMassPointInfo)]);
-
-  /**
-   * 初始化组件时请求数据
-   */
-  useEffect(() => {
-    fetchMassPoint(-1);
-  }, []);
+  }, [intercomGroupState, JSON.stringify(curMassPointInfo)]);
 
   return (
     <HandleEvent

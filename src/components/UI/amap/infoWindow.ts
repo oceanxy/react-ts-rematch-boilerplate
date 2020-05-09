@@ -136,6 +136,10 @@ function setWindowButton(massPointData: MassPoint, tasks: ITask[]) {
  * @returns {string}
  */
 const infoWindowTemplate = (data: InfoWindowResponse, massPointData: MassPoint) => {
+  if (!data || !massPointData) {
+    return '';
+  }
+
   const {monitor, location, tasks} = data;
 
   return `
