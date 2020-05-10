@@ -4,7 +4,7 @@
  * @Description: 对讲组名称组件
  * @Date: 2020-04-21 周二 15:07:10
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-10 周日 09:59:19
+ * @LastModifiedTime: 2020-05-10 周日 11:12:59
  */
 
 import Container from '@/components/UI/containerComp';
@@ -166,6 +166,7 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
           countdownDuration={callProcessing ? 30000 : 35000} // 持续时长：个呼/组呼默认35秒；电话呼叫状态30秒；电话接通后，该字段无意义
           startTime={moment()}
           getTiming={exitCallingWhenTimeout}
+          timingTextFormat={!callProcessing ? '' : callState ? '通话中 {timing}' : '连接中 {timing}'}
         />
       ) : null}
       <Container className="inter-plat-intercom-button-container">{buttons()}</Container>

@@ -4,7 +4,7 @@
  * @Description: 高德地图相关类型定义
  * @Date: 2020-04-13 周一 10:18:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-30 周四 17:52:46
+ * @LastModifiedTime: 2020-05-10 周日 11:23:22
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
@@ -155,6 +155,9 @@ declare global {
    * 地图状态
    */
   interface IAMapState {
+    /**
+     * 地图实例
+     */
     mapInstance: AMap.Map | null,
     /**
      * 当前鼠标工具类型

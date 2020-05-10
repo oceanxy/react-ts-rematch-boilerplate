@@ -31,6 +31,7 @@ export interface MassPointProps {
   intercomGroupState: IIntercomGroupState,
   setIntercomGroupState: IIntercomGroupModel['effects']['setState']
   mapDispatchers: IAMapModel['effects']
+  curSelectedMonitorId: IEventListState['curSelectedMonitorId']
 }
 
 /**
@@ -144,7 +145,7 @@ const openIntercomCall = (intercomParams: EntityIntercomCallProps) => {
  */
 const MassPoint = (props: MassPointProps) => {
   const {
-    fetchMassPoint, data, fetchWindowInfo, curMassPoint,
+    fetchMassPoint, data, fetchWindowInfo, curMassPoint, curSelectedMonitorId,
     intercomGroupState, setIntercomGroupState, mapDispatchers
   } = props;
   const map = props.map!;
@@ -223,6 +224,12 @@ const MassPoint = (props: MassPointProps) => {
       mass.setMap(map);
     }
 
+    // curMassPoint字段更新后打开地图上指定海量点的信息弹窗
+    if (!config.mock && curMassPoint) {
+      infoWindow.setContent(infoWindowTemplate(curMassPoint));
+      infoWindow.open(map!, [curMassPoint.location.longitude, curMassPoint.location.latitude]);
+    }
+
     /**
      * 海量点点击事件
      */
@@ -236,16 +243,18 @@ const MassPoint = (props: MassPointProps) => {
       });
 
       if (+response.retCode === 0) {
-        // 窗体绑定数据并显示
-        infoWindow.setContent(infoWindowTemplate(response.data, e.data as MassPoint));
-        infoWindow.open(map!, e.data.lnglat);
         setState({curMassPoint: response.data});
+        // 开启mock时，直接使用当前点击的海量点的坐标
+        if (config.mock) {
+          infoWindow.setContent(infoWindowTemplate(response.data));
+          infoWindow.open(map!, e.data.lnglat);
+        }
       } else {
         clearCurMassPoint();
         message.error('获取信息失败，请稍候再试！');
       }
     });
-  }, [JSON.stringify(props.data.positionList)]);
+  }, [JSON.stringify(props.data.positionList), curMassPoint]);
 
   useEffect(() => {
     // 获取地图元素
@@ -262,6 +271,18 @@ const MassPoint = (props: MassPointProps) => {
       amapOverlays?.removeEventListener('click', handleButtonEvent);
     };
   }, [intercomGroupState, JSON.stringify(curMassPoint)]);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     // 请求弹窗内的数据
+  //     const response = await fetchWindowInfo({
+  //       curSelectedMonitorId,
+  //       monitorType
+  //
+  //       // todo 从事件列表状态里获取当前监控对象的类型和ID
+  //     });
+  //   })();
+  // }, [curSelectedMonitorId]);
 
   return (
     <HandleEvent

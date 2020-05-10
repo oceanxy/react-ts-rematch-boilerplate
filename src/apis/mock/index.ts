@@ -84,6 +84,14 @@ function getLngLat() {
   ];
 }
 
+function getLng() {
+  return getLngLat()[0];
+}
+
+function getLat() {
+  return getLngLat()[1];
+}
+
 /**
  * Mock数据生成规则
  * 注意返回对象内的fetchAPI名称需要与api目录内的相应名称对应
@@ -763,9 +771,9 @@ const mocks: Mocks = {
       },
       'location': {
         'address': '重庆市渝中区石油路街道长江二路172号龙湖重庆时代天街',
-        'latitude': '29.535635',
+        'latitude': getLat,
         'gpsTime': '2020-03-26 19:06:39',
-        'longitude': '106.514349'
+        'longitude': getLng
       },
       'eventNames|1': ['超时长停留', '超时长停留，上班未到岗', '上班未到岗，SOS报警', 'SOS报警', '上班未到岗'],
       'tasks|3-5': [
