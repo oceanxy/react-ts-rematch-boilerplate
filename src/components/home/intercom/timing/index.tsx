@@ -25,11 +25,11 @@ interface IIntercomTimingProps {
    */
   countdownDuration?: number
   /**
-   * 开始组呼时的时间（moment）
+   * 开始主呼时的时间（moment）
    */
   startTime: moment.Moment
   /**
-   * 获取计时状态
+   * 获取计时状态的回调函数
    * @param {number} timing
    */
   getTiming?: (timing: number) => void

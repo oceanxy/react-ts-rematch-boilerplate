@@ -4,7 +4,7 @@
  * @Description: 对讲组名称组件
  * @Date: 2020-04-21 周二 15:07:10
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-09 周六 15:31:08
+ * @LastModifiedTime: 2020-05-10 周日 09:59:19
  */
 
 import Container from '@/components/UI/containerComp';
@@ -20,6 +20,7 @@ import './index.scss';
  * 对讲操作组件Render Props
  */
 interface IIntercomOperationProps {
+  state: IIntercomOperationState
   intercomGroupState: IIntercomGroupState
   intercomNoticeState: IIntercomNoticeState
   intercomNoticeDispatch: IIntercomNoticeModel['effects']
@@ -34,23 +35,15 @@ interface IIntercomOperationProps {
  * @constructor
  */
 const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
-  const {intercomGroupState, intercomNoticeState, intercomNoticeDispatch, dispatches, curMassPoint} = props;
+  const {
+    intercomGroupState, intercomNoticeState, intercomNoticeDispatch,
+    dispatches, curMassPoint, state
+  } = props;
+  const {timing, intercomCallProcessing, callProcessing, callState} = state!;
   const {active, value} = intercomNoticeState!;
-  const {setState, sendData} = intercomNoticeDispatch!;
-  const {intercomGroupCall, stopIntercomGroupCall, entityControl} = dispatches!;
+  const {setState: setNoticeState, sendData} = intercomNoticeDispatch!;
+  const {call, stopCall, entityControl} = dispatches!;
   const {curActiveGroupType, intercomId} = intercomGroupState!;
-  /**
-   * 计时状态
-   */
-  const [timing, setTiming] = useState(false);
-  /**
-   * 个呼、组呼状态
-   */
-  const [intercomCallProcessing, setIntercomCallProcessing] = useState(false);
-  /**
-   * 电话状态
-   */
-  const [callProcessing, setCallProcessing] = useState(false);
   /**
    * 当前监控对象禁言状态
    */
@@ -61,7 +54,7 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
    * @param {boolean} isShowNotice 是否显示对讲通知组件
    */
   const onNotice = (isShowNotice: boolean) => {
-    setState!({active: isShowNotice});
+    setNoticeState!({active: isShowNotice});
   };
 
   /**
@@ -72,43 +65,14 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   };
 
   /**
-   * 处理个呼、组呼、电话（双工）
+   * 处理个呼、组呼、电话（双工）的呼叫或挂断
    * @constructor
    */
   const handleCallModel = (callMode: CallModeEnum) => {
-    if (callMode === CallModeEnum.DUPLEX_CALL_MODE) {
-      onCall();
+    if (callProcessing || intercomCallProcessing) {
+      stopCall();
     } else {
-      onIntercomGroupCall(callMode);
-    }
-  };
-
-  /**
-   * 组呼、个呼
-   * @param {CallModeEnum} callMode
-   */
-  const onIntercomGroupCall = (callMode: CallModeEnum) => {
-    if (!intercomCallProcessing) {
-      setIntercomCallState(true);
-      intercomGroupCall(callMode);
-    } else {
-      setIntercomCallState(false);
-      stopIntercomGroupCall();
-    }
-  };
-
-  /**
-   * 拨打电话
-   */
-  const onCall = () => {
-    if (!callProcessing) {
-      setTiming(true);
-      setCallProcessing(true);
-      intercomGroupCall(CallModeEnum.DUPLEX_CALL_MODE);
-    } else {
-      setTiming(false);
-      setCallProcessing(false);
-      stopIntercomGroupCall();
+      call(callMode);
     }
   };
 
@@ -124,26 +88,12 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   };
 
   /**
-   * 设置个呼、组呼、电话状态
-   * @param {boolean} state
-   */
-  const setIntercomCallState = (state: boolean) => {
-    setTiming(state);
-    setIntercomCallProcessing(state);
-  };
-
-  /**
    * 超时退出组呼/个呼/电话
    * @param {number} timing
    */
   const exitCallingWhenTimeout = (timing: number) => {
-    if (intercomCallProcessing && timing <= 0) {
-      setIntercomCallState(false);
-    }
-
-    if (callProcessing && timing <= 0) {
-      setTiming(false);
-      setCallProcessing(false);
+    if ((intercomCallProcessing && timing <= 0) || (callProcessing && timing <= 0)) {
+      stopCall();
     }
   };
 
@@ -212,8 +162,8 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
     <Container className="inter-plat-intercom-operation">
       {timing ? (
         <Timing
-          isCountdown={true}
-          countdownDuration={callProcessing ? 30000 : 35000} // 持续时长：个呼/组呼默认35秒，电话30秒
+          isCountdown={!callState} // 个呼/组呼/电话呼叫中为true，电话接通后为false
+          countdownDuration={callProcessing ? 30000 : 35000} // 持续时长：个呼/组呼默认35秒；电话呼叫状态30秒；电话接通后，该字段无意义
           startTime={moment()}
           getTiming={exitCallingWhenTimeout}
         />

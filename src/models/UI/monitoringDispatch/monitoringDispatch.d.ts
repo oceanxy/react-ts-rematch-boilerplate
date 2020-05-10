@@ -226,6 +226,12 @@ declare global {
        */
       onTempGroupList(response: {tempGroupList: TemporaryGroup[]}): void
       /**
+       * 双工主叫响铃事件处理
+       * 发起双工主呼后，如果双工链路寻呼成功，会触发双工主叫响铃事件
+       * @param {DuplexCallingRingResponse} response
+       */
+      onDuplexCallingRing(response: DuplexCallingRingResponse): void
+      /**
        * 主呼响应事件
        * 开始主呼会触发主呼开始响应事件；
        * 双工主呼在触发双工主叫响铃事件后，如果双工被叫接听，会触发主呼开始响应事件；

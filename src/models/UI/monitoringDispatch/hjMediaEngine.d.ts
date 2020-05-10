@@ -10,7 +10,8 @@
 import {
   CallingStartResultEnum,
   CallingStopCauseEnum,
-  CallModeEnum, ControlCmd,
+  CallModeEnum,
+  ControlCmd,
   GroupIDTypeEnum,
   LoginResultEnum,
   UserIDTypeEnum
@@ -398,6 +399,24 @@ declare global {
     targetMsId: number
   }
 
+  /**
+   * 双工主叫响铃事件处理response
+   */
+  interface DuplexCallingRingResponse {
+    /**
+     * 双工被叫用户ID
+     */
+    calledMsId: number
+    /**
+     * 双工被叫个呼号码
+     */
+    calledMsNum: number
+    /**
+     * 双工被叫名称
+     */
+    calledMsName: string
+  }
+
   interface VideoEngine {}
 
   /**
@@ -484,7 +503,12 @@ declare global {
 
     onExitFullCallMode(): void
 
-    onDuplexCallingRing(): void
+    /**
+     * 双工主叫响铃事件处理
+     * 发起双工主呼后，如果双工链路寻呼成功，会触发双工主叫响铃事件
+     * @param {DuplexCallingRingResponse} response
+     */
+    onDuplexCallingRing(response: DuplexCallingRingResponse): void
 
     onDuplexCalledRing(): void
 

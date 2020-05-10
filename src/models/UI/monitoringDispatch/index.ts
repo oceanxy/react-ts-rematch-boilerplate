@@ -369,7 +369,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       const {
         onLoginResponse, onLogout, onTempGroupList, onCallingStartResponse, onCallingStop,
         onCreateTempGroupResponse, onTempGroupUpdate, onAddTempGroupMemberResponse,
-        updateState, login
+        updateState, login, onDuplexCallingRing
       } = store.dispatch.monitoringDispatch;
 
       // 创建
@@ -382,6 +382,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       hjMediaEngine.audioEngine.onLoginResponse = onLoginResponse;
       hjMediaEngine.audioEngine.onLogout = onLogout;
       hjMediaEngine.audioEngine.onTempGroupList = onTempGroupList;
+      hjMediaEngine.audioEngine.onDuplexCallingRing = onDuplexCallingRing;
       hjMediaEngine.audioEngine.onCallingStartResponse = onCallingStartResponse;
       hjMediaEngine.audioEngine.onCallingStop = onCallingStop;
       hjMediaEngine.audioEngine.onCreateTempGroupResponse = onCreateTempGroupResponse;
@@ -506,32 +507,11 @@ const monitoringDispatch: IMonitoringDispatchModel = {
     onTempGroupList(response): void {
       // TODO 更新临时组数据
     },
+    onDuplexCallingRing(response: DuplexCallingRingResponse) {
+      store.dispatch.intercomOperation.onDuplexCallingRing(response);
+    },
     onCallingStartResponse(response): void {
-      let type = null;
-
-      switch (response.callMode) {
-        case CallModeEnum.GROUP_CALL_MODE:
-          type = LogType.GroupCall;
-          break;
-        case CallModeEnum.DUPLEX_CALL_MODE:
-          type = LogType.Call;
-          break;
-        case CallModeEnum.INDIVIDUAL_CALL_MODE:
-        default:
-          type = LogType.EntityCall;
-          break;
-      }
-
-      // 记录日志
-      store.dispatch.log.addLog({
-        type,
-        id: store.getState().intercomGroup.id
-      });
-
-      // 呼叫成功
-      if (response.result !== CallingStartResultEnum.CALLING_START_SUCCESS) {
-        message.error('呼叫失败，请稍候重试！');
-      }
+      store.dispatch.intercomOperation.onCallingStartResponse(response);
     },
     onCallingStop(response): void {
       // TODO 主呼停止事件处理（非主动停止主呼时）
