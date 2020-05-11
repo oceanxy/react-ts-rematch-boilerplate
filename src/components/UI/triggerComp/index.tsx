@@ -4,7 +4,7 @@
  * @Description: 触发器组件
  * @Date: 2020-01-14 14:45:32
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-23 周四 16:13:05
+ * @LastModifiedTime: 2020-05-11 周一 11:08:23
  */
 
 import Container from '@/components/UI/containerComp';
@@ -70,7 +70,7 @@ const StyledTrigger = styled(Container)`
 `;
 
 /**
- * 导航菜单组件
+ * 触发器组件
  */
 const Trigger = (props: ITriggerProps) => {
   const {onClick, onTriggerClick, type, name, active, triggerTitle, width, className} = props;
@@ -101,7 +101,9 @@ const Trigger = (props: ITriggerProps) => {
           <Container className="inter-plat-trigger-type">
             <TriggerComponent
               title={triggerTitle}
-              onClick={_.isFunction(onTriggerClick) ? onTriggerClick : undefined} />
+              onClick={_.isFunction(onTriggerClick) ? onTriggerClick : undefined}
+              active={active}
+            />
           </Container>
         ) : null
       }

@@ -9,7 +9,8 @@
 
 import fetchApis from '@/apis';
 import { APIResponse } from '@/interfaces/api/mock';
-import { store } from '@/store';
+import { EntityType } from '@/models/UI/entity';
+import { RootState, store } from '@/store';
 
 /**
  * 地图model
@@ -39,7 +40,17 @@ const map: IAMapModel = {
     clearCurMassPoint() {
       store.dispatch.map.updateState({curMassPoint: undefined});
     },
-    async fetchMassPoint(monitorType: IEntity['monitorType']) {
+    async fetchMassPoint(monitorType?: IEntity['monitorType'][], state?: RootState) {
+      if (!monitorType) {
+        monitorType = state!.displayContent.triggers.reduce((statusArr, trigger) => {
+          if (trigger.status && trigger.value !== 'area') {
+            statusArr.push(trigger.value);
+          }
+
+          return statusArr;
+        }, [] as EntityType[]);
+      }
+
       const response: APIResponse<MassPointResponse> = await fetchApis.fetchMassPoint(monitorType);
 
       store.dispatch.map.updateState({

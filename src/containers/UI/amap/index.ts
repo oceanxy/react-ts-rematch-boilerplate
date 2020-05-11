@@ -16,7 +16,8 @@ import POI from './POI';
 const mapStateToProps = (state: RootState) => ({
   state: state.map,
   intercomGroupState: state.intercomGroup,
-  curSelectedMonitorId: state.eventList.curSelectedMonitorId
+  curSelectedMonitorId: state.eventList.curSelectedMonitorId,
+  triggers: state.displayContent.triggers
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({

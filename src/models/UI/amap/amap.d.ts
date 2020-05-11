@@ -8,6 +8,7 @@
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
+import { RootState } from '@/store';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
@@ -206,9 +207,10 @@ declare global {
       clearCurMassPoint(): void
       /**
        * 获取海量点数据
-       * @param {IEntity["monitorType"]} monitorType
+       * @param {IEntity["monitorType"][]} monitorType
+       * @param {RootState} state
        */
-      fetchMassPoint(monitorType: IEntity['monitorType']): void
+      fetchMassPoint(monitorType?: IEntity['monitorType'][], state?: RootState): void
       /**
        * 获取弹窗信息
        * @param {InfoWindowRequest} reqPayload

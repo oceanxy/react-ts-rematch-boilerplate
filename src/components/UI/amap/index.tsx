@@ -35,13 +35,14 @@ export interface IZWMapProps extends IContainerProps<any> {
   intercomGroupState: IIntercomGroupState,
   setIntercomGroupState: IIntercomGroupModel['effects']['setState']
   curSelectedMonitorId: IEventListState['curSelectedMonitorId']
+  triggers: IDisplayContentState['triggers']
 }
 
 /**
  * 地图组件
  */
 const ZWMap = (props: Partial<IZWMapProps>) => {
-  const {state, dispatches, intercomGroupState, setIntercomGroupState, curSelectedMonitorId} = props;
+  const {state, dispatches, intercomGroupState, setIntercomGroupState, curSelectedMonitorId, triggers} = props;
   const {setState, fetchMassPoint, fetchWindowInfo} = dispatches!;
   const {mapInstance: map, mouseToolType, callback, massPoints} = state!;
 
@@ -61,6 +62,7 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
               intercomGroupState={intercomGroupState!}
               setIntercomGroupState={setIntercomGroupState!}
               curSelectedMonitorId={curSelectedMonitorId!}
+              triggers={triggers!}
             />
           </>) :
           <UseMap setState={setState} />

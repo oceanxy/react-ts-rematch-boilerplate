@@ -4,7 +4,7 @@
  * @Description: 海量点组件
  * @Date: 2020-01-14 17:50:59
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-11 周一 10:07:42
+ * @LastModifiedTime: 2020-05-11 周一 16:18:54
  */
 
 import config from '@/config';
@@ -19,6 +19,13 @@ import thingPng from './images/dispatch-thing.png';
 import './index.scss';
 import infoWindowTemplate from './infoWindow';
 
+// 事件弹窗实例
+let infoWindow: any;
+// 海量点实例
+let mass: any;
+// 标注实例
+// const marker = new AMap.Marker({content: '', map});
+
 /**
  * 海量点组件Render Props
  */
@@ -32,6 +39,7 @@ export interface MassPointProps {
   setIntercomGroupState: IIntercomGroupModel['effects']['setState']
   mapDispatchers: IAMapModel['effects']
   curSelectedMonitorId: IEventListState['curSelectedMonitorId']
+  triggers: IDisplayContentState['triggers']
 }
 
 /**
@@ -146,7 +154,7 @@ const openIntercomCall = (intercomParams: EntityIntercomCallProps) => {
 const MassPoint = (props: MassPointProps) => {
   const {
     fetchMassPoint, data, fetchWindowInfo, curMassPoint, curSelectedMonitorId,
-    intercomGroupState, setIntercomGroupState, mapDispatchers
+    intercomGroupState, setIntercomGroupState, mapDispatchers, triggers
   } = props;
   const map = props.map!;
   const {setState, clearCurMassPoint} = mapDispatchers;
@@ -154,17 +162,12 @@ const MassPoint = (props: MassPointProps) => {
    * 处理事件对话框显示状态
    */
   const [isShowModal, setIsShowModal] = useState(false);
-  // 事件弹窗实例
-  let infoWindow: any;
-  // 海量点实例
-  let mass: any;
-  // 标注实例
-  // const marker = new AMap.Marker({content: '', map});
 
   if (!mass) {
     mass = setMass(props.data);
   } else {
-    mass.setData(props.data);
+    mass.clear();
+    mass.setData(props.data.positionList);
   }
 
   if (!infoWindow) {
@@ -210,10 +213,10 @@ const MassPoint = (props: MassPointProps) => {
     }
   };
 
+  // 获取海量点数据
   useEffect(() => {
-    // 获取海量点数据
-    fetchMassPoint(-1);
-  }, []);
+    fetchMassPoint();
+  }, [JSON.stringify(triggers.slice(0, 4))]);
 
   /**
    * 初始化地图组件及地图相关元素和数据

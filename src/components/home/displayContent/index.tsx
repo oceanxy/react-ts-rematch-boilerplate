@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 显示内容组件
  * @Date: 2020-01-14 13:51:14
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-01-14 13:51:14
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-11 周一 15:20:32
  */
 
 import Container from '@/components/UI/containerComp';
@@ -15,13 +15,35 @@ import React from 'react';
 import './index.scss';
 
 interface IDisplayContent {
-  active?: boolean;
+  triggers: IDisplayContentState['triggers']
+  setState: IDisplayContentModel['effects']['setState']
+  getCurTrigger: IDisplayContentModel['effects']['getCurTrigger']
 }
 
 /**
  * 显示内容组件
  */
-const DisplayContent = (props: IDisplayContent) => {
+const DisplayContent = (props: Partial<IDisplayContent>) => {
+  const {triggers, setState, getCurTrigger} = props;
+
+  /**
+   * 开启/关闭显示内容
+   */
+  const handleTriggerClick = async (triggerName: string) => {
+    // 获取当前状态数组中指定triggerName对象的下标
+    const {trigger, index} = await getCurTrigger!(triggerName);
+    // 拷贝原triggers状态
+    const newTriggers = [...triggers!];
+    // 重置为相反状态
+    newTriggers[index] = {...triggers![index], status: !trigger.status};
+    if (trigger.value === 'area') {
+      // TODO 设置区域
+    } else {
+      // 设置状态
+      setState!({triggers: newTriggers});
+    }
+  };
+
   return (
     <Container className="inter-plat-display-container" conTheme="style3">
       <ItemLegend
@@ -31,10 +53,17 @@ const DisplayContent = (props: IDisplayContent) => {
         nameStyled={styledComponent.centerTitle}
       />
       <Container className="inter-plat-display-item-container">
-        <Trigger name="车辆" type={ETriggerType.TRIGGER} />
-        <Trigger name="任务" type={ETriggerType.TRIGGER} />
-        <Trigger name="物资" type={ETriggerType.TRIGGER} />
-        <Trigger name="区域" type={ETriggerType.TRIGGER} />
+        {
+          triggers?.map((trigger) => (
+            <Trigger
+              key={`inter-plat-display-item-${trigger.text}`}
+              name={trigger.text}
+              type={ETriggerType.TRIGGER}
+              active={trigger.status}
+              onTriggerClick={handleTriggerClick.bind(null, trigger.text)}
+            />
+          ))
+        }
       </Container>
     </Container>
   );

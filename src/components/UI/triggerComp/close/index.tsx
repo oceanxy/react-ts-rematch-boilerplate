@@ -1,7 +1,7 @@
 /**
  * @Author: Oceanxy
  * @Email: xieyang@zwlbs.com
- * @Description: 开关组件
+ * @Description: 关闭组件
  * @Date: 2020-01-14 15:06:24
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
  * @LastModifiedTime: 2020-04-23 周四 15:58:56
@@ -20,7 +20,7 @@ interface ICloseProps {
 }
 
 /**
- * 开关组件-关闭组件
+ * 关闭组件
  */
 const TClose = (props: ICloseProps) => {
   const {className, title, onClick} = props;

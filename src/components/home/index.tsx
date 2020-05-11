@@ -4,16 +4,16 @@
  * @Description: 组件组装
  * @Date: 2020-01-04 14:30:18
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-14 周二 10:24:36
+ * @LastModifiedTime: 2020-05-11 周一 14:30:37
  */
 
-import DisplayContent from '@/components/home/displayContent';
 import EventModel from '@/components/home/eventModel';
 import ResourceStatistics from '@/components/home/resourceStatistics';
 import TaskModel from '@/components/home/taskModel';
 import Container from '@/components/UI/containerComp';
 import Nav from '@/components/UI/nav';
 import { renderRoutes } from '@/config/router';
+import DisplayContent from '@/containers/home/displayContent';
 import { Intercom } from '@/containers/home/intercom';
 import TemporaryGroup from '@/containers/home/temporaryGroup';
 import { MonitoringDispatch, Search } from '@/containers/UI';
