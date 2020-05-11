@@ -8,16 +8,17 @@
  */
 
 import config from '@/config';
-import { HandleEvent } from '@/containers/home/eventModel';
-import { CurActiveGroupType } from '@/models/home/intercom/group';
-import { message } from 'antd';
-import React, { useEffect, useState } from 'react';
+import {HandleEvent} from '@/containers/home/eventModel';
+import {CurActiveGroupType} from '@/models/home/intercom/group';
+import {message} from 'antd';
+import React, {useEffect, useState} from 'react';
 import carPng from './images/dispatch-car.png';
 import peoplePng from './images/dispatch-people.png';
 import suppliesPng from './images/dispatch-supplies.png';
 import thingPng from './images/dispatch-thing.png';
 import './index.scss';
 import infoWindowTemplate from './infoWindow';
+import handleEvent from '@/models/home/eventModel/handleEvent';
 
 // 事件弹窗实例
 let infoWindow: any;
@@ -175,18 +176,24 @@ const MassPoint = (props: MassPointProps) => {
   }
 
   /**
-   * 处理窗体按钮事件
-   * @param {Event} e
+   * 处理地图事件
+   * 因高德地图信息弹窗不支持JSX及ReactNode，所以本组件使用DOM的HTMLElement，
+   * 并用DOM2级方法 addEventListener 和 removeEventListener来处理事件监听
+   * @param e
    */
-  const handleButtonEvent = (e: Event) => {
+  const handleMapEvent = (e: Event) => {
     const ele = (e.target as HTMLButtonElement);
 
     if (curMassPoint) {
+      // 处理事件
       if (ele?.className.includes('handle-event')) {
         map.clearInfoWindow();
-        clearCurMassPoint();
+        // 海量点弹窗关闭，清除store中当前海量点状态
+        // （注意，若此处清除了该状态，在接下来打开的处理事件对话框中将获取不到此海量点的信息，
+        // 所以，应该在关闭处理事件对话框时再清除store中当前海量点状态）
+        // clearCurMassPoint();
         setIsShowModal(true);
-      } else if (ele?.className.includes('intercom-call')) {
+      } /** 开启监控对象对讲面板 */ else if (ele?.className.includes('intercom-call')) {
         const intercomParams = {
           intercomGroupState,
           setIntercomGroupState,
@@ -194,22 +201,14 @@ const MassPoint = (props: MassPointProps) => {
         };
 
         openIntercomCall(intercomParams);
+      } /** 处理关闭海量点弹窗相关逻辑 */ else if (ele?.className.includes('inter-plat-map-info-window-close')) {
+        // 关闭海量点弹窗
+        map.clearInfoWindow();
+        // 关闭时间处理对话框
+        setIsShowModal(false);
+        // 清空当前选中的海量点信息
+        clearCurMassPoint();
       }
-    }
-  };
-
-  /**
-   * 关闭海量点弹窗
-   * @param {Event} e
-   */
-  const closeInfoWindow = (e: Event) => {
-    if ((e.target as HTMLDivElement)?.className === 'inter-plat-map-info-window-close') {
-      // 关闭海量点信息弹窗
-      map.clearInfoWindow();
-      // 关闭时间处理对话框
-      setIsShowModal(false);
-      // 清空当前选中的海量点信息
-      clearCurMassPoint();
     }
   };
 
@@ -219,7 +218,7 @@ const MassPoint = (props: MassPointProps) => {
   }, [JSON.stringify(triggers.slice(0, 4))]);
 
   /**
-   * 初始化地图组件及地图相关元素和数据
+   * 海量点数据变更时更新地图上的海量点
    */
   useEffect(() => {
     // 在地图上设置海量点
@@ -227,19 +226,10 @@ const MassPoint = (props: MassPointProps) => {
       mass.setMap(map);
     }
 
-    // curMassPoint字段更新后打开地图上指定海量点的信息弹窗
-    if (!config.mock && curMassPoint) {
-      const lnglat: [number, number] = [curMassPoint.location.longitude, curMassPoint.location.latitude];
-
-      infoWindow.setContent(infoWindowTemplate(curMassPoint));
-      infoWindow.open(map!, lnglat);
-      map.setCenter(lnglat);
-    }
-
     /**
      * 海量点点击事件
      */
-    mass.off('click').on('click', async (e: any) => {
+    mass.on('click', async (e: any) => {
       const {monitorId, monitorType} = e.data;
 
       // 请求弹窗内的数据
@@ -261,24 +251,44 @@ const MassPoint = (props: MassPointProps) => {
         message.error('获取信息失败，请稍候再试！');
       }
     });
-  }, [JSON.stringify(props.data.positionList), curMassPoint]);
-
-  useEffect(() => {
-    // 获取地图元素
-    const amapOverlays = document.querySelector('.amap-overlays');
-    const amapContainer = document.querySelector('.amap-maps');
-
-    // 监听地图弹窗关闭事件
-    amapContainer?.addEventListener('click', closeInfoWindow);
-    // 监听功能按钮事件
-    amapOverlays?.addEventListener('click', handleButtonEvent);
 
     return () => {
-      amapContainer?.removeEventListener('click', closeInfoWindow);
-      amapOverlays?.removeEventListener('click', handleButtonEvent);
+      mass.off('click');
     };
-  }, [intercomGroupState, JSON.stringify(curMassPoint)]);
+  }, [props.data.positionList]);
 
+  /**
+   * 当前点击海量点弹窗或其他事件激活的弹窗的信息更新
+   */
+  useEffect(() => {
+    // curMassPoint字段更新后打开地图上指定海量点的信息弹窗
+    if (!config.mock && curMassPoint) {
+      const lnglat: [number, number] = [curMassPoint.location.longitude, curMassPoint.location.latitude];
+
+      infoWindow.setContent(infoWindowTemplate(curMassPoint));
+      infoWindow.open(map!, lnglat);
+      map.setCenter(lnglat);
+    }
+  }, [curMassPoint]);
+
+  /**
+   * 根据海量点弹窗信息以及对讲面板状态的变更，重新绑定事件
+   */
+  useEffect(() => {
+    // 获取地图元素
+    const mapContainer = document.querySelector('.amap-maps');
+
+    // 监听地图元素事件
+    mapContainer?.addEventListener('click', handleMapEvent);
+
+    return () => {
+      mapContainer?.removeEventListener('click', handleMapEvent);
+    };
+  }, [intercomGroupState, curMassPoint]);
+
+  /**
+   * 点击海量点或事件激活弹窗时，获取弹窗数据
+   */
   useEffect(() => {
     (async () => {
       // 请求弹窗内的数据
