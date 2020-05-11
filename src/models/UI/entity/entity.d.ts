@@ -33,7 +33,7 @@ declare global {
      * 监控对象类型
      * -1：全部 0：车；1：人；2：物；9：静态物资；10：调度员
      */
-    monitorType?: -1 | EntityType | EntityType[]
+    monitorType?: -1 | EntityType
     /**
      * 所属分组名称
      */

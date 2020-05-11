@@ -49,7 +49,15 @@ const map: IAMapModel = {
         }
       });
     },
-    async fetchWindowInfo(reqPayload: InfoWindowRequest): Promise<APIResponse<InfoWindowResponse>> {
+    async fetchWindowInfo(reqPayload?: InfoWindowRequest): Promise<APIResponse<InfoWindowResponse>> {
+      if (!reqPayload) {
+        const {curSelectedMonitorId} = store.getState().eventList;
+
+        reqPayload = {
+          monitorId: curSelectedMonitorId
+        };
+      }
+
       return await fetchApis.fetchWindowInfo(reqPayload);
     }
   }

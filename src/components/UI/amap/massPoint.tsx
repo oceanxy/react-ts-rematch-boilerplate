@@ -161,6 +161,16 @@ const MassPoint = (props: MassPointProps) => {
   // 标注实例
   // const marker = new AMap.Marker({content: '', map});
 
+  if (!mass) {
+    mass = setMass(props.data);
+  } else {
+    mass.setData(props.data);
+  }
+
+  if (!infoWindow) {
+    infoWindow = setInfoWindow();
+  }
+
   /**
    * 处理窗体按钮事件
    * @param {Event} e
@@ -209,16 +219,6 @@ const MassPoint = (props: MassPointProps) => {
    * 初始化地图组件及地图相关元素和数据
    */
   useEffect(() => {
-    if (!mass) {
-      mass = setMass(props.data);
-    } else {
-      mass.setData(props.data);
-    }
-
-    if (!infoWindow) {
-      infoWindow = setInfoWindow();
-    }
-
     // 在地图上设置海量点
     if (data.positionList.length) {
       mass.setMap(map);
@@ -272,17 +272,28 @@ const MassPoint = (props: MassPointProps) => {
     };
   }, [intercomGroupState, JSON.stringify(curMassPoint)]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     // 请求弹窗内的数据
-  //     const response = await fetchWindowInfo({
-  //       curSelectedMonitorId,
-  //       monitorType
-  //
-  //       // todo 从事件列表状态里获取当前监控对象的类型和ID
-  //     });
-  //   })();
-  // }, [curSelectedMonitorId]);
+  useEffect(() => {
+    (async () => {
+      // 请求弹窗内的数据
+      const response = await fetchWindowInfo();
+
+      if (+response.retCode === 0) {
+        setState({curMassPoint: response.data});
+        // 开启mock时，使用mock数据展示
+        if (config.mock) {
+          const {data} = response;
+          const {location: {longitude, latitude}} = data;
+
+          infoWindow.setContent(infoWindowTemplate(response.data));
+          infoWindow.open(map!, [longitude, latitude]);
+          map.setCenter([longitude, latitude]);
+        }
+      } else {
+        clearCurMassPoint();
+        message.error('获取信息失败，请稍候再试！');
+      }
+    })();
+  }, [curSelectedMonitorId]);
 
   return (
     <HandleEvent

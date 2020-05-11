@@ -20,9 +20,9 @@ declare global {
      */
     monitorId: string
     /**
-     * 监控对象类型
+     * 监控对象类型 0：车 1 :人 2 :动态物品 9:静态物资 10:调度员（静态物资和调度员时必传）
      */
-    monitorType: IEntity['monitorType']
+    monitorType?: IEntity['monitorType']
     /**
      * 默认0。0:按监控对象 1:按事件
      */
@@ -214,7 +214,7 @@ declare global {
        * @param {InfoWindowRequest} reqPayload
        * @returns {Promise<APIResponse<InfoWindowResponse>>}
        */
-      fetchWindowInfo(reqPayload: InfoWindowRequest): Promise<APIResponse<InfoWindowResponse>>
+      fetchWindowInfo(reqPayload?: InfoWindowRequest): Promise<APIResponse<InfoWindowResponse>>
     }
   }
 }
