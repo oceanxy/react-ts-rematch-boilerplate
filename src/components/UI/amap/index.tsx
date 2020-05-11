@@ -4,9 +4,10 @@
  * @Description: 高德地图组件
  * @Date: 2020-01-04 11:43:57
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-26 周日 09:55:39
+ * @LastModifiedTime: 2020-05-11 周一 17:44:04
  */
 
+import Area from '@/components/UI/amap/area';
 import MassPoint from '@/components/UI/amap/massPoint';
 import Container, { IContainerProps } from '@/components/UI/containerComp';
 import config from '@/config';
@@ -36,13 +37,21 @@ export interface IZWMapProps extends IContainerProps<any> {
   setIntercomGroupState: IIntercomGroupModel['effects']['setState']
   curSelectedMonitorId: IEventListState['curSelectedMonitorId']
   triggers: IDisplayContentState['triggers']
+  mapFences: IFenceState['mapFences']
+  fetchFenceAreaData: IFenceModel['effects']['fetchAreaData']
+  fetchFenceDetails: IFenceModel['effects']['fetchDetails']
 }
 
 /**
  * 地图组件
  */
 const ZWMap = (props: Partial<IZWMapProps>) => {
-  const {state, dispatches, intercomGroupState, setIntercomGroupState, curSelectedMonitorId, triggers} = props;
+  const {
+    state, dispatches, intercomGroupState,
+    setIntercomGroupState, curSelectedMonitorId,
+    triggers, fetchFenceAreaData, fetchFenceDetails,
+    mapFences
+  } = props;
   const {setState, fetchMassPoint, fetchWindowInfo} = dispatches!;
   const {mapInstance: map, mouseToolType, callback, massPoints} = state!;
 
@@ -52,17 +61,23 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
         map ?
           (<>
             <MouseTool map={map} mouseToolType={mouseToolType} callback={callback} setState={setState} />
+            <Area
+              map={map}
+              triggers={triggers!}
+              data={mapFences!}
+              fetchFenceAreaData={fetchFenceAreaData!}
+              fetchFenceDetails={fetchFenceDetails!} />
             <MassPoint
+              map={map}
+              data={massPoints}
+              triggers={triggers!}
               mapDispatchers={dispatches!}
               curMassPoint={state?.curMassPoint}
-              map={map}
               fetchMassPoint={fetchMassPoint}
-              data={massPoints}
               fetchWindowInfo={fetchWindowInfo}
               intercomGroupState={intercomGroupState!}
               setIntercomGroupState={setIntercomGroupState!}
               curSelectedMonitorId={curSelectedMonitorId!}
-              triggers={triggers!}
             />
           </>) :
           <UseMap setState={setState} />

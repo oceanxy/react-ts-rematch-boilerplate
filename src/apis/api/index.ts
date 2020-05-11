@@ -16,7 +16,9 @@ export type APIName =
   'fetchEventDetails' | // 事件详情
   'fetchEventList' | // 事件列表
   'fetchSearchByMonitorName' | // 搜索-按监控对象搜索
-  'fetchFences' | // 获取围栏数据
+  'fetchFences' | // 根据关键字获取围栏数据
+  'fetchUserFence' | // 获取当前用户下设置的围栏数据（围栏下拉列表）
+  'fetchFenceDetails' | // 获取围栏详情
   'fetchAroundEvent' | // 资源统计-按突发事件
   'fetchRSByAdminRegions' | // 资源统计-按行政区划
   'fetchRSByFence' | // 资源统计-按区域（按围栏）
@@ -98,10 +100,18 @@ const apis: APIRequestConfig = {
     method: EHTTPMethod.POST
   },
   /**
-   * 获取围栏数据
+   * 根据关键字获取围栏数据
    */
   fetchFences: {
     url: '/clbs/web/v1/dispatch/fence/getFenceTree',
+    method: EHTTPMethod.POST
+  },
+  fetchFenceDetails: {
+    url: '/clbs/web/v1/dispatch/fence/details',
+    method: EHTTPMethod.POST
+  },
+  fetchUserFence: {
+    url: '/clbs/web/v1/dispatch/fence/getUserFence',
     method: EHTTPMethod.POST
   },
   /**

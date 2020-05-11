@@ -797,6 +797,110 @@ const mocks: Mocks = {
         }
       ]
     }
+  },
+  fetchUserFence: {
+    retCode: 0,
+    retMsg: '',
+    data: {
+      'fenceList': [
+        {
+          'fenceName': '北京中位科技-路线',
+          'locationData': {
+            'width': '45',
+            'points': [
+              [
+                '106.503827',
+                '29.534275'
+              ],
+              [
+                '106.507062',
+                '29.533976'
+              ]
+            ]
+          },
+          'fenceType': 'zw_m_line',
+          'transparency': '78',
+          'colorCode': 'd49522',
+          'fenceId': '0db62b3a-208c-4f60-b57f-e0517b54fb5a'
+        },
+        {
+          'fenceName': '北京中位科技-标注',
+          'locationData': {
+            'latitude': 29.534107,
+            'longitude': 106.5035
+          },
+          'fenceType': 'zw_m_marker',
+          'transparency': '78',
+          'colorCode': 'd49522',
+          'fenceId': 'd857d296-2d9d-42d7-a42c-89a093baf94c'
+        },
+        {
+          'fenceName': '北京中位科技-圆形',
+          'locationData': {
+            'latitude': 29.534322,
+            'radius': 83.41971479710175,
+            'longitude': 106.504165
+          },
+          'fenceType': 'zw_m_circle',
+          'transparency': '78',
+          'colorCode': 'd49522',
+          'fenceId': '5a38ab82-46a7-45df-ba3e-19bd13570ee8'
+        },
+        {
+          'fenceName': '北京中位科技-多边形',
+          'locationData': [
+            [
+              '106.504133',
+              '29.534504'
+            ],
+            [
+              '106.503388',
+              '29.53351'
+            ],
+            [
+              '106.504536',
+              '29.532464'
+            ],
+            [
+              '106.506665',
+              '29.532408'
+            ],
+            [
+              '106.507572',
+              '29.533248'
+            ],
+            [
+              '106.506612',
+              '29.534289'
+            ],
+            [
+              '106.505651',
+              '29.534635'
+            ]
+          ],
+          'fenceType': 'zw_m_polygon',
+          'transparency': '78',
+          'colorCode': 'd49522',
+          'fenceId': '2f69660b-bdc4-4293-92fa-75fca1b94e72'
+        }
+      ]
+    }
+  },
+  fetchFenceDetails: {
+    retMsg: '',
+    retCode: 0,
+    data: {
+      'fenceName': 'yuan',
+      'locationData': {
+        'latitude': 29.530537,
+        'radius': 1658.8359961204733,
+        'longitude': 106.495806
+      },
+      'fenceType': 'zw_m_circle',
+      'transparency': '50',
+      'colorCode': 'FFF100',
+      'fenceId': 'ef11341b-628f-4d56-8ba0-9b716bd73da0'
+    }
   }
 };
 

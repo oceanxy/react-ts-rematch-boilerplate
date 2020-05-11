@@ -4,11 +4,43 @@
  * @Description: 围栏model
  * @Date: 2020-04-09 周四 09:40:08
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-13 周一 14:37:26
+ * @LastModifiedTime: 2020-05-11 周一 16:39:09
  */
 
 import fetchApis from '@/apis';
+import { APIResponse } from '@/interfaces/api/mock';
 import { store } from '@/store';
+
+/**
+ * 围栏种类
+ */
+export enum FenceType {
+  /**
+   * 圆形围栏
+   * @type {string}
+   */
+  Circle = 'zw_m_circle',
+  /**
+   * 多边形围栏
+   * @type {string}
+   */
+  Polygon = 'zw_m_polygon',
+  /**
+   * 路径围栏
+   * @type {string}
+   */
+  Line = 'zw_m_line',
+  /**
+   * 标注围栏
+   * @type {string}
+   */
+  Marker = 'zw_m_marker',
+  /**
+   * 行政区划围栏
+   * @type {string}
+   */
+  Administration = 'zw_m_administration'
+}
 
 /**
  * 围栏model
@@ -18,7 +50,8 @@ const fence: IFenceModel = {
   state: {
     fences: [],
     searchFences: [],
-    currentFenceId: ''
+    currentFenceId: '',
+    mapFences: undefined
   },
   reducers: {
     updateState(state, payload) {
@@ -42,8 +75,16 @@ const fence: IFenceModel = {
 
       store.dispatch.fence.updateState(params);
     },
-    setFenceId(id): void {
-      store.dispatch.fence.updateState({currentFenceId: id || ''});
+    setState(payload): void {
+      store.dispatch.fence.updateState(payload);
+    },
+    async fetchAreaData() {
+      const response: APIResponse<IFenceAreaResponse> = await fetchApis.fetchUserFence();
+
+      store.dispatch.fence.updateState({mapFences: response.data});
+    },
+    async fetchDetails(reqPayload: IFenceDetailsRequest): Promise<APIResponse<IFenceDetailsResponse>> {
+      return await fetchApis.fetchFenceDetails(reqPayload);
     }
   }
 };

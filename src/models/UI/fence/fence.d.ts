@@ -3,10 +3,12 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 围栏类型定义文件
  * @Date: 2020-04-09 周四 11:28:28
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-09 周四 11:28:28
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-11 周一 17:24:26
  */
 
+import { APIResponse } from '@/interfaces/api/mock';
+import { FenceType } from '@/models/UI/fence/index';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
@@ -45,13 +47,134 @@ declare global {
   }
 
   /**
-   * 围栏数据请求参数接口
+   * 点
+   */
+  type IPoint = [number, number]
+
+  /**
+   * 围栏区域位置信息
+   */
+  interface ILocation {
+    /**
+     * 纬度
+     */
+    latitude: number
+    /**
+     * 半径
+     */
+    radius: number
+    /**
+     * 经度
+     */
+    longitude: number
+    /**
+     * 线条宽度
+     */
+    width: number
+    /**
+     * 点坐标集合
+     */
+    points: IPoint[]
+  }
+
+  /**
+   * 围栏区域数据
+   */
+  interface IFenceArea {
+    /**
+     * 围栏ID
+     */
+    fenceId: string
+    /**
+     * 围栏名称
+     */
+    fenceName: string
+    /**
+     * 围栏种类
+     */
+    fenceType: FenceType
+    /**
+     * 围栏展示颜色
+     */
+    colorCode: string
+    /**
+     * 透明度
+     */
+    transparency: number
+    /**
+     * 围栏位置数据数组(与获取围栏详情相同)
+     */
+    locationData: ILocation
+  }
+
+  /**
+   * 围栏列表数据请求参数接口
    */
   interface IFenceRequest {
     /**
      * 围栏种类名称或围栏名称关键字。为空查询全部
      */
     queryParam?: IFence['name'] | string
+  }
+
+  /**
+   * 围栏详情request
+   */
+  interface IFenceDetailsRequest {
+    /**
+     * 围栏ID
+     */
+    fenceId: string
+    /**
+     * 0：不返回经纬度信息 1：返回经纬度信息 默认0
+     */
+    queryType?: 0 | 1
+    /**
+     * 围栏类型
+     */
+    fenceType: FenceType
+  }
+
+  /**
+   * 围栏详情response
+   */
+  interface IFenceDetailsResponse {
+    /**
+     * 围栏详情数据
+     */
+    fenceDetails: {
+      /**
+       * 围栏ID
+       */
+      fenceId: string
+      /**
+       * 围栏名称
+       */
+      fenceName: string
+      /**
+       * 围栏种类
+       */
+      fenceType: FenceType
+      /**
+       * 围栏展示颜色
+       */
+      colorCode: string
+      /**
+       * 透明度
+       */
+      transparency: number
+      /**
+       * 围栏位置数据数组
+       */
+      locationData: ILocation
+    }
+  }
+
+  /**
+   * 围栏区域数据response（用于在地图上绘制围栏）
+   */
+  interface IFenceAreaResponse {
+    fenceList: IFenceArea[]
   }
 
   /**
@@ -66,6 +189,10 @@ declare global {
      * 搜索框根据关键字获取的围栏数据
      */
     searchFences: IFence[]
+    /**
+     * 用于在地图上绘制围栏的数据集
+     */
+    mapFences?: IFenceAreaResponse
     /**
      * 当前围栏ID
      */
@@ -88,11 +215,25 @@ declare global {
     },
     effects: {
       /**
-       * 从远程获取围栏列表数据
+       * 从远程获取围栏列表数据 （用于搜索、下拉列表等）
        * @param {IFenceRequest} reqPayload 请求参数
        */
       fetchData(reqPayload: IFenceRequest): void
-      setFenceId(id?: IFenceState['currentFenceId']): void
+      /**
+       * 设置状态
+       * @param {Partial<IFenceState>} payload
+       */
+      setState(payload: Partial<IFenceState>): void
+      /**
+       * 获取围栏区域数据（用于在地图上绘制围栏）
+       */
+      fetchAreaData(): void
+      /**
+       * 获取围栏详情数据
+       * @param {IFenceDetailsRequest} reqPayload
+       * @returns {Promise<APIResponse<IFenceDetailsResponse>>}
+       */
+      fetchDetails(reqPayload: IFenceDetailsRequest): Promise<APIResponse<IFenceDetailsResponse>>
     }
   }
 }

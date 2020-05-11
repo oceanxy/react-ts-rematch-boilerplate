@@ -17,7 +17,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   getData: dispatch.fence.fetchData,
-  setId: dispatch.fence.setFenceId
+  setFenceState: dispatch.fence.setState
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegionalControl);

@@ -20,7 +20,7 @@ interface IRegionalControlProps {
   data: IFenceState['fences'];
   currentId: IFenceState['currentFenceId'];
   getData: IFenceModel['effects']['fetchData'];
-  setId: IFenceModel['effects']['setFenceId'];
+  setFenceState: IFenceModel['effects']['setState'];
 }
 
 /**
@@ -28,7 +28,7 @@ interface IRegionalControlProps {
 
  */
 const RegionalControl = (props: Partial<IRegionalControlProps>) => {
-  const { getData, data, currentId, setId } = props;
+  const { getData, data, currentId, setFenceState } = props;
 
   /**
    * 选择区域（围栏）事件
@@ -36,9 +36,9 @@ const RegionalControl = (props: Partial<IRegionalControlProps>) => {
    */
   const onChange = (value: string) => {
     if (value) {
-      setId!(value);
+      setFenceState!({currentFenceId: value});
     } else {
-      setId!();
+      setFenceState!({currentFenceId: ''});
     }
   };
 
