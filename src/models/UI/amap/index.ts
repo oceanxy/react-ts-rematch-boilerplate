@@ -4,7 +4,7 @@
  * @Description: 地图model
  * @Date: 2020-03-31 周二 17:03:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-30 周四 17:52:38
+ * @LastModifiedTime: 2020-05-11 周一 09:56:55
  */
 
 import fetchApis from '@/apis';

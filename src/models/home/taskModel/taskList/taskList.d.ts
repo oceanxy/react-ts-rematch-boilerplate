@@ -7,13 +7,14 @@
  * @LastModifiedTime: 2020-04-13 周一 17:21:16
  */
 
+import { RootState } from '@/store';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
   /**
    * 任务列表后台返回的数据
    */
-  interface ITaskListData {
+  interface ITaskListResponse {
     /**
      * 返回任务列表分页信息
      */
@@ -56,7 +57,7 @@ declare global {
     /**
      * 数据
      */
-    data: ITaskListData['taskPageInfo']
+    data: ITaskListResponse['taskPageInfo']
     /**
      * 当前选中的任务ID
      */
@@ -101,10 +102,25 @@ declare global {
   interface ITaskListModel extends ModelConfig {
     state: ITaskListState
     reducers: {
+      /**
+       * 更新本地状态
+       * @param {ITaskListState} state
+       * @param {Partial<ITaskListState>} payload
+       * @returns {ITaskListState}
+       */
       updateState(state: ITaskListState, payload: Partial<ITaskListState>): ITaskListState
     }
     effects: {
-      fetchData(reqPayload?: ITaskListRequest): void
+      /**
+       * 获取数据
+       * @param {Partial<ITaskListRequest> & {selectFirstData?: boolean}} reqPayload
+       * @param {RootState} rootState
+       */
+      fetchData(reqPayload?: Partial<ITaskListRequest> & {selectFirstData?: boolean}, rootState?: RootState): void
+      /**
+       * 设置状态
+       * @param {Partial<ITaskListState>} payload
+       */
       setState(payload: Partial<ITaskListState>): void
     }
   }

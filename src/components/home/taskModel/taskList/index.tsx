@@ -4,27 +4,25 @@
  * @Description: 任务列表组件
  * @Date: 2020-04-14 周二 10:56:15
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-15 周三 10:10:56
+ * @LastModifiedTime: 2020-05-11 周一 10:13:03
  */
 
 import ListItem from '@/components/home/listItem';
 import Container from '@/components/UI/containerComp';
 import { taskTypeColor, taskTypeStatus } from '@/models/home/taskModel/taskDetails';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './index.scss';
 
 interface ITaskListProps {
-  data: ITaskListData['taskPageInfo']
+  data: ITaskListResponse['taskPageInfo']
   curSelectedTaskId: ITaskListState['curSelectedTaskId']
+  curSelectedMonitorId: IEventListState['curSelectedMonitorId']
   setState: ITaskListModel['effects']['setState']
   fetchData: ITaskListModel['effects']['fetchData']
 }
 
 const TaskList = (props: Partial<ITaskListProps>) => {
-  const {data, curSelectedTaskId, fetchData, setState} = props;
-  // 指示组件是否是初次渲染的状态
-  const [isInit, setInit] = useState(true);
-
+  const {data, curSelectedTaskId, fetchData, setState, curSelectedMonitorId} = props;
   /**
    * 任务点击
    * @param {IEventDetailsRequest} payload
@@ -38,15 +36,9 @@ const TaskList = (props: Partial<ITaskListProps>) => {
     }
   };
 
-  // 如果数据合法且是初次渲染组件，则自动选中当前第一条数据
-  if (data?.records.length && isInit) {
-    setState?.({curSelectedTaskId: data.records[0].taskId});
-    setInit(false);
-  }
-
   useEffect(() => {
-    fetchData!();
-  }, []);
+    fetchData!({selectFirstData: true});
+  }, [curSelectedMonitorId]);
 
   return (
     <Container className="task-list-container">

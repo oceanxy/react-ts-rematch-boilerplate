@@ -4,7 +4,7 @@
  * @Description: 高德地图相关类型定义
  * @Date: 2020-04-13 周一 10:18:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-10 周日 11:23:22
+ * @LastModifiedTime: 2020-05-11 周一 09:56:43
  */
 
 import { APIResponse } from '@/interfaces/api/mock';

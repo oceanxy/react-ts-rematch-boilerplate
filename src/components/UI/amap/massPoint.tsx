@@ -4,7 +4,7 @@
  * @Description: 海量点组件
  * @Date: 2020-01-14 17:50:59
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-09 周六 14:29:04
+ * @LastModifiedTime: 2020-05-11 周一 10:07:42
  */
 
 import config from '@/config';
@@ -226,8 +226,11 @@ const MassPoint = (props: MassPointProps) => {
 
     // curMassPoint字段更新后打开地图上指定海量点的信息弹窗
     if (!config.mock && curMassPoint) {
+      const lnglat: [number, number] = [curMassPoint.location.longitude, curMassPoint.location.latitude];
+
       infoWindow.setContent(infoWindowTemplate(curMassPoint));
-      infoWindow.open(map!, [curMassPoint.location.longitude, curMassPoint.location.latitude]);
+      infoWindow.open(map!, lnglat);
+      map.setCenter(lnglat);
     }
 
     /**
@@ -248,6 +251,7 @@ const MassPoint = (props: MassPointProps) => {
         if (config.mock) {
           infoWindow.setContent(infoWindowTemplate(response.data));
           infoWindow.open(map!, e.data.lnglat);
+          map.setCenter(e.data.lnglat);
         }
       } else {
         clearCurMassPoint();

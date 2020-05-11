@@ -4,7 +4,7 @@
  * @Description: 任务统计组件
  * @Date: 2020-04-14 周二 10:52:10
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-14 周二 17:03:30
+ * @LastModifiedTime: 2020-05-11 周一 10:21:37
  */
 
 import Button from '@/components/UI/button';
@@ -14,8 +14,8 @@ import React, { useState } from 'react';
 import './index.scss';
 
 interface ITaskStatisticsProps {
-  fetchData: (reqPayload: IEventListRequest) => void;
-  data: IEventStatisticsState;
+  fetchData: ITaskListModel['effects']['fetchData']
+  data: IEventStatisticsState
 }
 
 const TaskStatistics = (props: Partial<ITaskStatisticsProps>) => {
@@ -33,10 +33,7 @@ const TaskStatistics = (props: Partial<ITaskStatisticsProps>) => {
     if (!isStatisticsMethodChanged) return;
 
     // 获取新的列表数据
-    fetchData?.({
-      eventStatus: reqTaskStatisticsMethod,
-      isStatisticsMethodChanged
-    } as IEventListRequest);
+    fetchData!({taskStatus: reqTaskStatisticsMethod});
 
     // 更新组件状态
     setTaskStatisticsMethod(reqTaskStatisticsMethod);
