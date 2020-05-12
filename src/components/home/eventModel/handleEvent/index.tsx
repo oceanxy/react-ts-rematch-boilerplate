@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 处理事件弹窗组件
  * @Date: 2020-05-07 周四 09:30:30
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-05-07 周四 09:30:30
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-12 周二 08:59:03
  */
 
 import Modal from '@/components/UI/modal';
@@ -30,6 +30,10 @@ interface HandleEventProps {
    * 当前海量点窗体承载的信息
    */
   curMassPointInfo?: InfoWindowResponse
+  /**
+   * 清空当前点击的海量点弹窗数据
+   */
+  clearCurMassPoint?: IAMapModel['effects']['clearCurMassPoint']
 
   /**
    * 设置处理事件对话框状态
@@ -59,7 +63,7 @@ interface HandleEventFormProps {
  * @constructor
  */
 const HandleEvent = (props: HandleEventProps) => {
-  const {visible, setIsShowModal, handleEvent, curMassPointInfo} = props;
+  const {visible, setIsShowModal, handleEvent, curMassPointInfo, clearCurMassPoint} = props;
   /**
    * 批量全部处理的loading状态
    */
@@ -121,8 +125,7 @@ const HandleEvent = (props: HandleEventProps) => {
 
     // 处理完成之后的逻辑
     if (!values.handleMethod) {
-      // 关闭对话框
-      setIsShowModal(false);
+      closeModal();
     } else {
       // 禁用按钮及文本域
       setSingleState({
@@ -130,6 +133,14 @@ const HandleEvent = (props: HandleEventProps) => {
         [`${singleCurEvent.eventId}`]: {disabled: true}
       });
     }
+  };
+
+  /**
+   * 关闭对话框
+   */
+  const closeModal = () => {
+    setIsShowModal(false);
+    clearCurMassPoint!();
   };
 
   /**
@@ -156,7 +167,7 @@ const HandleEvent = (props: HandleEventProps) => {
       width={400}
       title={`${curMassPointInfo?.monitor.monitorName} 报警处理`}
       visible={visible}
-      onCancel={() => setIsShowModal(false)}
+      onCancel={() => closeModal()}
       footer={null}
       destroyOnClose={true}
       className="inter-plat-handle-event-modal"
@@ -223,7 +234,7 @@ const HandleEvent = (props: HandleEventProps) => {
           {({getFieldValue}) => {
             return !getFieldValue('handleMethod') ?
               (<Row justify="end" className="modal-row">
-                <Button size="small" onClick={() => setIsShowModal(false)}>取 消</Button>
+                <Button size="small" onClick={() => closeModal()}>取 消</Button>
                 <Button size="small" loading={loading} htmlType="submit">处 理</Button>
               </Row>) : null;
           }}
