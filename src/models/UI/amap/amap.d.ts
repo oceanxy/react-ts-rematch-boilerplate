@@ -4,10 +4,11 @@
  * @Description: 高德地图相关类型定义
  * @Date: 2020-04-13 周一 10:18:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-11 周一 09:56:43
+ * @LastModifiedTime: 2020-05-12 周二 16:10:49
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
+import { EntityType } from '@/models/UI/entity';
 import { RootState } from '@/store';
 import { ModelConfig } from '@rematch/core';
 
@@ -54,7 +55,7 @@ declare global {
       /**
        * 监控对象类型 0：车 1 :人 2 :动态物品 9:静态物资 10:调度员
        */
-      monitorType: 0 | 1 | 2 | 9 | 10
+      monitorType: EntityType
       /**
        * 监控对象名称
        */
@@ -173,9 +174,13 @@ declare global {
      */
     massPoints: MassPointResponse
     /**
-     * 当前弹框的海量点信息
+     * 当前海量点的弹窗信息
      */
     curMassPoint?: InfoWindowResponse
+    /**
+     * 当前区域的弹窗信息
+     */
+    curArea?: IFenceDetailsResponse
   }
 
   /**

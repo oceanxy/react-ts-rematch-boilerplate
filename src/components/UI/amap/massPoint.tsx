@@ -1,10 +1,10 @@
 /**
  * @Author: Oceanxy
  * @Email: xieyang@zwlbs.com
- * @Description: 海量点组件
+ * @Description: 海量点组件（为了在mock数据时让弹窗位置更真实，本组件做了一些额外的mock逻辑处理）
  * @Date: 2020-01-14 17:50:59
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-11 周一 16:18:54
+ * @LastModifiedTime: 2020-05-12 周二 16:36:36
  */
 
 import config from '@/config';
@@ -23,8 +23,6 @@ import infoWindowTemplate from './infoWindow';
 let infoWindow: any;
 // 海量点实例
 let mass: any;
-// 标注实例
-// const marker = new AMap.Marker({content: '', map});
 
 /**
  * 海量点组件Render Props
@@ -39,6 +37,8 @@ export interface MassPointProps {
   setIntercomGroupState: IIntercomGroupModel['effects']['setState']
   mapDispatchers: IAMapModel['effects']
   curSelectedMonitorId: IEventListState['curSelectedMonitorId']
+  searchPanelTarget: ISearchState['target']
+  setSearchState: ISearchModel['effects']['setState']
   triggers: IDisplayContentState['triggers']
 }
 
@@ -154,8 +154,9 @@ const openIntercomCall = (intercomParams: EntityIntercomCallProps) => {
  */
 const MassPoint = (props: MassPointProps) => {
   const {
-    fetchMassPoint, data, fetchWindowInfo, curMassPoint, curSelectedMonitorId,
-    intercomGroupState, setIntercomGroupState, mapDispatchers, triggers
+    fetchMassPoint, data, fetchWindowInfo, curMassPoint,
+    curSelectedMonitorId, intercomGroupState, setIntercomGroupState,
+    mapDispatchers, triggers, searchPanelTarget, setSearchState
   } = props;
   const map = props.map!;
   const {setState, clearCurMassPoint} = mapDispatchers;
@@ -269,12 +270,17 @@ const MassPoint = (props: MassPointProps) => {
    */
   useEffect(() => {
     // curMassPoint字段更新后打开地图上指定海量点的信息弹窗
-    if (!config.mock && curMassPoint) {
+    if ((!config.mock || searchPanelTarget) && curMassPoint) {
       const lnglat: [number, number] = [curMassPoint.location.longitude, curMassPoint.location.latitude];
 
       infoWindow.setContent(infoWindowTemplate(curMassPoint));
       infoWindow.open(map!, lnglat);
       map.setCenter(lnglat);
+
+      // 当通过点击搜索结果面板激活海量点弹窗时，当弹窗打开后清除该状态
+      if (searchPanelTarget) {
+        setSearchState({target: undefined});
+      }
     }
   }, [curMassPoint]);
 

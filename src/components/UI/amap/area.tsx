@@ -4,7 +4,7 @@
  * @Description: 区域（围栏）组件
  * @Date: 2020-05-11 周一 16:23:37
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-11 周一 16:23:37
+ * @LastModifiedTime: 2020-05-12 周二 16:36:16
  */
 
 import infoWindowTemplate from '@/components/UI/amap/infoWindow';
@@ -22,9 +22,13 @@ let infoWindow: any;
  */
 export interface AreaProps {
   map: IAMapState['mapInstance']
+  mapDispatch: IAMapModel['effects']
   data: IFenceState['mapFences']
   triggers: IDisplayContentState['triggers']
   dispatch: IFenceModel['effects']
+  curArea: IAMapState['curArea']
+  searchPanelTarget: ISearchState['target']
+  setSearchState: ISearchModel['effects']['setState']
 }
 
 /**
@@ -46,7 +50,8 @@ const setInfoWindow = (): AMap.InfoWindow => {
  * 海量点组件
  */
 const Area = (props: AreaProps) => {
-  const {map, triggers, dispatch, data} = props;
+  const {map, triggers, dispatch, data, curArea, mapDispatch, searchPanelTarget, setSearchState} = props;
+  const {setState: setMapState} = mapDispatch;
   const {fetchAreaData, setState, fetchDetails} = dispatch;
   const areaTrigger: ITrigger = triggers.slice(-1)[0];
 
@@ -60,15 +65,12 @@ const Area = (props: AreaProps) => {
 
     const response = await fetchDetails({
       fenceId: data.fenceId,
+      queryType: 1,
       fenceType: data.fenceType
     });
 
     if (+response.retCode === 0) {
-      const {longitude, latitude} = response.data.fenceDetails.locationData;
-
-      infoWindow.setContent(infoWindowTemplate(response.data));
-      infoWindow.open(map!, [longitude, latitude]);
-      map!.setCenter([longitude, latitude]);
+      setMapState({curArea: response.data});
     } else {
       message.error('获取信息失败，请稍候再试！');
     }
@@ -161,6 +163,20 @@ const Area = (props: AreaProps) => {
       map!.add(areas);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (curArea) {
+      const {longitude, latitude} = curArea?.fenceDetails.locationData!;
+
+      infoWindow.setContent(infoWindowTemplate(curArea));
+      infoWindow.open(map!, [longitude, latitude]);
+      map!.setCenter([longitude, latitude]);
+
+      if (searchPanelTarget) {
+        setSearchState({target: undefined});
+      }
+    }
+  }, [curArea]);
 
   return null;
 };

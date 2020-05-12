@@ -16,13 +16,6 @@
   }
 
   .inter-plat-map-info-window-container {
-    border-width: 15px 22px 30px 30px;
-    border-style: solid;
-    border-color: transparent;
-    border-image-source: url(../containerComp/images/container-border-bg.png);
-    border-image-slice: 15 22 30 30 fill;
-    border-image-repeat: round;
-
     .inter-plat-map-info-window-close {
       position: absolute;
       right: 10px;
@@ -151,7 +144,7 @@
     .inter-plat-map-info-window-content-sharp {
       position: absolute;
       width: 0;
-      bottom: 7px;
+      bottom: -5px;
       left: 50%;
       margin-left: -8px;
       border-left: 8px solid transparent;
@@ -168,6 +161,70 @@
         border-top: 8px solid rgba(0, 0, 0, 0.3);
         filter: blur(2px);
         z-index: -1;
+      }
+    }
+  }
+}
+
+// POI搜索点弹框样式重写
+.amap-info {
+  margin-top: -12px;
+  margin-left: -27px;
+
+  .amap-info-contentContainer {
+    border-width: 15px 22px 30px 30px;
+    border-style: solid;
+    border-color: transparent;
+    border-image-source: url(../containerComp/images/container-border-bg.png);
+    border-image-slice: 15 22 30 30 fill;
+    border-image-repeat: round;
+    padding-bottom: 0;
+
+    .amap-content-body.amap-pl-pc {
+      border: none;
+      min-width: 200px;
+      max-width: 360px;
+      font-family: Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;
+      box-shadow: unset;
+      background: unset;
+      border-radius: 2px;
+      text-align: left;
+
+      .amap-lib-infowindow {
+        background: none;
+
+        .amap-lib-infowindow-title {
+          border-color: #213c5a;
+          padding-bottom: 5px;
+          margin-bottom: 4px;
+
+          .poi-more {
+            transition: all .3s cubic-bezier(.645, .045, .355, 1);
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+
+    .amap-combo-sharp {
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid rgba(56, 107, 168, .6);
+      background: none;
+      margin-top: 25px;
+      margin-bottom: -37px;
+      margin-left: 45%;
+    }
+
+    .amap-combo-close {
+      transition: all .3s cubic-bezier(.645, .045, .355, 1);
+      opacity: .7;
+      transform: scale(.8);
+      top: 15px;
+      right: 15px;
+
+      &:hover {
+        transform: scale(1);
       }
     }
   }

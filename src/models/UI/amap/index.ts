@@ -4,7 +4,7 @@
  * @Description: 地图model
  * @Date: 2020-03-31 周二 17:03:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-11 周一 09:56:55
+ * @LastModifiedTime: 2020-05-12 周二 16:11:18
  */
 
 import fetchApis from '@/apis';
@@ -22,6 +22,7 @@ const map: IAMapModel = {
     mouseToolType: null,
     callback: undefined,
     curMassPoint: undefined,
+    curArea: undefined,
     massPoints: {
       positionList: [],
       iconSortList: []

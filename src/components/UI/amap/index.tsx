@@ -4,7 +4,7 @@
  * @Description: 高德地图组件
  * @Date: 2020-01-04 11:43:57
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-12 周二 09:59:14
+ * @LastModifiedTime: 2020-05-12 周二 16:36:45
  */
 
 import Area from '@/components/UI/amap/area';
@@ -32,13 +32,15 @@ const UseMap = useScript(`https://webapi.amap.com/maps?v=${config.map.mapVersion
  */
 export interface IZWMapProps extends IContainerProps<any> {
   state: IAMapState,
-  dispatches: IAMapModel['effects']
+  dispatch: IAMapModel['effects']
   intercomGroupState: IIntercomGroupState,
   setIntercomGroupState: IIntercomGroupModel['effects']['setState']
   curSelectedMonitorId: IEventListState['curSelectedMonitorId']
   triggers: IDisplayContentState['triggers']
   mapFences: IFenceState['mapFences']
   fenceDispatch: IFenceModel['effects']
+  searchPanelTarget: ISearchState['target']
+  setSearchState: ISearchModel['effects']['setState']
 }
 
 /**
@@ -46,13 +48,13 @@ export interface IZWMapProps extends IContainerProps<any> {
  */
 const ZWMap = (props: Partial<IZWMapProps>) => {
   const {
-    state, dispatches, intercomGroupState,
+    state, dispatch, intercomGroupState,
     setIntercomGroupState, curSelectedMonitorId,
-    triggers, fenceDispatch,
-    mapFences
+    triggers, fenceDispatch, setSearchState,
+    mapFences, searchPanelTarget
   } = props;
-  const {setState, fetchMassPoint, fetchWindowInfo} = dispatches!;
-  const {mapInstance: map, mouseToolType, callback, massPoints} = state!;
+  const {setState, fetchMassPoint, fetchWindowInfo} = dispatch!;
+  const {mapInstance: map, mouseToolType, callback, massPoints, curMassPoint, curArea} = state!;
 
   return (
     <Container id="mapContainer" className="inter-plat-map" {...props}>
@@ -63,15 +65,21 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
             <Area
               map={map}
               triggers={triggers!}
+              mapDispatch={dispatch!}
               data={mapFences!}
+              curArea={curArea}
               dispatch={fenceDispatch!}
+              searchPanelTarget={searchPanelTarget}
+              setSearchState={setSearchState!}
             />
             <MassPoint
               map={map}
               data={massPoints}
+              setSearchState={setSearchState!}
+              searchPanelTarget={searchPanelTarget}
               triggers={triggers!}
-              mapDispatchers={dispatches!}
-              curMassPoint={state?.curMassPoint}
+              mapDispatchers={dispatch!}
+              curMassPoint={curMassPoint}
               fetchMassPoint={fetchMassPoint}
               fetchWindowInfo={fetchWindowInfo}
               intercomGroupState={intercomGroupState!}

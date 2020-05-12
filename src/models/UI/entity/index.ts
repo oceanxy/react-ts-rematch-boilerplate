@@ -11,17 +11,6 @@ import fetchApis from '@/apis';
 import { APIResponse } from '@/interfaces/api/mock';
 import { store } from '@/store';
 
-const defaultData: IEntity = {
-  monitorId: '',
-  monitorName: '',
-  monitorType: -1,
-  assignmentName: '',
-  deviceNum: 0,
-  groupName: '',
-  simCardNum: 0,
-  userId: undefined
-};
-
 /**
  * 实体（监控对象）类型
  */
@@ -106,5 +95,4 @@ const entity: IEntityModel = {
   }
 };
 
-export { defaultData };
 export default entity;

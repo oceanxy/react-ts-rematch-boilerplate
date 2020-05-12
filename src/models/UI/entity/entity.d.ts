@@ -39,6 +39,15 @@ declare global {
      */
     assignmentName?: string
     /**
+     * 所属分组名称
+     */
+    curAssignmentName: string
+    /**
+     * 所属分组类型
+     * 1 固定组 2 任务组 3 临时组
+     */
+    curAssignmentType: 1 | 2 | 3
+    /**
      * 设备号
      */
     deviceNum?: number
@@ -61,11 +70,24 @@ declare global {
     /**
      * 对讲成员在线状态 1:在线 ，0：不在线
      */
-    audioOnlineStatus?: 0 | 1
+    onlineStatus?: 0 | 1
     /**
      * 对讲成员名称
      */
     userName?: string
+    /**
+     * 是否被禁言
+     */
+    hasForbiddenWord: boolean
+    /**
+     * 图标url
+     */
+    iconUrl: string
+    /**
+     * 车牌颜色
+     * 当监控对象为车辆时有效
+     */
+    plateColor: string
   }
 
   // 请求参数

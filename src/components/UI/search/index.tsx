@@ -4,12 +4,12 @@
  * @Description: 搜索组件
  * @Date: 2020-01-14 11:38:22
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-09 周四 15:36:14
+ * @LastModifiedTime: 2020-05-12 周二 13:58:37
  */
 
 import Container from '@/components/UI/containerComp';
 import Icon, { iconName, IconSource, IconSourceHover } from '@/components/UI/iconComp';
-import SearchPanel from '@/components/UI/search/searchPanel';
+import SearchPanel from '@/containers/UI/search/searchPanel';
 import { SearchCondition } from '@/models/UI/search';
 import Select from 'antd/es/select';
 import React, { ButtonHTMLAttributes, ChangeEvent, useRef, useState } from 'react';
@@ -19,12 +19,10 @@ import './index.scss';
  * 搜索接口
  */
 export interface ISearchProps extends ButtonHTMLAttributes<any> {
-  searchState: ISearchState & SearchResultData
+  searchState: ISearchState
   active: boolean
   isShowSearchResult: boolean
-  fetchData: ISearchModel['effects']['fetchData']
-  setState: ISearchModel['effects']['setState']
-  clearData: ISearchModel['effects']['clearData']
+  dispatch: ISearchModel['effects']
 }
 
 /**
@@ -70,10 +68,9 @@ const searchConditions: ISearchCondition[] = [
  * 搜索组件
  */
 const Search = (props: Partial<ISearchProps>) => {
-  const {searchState, fetchData, setState, clearData} = props;
+  const {searchState, dispatch} = props;
+  const {fetchData, setState, clearData} = dispatch!;
   const {searchCondition, searchKeyword} = searchState!;
-  // 控制搜索结果面板的显示或隐藏
-  const [isShowSearchResult, setIsShowSearchResult] = useState(false);
   // 搜索框Ref
   const searchBox = useRef<HTMLInputElement>(null);
 
@@ -87,12 +84,10 @@ const Search = (props: Partial<ISearchProps>) => {
       if (sc.value === value) {
         // 根据当前选中的查询方式更改文本框的提示语
         searchBox.current!.placeholder = sc.placeholder;
-        // 清空搜索关键词、设置新的搜索条件（按对象、区域或位置搜索）
-        setState!({searchKeyword: '', searchCondition: value});
+        // 清空搜索关键词、设置新的搜索条件（按对象、区域或位置搜索）、关闭搜索结果面板
+        setState!({searchKeyword: '', searchCondition: value, isShowResultPanel: false});
         // 变更搜索条件后，清空搜索数据缓存
         clearData!();
-        // 设置是否显示搜索结果面板
-        setIsShowSearchResult(false);
         break;
       }
     }
@@ -121,7 +116,7 @@ const Search = (props: Partial<ISearchProps>) => {
         fetchData?.({params: requestParam, condition: searchCondition!});
       }
 
-      setIsShowSearchResult(true);
+      setState({isShowResultPanel: true});
     }
   };
 
@@ -147,13 +142,13 @@ const Search = (props: Partial<ISearchProps>) => {
     // 根据输入框的值内容，设置是否显示搜索结果面板
     if (searchCondition === SearchCondition.POSITION) {
       if (beSetValue) {
-        setIsShowSearchResult(true);
+        setState({isShowResultPanel: true});
       } else {
-        setIsShowSearchResult(false);
+        setState({isShowResultPanel: false});
       }
     } else {
       if (!beSetValue || beSetValue !== searchKeyword) {
-        setIsShowSearchResult(false);
+        setState({isShowResultPanel: false});
       }
     }
   };
@@ -186,11 +181,7 @@ const Search = (props: Partial<ISearchProps>) => {
         />
         <button className="inter-plat-search-button" type="submit" onClick={handleSearch} />
       </Container>
-      <SearchPanel
-        searchState={searchState!}
-        isShow={isShowSearchResult}
-        setIsShowSearchResult={setIsShowSearchResult}
-      />
+      <SearchPanel />
     </Container>
   );
 };

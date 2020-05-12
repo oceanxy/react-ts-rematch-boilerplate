@@ -4,7 +4,7 @@
  * @Description: amap组件
  * @Date: 2020-03-31 周二 17:03:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-12 周二 09:58:16
+ * @LastModifiedTime: 2020-05-12 周二 16:36:01
  */
 
 import AMap from '@/components/UI/amap';
@@ -18,13 +18,15 @@ const mapStateToProps = (state: RootState) => ({
   mapFences: state.fence.mapFences,
   intercomGroupState: state.intercomGroup,
   curSelectedMonitorId: state.eventList.curSelectedMonitorId,
-  triggers: state.displayContent.triggers
+  triggers: state.displayContent.triggers,
+  searchPanelTarget: state.search.target
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
-  dispatches: dispatch.map,
+  dispatch: dispatch.map,
   setIntercomGroupState: dispatch.intercomGroup.setState,
-  fenceDispatch: dispatch.fence
+  fenceDispatch: dispatch.fence,
+  setSearchState: dispatch.search.setState
 });
 
 export { POI, Boundary };

@@ -53,7 +53,8 @@ export const monitorTypeIcon: {[K: string]: IconSource | IconSourceHover} = {
 const search: ISearchModel = {
   state: {
     searchCondition: SearchCondition.ENTITY,
-    searchKeyword: ''
+    isShowResultPanel: false,
+    searchKeyword: '',
   },
   reducers: {
     updateState: (state, payload) => ({

@@ -122,7 +122,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
               key={`inter-plat-intercom-member-${index}`}
               title={member.userName}
               name={member.userName!}
-              online={member.audioOnlineStatus}
+              online={member.onlineStatus}
               onClick={handleRemoveMember.bind(null, member)}
             />
           );

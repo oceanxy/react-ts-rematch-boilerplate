@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 高德地图POI搜索组件
  * @Date: 2020-04-01 周三 09:04:01
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-01 周三 09:04:01
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-12 周二 18:14:18
  */
 
 import POI from '@/components/UI/amap/POI';
@@ -19,7 +19,8 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
-  setState: dispatch.position.setState
+  setState: dispatch.position.setState,
+  setSearchState: dispatch.search.setState
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(POI);
