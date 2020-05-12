@@ -4,7 +4,7 @@
  * @Description: amap组件
  * @Date: 2020-03-31 周二 17:03:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-11 周一 17:43:56
+ * @LastModifiedTime: 2020-05-12 周二 09:58:16
  */
 
 import AMap from '@/components/UI/amap';
@@ -24,8 +24,7 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   dispatches: dispatch.map,
   setIntercomGroupState: dispatch.intercomGroup.setState,
-  fetchFenceAreaData: dispatch.fence.fetchAreaData,
-  fetchFenceDetails: dispatch.fence.fetchDetails
+  fenceDispatch: dispatch.fence
 });
 
 export { POI, Boundary };

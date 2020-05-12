@@ -4,7 +4,7 @@
  * @Description: 高德地图组件
  * @Date: 2020-01-04 11:43:57
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-11 周一 17:44:04
+ * @LastModifiedTime: 2020-05-12 周二 09:59:14
  */
 
 import Area from '@/components/UI/amap/area';
@@ -38,8 +38,7 @@ export interface IZWMapProps extends IContainerProps<any> {
   curSelectedMonitorId: IEventListState['curSelectedMonitorId']
   triggers: IDisplayContentState['triggers']
   mapFences: IFenceState['mapFences']
-  fetchFenceAreaData: IFenceModel['effects']['fetchAreaData']
-  fetchFenceDetails: IFenceModel['effects']['fetchDetails']
+  fenceDispatch: IFenceModel['effects']
 }
 
 /**
@@ -49,7 +48,7 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
   const {
     state, dispatches, intercomGroupState,
     setIntercomGroupState, curSelectedMonitorId,
-    triggers, fetchFenceAreaData, fetchFenceDetails,
+    triggers, fenceDispatch,
     mapFences
   } = props;
   const {setState, fetchMassPoint, fetchWindowInfo} = dispatches!;
@@ -65,8 +64,8 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
               map={map}
               triggers={triggers!}
               data={mapFences!}
-              fetchFenceAreaData={fetchFenceAreaData!}
-              fetchFenceDetails={fetchFenceDetails!} />
+              dispatch={fenceDispatch!}
+            />
             <MassPoint
               map={map}
               data={massPoints}

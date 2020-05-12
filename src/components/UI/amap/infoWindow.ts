@@ -120,40 +120,78 @@ function setWindowButton(data: InfoWindowResponse, tasks: ITask[], onlineStatus:
 }
 
 /**
- * 地图弹窗模版
- * @param {InfoWindowResponse} data 弹窗数据
+ * 海量点弹窗模版
+ * @param {InfoWindowResponse} data
  * @returns {string}
  */
-const infoWindowTemplate = (data: InfoWindowResponse) => {
-  if (!data) {
-    return '';
-  }
-
+const massPointInfoWindow = (data: InfoWindowResponse) => {
   const {monitor, location, tasks, eventList} = data;
   const happenEvent = !!eventList.length;
 
   return `
+    ${setWindowFields(data, happenEvent)}
+    <div class="info-window-item" title="上报事件的监控对象名称">
+      <span class="key">监控对象</span>
+      <span class="value">${monitor.monitorName}</span>
+    </div>
+    <div class="info-window-item" title="监控对象的类型">
+      <span class="key">类型</span>
+      <span class="value">${getEntityTypeText(+monitor.monitorType!)}</span>
+    </div>
+    <div class="info-window-item" title="监控对象最近一次上报的位置描述">
+      <span class="key">位置</span>
+      <span class="value">${location.address}</span>
+    </div>
+    ${setWindowButton(data, tasks, !!monitor.onlineStatus, happenEvent)}
+  `;
+};
+
+/**
+ * 围栏弹窗模版
+ * @param {IFenceDetailsResponse} data
+ * @returns {string}
+ */
+const fenceInfoWindow = (data: IFenceDetailsResponse) => {
+  const {fenceDetails} = data;
+  const {longitude, latitude} = fenceDetails.locationData;
+
+  return `
+    <div class="info-window-item" title="监控对象最近一次上报的定位时间">
+      <span class="key">名称</span>
+      <span class="value">${fenceDetails.fenceName}</span>
+    </div>
+    <div class="info-window-item" title="事件名称">
+      <span class="key">经纬度</span>
+      <span class="value">${longitude}, ${latitude}</span>
+    </div>
+  `;
+};
+
+/**
+ * 地图弹窗模版
+ * @param {InfoWindowResponse} data 弹窗数据
+ * @returns {string}
+ */
+const infoWindowTemplate = (data?: InfoWindowResponse | IFenceDetailsResponse) => {
+  let template = `
     <div class="inter-plat-map-info-window-container">
       <div class="inter-plat-map-info-window-close"></div>
       <div class="inter-plat-map-info-window-content">
-        ${setWindowFields(data, happenEvent)}
-        <div class="info-window-item" title="上报事件的监控对象名称">
-          <span class="key">监控对象</span>
-          <span class="value">${monitor.monitorName}</span>
-        </div>
-        <div class="info-window-item" title="监控对象的类型">
-          <span class="key">类型</span>
-          <span class="value">${getEntityTypeText(+data.monitor.monitorType!)}</span>
-        </div>
-        <div class="info-window-item" title="监控对象最近一次上报的位置描述">
-          <span class="key">位置</span>
-          <span class="value">${location.address}</span>
-        </div>
-        ${setWindowButton(data, tasks, !!data.monitor.onlineStatus, happenEvent)}
-      </div>
-      <div class="inter-plat-map-info-window-content-sharp"></div>
-    </d
   `;
+
+  if (data) {
+    const {fenceDetails}: IFenceDetailsResponse = data as IFenceDetailsResponse;
+    if (fenceDetails) {
+      template += fenceInfoWindow(data as IFenceDetailsResponse);
+    } else {
+      template += massPointInfoWindow(data as InfoWindowResponse);
+    }
+  }
+
+  return template += `
+    </div>
+    <div class="inter-plat-map-info-window-content-sharp"></div>
+  </div>`;
 };
 
 export default infoWindowTemplate;

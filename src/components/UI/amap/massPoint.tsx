@@ -8,17 +8,16 @@
  */
 
 import config from '@/config';
-import {HandleEvent} from '@/containers/home/eventModel';
-import {CurActiveGroupType} from '@/models/home/intercom/group';
-import {message} from 'antd';
-import React, {useEffect, useState} from 'react';
+import { HandleEvent } from '@/containers/home/eventModel';
+import { CurActiveGroupType } from '@/models/home/intercom/group';
+import { message } from 'antd';
+import React, { useEffect, useState } from 'react';
 import carPng from './images/dispatch-car.png';
 import peoplePng from './images/dispatch-people.png';
 import suppliesPng from './images/dispatch-supplies.png';
 import thingPng from './images/dispatch-thing.png';
 import './index.scss';
 import infoWindowTemplate from './infoWindow';
-import handleEvent from '@/models/home/eventModel/handleEvent';
 
 // 事件弹窗实例
 let infoWindow: any;
@@ -58,6 +57,7 @@ interface EntityIntercomCallProps {
  */
 const setInfoWindow = (): AMap.InfoWindow => {
   return new AMap.InfoWindow({
+    content: infoWindowTemplate(),
     closeWhenClickMap: true,
     autoMove: true,
     isCustom: true,
@@ -176,6 +176,34 @@ const MassPoint = (props: MassPointProps) => {
   }
 
   /**
+   * 处理海量点点击事件
+   * @param e
+   * @returns {Promise<void>}
+   */
+  const handleMassPointClick = async (e: any) => {
+    const {monitorId, monitorType} = e.data;
+
+    // 请求弹窗内的数据
+    const response = await fetchWindowInfo({
+      monitorId,
+      monitorType
+    });
+
+    if (+response.retCode === 0) {
+      setState({curMassPoint: response.data});
+      // 开启mock时，直接使用当前点击的海量点的坐标
+      if (config.mock) {
+        infoWindow.setContent(infoWindowTemplate(response.data));
+        infoWindow.open(map!, e.data.lnglat);
+        map.setCenter(e.data.lnglat);
+      }
+    } else {
+      clearCurMassPoint();
+      message.error('获取信息失败，请稍候再试！');
+    }
+  };
+
+  /**
    * 处理地图事件
    * 因高德地图信息弹窗不支持JSX及ReactNode，所以本组件使用DOM的HTMLElement，
    * 并用DOM2级方法 addEventListener 和 removeEventListener来处理事件监听
@@ -204,7 +232,7 @@ const MassPoint = (props: MassPointProps) => {
       } /** 处理关闭海量点弹窗相关逻辑 */ else if (ele?.className.includes('inter-plat-map-info-window-close')) {
         // 关闭海量点弹窗
         map.clearInfoWindow();
-        // 关闭时间处理对话框
+        // 关闭事件处理对话框
         setIsShowModal(false);
         // 清空当前选中的海量点信息
         clearCurMassPoint();
@@ -229,31 +257,10 @@ const MassPoint = (props: MassPointProps) => {
     /**
      * 海量点点击事件
      */
-    mass.on('click', async (e: any) => {
-      const {monitorId, monitorType} = e.data;
-
-      // 请求弹窗内的数据
-      const response = await fetchWindowInfo({
-        monitorId,
-        monitorType
-      });
-
-      if (+response.retCode === 0) {
-        setState({curMassPoint: response.data});
-        // 开启mock时，直接使用当前点击的海量点的坐标
-        if (config.mock) {
-          infoWindow.setContent(infoWindowTemplate(response.data));
-          infoWindow.open(map!, e.data.lnglat);
-          map.setCenter(e.data.lnglat);
-        }
-      } else {
-        clearCurMassPoint();
-        message.error('获取信息失败，请稍候再试！');
-      }
-    });
+    mass.on('click', handleMassPointClick);
 
     return () => {
-      mass.off('click');
+      mass.off('click', handleMassPointClick);
     };
   }, [props.data.positionList]);
 

@@ -7,9 +7,12 @@
  * @LastModifiedTime: 2020-05-11 周一 16:23:37
  */
 
+import infoWindowTemplate from '@/components/UI/amap/infoWindow';
 import { FenceType } from '@/models/UI/fence';
+import { message } from 'antd';
 import React, { useEffect } from 'react';
 import './index.scss';
+import Overlay = AMap.Overlay;
 
 // 区域弹窗实例
 let infoWindow: any;
@@ -21,8 +24,7 @@ export interface AreaProps {
   map: IAMapState['mapInstance']
   data: IFenceState['mapFences']
   triggers: IDisplayContentState['triggers']
-  fetchFenceAreaData: IFenceModel['effects']['fetchAreaData']
-  fetchFenceDetails: IFenceModel['effects']['fetchDetails']
+  dispatch: IFenceModel['effects']
 }
 
 /**
@@ -31,6 +33,7 @@ export interface AreaProps {
  */
 const setInfoWindow = (): AMap.InfoWindow => {
   return new AMap.InfoWindow({
+    content: infoWindowTemplate(),
     closeWhenClickMap: true,
     autoMove: true,
     isCustom: true,
@@ -43,53 +46,121 @@ const setInfoWindow = (): AMap.InfoWindow => {
  * 海量点组件
  */
 const Area = (props: AreaProps) => {
-  const {map, triggers, fetchFenceAreaData, data} = props;
+  const {map, triggers, dispatch, data} = props;
+  const {fetchAreaData, setState, fetchDetails} = dispatch;
+  const areaTrigger: ITrigger = triggers.slice(-1)[0];
 
-  useEffect(() => {
-    fetchFenceAreaData();
-  }, [JSON.stringify(triggers.slice(-1))]);
+  /**
+   * 处理围栏点击事件
+   * @param e
+   * @returns {Promise<void>}
+   */
+  const handleClickOverlay = async (e: any) => {
+    const data: IFenceArea = e.target.getExtData();
 
-  useEffect(() => {
-    const areas = data?.fenceList.map((fence) => {
-      const {longitude, latitude, radius, width, points} = fence.locationData;
-
-      switch (fence.fenceType) {
-        case FenceType.Circle:
-          return new AMap.Circle({
-            center: new AMap.LngLat(longitude, latitude), // 圆心位置
-            radius: radius,  // 半径
-            strokeWeight: 0,  // 线粗细度
-            fillColor: `#${fence.colorCode}`,  // 填充颜色
-            fillOpacity: fence.transparency / 100 // 填充透明度
-          });
-        case FenceType.Marker:
-          return new AMap.Marker({
-            icon: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
-            position: [longitude, latitude]
-          });
-        case FenceType.Line:
-          return new AMap.Polyline({
-            path: points,
-            borderWeight: width, // 线条宽度，默认为 1
-            strokeColor: `#${fence.colorCode}`, // 线条颜色
-            lineJoin: 'round' // 折线拐点连接处样式
-          });
-        case FenceType.Polygon:
-        case FenceType.Administration:
-        default:
-          return new AMap.Polygon({
-            path: points,
-            fillColor: `#${fence.colorCode}`, // 多边形填充颜色
-            fillOpacity: fence.transparency / 100
-          });
-      }
+    const response = await fetchDetails({
+      fenceId: data.fenceId,
+      fenceType: data.fenceType
     });
 
-    // 将以上覆盖物添加到地图上
+    if (+response.retCode === 0) {
+      const {longitude, latitude} = response.data.fenceDetails.locationData;
+
+      infoWindow.setContent(infoWindowTemplate(response.data));
+      infoWindow.open(map!, [longitude, latitude]);
+      map!.setCenter([longitude, latitude]);
+    } else {
+      message.error('获取信息失败，请稍候再试！');
+    }
+  };
+
+  /**
+   * 创建围栏
+   * @param {IFenceState["mapFences"]} data
+   * @returns {any[] | undefined}
+   */
+  const createOverlays = (data: IFenceState['mapFences']) => {
+    return data?.fenceList.map((fence) => {
+      const {longitude, latitude, radius, width, points} = fence.locationData;
+      let tempOverlays;
+
+      if (fence.fenceType === FenceType.Circle) {
+        tempOverlays = new AMap.Circle({
+          extData: fence,
+          center: new AMap.LngLat(longitude, latitude), // 圆心位置
+          radius: radius,  // 半径
+          strokeWeight: 0,  // 线粗细度
+          strokeColor: 'transparent',
+          fillColor: `#${fence.colorCode}`,  // 填充颜色
+          fillOpacity: fence.transparency / 100 // 填充透明度
+        });
+      } else if (fence.fenceType === FenceType.Marker) {
+        tempOverlays = new AMap.Marker({
+          extData: fence,
+          icon: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+          position: [longitude, latitude]
+        });
+      } else if (fence.fenceType === FenceType.Line) {
+        tempOverlays = new AMap.Polyline({
+          extData: fence,
+          path: points,
+          borderWeight: width, // 线条宽度，默认为 1
+          strokeColor: `#${fence.colorCode}`, // 线条颜色
+          lineJoin: 'round' // 折线拐点连接处样式
+        });
+      } else {
+        tempOverlays = new AMap.Polygon({
+          extData: fence,
+          path: points,
+          fillColor: `#${fence.colorCode}`, // 多边形填充颜色
+          fillOpacity: fence.transparency / 100,
+          strokeWeight: 0,
+          strokeColor: 'transparent',
+          lineJoin: 'round' // 折线拐点连接处样式
+        });
+      }
+
+      (tempOverlays as Overlay).on('click', handleClickOverlay);
+
+      return tempOverlays;
+    });
+  };
+
+  // 初始化弹窗
+  if (!infoWindow) {
+    infoWindow = setInfoWindow();
+
+    const mapContainer = document.querySelector('.amap-maps');
+    // 监听地图元素事件
+    mapContainer?.addEventListener('click', (e: any) => {
+      const ele = (e.target as HTMLButtonElement);
+
+      if (ele?.className.includes('inter-plat-map-info-window-close')) {
+        // 关闭海量点弹窗
+        map!.clearInfoWindow();
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (areaTrigger.status) {
+      fetchAreaData();
+    } else {
+      setState({mapFences: undefined});
+    }
+  }, [areaTrigger.status]);
+
+  useEffect(() => {
+    const areas = createOverlays(data);
+
+    // 清除地图上已存在的覆盖物
+    map?.clearMap();
+
     if (areas) {
+      // 将新的覆盖物覆盖物添加到地图上
       map!.add(areas);
     }
-  }, [JSON.stringify(data)]);
+  }, [data]);
 
   return null;
 };

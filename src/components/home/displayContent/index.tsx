@@ -36,12 +36,8 @@ const DisplayContent = (props: Partial<IDisplayContent>) => {
     const newTriggers = [...triggers!];
     // 重置为相反状态
     newTriggers[index] = {...triggers![index], status: !trigger.status};
-    if (trigger.value === 'area') {
-      // TODO 设置区域
-    } else {
-      // 设置状态
-      setState!({triggers: newTriggers});
-    }
+    // 设置状态
+    setState!({triggers: newTriggers});
   };
 
   return (

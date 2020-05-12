@@ -826,8 +826,8 @@ const mocks: Mocks = {
         {
           'fenceName': '北京中位科技-标注',
           'locationData': {
-            'latitude': 29.534107,
-            'longitude': 106.5035
+            'latitude': 29.540497,
+            'longitude': 106.500611
           },
           'fenceType': 'zw_m_marker',
           'transparency': '78',
@@ -838,8 +838,8 @@ const mocks: Mocks = {
           'fenceName': '北京中位科技-圆形',
           'locationData': {
             'latitude': 29.534322,
-            'radius': 83.41971479710175,
-            'longitude': 106.504165
+            'radius': 183.41971479710175,
+            'longitude': 106.494165
           },
           'fenceType': 'zw_m_circle',
           'transparency': '78',
@@ -848,36 +848,15 @@ const mocks: Mocks = {
         },
         {
           'fenceName': '北京中位科技-多边形',
-          'locationData': [
-            [
-              '106.504133',
-              '29.534504'
-            ],
-            [
-              '106.503388',
-              '29.53351'
-            ],
-            [
-              '106.504536',
-              '29.532464'
-            ],
-            [
-              '106.506665',
-              '29.532408'
-            ],
-            [
-              '106.507572',
-              '29.533248'
-            ],
-            [
-              '106.506612',
-              '29.534289'
-            ],
-            [
-              '106.505651',
-              '29.534635'
+          'locationData': {
+            'points': [
+              [106.522489, 29.538774],
+              [106.529611, 29.550497],
+              [106.535276, 29.523987],
+              [106.512702, 29.516817],
+              [106.481803, 29.515846]
             ]
-          ],
+          },
           'fenceType': 'zw_m_polygon',
           'transparency': '78',
           'colorCode': 'd49522',
@@ -890,16 +869,18 @@ const mocks: Mocks = {
     retMsg: '',
     retCode: 0,
     data: {
-      'fenceName': 'yuan',
-      'locationData': {
-        'latitude': 29.530537,
-        'radius': 1658.8359961204733,
-        'longitude': 106.495806
-      },
-      'fenceType': 'zw_m_circle',
-      'transparency': '50',
-      'colorCode': 'FFF100',
-      'fenceId': 'ef11341b-628f-4d56-8ba0-9b716bd73da0'
+      'fenceDetails': {
+        'fenceName': 'yuan',
+        'locationData': {
+          'latitude': 29.530537,
+          'radius': 1658.8359961204733,
+          'longitude': 106.495806
+        },
+        'fenceType': 'zw_m_circle',
+        'transparency': '50',
+        'colorCode': 'FFF100',
+        'fenceId': 'ef11341b-628f-4d56-8ba0-9b716bd73da0'
+      }
     }
   }
 };
