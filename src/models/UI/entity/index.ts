@@ -50,7 +50,8 @@ const entity: IEntityModel = {
   state: {
     entities: [],
     searchEntities: [],
-    currentEntityId: ''
+    currentEntityId: '',
+    byCondition: false
   },
   reducers: {
     updateState(state, payload) {
@@ -92,6 +93,20 @@ const entity: IEntityModel = {
       }
 
       return await fetchApis.fetchFixedEntity(reqPayload);
+    },
+    async fetchConditionData(reqPayload): Promise<APIResponse<{monitors: IEntity[]}>> {
+      const {latitude, longitude, radius} = store.getState().temporaryGroup.backFillInfo;
+      const request: IEntityByCondition & IEntityByCircleRequest = {
+        length: 2000,
+        supportMonitorType: -1,
+        ageRange: [0, 100],
+        radius: radius!,
+        latitude: latitude!,
+        longitude: longitude!,
+        ...reqPayload
+      };
+
+      return await fetchApis.fetchFixedCondition(request);
     },
     setState(payload): void {
       store.dispatch.entity.updateState(payload);

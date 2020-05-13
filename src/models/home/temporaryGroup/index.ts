@@ -4,12 +4,23 @@
  * @Description: 临时组model
  * @Date: 2020-04-23 周四 13:51:12
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-30 周四 10:09:06
+ * @LastModifiedTime: 2020-05-13 周三 16:52:03
  */
 
 import fetchApis from '@/apis';
 import { APIResponse } from '@/interfaces/api/mock';
 import { store } from '@/store';
+
+/**
+ * 临时组的临时状态
+ * @type {{isShowEditModal: boolean; backFillInfo: {}; loading: boolean; title: string}}
+ */
+const tempState = {
+  isShowEditModal: false,
+  backFillInfo: {},
+  loading: false,
+  title: ''
+};
 
 /**
  * 临时组model
@@ -18,16 +29,19 @@ import { store } from '@/store';
 const temporaryGroup: ITemporaryGroupModel = {
   state: {
     data: [],
-    isShowEditModal: false,
-    backFillInfo: {},
-    loading: false,
-    title: ''
+    ...tempState
   },
   reducers: {
     updateState(state: ITemporaryGroupState, payload: Partial<ITemporaryGroupState>): ITemporaryGroupState {
+      const {backFillInfo, ...rest} = payload;
+
       return {
         ...state,
-        ...payload
+        ...rest,
+        backFillInfo: {
+          ...state.backFillInfo,
+          ...backFillInfo
+        }
       };
     }
   },
@@ -38,6 +52,10 @@ const temporaryGroup: ITemporaryGroupModel = {
       store.dispatch.temporaryGroup.updateState({data: response.data.temporaryGroupList});
     },
     setState(payload: Partial<ITemporaryGroupState>): void {
+      if ('isShowEditModal' in payload && !payload.isShowEditModal) {
+        payload = tempState;
+      }
+
       store.dispatch.temporaryGroup.updateState(payload);
     },
     async unbindTemporaryGroup(intercomGroupId: string): Promise<APIResponse> {

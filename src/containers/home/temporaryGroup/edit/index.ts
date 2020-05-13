@@ -13,7 +13,8 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
   state: state.temporaryGroup,
-  mouseToolType: state.map.mouseToolType
+  mouseToolType: state.map.mouseToolType,
+  byCondition: state.entity.byCondition
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({

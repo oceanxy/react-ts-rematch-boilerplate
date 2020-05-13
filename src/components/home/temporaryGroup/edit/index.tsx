@@ -10,7 +10,7 @@
 import Modal from '@/components/UI/modal';
 import { APIResponse } from '@/interfaces/api/mock';
 import { MouseToolType } from '@/models/UI/amap';
-import { Button, Checkbox, Form, Input, Row } from 'antd';
+import { Button, Checkbox, Form, Input, Row, Select, Slider } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { CheckboxValueType } from 'antd/es/checkbox/Group';
 import React, { useEffect, useState } from 'react';
@@ -26,6 +26,7 @@ interface IEditTaskProps {
   entityDispatch: IEntityModel['effects']
   addTempGroupMember: IMonitoringDispatchModel['effects']['addTempGroupMember']
   mouseToolType: IAMapState['mouseToolType']
+  byCondition: IEntityState['byCondition']
 }
 
 /**
@@ -35,9 +36,16 @@ interface IEditTaskProps {
  * @constructor
  */
 const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
-  const {state, setState, createTemporaryGroup, addTempGroupMember, mouseToolType, entityDispatch} = props;
+  const {
+    state, setState, createTemporaryGroup, byCondition,
+    addTempGroupMember, mouseToolType, entityDispatch
+  } = props;
   const {fetchFixedData, fetchDataByCircle} = entityDispatch!;
-  const {isShowEditModal, title, loading, backFillInfo: {name}} = state!;
+  const {isShowEditModal, title, loading, backFillInfo: {name, radius}} = state!;
+
+  // 避免不必要的渲染
+  if (!isShowEditModal) return null;
+
   const [form] = Form.useForm();
   /**
    * 根据圈选范围获取的监控对象临时数组状态
@@ -141,7 +149,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   };
 
   useEffect(() => {
-    if (isShowEditModal) {
+    if (isShowEditModal && !byCondition) {
       (async () => {
         let response: any;
 
@@ -164,11 +172,11 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
             interlocutorIds: []
           });
         }
-
-        // 设置全选、反选复选框的状态
-        listenersCheck([]);
       })();
     }
+
+    // 设置全选、反选复选框的状态
+    listenersCheck([]);
   }, [isShowEditModal]);
 
   return (
@@ -181,7 +189,124 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
       footer={null}
       destroyOnClose={true}
     >
-      <Form form={form} onFinish={onFinish} autoComplete="off">
+      <Form form={form} onFinish={onFinish} autoComplete="off" initialValues={{
+        radius,
+        gender: [1, 2],
+        ageRange: [20, 40]
+      }}>
+        {
+          !byCondition ? null : (
+            <>
+              <Row className="inter-plat-row-text">请根据条件搜索监控对象</Row>
+              <Form.Item
+                label="人员技能"
+                name="skillIds"
+                className="select"
+              >
+                <Select
+                  mode="multiple"
+                  allowClear={true}
+                  placeholder="请选择人员技能"
+                  dropdownClassName="inter-plat-dropdown task-operation-modal-select"
+                  showSearch
+                  optionFilterProp="children">
+                  <Select.Option value={1}>1</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label="对讲机型"
+                name="intercomModelIds"
+                className="select"
+              >
+                <Select
+                  mode="multiple"
+                  allowClear={true}
+                  placeholder="请选择对讲机型"
+                  dropdownClassName="inter-plat-dropdown task-operation-modal-select"
+                  showSearch
+                  optionFilterProp="children">
+                  <Select.Option value={1}>1</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label="驾照类别"
+                name="driverLicenseCategoryIds"
+                className="select"
+              >
+                <Select
+                  mode="multiple"
+                  allowClear={true}
+                  placeholder="请选择驾照类别"
+                  dropdownClassName="inter-plat-dropdown task-operation-modal-select"
+                  showSearch
+                  optionFilterProp="children">
+                  <Select.Option value={1}>1</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label="资格证书"
+                name="qualificationIds"
+                className="select"
+              >
+                <Select
+                  mode="multiple"
+                  allowClear={true}
+                  placeholder="请选择资格证书"
+                  dropdownClassName="inter-plat-dropdown task-operation-modal-select"
+                  showSearch
+                  optionFilterProp="children">
+                  <Select.Option value={1}>1</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label="血型"
+                name="bloodTypeIds"
+                className="select"
+              >
+                <Select
+                  mode="multiple"
+                  allowClear={true}
+                  placeholder="请选择血型"
+                  dropdownClassName="inter-plat-dropdown task-operation-modal-select"
+                  showSearch
+                  optionFilterProp="children">
+                  <Select.Option value={1}>1</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label="性别"
+                name="gender"
+                className="radio"
+                rules={[{required: true, message: '请选择性别'}]}
+              >
+                <Checkbox.Group>
+                  <Checkbox value={1}>男</Checkbox>
+                  <Checkbox value={2}>女</Checkbox>
+                </Checkbox.Group>
+              </Form.Item>
+              <Form.Item
+                label="年龄范围"
+                name="ageRange"
+                className="radio"
+              >
+                <Slider range={true} />
+              </Form.Item>
+              <Form.Item
+                label="半径（m）"
+                name="radius"
+                rules={[{required: true, message: '请输入半径'}]}
+                className="input"
+              >
+                <Input type="text" placeholder="请输入半径" />
+              </Form.Item>
+              <Row justify="end" className="temp-group-edit-modal-row bottom-line">
+                <Button size="small" type="primary" loading={loading}>搜 索</Button>
+                <Button size="small" type="primary" onClick={editTempGroupCancel}>重 置</Button>
+              </Row>
+              <Row className="inter-plat-row-text">{title ? title : '创建临时组'}</Row>
+            </>
+          )
+        }
         <Form.Item
           label="名称"
           name="temporaryGroup"
@@ -219,11 +344,13 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                 <Form.Item name="interlocutorIds" rules={[{required: true, message: '请勾选加入临时组的监控对象'}]}>
                   <Checkbox.Group onChange={listenersCheck}>
                     {
-                      (getFieldValue('entities') || []).map((entity: IEntity, index: number) => (
-                        <Checkbox key={`temp-group-edit-modal-entity-${index}`} value={entity.userId}>
-                          {entity.monitorName}
-                        </Checkbox>
-                      ))
+                      (getFieldValue('entities') || []).length ?
+                        (getFieldValue('entities') || []).map((entity: IEntity, index: number) => (
+                          <Checkbox key={`temp-group-edit-modal-entity-${index}`} value={entity.userId}>
+                            {entity.monitorName}
+                          </Checkbox>
+                        )) :
+                        '暂无监控对象数据'
                     }
                   </Checkbox.Group>
                 </Form.Item>
@@ -232,7 +359,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
           }}
         </Form.Item>
         <Row justify="end" className="temp-group-edit-modal-row">
-          <Button size="small" type="primary" htmlType="submit" loading={loading}>提 交</Button>
+          <Button size="small" type="primary" htmlType="submit" loading={loading} disabled={byCondition}>提 交</Button>
           <Button size="small" type="primary" onClick={editTempGroupCancel}>取 消</Button>
         </Row>
       </Form>

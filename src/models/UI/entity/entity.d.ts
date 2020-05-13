@@ -137,6 +137,40 @@ declare global {
   }
 
   /**
+   * 按综合条件筛选实体
+   */
+  interface IEntityByCondition {
+    /**
+     * 技能ID
+     */
+    skillIds?: string[]
+    /**
+     * 机型ID
+     */
+    intercomModelIds?: string[]
+    /**
+     * 驾照类别ID
+     */
+    driverLicenseCategoryIds?: string[]
+    /**
+     * 资格证书ID
+     */
+    qualificationIds?: string[]
+    /**
+     * 血型ID
+     */
+    bloodTypeIds?: string[]
+    /**
+     * 性别 1：男 2：女
+     */
+    gender?: 1 | 2
+    /**
+     * 年龄范围
+     */
+    ageRange: [number, number]
+  }
+
+  /**
    * 实体状态
    */
   interface IEntityState {
@@ -152,6 +186,10 @@ declare global {
      * 当前实体ID
      */
     currentEntityId: string
+    /**
+     * 是否通过自定义条件来筛选数据
+     */
+    byCondition: boolean
   }
 
   /**
@@ -181,11 +219,17 @@ declare global {
        */
       fetchDataByCircle(reqPayload?: IEntityByCircleRequest): Promise<APIResponse<{monitors: IEntity[]}>>
       /**
-       * 获取固定的监控对象
+       * 获取固定的实体（监控对象）
        * @param {IEntityByCircleRequest} reqPayload
        * @returns {Promise<APIResponse<{monitors: IEntity[]}>>}
        */
       fetchFixedData(reqPayload?: IEntityRequest): Promise<APIResponse<{monitors: IEntity[]}>>
+      /**
+       * 按固定条件获取实体数据
+       * @param {IEntityByCondition} reqPayload
+       * @returns {Promise<APIResponse<{monitors: IEntity[]}>>}
+       */
+      fetchConditionData(reqPayload: IEntityByCondition): Promise<APIResponse<{monitors: IEntity[]}>>
       /**
        * 设置状态
        * @param {Partial<IEntityState>} payload

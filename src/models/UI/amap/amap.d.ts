@@ -4,7 +4,7 @@
  * @Description: 高德地图相关类型定义
  * @Date: 2020-04-13 周一 10:18:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-13 周三 09:29:20
+ * @LastModifiedTime: 2020-05-13 周三 16:19:14
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
@@ -171,7 +171,10 @@ declare global {
      * @param type 高德地图鼠标工具触发的事件名称
      * @param {AMap.Circle | AMap.Polygon | AMap.Polyline | AMap.Rectangle} overlay 覆盖物对象
      */
-    callback?: (type: any, overlay: AMap.Circle | AMap.Polygon | AMap.Polyline | AMap.Rectangle) => void
+    callback?: ((type: string, overlay: AMap.Circle) => void) |
+      ((type: string, overlay: AMap.Polygon) => void) |
+      ((type: string, overlay: AMap.Polyline) => void) |
+      ((type: string, overlay: AMap.Rectangle) => void)
     /**
      * 海量点数据
      */

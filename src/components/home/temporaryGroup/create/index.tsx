@@ -4,7 +4,7 @@
  * @Description: 创建临时组组件
  * @Date: 2020-04-25 周六 14:58:52
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-30 周四 10:13:56
+ * @LastModifiedTime: 2020-05-13 周三 13:48:32
  */
 
 import Container from '@/components/UI/containerComp';
@@ -24,10 +24,11 @@ import './index.scss';
 interface ICreateTempGroupProps {
   setState: ITemporaryGroupModel['effects']['setState']
   setAMapState: IAMapModel['effects']['setState']
+  setEntityState: IEntityModel['effects']['setState']
 }
 
 const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
-  const {setAMapState, setState} = props;
+  const {setAMapState, setState, setEntityState} = props;
   // 创建临时组时，传递给询问对话框的状态
   const [showTempGroupModal, setShowTempGroupModal] = useState({
     visible: false,
@@ -43,9 +44,11 @@ const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
 
   /**
    * 激活高德地图鼠标工具
+   * @param {IEntityState["byCondition"]} byCondition 鼠标工具绘制后，是否是按自定义条件筛选实体。根据这个条件加载不同的创建临时组对话框
    */
-  const loadAMapMouseTool = () => {
+  const loadAMapMouseTool = (byCondition: IEntityState['byCondition']) => {
     setShowTempGroupModal({visible: false, current: null});
+    setEntityState!({byCondition});
     setAMapState!({
       mouseToolType: MouseToolType.Circle,
       callback: handleCircleMouseTool
@@ -54,15 +57,13 @@ const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
 
   /**
    * 处理地图鼠标事件绘制覆盖物后的回调事件
-   * @param type
-   * @param {AMap.Circle | AMap.Polygon | AMap.Polyline | AMap.Rectangle} overlay 绘制的覆盖物对象
-   * @returns {Promise<void>}
+   * @param {string} type
+   * @param {AMap.Circle} overlay
    */
-  const handleCircleMouseTool = async (type: any, overlay: AMap.Circle | any) => {
+  const handleCircleMouseTool = (type: string, overlay: AMap.Circle) => {
     const radius = overlay.getRadius();
     const center = overlay.getCenter();
-
-    const backFillInfo: ITemporaryGroupState['backFillInfo'] = {radius, center};
+    const backFillInfo = {radius, center} as ITemporaryGroupState['backFillInfo'];
 
     setState!({isShowEditModal: true, title: '创建临时组', backFillInfo});
   };
@@ -71,7 +72,7 @@ const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
    * 处理固定对象选择事件
    * @returns {Promise<void>}
    */
-  const handleFixedEntity = async () => {
+  const handleFixedEntity = () => {
     setShowTempGroupModal({visible: false, current: null});
     setState!({isShowEditModal: true, title: '创建临时组'});
   };
@@ -103,7 +104,7 @@ const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
           name="地图圆形圈选"
           className="hover inter-plat-temp-group-create-modal-item"
           width="100%"
-          onClick={loadAMapMouseTool}
+          onClick={() => loadAMapMouseTool(false)}
         />
         <Trigger
           name="固定对象选择"
@@ -111,12 +112,12 @@ const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
           width="100%"
           onClick={handleFixedEntity}
         />
-        {/*<Trigger*/}
-        {/*  name="固定条件选择"*/}
-        {/*  className="hover inter-plat-temp-group-create-modal-item"*/}
-        {/*  width="100%"*/}
-        {/*  onClick={loadAMapMouseTool}*/}
-        {/*/>*/}
+        <Trigger
+          name="固定条件选择"
+          className="hover inter-plat-temp-group-create-modal-item"
+          width="100%"
+          onClick={() => loadAMapMouseTool(true)}
+        />
       </Modal>
       <EditTemporaryGroup />
     </Container>

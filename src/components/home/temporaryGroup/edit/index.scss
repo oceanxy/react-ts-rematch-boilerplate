@@ -27,10 +27,21 @@
   &:hover {
     @include bg_hover;
   }
+
+  &:disabled {
+    filter: grayscale(100%);
+    opacity: .6;
+    cursor: default;
+  }
 }
 
 /* 此处表单及其内部样式受editTask内“ant-modal”影响，后期优化时可以考虑将这部分css代码抽离出来 */
 .temp-group-edit-modal.ant-modal {
+  .inter-plat-row-text {
+    color: #a7a7a7;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
 
   .temp-group-edit-modal-row {
     margin-top: 30px;
@@ -41,6 +52,13 @@
 
     button {
       @include btn;
+    }
+
+    &.bottom-line {
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid;
+      @include border-color;
     }
   }
 
