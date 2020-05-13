@@ -13,6 +13,7 @@ import ItemLegend from '@/components/UI/itemLegend';
 import Modal from '@/components/UI/modal';
 import Trigger from '@/components/UI/triggerComp';
 import { EditTemporaryGroup } from '@/containers/home/temporaryGroup';
+import { MouseToolType } from '@/models/UI/amap';
 import styledComponent from '@/styled';
 import React, { useState } from 'react';
 import './index.scss';
@@ -46,24 +47,33 @@ const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
   const loadAMapMouseTool = () => {
     setShowTempGroupModal({visible: false, current: null});
     setAMapState!({
-      mouseToolType: 'circle',
-      callback: handleMouseTool
+      mouseToolType: MouseToolType.Circle,
+      callback: handleCircleMouseTool
     });
   };
 
   /**
    * 处理地图鼠标事件绘制覆盖物后的回调事件
    * @param type
-   * @param {AMap.Overlay} overlay 绘制的覆盖物对象
+   * @param {AMap.Circle | AMap.Polygon | AMap.Polyline | AMap.Rectangle} overlay 绘制的覆盖物对象
    * @returns {Promise<void>}
    */
-  const handleMouseTool = async (type: any, overlay: AMap.Circle) => {
+  const handleCircleMouseTool = async (type: any, overlay: AMap.Circle | any) => {
     const radius = overlay.getRadius();
     const center = overlay.getCenter();
 
     const backFillInfo: ITemporaryGroupState['backFillInfo'] = {radius, center};
 
     setState!({isShowEditModal: true, title: '创建临时组', backFillInfo});
+  };
+
+  /**
+   * 处理固定对象选择事件
+   * @returns {Promise<void>}
+   */
+  const handleFixedEntity = async () => {
+    setShowTempGroupModal({visible: false, current: null});
+    setState!({isShowEditModal: true, title: '创建临时组'});
   };
 
   return (
@@ -95,6 +105,18 @@ const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
           width="100%"
           onClick={loadAMapMouseTool}
         />
+        <Trigger
+          name="固定对象选择"
+          className="hover inter-plat-temp-group-create-modal-item"
+          width="100%"
+          onClick={handleFixedEntity}
+        />
+        {/*<Trigger*/}
+        {/*  name="固定条件选择"*/}
+        {/*  className="hover inter-plat-temp-group-create-modal-item"*/}
+        {/*  width="100%"*/}
+        {/*  onClick={loadAMapMouseTool}*/}
+        {/*/>*/}
       </Modal>
       <EditTemporaryGroup />
     </Container>

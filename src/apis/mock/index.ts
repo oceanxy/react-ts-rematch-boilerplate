@@ -277,6 +277,32 @@ const mocks: Mocks = {
       ]
     }
   },
+  fetchFixedEntity: {
+    retCode: 0,
+    retMsg: '',
+    data: {
+      'monitors|10-20': [
+        {
+          'assignmentName': 'tb-group02,tb-group09,tb-group01',
+          'curAssignmentName': 'tb-group01',
+          'curAssignmentType': '1',
+          'deviceNum': '0002527',
+          'dispatchStatus|1': [1, 2, 3],
+          'groupName': null,
+          'hasForbiddenWord|1': [false, true],
+          'iconUrl': null,
+          'monitorId': '@guid',
+          'monitorName': monitorName,
+          'monitorType|1': [1, 2, 3, 9, 10],
+          'onlineStatus|1': [0, 1],
+          'plateColor': null,
+          'simCardNum': '18600332931',
+          'userId': () => Random.integer(),
+          'userNumber': '93446'
+        }
+      ]
+    }
+  },
   fetchFences: {
     retCode: 0,
     retMsg: '',

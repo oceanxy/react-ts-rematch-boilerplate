@@ -160,12 +160,37 @@ declare global {
   interface IEntityModel extends ModelConfig {
     state: IEntityState,
     reducers: {
+      /**
+       * 更新本地状态
+       * @param {IEntityState} state
+       * @param {Partial<IEntityState>} payload
+       * @returns {IEntityState}
+       */
       updateState(state: IEntityState, payload: Partial<IEntityState>): IEntityState
     },
     effects: {
+      /**
+       * 获取实体（监控对象）数据
+       * @param {IEntityRequest} reqPayload
+       */
       fetchData(reqPayload: IEntityRequest): void
+      /**
+       * 根据地图圆形圈选获取实体数据
+       * @param {IEntityByCircleRequest} reqPayload
+       * @returns {Promise<APIResponse<{monitors: IEntity[]}>>}
+       */
       fetchDataByCircle(reqPayload?: IEntityByCircleRequest): Promise<APIResponse<{monitors: IEntity[]}>>
-      setEntityId(id?: IEntityState['currentEntityId']): void
+      /**
+       * 获取固定的监控对象
+       * @param {IEntityByCircleRequest} reqPayload
+       * @returns {Promise<APIResponse<{monitors: IEntity[]}>>}
+       */
+      fetchFixedData(reqPayload?: IEntityRequest): Promise<APIResponse<{monitors: IEntity[]}>>
+      /**
+       * 设置状态
+       * @param {Partial<IEntityState>} payload
+       */
+      setState(payload: Partial<IEntityState>): void
     }
   }
 }

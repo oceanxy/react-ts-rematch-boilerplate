@@ -13,6 +13,7 @@ import Member from '@/components/UI/member';
 import Modal from '@/components/UI/modal';
 import Trigger from '@/components/UI/triggerComp';
 import { CurActiveGroupType } from '@/models/home/intercom/group';
+import { MouseToolType } from '@/models/UI/amap';
 import { message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './index.scss';
@@ -67,7 +68,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
     setMember({visible: false, type: null, current: null});
     // 设置地图鼠标工具组件状态，进行地图圈选
     setAMapState!({
-      mouseToolType: 'circle',
+      mouseToolType: MouseToolType.Circle,
       callback: handleMouseTool
     });
   };
@@ -78,7 +79,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
    * @param {AMap.Overlay} overlay 绘制的覆盖物对象
    * @returns {Promise<void>}
    */
-  const handleMouseTool = async (type: any, overlay: AMap.Circle) => {
+  const handleMouseTool = async (type: any, overlay: AMap.Circle | any) => {
     // 圈选地图范围后，获取高德地图鼠标工具返回的信息
     const radius = overlay.getRadius();
     const center = overlay.getCenter();
@@ -105,6 +106,15 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
     }
 
     setMember({visible: false, type: null, current: null});
+  };
+
+  /**
+   * 处理固定对象选择事件
+   * @returns {Promise<void>}
+   */
+  const handleFixedEntity = async () => {
+    setMember({visible: false, type: null, current: null});
+    setTempGroupState!({isShowEditModal: true, title: '添加临时组成员', backFillInfo: {name}});
   };
 
   useEffect(() => {
@@ -155,6 +165,12 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
           className="hover inter-plat-temp-group-create-modal-item"
           width="100%"
           onClick={loadAMapMouseTool}
+        />
+        <Trigger
+          name="固定对象选择"
+          className="hover inter-plat-temp-group-create-modal-item"
+          width="100%"
+          onClick={handleFixedEntity}
         />
       </Modal>
     </Container>

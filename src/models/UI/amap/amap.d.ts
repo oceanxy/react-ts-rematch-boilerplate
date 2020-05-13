@@ -4,10 +4,11 @@
  * @Description: 高德地图相关类型定义
  * @Date: 2020-04-13 周一 10:18:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-12 周二 16:10:49
+ * @LastModifiedTime: 2020-05-13 周三 09:29:20
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
+import { MouseToolType } from '@/models/UI/amap/index';
 import { EntityType } from '@/models/UI/entity';
 import { RootState } from '@/store';
 import { ModelConfig } from '@rematch/core';
@@ -164,11 +165,13 @@ declare global {
     /**
      * 当前鼠标工具类型
      */
-    mouseToolType: 'circle' | 'polygon' | null
+    mouseToolType: MouseToolType
     /**
      * 触发鼠标事件，且鼠标事件操作完成后需要执行的回调函数
+     * @param type 高德地图鼠标工具触发的事件名称
+     * @param {AMap.Circle | AMap.Polygon | AMap.Polyline | AMap.Rectangle} overlay 覆盖物对象
      */
-    callback?: (type: any, overlay: AMap.Circle) => void
+    callback?: (type: any, overlay: AMap.Circle | AMap.Polygon | AMap.Polyline | AMap.Rectangle) => void
     /**
      * 海量点数据
      */

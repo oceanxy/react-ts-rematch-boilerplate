@@ -4,7 +4,7 @@
  * @Description: 地图model
  * @Date: 2020-03-31 周二 17:03:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-12 周二 16:11:18
+ * @LastModifiedTime: 2020-05-13 周三 10:53:10
  */
 
 import fetchApis from '@/apis';
@@ -13,13 +13,24 @@ import { EntityType } from '@/models/UI/entity';
 import { RootState, store } from '@/store';
 
 /**
+ * 鼠标工具类型
+ */
+export enum MouseToolType {
+  Null = 'Null',
+  Circle = 'Circle',
+  Polygon = 'Polygon',
+  Polyline = 'Polyline',
+  Rectangle = 'Rectangle'
+}
+
+/**
  * 地图model
  * @type {{reducers: {updateMapInstance: (state: IMapState, map: AMap.Map) => {mapInstance: AMap.Map | null; map: AMap.Map}}; state: IMapState}}
  */
 const map: IAMapModel = {
   state: {
     mapInstance: null,
-    mouseToolType: null,
+    mouseToolType: MouseToolType.Null,
     callback: undefined,
     curMassPoint: undefined,
     curArea: undefined,

@@ -66,12 +66,6 @@ const entity: IEntityModel = {
       // 按实体名称搜索时（默认）
       let params: Partial<IEntityState> = {searchEntities: response.data.monitors || []};
 
-      // 根据搜索条件更新对应的状态
-      if (!reqPayload.simpleQueryParam) {
-        // 获取全部围栏时
-        params = {entities: response.data.fenceTreeNodes || []};
-      }
-
       store.dispatch.entity.updateState(params);
     },
     async fetchDataByCircle(reqPayload): Promise<APIResponse<{monitors: IEntity[]}>> {
@@ -89,8 +83,18 @@ const entity: IEntityModel = {
 
       return await fetchApis.fetchEntityByCircle(reqPayload);
     },
-    setEntityId(id): void {
-      store.dispatch.entity.updateState({currentEntityId: id || ''});
+    async fetchFixedData(reqPayload?: IEntityRequest): Promise<APIResponse<{monitors: IEntity[]}>> {
+      if (!reqPayload) {
+        reqPayload = {
+          length: 2000,
+          supportMonitorType: -1
+        };
+      }
+
+      return await fetchApis.fetchFixedEntity(reqPayload);
+    },
+    setState(payload): void {
+      store.dispatch.entity.updateState(payload);
     }
   }
 };

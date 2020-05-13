@@ -16,6 +16,7 @@ export type APIName =
   'fetchEventDetails' | // 事件详情
   'fetchEventList' | // 事件列表
   'fetchSearchByMonitorName' | // 搜索-按监控对象搜索
+  'fetchFixedEntity' | // 获取固定监控对象
   'fetchFences' | // 根据关键字获取围栏数据
   'fetchUserFence' | // 获取当前用户下设置的围栏数据（围栏下拉列表）
   'fetchFenceDetails' | // 获取围栏详情
@@ -203,6 +204,10 @@ const apis: APIRequestConfig = {
   },
   handleEvent: {
     url: '/clbs/web/v1/dispatch/event/handle',
+    method: EHTTPMethod.POST
+  },
+  fetchFixedEntity: {
+    url: '/clbs/web/v1/dispatch/monitor/search/byFixed',
     method: EHTTPMethod.POST
   }
 };

@@ -8,6 +8,8 @@
  */
 
 import Modal from '@/components/UI/modal';
+import { APIResponse } from '@/interfaces/api/mock';
+import { MouseToolType } from '@/models/UI/amap';
 import { Button, Checkbox, Form, Input, Row } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { CheckboxValueType } from 'antd/es/checkbox/Group';
@@ -21,8 +23,9 @@ interface IEditTaskProps {
   state: ITemporaryGroupState
   setState: ITemporaryGroupModel['effects']['setState']
   createTemporaryGroup: ITemporaryGroupModel['effects']['createTemporaryGroup']
-  fetchDataByCircle: IEntityModel['effects']['fetchDataByCircle']
+  entityDispatch: IEntityModel['effects']
   addTempGroupMember: IMonitoringDispatchModel['effects']['addTempGroupMember']
+  mouseToolType: IAMapState['mouseToolType']
 }
 
 /**
@@ -32,7 +35,8 @@ interface IEditTaskProps {
  * @constructor
  */
 const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
-  const {state, setState, createTemporaryGroup, fetchDataByCircle, addTempGroupMember} = props;
+  const {state, setState, createTemporaryGroup, addTempGroupMember, mouseToolType, entityDispatch} = props;
+  const {fetchFixedData, fetchDataByCircle} = entityDispatch!;
   const {isShowEditModal, title, loading, backFillInfo: {name}} = state!;
   const [form] = Form.useForm();
   /**
@@ -139,18 +143,30 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   useEffect(() => {
     if (isShowEditModal) {
       (async () => {
-        // 获取地图已圈选范围内的所有实体（监控对象）数据
-        const response = await fetchDataByCircle!();
-        setTempEntities(response.data.monitors);
+        let response: any;
+
+        if (mouseToolType === MouseToolType.Circle) {
+          // 获取地图已圈选范围内的所有实体（监控对象）数据
+          response = await fetchDataByCircle();
+        } else if (mouseToolType === MouseToolType.Null) {
+          response = await fetchFixedData();
+        }
+
+        const {monitors} = (response as APIResponse<{monitors: IEntity[]}>).data;
+
+        setTempEntities(monitors);
 
         if (response.retCode === 0) {
           // 将实体数据回填到antd form上
           form.setFieldsValue({
             temporaryGroup: name,
-            entities: response.data.monitors,
+            entities: monitors,
             interlocutorIds: []
           });
         }
+
+        // 设置全选、反选复选框的状态
+        listenersCheck([]);
       })();
     }
   }, [isShowEditModal]);
@@ -163,6 +179,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
       visible={isShowEditModal}
       onCancel={editTempGroupCancel}
       footer={null}
+      destroyOnClose={true}
     >
       <Form form={form} onFinish={onFinish} autoComplete="off">
         <Form.Item
