@@ -25,11 +25,12 @@ interface IIntercomMembersProps {
   isActiveIntercom: IIntercomState['active']
   setAMapState: IAMapModel['effects']['setState']
   setTempGroupState: ITemporaryGroupModel['effects']['setState']
+  setEntityState: IEntityModel['effects']['setState']
 }
 
 const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
   const {
-    state, isActiveIntercom, dispatches,
+    state, isActiveIntercom, dispatches, setEntityState,
     setAMapState, setTempGroupState, curTempGroupState
   } = props;
   const {data, loading} = state!;
@@ -63,13 +64,15 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
   /**
    * 激活高德地图鼠标工具
    */
-  const loadAMapMouseTool = () => {
+  const loadAMapMouseTool = (byCondition: IEntityState['byCondition']) => {
     // 初始化本组件所有状态
     setMember({visible: false, type: null, current: null});
+    // 设置实体model的状态
+    setEntityState!({byCondition});
     // 设置地图鼠标工具组件状态，进行地图圈选
     setAMapState!({
       mouseToolType: MouseToolType.Circle,
-      callback: handleMouseTool
+      callback: handleCircleMouseTool
     });
   };
 
@@ -79,7 +82,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
    * @param {AMap.Overlay} overlay 绘制的覆盖物对象
    * @returns {Promise<void>}
    */
-  const handleMouseTool = async (type: any, overlay: AMap.Circle | any) => {
+  const handleCircleMouseTool = async (type: any, overlay: AMap.Circle | any) => {
     // 圈选地图范围后，获取高德地图鼠标工具返回的信息
     const radius = overlay.getRadius();
     const center = overlay.getCenter();
@@ -164,13 +167,19 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
           name="地图圆形圈选"
           className="hover inter-plat-temp-group-create-modal-item"
           width="100%"
-          onClick={loadAMapMouseTool}
+          onClick={() => loadAMapMouseTool(false)}
         />
         <Trigger
           name="固定对象选择"
           className="hover inter-plat-temp-group-create-modal-item"
           width="100%"
           onClick={handleFixedEntity}
+        />
+        <Trigger
+          name="固定条件选择"
+          className="hover inter-plat-temp-group-create-modal-item"
+          width="100%"
+          onClick={() => loadAMapMouseTool(true)}
         />
       </Modal>
     </Container>

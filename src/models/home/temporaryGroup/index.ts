@@ -33,15 +33,9 @@ const temporaryGroup: ITemporaryGroupModel = {
   },
   reducers: {
     updateState(state: ITemporaryGroupState, payload: Partial<ITemporaryGroupState>): ITemporaryGroupState {
-      const {backFillInfo, ...rest} = payload;
-
       return {
         ...state,
-        ...rest,
-        backFillInfo: {
-          ...state.backFillInfo,
-          ...backFillInfo
-        }
+        ...payload
       };
     }
   },

@@ -20,7 +20,8 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   dispatches: dispatch.intercomMembers,
   setTempGroupState: dispatch.temporaryGroup.setState,
-  setAMapState: dispatch.map.setState
+  setAMapState: dispatch.map.setState,
+  setEntityState: dispatch.entity.setState
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IntercomMembers);

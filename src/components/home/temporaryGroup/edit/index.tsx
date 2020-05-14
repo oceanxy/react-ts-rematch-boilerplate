@@ -235,6 +235,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
 
           if (+response.retCode === 0) {
             searchForm.setFieldsValue(response.data);
+            createForm.setFieldsValue({temporaryGroup: name});
           } else {
             message.error('初始化条件列表失败！');
             editTempGroupCancel();
