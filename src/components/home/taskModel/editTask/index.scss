@@ -246,6 +246,41 @@
             background: none;
             @include border-color;
           }
+
+          &.slider .ant-slider {
+            .ant-slider-handle,
+            .ant-slider-track {
+              transition: background, border .3s cubic-bezier(.645, .045, .355, 1);
+            }
+
+            .ant-slider-rail,
+            .ant-slider-track {
+              @include bg;
+            }
+
+            .ant-slider-track,
+            .ant-slider-track-1 {
+              border: 1px solid rgba(45, 60, 76, 1);
+              background: rgb(52, 99, 139);
+            }
+
+            .ant-slider-handle {
+              border: 1px solid rgba(45, 60, 76, .4);
+              background: rgb(52, 99, 139);
+
+              &.ant-slider-handle-click-focused {
+                border-color: rgba(64, 169, 255, .42);
+                box-shadow: 0 0 0 6px rgba(24, 144, 255, .12);
+              }
+            }
+
+            &:hover {
+              .ant-slider-track,
+              .ant-slider-handle {
+                @include bg-hover;
+              }
+            }
+          }
         }
       }
     }

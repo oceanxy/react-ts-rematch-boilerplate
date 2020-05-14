@@ -137,6 +137,42 @@ declare global {
   }
 
   /**
+   * 基础数据模版
+   */
+  interface ICondition {
+    id: string
+    name?: string
+
+    [K: string]: string
+  }
+
+  /**
+   * 高级搜索条件的基础数据response
+   */
+  interface IConditionForEntityResponse {
+    /**
+     * 技能列表
+     */
+    skillList: ICondition[]
+    /**
+     * 机型列表
+     */
+    intercomModelList: ICondition[]
+    /**
+     * 资格证列表
+     */
+    qualificationList: ICondition[]
+    /**
+     * 血型列表
+     */
+    bloodTypeList: ICondition[]
+    /**
+     * 驾照类别列表
+     */
+    driverLicenseCategoryList: ICondition[]
+  }
+
+  /**
    * 按综合条件筛选实体
    */
   interface IEntityByCondition {
@@ -230,6 +266,11 @@ declare global {
        * @returns {Promise<APIResponse<{monitors: IEntity[]}>>}
        */
       fetchConditionData(reqPayload: IEntityByCondition): Promise<APIResponse<{monitors: IEntity[]}>>
+      /**
+       * 获取高级搜索条件的基础数据
+       * @returns {Promise<APIResponse<IConditionForEntityResponse>>}
+       */
+      fetchConditionForEntity(): Promise<APIResponse<IConditionForEntityResponse>>
       /**
        * 设置状态
        * @param {Partial<IEntityState>} payload

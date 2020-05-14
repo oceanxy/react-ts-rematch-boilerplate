@@ -99,14 +99,17 @@ const entity: IEntityModel = {
       const request: IEntityByCondition & IEntityByCircleRequest = {
         length: 2000,
         supportMonitorType: -1,
-        ageRange: [0, 100],
+        ageRange: [20, 40],
         radius: radius!,
         latitude: latitude!,
         longitude: longitude!,
         ...reqPayload
       };
 
-      return await fetchApis.fetchFixedCondition(request);
+      return await fetchApis.fetchFixedConditionEntity(request);
+    },
+    async fetchConditionForEntity(): Promise<APIResponse<IConditionForEntityResponse>> {
+      return await fetchApis.fetchConditionForEntity();
     },
     setState(payload): void {
       store.dispatch.entity.updateState(payload);

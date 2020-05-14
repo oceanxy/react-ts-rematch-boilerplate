@@ -269,10 +269,10 @@ const mocks: Mocks = {
           'monitorName|1': [monitorName, () => Random.cname()],
           'monitorType|1': [0, 1, 2, 9, 10],
           'assignmentName|1': ['分组1', '分组2', '分组3', '分组4'],
-          deviceNum: Math.floor(Math.random() * 10000),
+          deviceNum: () => Math.floor(Math.random() * 10000),
           'groupName|1': ['组织1', '组织2', '组织3', '组织4'],
-          simCardNum: Math.floor(Math.random() * 10000),
-          userId: Random.integer(10000, 99999)
+          simCardNum: () => Math.floor(Math.random() * 10000),
+          userId: () => Random.integer(10000, 99999)
         }
       ]
     }
@@ -297,13 +297,13 @@ const mocks: Mocks = {
           'onlineStatus|1': [0, 1],
           'plateColor': null,
           'simCardNum': '18600332931',
-          'userId': () => Random.integer(),
+          'userId': () => Random.integer(10000, 99999),
           'userNumber': '93446'
         }
       ]
     }
   },
-  fetchFixedCondition: {
+  fetchFixedConditionEntity: {
     retMsg: '',
     retCode: 0,
     data: {
@@ -323,8 +323,49 @@ const mocks: Mocks = {
           'onlineStatus|1': [0, 1],
           'plateColor': null,
           'simCardNum': '18600332931',
-          'userId': () => Random.integer(),
+          'userId': () => Random.integer(10000, 99999),
           'userNumber': '93446'
+        }
+      ]
+    }
+  },
+  fetchConditionForEntity: {
+    retCode: 0,
+    retMsg: '',
+    data: {
+      'skillList|3': [
+        {
+          'id': '@guid',
+          'skillCategoryName': '测试',
+          'skillName|+1': ['技能1', '技能2', '技能3']
+        }
+      ],
+      'intercomModelList|4': [
+        {
+          'id': '@guid',
+          'name|+1': ['机型1', '机型2', '机型3', '机型4'],
+          'originalModelId': 3
+        }
+      ],
+      'qualificationList|5': [
+        {
+          'id': '@guid',
+          'name|+1': ['1级', '2级', '3级', '4级', '5级'],
+          'type': null
+        }
+      ],
+      'bloodTypeList|4': [
+        {
+          'id': '@guid',
+          'name|+1': ['A', 'B', 'C', 'O'],
+          'type': null
+        }
+      ],
+      'driverLicenseCategoryList|15': [
+        {
+          'id': '@guid',
+          'name|+1': ['A1', 'A2', 'A3', 'B1', 'B2', 'C1', 'C2', 'C3', 'C4', 'D', 'E', 'F', 'M', 'N', 'P'],
+          'type': null
         }
       ]
     }
