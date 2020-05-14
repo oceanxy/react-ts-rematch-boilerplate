@@ -84,6 +84,22 @@ const entity: IEntityModel = {
 
       return await fetchApis.fetchEntityByCircle(reqPayload);
     },
+    async fetchDataByRectangle(reqPayload?: IEntityByRectangleRequest): Promise<APIResponse<{monitors: IEntity[]}>> {
+      if (!reqPayload) {
+        const {northWest, southEast} = store.getState().temporaryGroup.backFillInfo;
+
+        reqPayload = {
+          supportMonitorType: -1,
+          onlineStatus: 1,
+          leftLatitude: northWest!.getLat(),
+          leftLongitude: northWest!.getLng(),
+          rightLatitude: southEast!.getLat(),
+          rightLongitude: southEast!.getLng()
+        };
+      }
+
+      return await fetchApis.fetchEntityByCircle(reqPayload);
+    },
     async fetchFixedData(reqPayload?: IEntityRequest): Promise<APIResponse<{monitors: IEntity[]}>> {
       if (!reqPayload) {
         reqPayload = {

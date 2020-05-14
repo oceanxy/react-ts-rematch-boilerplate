@@ -4,7 +4,7 @@
  * @Description: 高德地图鼠标工具组件
  * @Date: 2020-04-26 周日 09:54:45
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-13 周三 11:37:56
+ * @LastModifiedTime: 2020-05-14 周四 17:38:02
  */
 
 import config from '@/config';
@@ -17,7 +17,6 @@ import React, { useEffect } from 'react';
  */
 export interface IBoundaryProps {
   map: IAMapState['mapInstance']
-  callback: IAMapState['callback']
   mouseToolType: IAMapState['mouseToolType']
   setState: IAMapModel['effects']['setState']
 }
@@ -32,7 +31,7 @@ let mouseTool: any;
  * @constructor
  */
 const MouseTool = (props: Partial<IBoundaryProps>) => {
-  const {map, mouseToolType, callback, setState} = props;
+  const {map, mouseToolType, setState} = props;
 
   if (!mouseTool && map) {
     AMap.plugin('AMap.MouseTool', () => {
@@ -45,20 +44,17 @@ const MouseTool = (props: Partial<IBoundaryProps>) => {
    * @param {any} type
    * @param {any} obj 绘制出来的覆盖物对象。
    */
-  const drawOverlay = ({type, obj}: any) => {
-    // 处理绘制覆盖物后的回调事件
-    callback && callback!(type, obj);
+  const drawOverlay = ({obj}: any) => {
+    // 绘制完成后更新覆盖物状态
+    setState!({overlay: obj});
     // 结束绘制
     mouseTool.close(true);
     message.destroy();
-    // 绘制完成后重置鼠标工具状态
-    setState!({
-      mouseToolType: MouseToolType.Null,
-      callback: undefined
-    });
   };
 
   useEffect(() => {
+    setState!({overlay: undefined});
+
     // 检测地图是否实例化完成且鼠标工具被激活
     if (map && mouseTool && (mouseToolType != MouseToolType.Null)) {
       message.config({top: 100});
@@ -66,6 +62,8 @@ const MouseTool = (props: Partial<IBoundaryProps>) => {
 
       if (mouseToolType === MouseToolType.Circle) {
         mouseTool.circle(config.map.mouseTool);
+      } else if (mouseToolType === MouseToolType.Rectangle) {
+        mouseTool.rectangle(config.map.mouseTool);
       }
     }
 

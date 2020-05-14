@@ -3,11 +3,12 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 全局配置定义
  * @Date: 2020-01-02 16:03:27
- * @LastModified: Oceanxy
- * @LastModifiedTime: 2020-01-02 16:03:27
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-14 周四 17:56:56
  */
 
 import Circle = AMap.Circle;
+import Polygon = AMap.Polygon;
 
 export enum EHTTPMethod {
   POST = 'POST',
@@ -61,8 +62,8 @@ export interface IConfig {
      */
     mapVersion: string,
     /**
-     * 地图鼠标工具配置 目前只支持圆
+     * 地图鼠标工具配置 目前只支持圆和矩形
      */
-    mouseTool: Circle.Options
+    mouseTool: Circle.Options & Polygon.Options
   } & AMap.Map.Options
 }

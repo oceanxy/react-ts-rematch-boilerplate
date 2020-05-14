@@ -4,13 +4,24 @@
  * @Description: 临时组类型定义
  * @Date: 2020-04-23 周四 13:53:48
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-30 周四 10:55:07
+ * @LastModifiedTime: 2020-05-14 周四 15:33:52
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
+import { MouseToolType } from '@/models/UI/amap';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
+  import LngLat = AMap.LngLat;
+  /**
+   * 触发编辑临时组或临时组成员的条件
+   */
+  type EditTempGroupType =
+    {
+      readonly mouseToolType: Exclude<MouseToolType, MouseToolType.Null>
+      readonly byCondition: IEntityState['byCondition']
+    } | {readonly byFixedEntity: true}
+
   /**
    * 临时组接口
    */
@@ -82,7 +93,7 @@ declare global {
       /**
        * 中心点
        */
-      center?: AMap.LngLat
+      center?: LngLat
       /**
        * 边界值
        */
@@ -95,6 +106,14 @@ declare global {
        * 圆心纬度
        */
       latitude?: number
+      /**
+       * 矩形西北角坐标
+       */
+      northWest?: LngLat
+      /**
+       * 矩形东南角坐标
+       */
+      southEast?: LngLat
     }
   }
 

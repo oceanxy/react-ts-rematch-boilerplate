@@ -4,7 +4,7 @@
  * @Description: 编辑临时组信息
  * @Date: 2020-04-26 周日 16:06:54
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-30 周四 09:49:43
+ * @LastModifiedTime: 2020-05-14 周四 15:28:04
  */
 
 import Modal from '@/components/UI/modal';
@@ -40,8 +40,12 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
     state, setState, createTemporaryGroup, byCondition,
     addTempGroupMember, mouseToolType, entityDispatch
   } = props;
-  const {fetchFixedData, fetchDataByCircle, fetchConditionData, fetchConditionForEntity} = entityDispatch!;
-  const {isShowEditModal, title, loading, backFillInfo: {name, radius}} = state!;
+  const {
+    fetchFixedData, fetchDataByCircle, fetchConditionData, fetchDataByRectangle,
+    fetchConditionForEntity, setState: setEntityState
+  } = entityDispatch!;
+  const {isShowEditModal, title, loading, backFillInfo} = state!;
+  const {name, radius} = backFillInfo;
 
   // 避免不必要的渲染
   if (!isShowEditModal) return null;
@@ -139,6 +143,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
    */
   const editTempGroupCancel = () => {
     setState!({isShowEditModal: false});
+    setEntityState({byCondition: false});
   };
 
   /**
@@ -206,8 +211,11 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
           let response: any;
 
           if (mouseToolType === MouseToolType.Circle) {
-            // 获取地图已圈选范围内的所有实体（监控对象）数据
+            // 获取地图圆形圈选范围内的所有实体（监控对象）数据
             response = await fetchDataByCircle();
+          } else if (mouseToolType === MouseToolType.Rectangle) {
+            // 获取地图矩形圈选范围内的所有实体（监控对象）数据
+            response = await fetchDataByRectangle();
           } else if (mouseToolType === MouseToolType.Null) {
             response = await fetchFixedData();
           }

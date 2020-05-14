@@ -108,16 +108,20 @@ declare global {
      * 多个用逗号隔开, -1 全部 0：车 1 :人 2 :动态物品 9:静态物资 10:调度员
      */
     supportMonitorType: -1 | 0 | 1 | 2 | 9 | 10
+    /**
+     * 在/离线状态
+     */
+    onlineStatus?: -1 | 0 | 1
+    /**
+     * 分组ID
+     */
+    assignmentId?: string
   }
 
   /**
    * 按圆形搜索监控对象
    */
   interface IEntityByCircleRequest extends IEntityRequest {
-    /**
-     * 在/离线状态
-     */
-    onlineStatus?: -1 | 0 | 1
     /**
      * 半径 ，单位m
      */
@@ -130,10 +134,28 @@ declare global {
      * 圆心纬度
      */
     latitude: number
+  }
+
+  /**
+   * 按圆形搜索监控对象
+   */
+  interface IEntityByRectangleRequest extends IEntityRequest {
     /**
-     * 分组ID
+     * 矩形区域左上角的经度
      */
-    assignmentId?: string
+    leftLongitude: number
+    /**
+     * 矩形区域左上角的纬度
+     */
+    leftLatitude: number
+    /**
+     * 矩形区域右下角的经度
+     */
+    rightLongitude: number
+    /**
+     * 矩形区域右下角的纬度
+     */
+    rightLatitude: number
   }
 
   /**
@@ -254,6 +276,12 @@ declare global {
        * @returns {Promise<APIResponse<{monitors: IEntity[]}>>}
        */
       fetchDataByCircle(reqPayload?: IEntityByCircleRequest): Promise<APIResponse<{monitors: IEntity[]}>>
+      /**
+       * 根据地图矩形圈选获取实体数据
+       * @param {IEntityByCircleRequest} reqPayload
+       * @returns {Promise<APIResponse<{monitors: IEntity[]}>>}
+       */
+      fetchDataByRectangle(reqPayload?: IEntityByRectangleRequest): Promise<APIResponse<{monitors: IEntity[]}>>
       /**
        * 获取固定的实体（监控对象）
        * @param {IEntityByCircleRequest} reqPayload

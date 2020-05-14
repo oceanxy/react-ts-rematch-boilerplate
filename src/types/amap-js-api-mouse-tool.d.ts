@@ -18,13 +18,13 @@ declare namespace AMap {
      */
     constructor(map: AMap.Map);
 
-    // marker(options: MouseTool.MarkerOptions)
+    marker(options: Marker.Options)
 
-    // polyline(options: PolylineOptions)
+    polyline(options: Polyline.Options)
 
-    // polygon(options: PolygonOptions)
+    polygon(options: Polygon.Options)
 
-    // rectangle(options: PolygonOptions)
+    rectangle(options: Rectangle.Options)
 
     circle(options: Circle.Options)
 

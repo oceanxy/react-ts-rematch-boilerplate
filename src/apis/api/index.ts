@@ -38,6 +38,7 @@ export type APIName =
   'addMember' | // 新增临时组成员
   'addLog' | // 记录日志
   'fetchEntityByCircle' | // 按圆形搜索监控对象
+  'fetchEntityByRectangle' | // 按矩形搜索监控对象
   'fetchMassPoint' | // 获取地图海量点信息
   'fetchWindowInfo' | // 获取地图弹窗信息
   'handleEvent' | // 处理监控对象事件
@@ -190,6 +191,10 @@ const apis: APIRequestConfig = {
   },
   fetchEntityByCircle: {
     url: '/clbs/web/v1/dispatch/monitor/search/byCircleRegion',
+    method: EHTTPMethod.POST
+  },
+  fetchEntityByRectangle: {
+    url: '/clbs/web/v1/dispatch/monitor/search/byRectangleRegion',
     method: EHTTPMethod.POST
   },
   addLog: {

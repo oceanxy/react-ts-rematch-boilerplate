@@ -16,7 +16,7 @@ import { RootState, store } from '@/store';
  * 鼠标工具类型
  */
 export enum MouseToolType {
-  Null = 'Null',
+  Null = '',
   Circle = 'Circle',
   Polygon = 'Polygon',
   Polyline = 'Polyline',
@@ -30,8 +30,8 @@ export enum MouseToolType {
 const map: IAMapModel = {
   state: {
     mapInstance: null,
+    overlay: undefined,
     mouseToolType: MouseToolType.Null,
-    callback: undefined,
     curMassPoint: undefined,
     curArea: undefined,
     massPoints: {

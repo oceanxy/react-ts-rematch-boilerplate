@@ -4,7 +4,7 @@
  * @Description: 高德地图组件
  * @Date: 2020-01-04 11:43:57
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-12 周二 16:36:45
+ * @LastModifiedTime: 2020-05-14 周四 16:37:47
  */
 
 import Area from '@/components/UI/amap/area';
@@ -54,14 +54,14 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
     mapFences, searchPanelTarget
   } = props;
   const {setState, fetchMassPoint, fetchWindowInfo} = dispatch!;
-  const {mapInstance: map, mouseToolType, callback, massPoints, curMassPoint, curArea} = state!;
+  const {mapInstance: map, mouseToolType, massPoints, curMassPoint, curArea} = state!;
 
   return (
     <Container id="mapContainer" className="inter-plat-map" {...props}>
       {
         map ?
           (<>
-            <MouseTool map={map} mouseToolType={mouseToolType} callback={callback} setState={setState} />
+            <MouseTool map={map} mouseToolType={mouseToolType} setState={setState} />
             <Area
               map={map}
               triggers={triggers!}

@@ -167,14 +167,9 @@ declare global {
      */
     mouseToolType: MouseToolType
     /**
-     * 触发鼠标事件，且鼠标事件操作完成后需要执行的回调函数
-     * @param type 高德地图鼠标工具触发的事件名称
-     * @param {AMap.Circle | AMap.Polygon | AMap.Polyline | AMap.Rectangle} overlay 覆盖物对象
+     * 鼠标工具绘制的覆盖物
      */
-    callback?: ((type: string, overlay: AMap.Circle) => void) |
-      ((type: string, overlay: AMap.Polygon) => void) |
-      ((type: string, overlay: AMap.Polyline) => void) |
-      ((type: string, overlay: AMap.Rectangle) => void)
+    overlay?: AMap.Circle | AMap.Rectangle | AMap.Polyline | AMap.Polygon
     /**
      * 海量点数据
      */
