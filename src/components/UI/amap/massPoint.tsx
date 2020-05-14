@@ -246,18 +246,14 @@ const MassPoint = (props: MassPointProps) => {
     fetchMassPoint();
   }, [JSON.stringify(triggers.slice(0, 4))]);
 
-  /**
-   * 海量点数据变更时更新地图上的海量点
-   */
+  // 海量点数据变更时更新地图上的海量点
   useEffect(() => {
     // 在地图上设置海量点
     if (data.positionList.length) {
       mass.setMap(map);
     }
 
-    /**
-     * 海量点点击事件
-     */
+    // 海量点点击事件
     mass.on('click', handleMassPointClick);
 
     return () => {
@@ -265,9 +261,7 @@ const MassPoint = (props: MassPointProps) => {
     };
   }, [props.data.positionList]);
 
-  /**
-   * 当前点击海量点弹窗或其他事件激活的弹窗的信息更新
-   */
+  // 当前点击海量点弹窗或其他事件激活的弹窗的信息更新
   useEffect(() => {
     // curMassPoint字段更新后打开地图上指定海量点的信息弹窗
     if ((!config.mock || searchPanelTarget) && curMassPoint) {

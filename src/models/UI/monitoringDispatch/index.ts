@@ -444,7 +444,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
         message.error('第三方对讲服务未启动！');
       }
     },
-    addTempGroupMember(memberIds: number[]): void {
+    addTempGroupMember(memberIds: string[]): void {
       const {
         monitoringDispatch: {hjMediaEngine},
         intercomGroup: {intercomId}

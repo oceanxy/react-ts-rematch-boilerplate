@@ -8,13 +8,13 @@
  */
 
 import Container from '@/components/UI/containerComp';
-import Icon, { IconSource } from '@/components/UI/iconComp';
+import Icon, {IconSource} from '@/components/UI/iconComp';
 import Member from '@/components/UI/member';
 import Modal from '@/components/UI/modal';
-import { TemporaryGroupCreationWay } from '@/containers/home/temporaryGroup';
-import { CurActiveGroupType } from '@/models/home/intercom/group';
-import { message } from 'antd';
-import React, { useEffect, useState } from 'react';
+import {TemporaryGroupCreationWay} from '@/containers/home/temporaryGroup';
+import {CurActiveGroupType} from '@/models/home/intercom/group';
+import {message} from 'antd';
+import React, {useEffect, useState} from 'react';
 import './index.scss';
 
 interface IIntercomMembersProps {
@@ -33,9 +33,9 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
   // 触发新增/删除成员时，传递给询问对话框的状态
   const [member, setMember] = useState({
     visible: false,
-    type: undefined as 'add' | 'remove' | undefined,
-    current: null as IEntity | null
-  });
+    type: undefined,
+    current: undefined
+  } as { visible: boolean, type?: 'add' | 'remove', current?: IEntity });
 
   /**
    * 处理删除成员事件
@@ -52,7 +52,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
    * 处理新增成员事件
    */
   const handleAddMembers = () => {
-    setMember({visible: true, type: 'add', current: null});
+    setMember({visible: true, type: 'add', current: undefined});
   };
 
   /**
@@ -71,7 +71,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
       message.success('删除成员失败， 请稍后再试！');
     }
 
-    setMember({visible: false, type: undefined, current: null});
+    setMember({visible: false, type: undefined, current: undefined});
   };
 
   useEffect(() => {
@@ -98,14 +98,14 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
       {
         // 只有临时组能加人
         curTempGroupState?.curActiveGroupType === CurActiveGroupType.Temporary ? (
-          <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAddMembers} />
+          <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAddMembers}/>
         ) : null
       }
       <Modal
         width={350}
         visible={member.visible && member.type === 'remove'}
         confirmLoading={loading}
-        onCancel={() => setMember({visible: false, type: undefined, current: null})}
+        onCancel={() => setMember({visible: false, type: undefined, current: undefined})}
         onOk={onRemoveMember}
       >
         确定从{curActiveGroupType === CurActiveGroupType.Task ? '任务' : '临时'}组中删除成员（{member.current?.userName}）吗？

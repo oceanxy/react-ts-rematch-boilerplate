@@ -55,20 +55,21 @@ const MouseTool = (props: Partial<IBoundaryProps>) => {
   useEffect(() => {
     setState!({overlay: undefined});
 
+    // 鼠标工具绘制覆盖物结束时触发此事件
+    mouseTool.on('draw', drawOverlay);
+
     // 检测地图是否实例化完成且鼠标工具被激活
     if (map && mouseTool && (mouseToolType != MouseToolType.Null)) {
       message.config({top: 100});
       message.info('请在地图上绘制区域。', 0);
 
+      debugger;
       if (mouseToolType === MouseToolType.Circle) {
         mouseTool.circle(config.map.mouseTool);
       } else if (mouseToolType === MouseToolType.Rectangle) {
         mouseTool.rectangle(config.map.mouseTool);
       }
     }
-
-    // 鼠标工具绘制覆盖物结束时触发此事件
-    mouseTool.on('draw', drawOverlay);
 
     return () => mouseTool.off('draw', drawOverlay);
   }, [mouseToolType]);

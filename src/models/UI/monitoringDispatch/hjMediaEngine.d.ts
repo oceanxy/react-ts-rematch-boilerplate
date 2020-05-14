@@ -311,7 +311,7 @@ declare global {
     /**
      * 对象ID（群组ID或者用户ID）
      */
-    objectId: number
+    objectId: string
   }
 
   /**
@@ -377,11 +377,11 @@ declare global {
     /**
      * 临时组ID
      */
-    tempGroupId: number
+    tempGroupId: string
     /**
      * 临时组成员用户ID列表
      */
-    tempGroupMemberMsIdList: number[]
+    tempGroupMemberMsIdList: string[]
   }
 
   /**
@@ -394,9 +394,9 @@ declare global {
      */
     controlCmd: ControlCmd
     /**
-     * 对象用户ID
+     * 对讲用户ID
      */
-    targetMsId: number
+    targetMsId: string
   }
 
   /**

@@ -39,7 +39,7 @@ const group: IIntercomGroupModel = {
   state: {
     name: '',
     id: '',
-    intercomId: 0,
+    intercomId: '',
     curActiveGroupType: CurActiveGroupType.Null
   },
   reducers: {

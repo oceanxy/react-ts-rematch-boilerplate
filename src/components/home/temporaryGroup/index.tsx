@@ -4,7 +4,7 @@
  * @Description: 临时组组件
  * @Date: 2020-01-14 14:24:28
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-25 周六 16:48:58
+ * @LastModifiedTime: 2020-05-14 周四 23:05:14
  */
 
 import Container from '@/components/UI/containerComp';
@@ -46,7 +46,8 @@ const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
     if (curActiveGroupType === CurActiveGroupType.Null) {
       setIntercomGroupState!({
         name: tempGroup.name,
-        id: tempGroup.intercomGroupId,
+        intercomId: tempGroup.intercomGroupId,
+        id: tempGroup.id,
         curActiveGroupType: CurActiveGroupType.Temporary
       });
     } else if (curActiveGroupType === CurActiveGroupType.Task) {
@@ -57,7 +58,7 @@ const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
     } else if (curActiveGroupType === CurActiveGroupType.Temporary) {
       message.destroy();
 
-      if (id !== tempGroup.intercomGroupId) {
+      if (id !== tempGroup.id) {
         message.destroy();
         message.warning((
           <span>其他临时组（<span className="highlight"> {name} </span>）正在进行对讲，暂不能进行此操作！</span>

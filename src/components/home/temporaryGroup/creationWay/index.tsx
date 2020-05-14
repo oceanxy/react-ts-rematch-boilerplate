@@ -4,14 +4,14 @@
  * @Description: 临时组创建方式组件
  * @Date: 2020-05-14 周四 16:45:46
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-14 周四 17:19:24
+ * @LastModifiedTime: 2020-05-14 周四 23:05:14
  */
 
 import Container from '@/components/UI/containerComp';
 import Modal from '@/components/UI/modal';
 import Trigger from '@/components/UI/triggerComp';
-import { MouseToolType } from '@/models/UI/amap';
-import React, { useEffect } from 'react';
+import {MouseToolType} from '@/models/UI/amap';
+import React, {useEffect} from 'react';
 import './index.scss';
 import Circle = AMap.Circle;
 
@@ -21,7 +21,7 @@ import Circle = AMap.Circle;
 interface ICreationWayProps {
   title: string,
   visible: boolean
-  setState: (payload: any) => void
+  setState: (state: { visible: boolean }) => void
   mouseToolType: IAMapState['mouseToolType']
   overlay: IAMapState['overlay']
   setEntityState: IEntityModel['effects']['setState']
@@ -36,22 +36,13 @@ const CreationWay = (props: Partial<ICreationWayProps>) => {
   } = props;
 
   /**
-   * 激活高德地图鼠标工具
-   * @param {MouseToolType} mouseToolType
-   */
-  const loadAMapMouseTool = (mouseToolType: MouseToolType) => {
-    setAMapState!({
-      mouseToolType: mouseToolType
-    });
-  };
-
-  /**
    * 处理trigger点击事件
    * @param {EditTempGroupType} type
    */
   const handleTriggerClick = (type: EditTempGroupType) => {
     // 初始化本组件所有状态
-    setState!({visible: false, type: null, current: null});
+
+    setState!({visible: false});
 
     if ('byCondition' in type) {
       const {byCondition} = type;
@@ -59,7 +50,9 @@ const CreationWay = (props: Partial<ICreationWayProps>) => {
       // 设置实体model的状态
       setEntityState!({byCondition});
       // 激活地图鼠标工具
-      loadAMapMouseTool(type.mouseToolType);
+      setAMapState!({
+        mouseToolType: type.mouseToolType
+      });
     } else if ('byFixedEntity' in type) {
       // 按照固定对象选择
       setTempGroupState!({isShowEditModal: true, title, backFillInfo: {name}});
@@ -91,7 +84,7 @@ const CreationWay = (props: Partial<ICreationWayProps>) => {
         width={300}
         footer={null}
         visible={visible}
-        onCancel={() => setState!({visible: false, type: null, current: null})}
+        onCancel={() => setState!({visible: false})}
       >
         <Trigger
           name="地图圆形圈选"

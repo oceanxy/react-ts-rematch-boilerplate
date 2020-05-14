@@ -18,14 +18,15 @@ declare global {
     /**
      * 群组名称
      */
-    name: string/**
+    name: string
+    /**
      * 【平台】群组ID或实体ID（监控对象ID）
      */
     id: string
     /**
      * 【第三方平台】对讲ID（群组/监控对象的ID）
      */
-    intercomId: number,
+    intercomId: string
     /**
      * 当前已激活的群组类别
      */

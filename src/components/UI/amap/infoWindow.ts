@@ -57,10 +57,6 @@ function setWindowFields(data: InfoWindowResponse, happenEvent: boolean) {
       <span class="key">时间</span>
       <span class="value">${location.gpsTime}</span>
     </div>
-    <div class="info-window-item" title="事件名称">
-      <span class="key">事件名称</span>
-      <span class="value">${eventNames}</span>
-    </div>
   `;
 
     // 是否有事件上报

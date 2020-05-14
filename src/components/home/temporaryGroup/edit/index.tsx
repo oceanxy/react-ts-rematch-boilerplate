@@ -4,16 +4,16 @@
  * @Description: 编辑临时组信息
  * @Date: 2020-04-26 周日 16:06:54
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-14 周四 15:28:04
+ * @LastModifiedTime: 2020-05-14 周四 23:05:14
  */
 
 import Modal from '@/components/UI/modal';
-import { APIResponse } from '@/interfaces/api/mock';
-import { MouseToolType } from '@/models/UI/amap';
-import { Button, Checkbox, Form, Input, message, Row, Select, Slider } from 'antd';
-import { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { CheckboxValueType } from 'antd/es/checkbox/Group';
-import React, { useEffect, useState } from 'react';
+import {APIResponse} from '@/interfaces/api/mock';
+import {MouseToolType} from '@/models/UI/amap';
+import {Button, Checkbox, Form, Input, message, Row, Select, Slider} from 'antd';
+import {CheckboxChangeEvent} from 'antd/es/checkbox';
+import {CheckboxValueType} from 'antd/es/checkbox/Group';
+import React, {useEffect, useState} from 'react';
 import './index.scss';
 
 /**
@@ -26,6 +26,7 @@ interface IEditTaskProps {
   entityDispatch: IEntityModel['effects']
   addTempGroupMember: IMonitoringDispatchModel['effects']['addTempGroupMember']
   mouseToolType: IAMapState['mouseToolType']
+  setMapState: IAMapModel['effects']['setState']
   byCondition: IEntityState['byCondition']
 }
 
@@ -38,7 +39,7 @@ interface IEditTaskProps {
 const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   const {
     state, setState, createTemporaryGroup, byCondition,
-    addTempGroupMember, mouseToolType, entityDispatch
+    addTempGroupMember, mouseToolType, entityDispatch, setMapState
   } = props;
   const {
     fetchFixedData, fetchDataByCircle, fetchConditionData, fetchDataByRectangle,
@@ -59,7 +60,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   /**
    * 全选、反选复选框选中状态
    */
-  const [checked, setChecked] = useState({all: false, invert: false} as {all?: boolean, invert?: boolean});
+  const [checked, setChecked] = useState({all: false, invert: false} as { all?: boolean, invert?: boolean });
   /**
    * 反选复选框显示状态
    */
@@ -144,6 +145,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   const editTempGroupCancel = () => {
     setState!({isShowEditModal: false});
     setEntityState({byCondition: false});
+    setMapState!({overlay: undefined});
   };
 
   /**
@@ -204,6 +206,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
     }
   };
 
+  // 编辑临时组对话框状态变更时的逻辑处理
   useEffect(() => {
     if (isShowEditModal) {
       (async () => {
@@ -220,7 +223,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
             response = await fetchFixedData();
           }
 
-          const {monitors} = (response as APIResponse<{monitors: IEntity[]}>).data;
+          const {monitors} = (response as APIResponse<{ monitors: IEntity[] }>).data;
 
           // 临时保存获取到的实体列表（主要用于全选/反选功能）
           setTempEntities(monitors);
@@ -455,7 +458,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                 className="slider"
                 rules={[{required: true, message: '请选择年龄范围'}]}
               >
-                <Slider range={true} />
+                <Slider range={true}/>
               </Form.Item>
               <Form.Item
                 label="半径（m）"
@@ -463,7 +466,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                 rules={[{required: true, message: '请输入半径'}]}
                 className="input"
               >
-                <Input type="text" placeholder="请输入半径" />
+                <Input type="text" placeholder="请输入半径"/>
               </Form.Item>
               <Row justify="end" className="temp-group-edit-modal-row bottom-line">
                 <Button size="small" type="primary" htmlType="submit" loading={searchLoading}>搜 索</Button>
@@ -480,7 +483,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
             rules={[{required: true, message: '请输入任务名称'}]}
             className="input"
           >
-            <Input type="text" placeholder="请输入任务名称" disabled={!!name} />
+            <Input type="text" placeholder="请输入任务名称" disabled={!!name}/>
           </Form.Item>
           <Form.Item
             noStyle

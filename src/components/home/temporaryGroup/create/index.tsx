@@ -8,30 +8,28 @@
  */
 
 import Container from '@/components/UI/containerComp';
-import Icon, { IconSource } from '@/components/UI/iconComp';
+import Icon, {IconSource} from '@/components/UI/iconComp';
 import ItemLegend from '@/components/UI/itemLegend';
-import { EditTemporaryGroup, TemporaryGroupCreationWay } from '@/containers/home/temporaryGroup';
+import {EditTemporaryGroup, TemporaryGroupCreationWay} from '@/containers/home/temporaryGroup';
 import styledComponent from '@/styled';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './index.scss';
 
 /**
  * 创建临时组组件Render Props
  */
-interface ICreateTempGroupProps {}
+interface ICreateTempGroupProps {
+}
 
 const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
   // 创建临时组时，传递给询问对话框的状态
-  const [showTempGroupModal, setShowTempGroupModal] = useState({
-    visible: false,
-    current: null as ITemporaryGroup | null
-  });
+  const [showTempGroupModal, setShowTempGroupModal] = useState({visible: false});
 
   /**
    * 处理点击‘创建临时组’按钮事件
    */
   const handleClick = () => {
-    setShowTempGroupModal({visible: true, current: null});
+    setShowTempGroupModal({visible: true});
   };
 
   return (
@@ -55,7 +53,7 @@ const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
         setState={setShowTempGroupModal}
         title='创建临时组'
       />
-      <EditTemporaryGroup />
+      <EditTemporaryGroup/>
     </Container>
   );
 };
