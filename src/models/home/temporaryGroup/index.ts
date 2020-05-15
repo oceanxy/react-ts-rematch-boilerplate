@@ -4,11 +4,12 @@
  * @Description: 临时组model
  * @Date: 2020-04-23 周四 13:51:12
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-13 周三 16:52:03
+ * @LastModifiedTime: 2020-05-15 周五 09:23:40
  */
 
 import fetchApis from '@/apis';
 import { APIResponse } from '@/interfaces/api/mock';
+import { MouseToolType } from '@/models/UI/amap';
 import { store } from '@/store';
 
 /**
@@ -17,7 +18,7 @@ import { store } from '@/store';
  */
 const tempState = {
   isShowEditModal: false,
-  backFillInfo: {},
+  backFillInfo: {name: undefined},
   loading: false,
   title: ''
 };
@@ -33,6 +34,20 @@ const temporaryGroup: ITemporaryGroupModel = {
   },
   reducers: {
     updateState(state: ITemporaryGroupState, payload: Partial<ITemporaryGroupState>): ITemporaryGroupState {
+      const {backFillInfo, ...rest} = payload;
+
+      // 如果backFillInfo不内存在name，则起合并store中的name到此对象
+      if ('backFillInfo' in payload && !('name' in backFillInfo!)) {
+        return {
+          ...state,
+          ...rest,
+          backFillInfo: {
+            ...backFillInfo,
+            name: state.backFillInfo.name
+          }
+        };
+      }
+
       return {
         ...state,
         ...payload
@@ -46,8 +61,16 @@ const temporaryGroup: ITemporaryGroupModel = {
       store.dispatch.temporaryGroup.updateState({data: response.data.temporaryGroupList});
     },
     setState(payload: Partial<ITemporaryGroupState>): void {
+      // 检测是否是关闭对话框动作，做相应的状态处理
       if ('isShowEditModal' in payload && !payload.isShowEditModal) {
+        const {entity, map} = store.dispatch;
+
+        // 清空本组件状态
         payload = tempState;
+        // 清空实体model按固定条件选择的状态
+        entity.setState({byCondition: false});
+        // 清空地图覆盖物及mouseToolType状态
+        map.setState({overlay: undefined, mouseToolType: MouseToolType.Null});
       }
 
       store.dispatch.temporaryGroup.updateState(payload);

@@ -4,16 +4,16 @@
  * @Description: 编辑临时组信息
  * @Date: 2020-04-26 周日 16:06:54
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-14 周四 23:05:14
+ * @LastModifiedTime: 2020-05-15 周五 13:52:35
  */
 
 import Modal from '@/components/UI/modal';
-import {APIResponse} from '@/interfaces/api/mock';
-import {MouseToolType} from '@/models/UI/amap';
-import {Button, Checkbox, Form, Input, message, Row, Select, Slider} from 'antd';
-import {CheckboxChangeEvent} from 'antd/es/checkbox';
-import {CheckboxValueType} from 'antd/es/checkbox/Group';
-import React, {useEffect, useState} from 'react';
+import { APIResponse } from '@/interfaces/api/mock';
+import { MouseToolType } from '@/models/UI/amap';
+import { Button, Checkbox, Form, Input, message, Row, Select, Slider } from 'antd';
+import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { CheckboxValueType } from 'antd/es/checkbox/Group';
+import React, { useEffect, useState } from 'react';
 import './index.scss';
 
 /**
@@ -26,7 +26,6 @@ interface IEditTaskProps {
   entityDispatch: IEntityModel['effects']
   addTempGroupMember: IMonitoringDispatchModel['effects']['addTempGroupMember']
   mouseToolType: IAMapState['mouseToolType']
-  setMapState: IAMapModel['effects']['setState']
   byCondition: IEntityState['byCondition']
 }
 
@@ -39,17 +38,17 @@ interface IEditTaskProps {
 const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   const {
     state, setState, createTemporaryGroup, byCondition,
-    addTempGroupMember, mouseToolType, entityDispatch, setMapState
+    addTempGroupMember, mouseToolType, entityDispatch
   } = props;
   const {
     fetchFixedData, fetchDataByCircle, fetchConditionData, fetchDataByRectangle,
-    fetchConditionForEntity, setState: setEntityState
+    fetchConditionForEntity
   } = entityDispatch!;
   const {isShowEditModal, title, loading, backFillInfo} = state!;
-  const {name, radius} = backFillInfo;
+  const {radius, name} = backFillInfo;
 
   // 避免不必要的渲染
-  if (!isShowEditModal) return null;
+  // if (!isShowEditModal) return null;
 
   const [searchForm] = Form.useForm();
   const [createForm] = Form.useForm();
@@ -60,7 +59,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   /**
    * 全选、反选复选框选中状态
    */
-  const [checked, setChecked] = useState({all: false, invert: false} as { all?: boolean, invert?: boolean });
+  const [checked, setChecked] = useState({all: false, invert: false} as {all?: boolean, invert?: boolean});
   /**
    * 反选复选框显示状态
    */
@@ -143,9 +142,8 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
    * 取消编辑
    */
   const editTempGroupCancel = () => {
+    // 关闭对话框
     setState!({isShowEditModal: false});
-    setEntityState({byCondition: false});
-    setMapState!({overlay: undefined});
   };
 
   /**
@@ -214,7 +212,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
           let response: any;
 
           if (mouseToolType === MouseToolType.Circle) {
-            // 获取地图圆形圈选范围内的所有实体（监控对象）数据
+            // 获取地图圆形圈选范围内的所有实体（监控对象）数据*/}
             response = await fetchDataByCircle();
           } else if (mouseToolType === MouseToolType.Rectangle) {
             // 获取地图矩形圈选范围内的所有实体（监控对象）数据
@@ -223,7 +221,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
             response = await fetchFixedData();
           }
 
-          const {monitors} = (response as APIResponse<{ monitors: IEntity[] }>).data;
+          const {monitors} = (response as APIResponse<{monitors: IEntity[]}>).data;
 
           // 临时保存获取到的实体列表（主要用于全选/反选功能）
           setTempEntities(monitors);
@@ -458,7 +456,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                 className="slider"
                 rules={[{required: true, message: '请选择年龄范围'}]}
               >
-                <Slider range={true}/>
+                <Slider range={true} />
               </Form.Item>
               <Form.Item
                 label="半径（m）"
@@ -466,7 +464,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                 rules={[{required: true, message: '请输入半径'}]}
                 className="input"
               >
-                <Input type="text" placeholder="请输入半径"/>
+                <Input type="text" placeholder="请输入半径" />
               </Form.Item>
               <Row justify="end" className="temp-group-edit-modal-row bottom-line">
                 <Button size="small" type="primary" htmlType="submit" loading={searchLoading}>搜 索</Button>
@@ -476,14 +474,19 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
             </Form>
           )
         }
-        <Form form={createForm} onFinish={onFinish} autoComplete="off">
+        <Form
+          form={createForm}
+          onFinish={onFinish}
+          autoComplete="off"
+          initialValues={{temporaryGroup: name}}
+        >
           <Form.Item
             label="名称"
             name="temporaryGroup"
             rules={[{required: true, message: '请输入任务名称'}]}
             className="input"
           >
-            <Input type="text" placeholder="请输入任务名称" disabled={!!name}/>
+            <Input type="text" placeholder="请输入任务名称" disabled={!!name} />
           </Form.Item>
           <Form.Item
             noStyle

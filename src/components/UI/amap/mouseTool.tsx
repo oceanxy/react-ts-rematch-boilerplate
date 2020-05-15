@@ -4,13 +4,14 @@
  * @Description: 高德地图鼠标工具组件
  * @Date: 2020-04-26 周日 09:54:45
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-14 周四 17:38:02
+ * @LastModifiedTime: 2020-05-15 周五 16:42:06
  */
 
 import config from '@/config';
 import { MouseToolType } from '@/models/UI/amap';
 import { message } from 'antd';
 import React, { useEffect } from 'react';
+import Circle = AMap.Circle;
 
 /**
  * 位置搜索接口
@@ -19,6 +20,8 @@ export interface IBoundaryProps {
   map: IAMapState['mapInstance']
   mouseToolType: IAMapState['mouseToolType']
   setState: IAMapModel['effects']['setState']
+  overlay: IAMapState['overlay']
+  setTempGroupState: ITemporaryGroupModel['effects']['setState']
 }
 
 // 鼠标工具
@@ -31,7 +34,7 @@ let mouseTool: any;
  * @constructor
  */
 const MouseTool = (props: Partial<IBoundaryProps>) => {
-  const {map, mouseToolType, setState} = props;
+  const {map, mouseToolType, setState, setTempGroupState, overlay} = props;
 
   if (!mouseTool && map) {
     AMap.plugin('AMap.MouseTool', () => {
@@ -63,7 +66,6 @@ const MouseTool = (props: Partial<IBoundaryProps>) => {
       message.config({top: 100});
       message.info('请在地图上绘制区域。', 0);
 
-      debugger;
       if (mouseToolType === MouseToolType.Circle) {
         mouseTool.circle(config.map.mouseTool);
       } else if (mouseToolType === MouseToolType.Rectangle) {
@@ -73,6 +75,24 @@ const MouseTool = (props: Partial<IBoundaryProps>) => {
 
     return () => mouseTool.off('draw', drawOverlay);
   }, [mouseToolType]);
+
+  useEffect(() => {
+    if (overlay) {
+      let backFillInfo: any;
+
+      if (mouseToolType === MouseToolType.Circle) {
+        const radius = (overlay as Circle).getRadius();
+        const center = (overlay as Circle).getCenter();
+        backFillInfo = {radius, center};
+      } else if (mouseToolType === MouseToolType.Rectangle) {
+        const northWest = overlay.getBounds()?.getNorthWest() ?? [];
+        const southEast = overlay.getBounds()?.getSouthEast() ?? [];
+        backFillInfo = {northWest, southEast};
+      }
+
+      setTempGroupState!({isShowEditModal: true, backFillInfo});
+    }
+  }, [overlay]);
 
   return null;
 };

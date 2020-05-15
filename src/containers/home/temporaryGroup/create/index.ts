@@ -4,7 +4,7 @@
  * @Description: 创建临时组
  * @Date: 2020-04-25 周六 15:26:39
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-14 周四 17:17:59
+ * @LastModifiedTime: 2020-05-15 周五 11:58:18
  */
 
 import CreateTemporaryGroup from '@/components/home/temporaryGroup/create';
@@ -13,6 +13,8 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({});
 
-const mapDispatchToProps = (dispatch: Dispatch): any => ({});
+const mapDispatchToProps = (dispatch: Dispatch): any => ({
+  setState: dispatch.temporaryGroup.setState
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateTemporaryGroup);

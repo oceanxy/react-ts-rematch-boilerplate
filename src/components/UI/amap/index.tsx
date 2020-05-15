@@ -4,7 +4,7 @@
  * @Description: 高德地图组件
  * @Date: 2020-01-04 11:43:57
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-14 周四 16:37:47
+ * @LastModifiedTime: 2020-05-15 周五 16:41:59
  */
 
 import Area from '@/components/UI/amap/area';
@@ -41,6 +41,8 @@ export interface IZWMapProps extends IContainerProps<any> {
   fenceDispatch: IFenceModel['effects']
   searchPanelTarget: ISearchState['target']
   setSearchState: ISearchModel['effects']['setState']
+  overlay: IAMapState['overlay']
+  setTempGroupState: ITemporaryGroupModel['effects']['setState']
 }
 
 /**
@@ -51,7 +53,7 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
     state, dispatch, intercomGroupState,
     setIntercomGroupState, curSelectedMonitorId,
     triggers, fenceDispatch, setSearchState,
-    mapFences, searchPanelTarget
+    mapFences, searchPanelTarget, overlay, setTempGroupState
   } = props;
   const {setState, fetchMassPoint, fetchWindowInfo} = dispatch!;
   const {mapInstance: map, mouseToolType, massPoints, curMassPoint, curArea} = state!;
@@ -61,7 +63,13 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
       {
         map ?
           (<>
-            <MouseTool map={map} mouseToolType={mouseToolType} setState={setState} />
+            <MouseTool
+              map={map}
+              mouseToolType={mouseToolType}
+              setState={setState}
+              setTempGroupState={setTempGroupState}
+              overlay={overlay}
+            />
             <Area
               map={map}
               triggers={triggers!}

@@ -4,7 +4,7 @@
  * @Description: mock数据模版
  * @Date: 2019-10-17 10:04:40
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-25 周六 15:20:19
+ * @LastModifiedTime: 2020-05-15 周五 09:30:33
  */
 
 import apis, { APIName, APIRequestConfig } from '@/apis/api';
@@ -701,7 +701,7 @@ const mocks: Mocks = {
       'interlocutorMemberList|30-50': [
         {
 
-          'audioOnlineStatus': () => Random.integer(0, 1),
+          'onlineStatus': () => Random.integer(0, 1),
           'userName': monitorName,
           'type': () => Random.integer(0, 2),
           'userId': () => Random.integer(),

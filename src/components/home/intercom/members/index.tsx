@@ -4,17 +4,17 @@
  * @Description: 对讲成员组件
  * @Date: 2020-04-21 周二 15:45:40
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-14 周四 17:09:19
+ * @LastModifiedTime: 2020-05-15 周五 13:53:02
  */
 
 import Container from '@/components/UI/containerComp';
-import Icon, {IconSource} from '@/components/UI/iconComp';
+import Icon, { IconSource } from '@/components/UI/iconComp';
 import Member from '@/components/UI/member';
 import Modal from '@/components/UI/modal';
-import {TemporaryGroupCreationWay} from '@/containers/home/temporaryGroup';
-import {CurActiveGroupType} from '@/models/home/intercom/group';
-import {message} from 'antd';
-import React, {useEffect, useState} from 'react';
+import { TemporaryGroupCreationWay } from '@/containers/home/temporaryGroup';
+import { CurActiveGroupType } from '@/models/home/intercom/group';
+import { message } from 'antd';
+import React, { useEffect, useState } from 'react';
 import './index.scss';
 
 interface IIntercomMembersProps {
@@ -22,20 +22,21 @@ interface IIntercomMembersProps {
   state: IIntercomMembersState
   dispatches: IIntercomMembersModel['effects']
   isActiveIntercom: IIntercomState['active']
+  setTemporaryGroupState: ITemporaryGroupModel['effects']['setState']
 }
 
 const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
-  const {state, isActiveIntercom, dispatches, curTempGroupState} = props;
+  const {state, isActiveIntercom, dispatches, curTempGroupState, setTemporaryGroupState} = props;
   const {data, loading} = state!;
   const {fetchData, setState, removeMember} = dispatches!;
-  const {curActiveGroupType} = curTempGroupState!;
+  const {curActiveGroupType, name} = curTempGroupState!;
 
   // 触发新增/删除成员时，传递给询问对话框的状态
   const [member, setMember] = useState({
     visible: false,
     type: undefined,
     current: undefined
-  } as { visible: boolean, type?: 'add' | 'remove', current?: IEntity });
+  } as {visible: boolean, type?: 'add' | 'remove', current?: IEntity});
 
   /**
    * 处理删除成员事件
@@ -53,6 +54,8 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
    */
   const handleAddMembers = () => {
     setMember({visible: true, type: 'add', current: undefined});
+    // 设置编辑临时组回填信息。编辑临时组时回填到临时组名称字段
+    setTemporaryGroupState!({backFillInfo: {name}, title: '添加临时组成员'});
   };
 
   /**
@@ -98,7 +101,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
       {
         // 只有临时组能加人
         curTempGroupState?.curActiveGroupType === CurActiveGroupType.Temporary ? (
-          <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAddMembers}/>
+          <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAddMembers} />
         ) : null
       }
       <Modal
@@ -113,7 +116,6 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
       <TemporaryGroupCreationWay
         visible={member.visible && member.type === 'add'}
         setState={setMember}
-        title="添加临时组成员"
       />
     </Container>
   );
