@@ -4,7 +4,7 @@
  * @Description: 地图弹窗模版。高德地图API【AMap.InfoWindow(option)】option.content不支持jsx，支持string或HTMLElement。
  * @Date: 2020-05-06 周三 16:47:18
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-10 周日 11:36:19
+ * @LastModifiedTime: 2020-05-18 周一 10:47:42
  */
 
 import { taskTypeColor, taskTypeStatus } from '@/models/home/taskModel/taskDetails';
@@ -51,11 +51,11 @@ function setWindowFields(data: InfoWindowResponse, happenEvent: boolean) {
   let str: string = '';
 
   // 监控对象类型不为静态物资时
-  if (data.monitor.monitorType !== EntityType.Supplies) {
+  if (data.monitor?.monitorType !== EntityType.Supplies) {
     str += `
     <div class="info-window-item" title="监控对象最近一次上报的定位时间">
       <span class="key">时间</span>
-      <span class="value">${location.gpsTime}</span>
+      <span class="value">${location?.gpsTime}</span>
     </div>
   `;
 
@@ -71,7 +71,7 @@ function setWindowFields(data: InfoWindowResponse, happenEvent: boolean) {
       str += `
       <div class="info-window-item" title="当前组">
         <span class="key">当前组</span>
-        <span class="value">${monitor.curAssignmentName}</span>
+        <span class="value">${monitor?.curAssignmentName}</span>
       </div>
     `;
     }
@@ -92,7 +92,7 @@ function setWindowButton(data: InfoWindowResponse, tasks: ITask[], onlineStatus:
   let str = '';
 
   // 静态物资没有以下功能
-  if (+data.monitor.monitorType !== EntityType.Supplies) {
+  if (+data.monitor?.monitorType !== EntityType.Supplies) {
     let btn = '';
 
     // 是否在线
@@ -122,23 +122,23 @@ function setWindowButton(data: InfoWindowResponse, tasks: ITask[], onlineStatus:
  */
 const massPointInfoWindow = (data: InfoWindowResponse) => {
   const {monitor, location, tasks, eventList} = data;
-  const happenEvent = !!eventList.length;
+  const happenEvent = !!eventList?.length;
 
   return `
     ${setWindowFields(data, happenEvent)}
     <div class="info-window-item" title="上报事件的监控对象名称">
       <span class="key">监控对象</span>
-      <span class="value">${monitor.monitorName}</span>
+      <span class="value">${monitor?.monitorName}</span>
     </div>
     <div class="info-window-item" title="监控对象的类型">
       <span class="key">类型</span>
-      <span class="value">${getEntityTypeText(+monitor.monitorType!)}</span>
+      <span class="value">${getEntityTypeText(+monitor?.monitorType!)}</span>
     </div>
     <div class="info-window-item" title="监控对象最近一次上报的位置描述">
       <span class="key">位置</span>
-      <span class="value">${location.address}</span>
+      <span class="value">${location?.address}</span>
     </div>
-    ${setWindowButton(data, tasks, !!monitor.onlineStatus, happenEvent)}
+    ${setWindowButton(data, tasks, !!monitor?.onlineStatus, happenEvent)}
   `;
 };
 

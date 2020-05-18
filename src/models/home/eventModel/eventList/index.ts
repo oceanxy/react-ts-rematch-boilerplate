@@ -17,19 +17,13 @@ import { store } from '@/store';
 const eventList: IEventListModel = {
   state: {
     data: [],
-    curSelectedMonitorId: ''
+    curSelectedEvent: {}
   },
   reducers: {
-    updateData: (state, data) => {
+    updateState: (state, payload) => {
       return {
         ...state,
-        data
-      };
-    },
-    updateCurId: (state, curSelectedMonitorId) => {
-      return {
-        ...state,
-        curSelectedMonitorId
+        ...payload
       };
     }
   },
@@ -46,10 +40,10 @@ const eventList: IEventListModel = {
       // 更新事件数量
       store.dispatch.eventStatistics.updateData(eventStatistics);
       // 更新事件列表
-      store.dispatch.eventList.updateData(eventList);
+      store.dispatch.eventList.updateState({data: eventList});
     },
-    async setCurId(curSelectedMonitorId) {
-      store.dispatch.eventList.updateCurId(curSelectedMonitorId);
+    async setState(payload) {
+      store.dispatch.eventList.updateState(payload);
     }
   }
 };

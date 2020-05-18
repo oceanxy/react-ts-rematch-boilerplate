@@ -4,7 +4,7 @@
  * @Description: 地图model
  * @Date: 2020-03-31 周二 17:03:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-13 周三 10:53:10
+ * @LastModifiedTime: 2020-05-18 周一 16:14:36
  */
 
 import fetchApis from '@/apis';
@@ -74,11 +74,13 @@ const map: IAMapModel = {
     },
     async fetchWindowInfo(reqPayload?: InfoWindowRequest): Promise<APIResponse<InfoWindowResponse>> {
       if (!reqPayload) {
-        const {curSelectedMonitorId} = store.getState().eventList;
+        const {monitorId} = store.getState().eventList.curSelectedEvent;
 
-        reqPayload = {
-          monitorId: curSelectedMonitorId
-        };
+        if (monitorId) {
+          reqPayload = {monitorId};
+        } else {
+          throw new Error('获取地图弹窗信息的参数有误，请确认！');
+        }
       }
 
       return await fetchApis.fetchWindowInfo(reqPayload);

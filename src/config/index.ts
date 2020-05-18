@@ -14,12 +14,20 @@ import { EProtocal, IConfig } from '@/interfaces/config';
  */
 const config: IConfig = {
   // 接口相关配置
+  // =====================本地调试使用devServer的代理，解决跨域问题========================================
+  // protocol: EProtocal.HTTP,
+  // port: 3001,
+  // host: 'localhost',
+  // =====================部署到服务端的配置，port和host为空，则默认相对服务环境的根路径=======================
   protocol: EProtocal.HTTP,
-  port: 3001,
-  host: 'localhost',
+  // port: 3001,
+  // host: 'localhost',
+  // ================================================================================================
+
   // app相关配置
-  basename: '/clbs/intercom',
-  mock: true,
+  basename: '/clbs/talkback/kanBanPage',
+  mock: false,
+
   // 地图相关配置
   map: {
     mapKey: '3018bf7f400b01e710642d798b80eaf1',

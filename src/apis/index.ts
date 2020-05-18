@@ -3,20 +3,20 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 生成接口请求函数
  * @Date: 2019-11-06 10:31:45
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-29 23:33:01
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-18 周一 17:45:43
  */
 
-import apis, {APIRequestConfig, FetchApis} from '@/apis/api';
+import apis, { APIRequestConfig, FetchApis } from '@/apis/api';
 import config from '@/config';
-import {IFetchAPI, WebsocketCallback} from '@/interfaces/api';
-import {APIResponse, IPolling} from '@/interfaces/api/mock';
-import {EHTTPMethod, EProtocal} from '@/interfaces/config';
-import Axios, {AxiosResponse} from 'axios';
+import { IFetchAPI, WebsocketCallback } from '@/interfaces/api';
+import { APIResponse, IPolling } from '@/interfaces/api/mock';
+import { EHTTPMethod, EProtocal } from '@/interfaces/config';
+import Axios, { AxiosResponse } from 'axios';
 import _ from 'lodash';
-import ReconnectingWebSocket from 'reconnecting-websocket';
-import mocks, {Mocks, productionData} from './mock';
 import qs from 'qs';
+import ReconnectingWebSocket from 'reconnecting-websocket';
+import mocks, { Mocks, productionData } from './mock';
 
 /**
  * 拼接URL
@@ -25,13 +25,20 @@ import qs from 'qs';
 function stitchingURL(fetchApi: IFetchAPI): string {
   // 拼接URL并实例化websocket
   let protocols = fetchApi.protocol ? fetchApi.protocol : config.protocol;
+
   if (fetchApi.isWebsocket) {
     protocols = config.protocol === EProtocal.HTTP ? EProtocal.WS : EProtocal.WSS;
   }
-  // 如果websocket的服务端口是另外的端口，则使用另外的端口
+
+  // 如果websocket的服务端口未设置，则使用全局配置的端口
   const port = fetchApi.port ? fetchApi.port : config.port;
-  // 如果websocket的主机是另外的主机，则使用另外的主机
+  // 如果websocket的host未设置，则使用全局配置的host
   const host = fetchApi.host ? fetchApi.host : config.host;
+
+  // 如果每个接口以及全局配置均未设置port和host，则使用相对路径
+  if (!port || !host) {
+    return fetchApi.url;
+  }
 
   return `${protocols}${host}:${port}${fetchApi.url}`;
 }
@@ -113,7 +120,7 @@ function fetchHttp(fetchApi: IFetchAPI, params?: any): Promise<AxiosResponse> {
     // 返回数据/捕获异常
     axiosResponse
       .then((data: AxiosResponse) => resolve(data))
-      .catch(reason => resolve(<AxiosResponse>{
+      .catch(reason => resolve(<AxiosResponse> {
         data: {retCode: 0, retMsg: 'request failed!', data: {}},
         ...reason
       }));
@@ -139,7 +146,7 @@ async function fetchPolling(fetchApi: IFetchAPI, params?: any, callback?: Websoc
     }
   }, 1000);
 
-  return <IPolling>{
+  return <IPolling> {
     close: () => clearInterval(polling),
     reconnect: () => {
     }
@@ -168,16 +175,16 @@ async function fetchMethod(
     // 当开启mock数据时，使用轮询的方式模拟websocket
     if (config.mock || fetchApi.forceMock) {
       const polling = await fetchPolling(fetchApi, params, callback);
-      return <IPolling>polling;
+      return <IPolling> polling;
     } else {
       // 从websocket服务器获取数据
       const ws = await fetchWebSocket(fetchApi, params, callback);
-      return <ReconnectingWebSocket | undefined>ws;
+      return <ReconnectingWebSocket | undefined> ws;
     }
   } else {
     // 使用HTTP获取数据（开启Mock数据时，HTTP请求会被mockjs拦截，否则则向服务端获取数据）
     const response: AxiosResponse = await fetchHttp(fetchApi, params);
-    return <APIResponse>response.data;
+    return <APIResponse> response.data;
   }
 }
 
@@ -198,9 +205,9 @@ const fetchApi = (mocks: Mocks, apis: APIRequestConfig) => () => {
       // 检测URL是否带有websocket协议或该API是否开启了websocket功能，以选择生成mock数据的方式
       if (fetchApi.url.match(/^wss?:\/\//) || fetchApi.isWebsocket) {
         // 生成mock数据
-        productionData(<keyof APIRequestConfig>fetchName, true);
+        productionData(<keyof APIRequestConfig> fetchName, true);
       } else {
-        productionData(<keyof APIRequestConfig>fetchName);
+        productionData(<keyof APIRequestConfig> fetchName);
       }
     }
 
@@ -212,8 +219,8 @@ const fetchApi = (mocks: Mocks, apis: APIRequestConfig) => () => {
     fetchApis[fetchName] = (params?: any, callback?: WebsocketCallback) => fetchMethod(fetchApi, params, callback);
   });
 
-  return <FetchApis>fetchApis;
+  return <FetchApis> fetchApis;
 };
 
 export const initFetchApi = fetchApi(mocks, apis);
-export default <FetchApis>fetchApis;
+export default <FetchApis> fetchApis;

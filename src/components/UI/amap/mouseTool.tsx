@@ -4,7 +4,7 @@
  * @Description: 高德地图鼠标工具组件
  * @Date: 2020-04-26 周日 09:54:45
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-15 周五 16:42:06
+ * @LastModifiedTime: 2020-05-18 周一 10:14:09
  */
 
 import config from '@/config';
@@ -58,11 +58,11 @@ const MouseTool = (props: Partial<IBoundaryProps>) => {
   useEffect(() => {
     setState!({overlay: undefined});
 
-    // 鼠标工具绘制覆盖物结束时触发此事件
-    mouseTool.on('draw', drawOverlay);
-
     // 检测地图是否实例化完成且鼠标工具被激活
     if (map && mouseTool && (mouseToolType != MouseToolType.Null)) {
+      // 鼠标工具绘制覆盖物结束时触发此事件
+      mouseTool.on('draw', drawOverlay);
+
       message.config({top: 100});
       message.info('请在地图上绘制区域。', 0);
 
@@ -73,7 +73,7 @@ const MouseTool = (props: Partial<IBoundaryProps>) => {
       }
     }
 
-    return () => mouseTool.off('draw', drawOverlay);
+    return () => mouseTool && mouseTool.off('draw', drawOverlay);
   }, [mouseToolType]);
 
   useEffect(() => {

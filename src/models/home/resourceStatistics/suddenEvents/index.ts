@@ -4,7 +4,7 @@
  * @Description: 突发事件周边资源model
  * @Date: 2020-04-02 周四 17:01:08
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-02 周四 17:01:08
+ * @LastModifiedTime: 2020-05-18 周一 16:49:56
  */
 
 import fetchApis from '@/apis';

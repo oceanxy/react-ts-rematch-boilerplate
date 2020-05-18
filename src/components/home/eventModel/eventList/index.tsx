@@ -4,7 +4,7 @@
  * @Description: 事件列表组件
  * @Date: 2020-03-23 15:50:32
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-14 周二 10:26:34
+ * @LastModifiedTime: 2020-05-18 周一 16:04:38
  */
 
 import ListItem from '@/components/home/listItem';
@@ -17,12 +17,10 @@ import './index.scss';
  * 时间列表组件props
  */
 interface IEventListProps {
-  data: IEvent[];
-  curSelectedMonitorId: IEventListState['curSelectedMonitorId'];
-  setCurMonitorId: IEventListModel['effects']['setCurId'];
-  fetchData: IEventListModel['effects']['fetchData'];
-  clearEventDetailsData: IEventDetailsModel['reducers']['clearData'];
-  setEventDetailsState: IEventDetailsModel['effects']['setState'];
+  data: IEvent[]
+  curSelectedEvent: IEventListState['curSelectedEvent']
+  setState: IEventListModel['effects']['setState']
+  fetchData: IEventListModel['effects']['fetchData']
 }
 
 /**
@@ -38,23 +36,19 @@ export const eventTypeStatus = ['未处理', '处理中'];
  * @constructor
  */
 const EventDetails = (props: Partial<IEventListProps>) => {
-  const {data, curSelectedMonitorId, setCurMonitorId} = props;
+  const {data, curSelectedEvent, setState} = props;
   const [isInit, setInit] = useState(true);
 
   /**
    * 事件点击
-   * @param {IEventDetailsRequest} payload
+   * @param {IEvent} event
    */
-  const onClick = (payload: IEventDetailsRequest) => {
-    const {setEventDetailsState, clearEventDetailsData} = props;
-
+  const onClick = (event: IEvent) => {
     // 检测当前点击的监控对象是否选中。如果已选中，则取消选中；反之则选中。
-    if (curSelectedMonitorId === payload.monitorId) {
-      clearEventDetailsData!();
-      setCurMonitorId?.('');
+    if (curSelectedEvent?.eventId === event.eventId) {
+      setState!({curSelectedEvent: {}});
     } else {
-      setEventDetailsState!({queryParams: payload});
-      setCurMonitorId?.(payload.monitorId);
+      setState!({curSelectedEvent: event});
     }
   };
 
@@ -67,27 +61,23 @@ const EventDetails = (props: Partial<IEventListProps>) => {
 
   // 如果数据合法且是初次渲染组件，则自动选中当前第一条数据
   if (data?.length && isInit) {
-    setCurMonitorId?.(data[0].monitorId);
+    setState!({curSelectedEvent: data[0]});
     setInit(false);
   }
 
   return (
     <Container className="event-list-container">
       {data && data.length
-        ? data.map((item, index) => (
+        ? data.map((event) => (
           <ListItem
-            key={`event-list-${index}`}
-            className={curSelectedMonitorId === item.monitorId ? 'active' : ''}
-            name={item.eventName}
-            status={eventTypeStatus[item.eventStatus]}
-            iconColor={eventTypeColor[item.eventLevel]}
-            time={item.startTime}
-            monitorName={item.monitorName}
-            onClick={onClick.bind(null, {
-              startTime: item.startTime,
-              monitorId: item.monitorId,
-              eventType: item.eventType
-            })}
+            key={`event-list-${event.eventId}`}
+            className={curSelectedEvent?.eventId === event.eventId ? 'active' : ''}
+            name={event.eventName}
+            status={eventTypeStatus[event.eventStatus]}
+            iconColor={eventTypeColor[event.eventLevel]}
+            time={event.startTime}
+            monitorName={event.monitorName}
+            onClick={onClick.bind(null, event)}
           />
         ))
         : null}

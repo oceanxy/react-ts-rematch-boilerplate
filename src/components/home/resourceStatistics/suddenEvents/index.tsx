@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 图表组件-突发事件周围资源
  * @Date: 2020-01-10 11:46:14
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-01-13 14:59:22
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-18 周一 16:50:01
  */
 
 import Container from '@/components/UI/containerComp';
@@ -101,7 +101,9 @@ const SuddenEvents = (props: Partial<ISuddenEventProps>) => {
   };
 
   useEffect(() => {
-    getData!();
+    if (eventId) {
+      getData!();
+    }
   }, [range, eventId]);
 
   return (

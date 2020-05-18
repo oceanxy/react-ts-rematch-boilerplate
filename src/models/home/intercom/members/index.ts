@@ -31,7 +31,7 @@ const members: IIntercomMembersModel = {
         const state = store.getState();
 
         reqPayload = {
-          intercomGroupId: state.intercomGroup.id,
+          intercomGroupId: state.intercomGroup.intercomId,
           interlocutorStatus: 0
         };
       }
@@ -58,7 +58,7 @@ const members: IIntercomMembersModel = {
         interlocutorId: member.monitorId
       });
 
-      if (response.retCode === 0) {
+      if (+response.retCode === 0) {
         // 调用增加日志接口
         await store.dispatch.log.addLog({type: LogType.ExitIntercomGroup, id});
         // 刷新对讲面板成员列表

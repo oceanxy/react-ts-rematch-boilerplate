@@ -4,7 +4,7 @@
  * @Description: 任务列表组件
  * @Date: 2020-04-14 周二 10:56:15
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-11 周一 10:13:03
+ * @LastModifiedTime: 2020-05-18 周一 16:07:54
  */
 
 import ListItem from '@/components/home/listItem';
@@ -16,13 +16,13 @@ import './index.scss';
 interface ITaskListProps {
   data: ITaskListResponse['taskPageInfo']
   curSelectedTaskId: ITaskListState['curSelectedTaskId']
-  curSelectedMonitorId: IEventListState['curSelectedMonitorId']
+  curSelectedEvent: IEventListState['curSelectedEvent']
   setState: ITaskListModel['effects']['setState']
   fetchData: ITaskListModel['effects']['fetchData']
 }
 
 const TaskList = (props: Partial<ITaskListProps>) => {
-  const {data, curSelectedTaskId, fetchData, setState, curSelectedMonitorId} = props;
+  const {data, curSelectedTaskId, fetchData, setState, curSelectedEvent} = props;
   /**
    * 任务点击
    * @param {IEventDetailsRequest} payload
@@ -37,8 +37,10 @@ const TaskList = (props: Partial<ITaskListProps>) => {
   };
 
   useEffect(() => {
-    fetchData!({selectFirstData: true});
-  }, [curSelectedMonitorId]);
+    if (curSelectedEvent?.eventId) {
+      fetchData!({selectFirstData: true});
+    }
+  }, [curSelectedEvent?.eventId]);
 
   return (
     <Container className="task-list-container">

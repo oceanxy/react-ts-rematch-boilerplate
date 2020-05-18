@@ -4,7 +4,7 @@
  * @Description: 区域（围栏）组件
  * @Date: 2020-05-11 周一 16:23:37
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-12 周二 16:36:16
+ * @LastModifiedTime: 2020-05-18 周一 10:43:31
  */
 
 import infoWindowTemplate from '@/components/UI/amap/infoWindow';
@@ -82,7 +82,7 @@ const Area = (props: AreaProps) => {
    * @returns {any[] | undefined}
    */
   const createOverlays = (data: IFenceState['mapFences']) => {
-    return data?.fenceList.map((fence) => {
+    return data?.fenceList?.map((fence) => {
       const {longitude, latitude, radius, width, points} = fence.locationData;
       let tempOverlays;
 

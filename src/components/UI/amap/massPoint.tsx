@@ -4,7 +4,7 @@
  * @Description: 海量点组件（为了在mock数据时让弹窗位置更真实，本组件做了一些额外的mock逻辑处理）
  * @Date: 2020-01-14 17:50:59
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-12 周二 16:36:36
+ * @LastModifiedTime: 2020-05-18 周一 17:29:00
  */
 
 import config from '@/config';
@@ -18,6 +18,7 @@ import suppliesPng from './images/dispatch-supplies.png';
 import thingPng from './images/dispatch-thing.png';
 import './index.scss';
 import infoWindowTemplate from './infoWindow';
+import MassMarks = AMap.MassMarks;
 
 // 事件弹窗实例
 let infoWindow: any;
@@ -36,7 +37,7 @@ export interface MassPointProps {
   intercomGroupState: IIntercomGroupState,
   setIntercomGroupState: IIntercomGroupModel['effects']['setState']
   mapDispatchers: IAMapModel['effects']
-  curSelectedMonitorId: IEventListState['curSelectedMonitorId']
+  curSelectedEvent?: IEventListState['curSelectedEvent']
   searchPanelTarget: ISearchState['target']
   setSearchState: ISearchModel['effects']['setState']
   triggers: IDisplayContentState['triggers']
@@ -107,6 +108,19 @@ const setMass = (data: IAMapState['massPoints']): AMap.MassMarks => {
 };
 
 /**
+ * 获取海量点style集合
+ * @param {string[]} iconSortList
+ * @returns {AMap.MassMarks.Style[]}
+ */
+const getStyle = (iconSortList: string[]): MassMarks.Style[] => {
+  return iconSortList.map((iconSrc) => ({
+    url: iconSrc,
+    anchor: new AMap.Pixel(12, -5),
+    size: new AMap.Size(24, 24)
+  }));
+};
+
+/**
  * 打开对讲面板
  * @param {EntityIntercomCallProps} intercomParams
  */
@@ -155,7 +169,7 @@ const openIntercomCall = (intercomParams: EntityIntercomCallProps) => {
 const MassPoint = (props: MassPointProps) => {
   const {
     fetchMassPoint, data, fetchWindowInfo, curMassPoint,
-    curSelectedMonitorId, intercomGroupState, setIntercomGroupState,
+    curSelectedEvent, intercomGroupState, setIntercomGroupState,
     mapDispatchers, triggers, searchPanelTarget, setSearchState
   } = props;
   const map = props.map!;
@@ -170,6 +184,7 @@ const MassPoint = (props: MassPointProps) => {
   } else {
     mass.clear();
     mass.setData(props.data.positionList);
+    mass.setStyle(getStyle(props.data.iconSortList));
   }
 
   if (!infoWindow) {
@@ -265,15 +280,20 @@ const MassPoint = (props: MassPointProps) => {
   useEffect(() => {
     // curMassPoint字段更新后打开地图上指定海量点的信息弹窗
     if ((!config.mock || searchPanelTarget) && curMassPoint) {
-      const lnglat: [number, number] = [curMassPoint.location.longitude, curMassPoint.location.latitude];
+      const longitude = curMassPoint.location?.longitude;
+      const latitude = curMassPoint.location?.latitude;
 
-      infoWindow.setContent(infoWindowTemplate(curMassPoint));
-      infoWindow.open(map!, lnglat);
-      map.setCenter(lnglat);
+      if (longitude && latitude) {
+        const lnglat: [number, number] = [longitude, latitude];
 
-      // 当通过点击搜索结果面板激活海量点弹窗时，当弹窗打开后清除该状态
-      if (searchPanelTarget) {
-        setSearchState({target: undefined});
+        infoWindow.setContent(infoWindowTemplate(curMassPoint));
+        infoWindow.open(map!, lnglat);
+        map.setCenter(lnglat);
+
+        // 当通过点击搜索结果面板激活海量点弹窗时，当弹窗打开后清除该状态
+        if (searchPanelTarget) {
+          setSearchState({target: undefined});
+        }
       }
     }
   }, [curMassPoint]);
@@ -297,27 +317,29 @@ const MassPoint = (props: MassPointProps) => {
    * 点击海量点或事件激活弹窗时，获取弹窗数据
    */
   useEffect(() => {
-    (async () => {
-      // 请求弹窗内的数据
-      const response = await fetchWindowInfo();
+    if (curSelectedEvent?.eventId) {
+      (async () => {
+        // 请求弹窗内的数据
+        const response = await fetchWindowInfo();
 
-      if (+response.retCode === 0) {
-        setState({curMassPoint: response.data});
-        // 开启mock时，使用mock数据展示
-        if (config.mock) {
-          const {data} = response;
-          const {location: {longitude, latitude}} = data;
+        if (+response.retCode === 0) {
+          setState({curMassPoint: response.data});
+          // 开启mock时，使用mock数据展示
+          if (config.mock) {
+            const {data} = response;
+            const {location: {longitude, latitude}} = data;
 
-          infoWindow.setContent(infoWindowTemplate(response.data));
-          infoWindow.open(map!, [longitude, latitude]);
-          map.setCenter([longitude, latitude]);
+            infoWindow.setContent(infoWindowTemplate(response.data));
+            infoWindow.open(map!, [longitude, latitude]);
+            map.setCenter([longitude, latitude]);
+          }
+        } else {
+          clearCurMassPoint();
+          message.error('获取信息失败，请稍候再试！');
         }
-      } else {
-        clearCurMassPoint();
-        message.error('获取信息失败，请稍候再试！');
-      }
-    })();
-  }, [curSelectedMonitorId]);
+      })();
+    }
+  }, [curSelectedEvent?.eventId]);
 
   return (
     <HandleEvent

@@ -4,7 +4,7 @@
  * @Description: 事件列表类型定义
  * @Date: 2020-04-13 周一 13:32:43
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-07 周四 10:53:02
+ * @LastModifiedTime: 2020-05-18 周一 15:42:07
  */
 
 import { IEventStatisticsState } from '@/models/home/eventModel/eventStatistics';
@@ -18,35 +18,35 @@ declare global {
     /**
      * 监控对象ID
      */
-    monitorId: string;
+    monitorId: string
     /**
      * 监控对象名称
      */
-    monitorName: string;
+    monitorName: string
     /**
      * 事件类型
      */
-    eventType: number;
+    eventType: number
     /**
      * 事件名称
      */
-    eventName: string;
+    eventName: string
     /**
      * 事件等级 1：一般 2：较重 3：严重 4：特别严重 0：没有事件详情数据
      */
-    eventLevel: 0 | 1 | 2 | 3 | 4;
+    eventLevel: 0 | 1 | 2 | 3 | 4
     /**
      * 处理状态 0:未处理 1：处理中
      */
-    eventStatus: 0 | 1;
+    eventStatus: 0 | 1
     /**
      * 事件开始时间
      */
-    startTime: Date | null;
+    startTime: Date | null
     /**
      * 事件ID
      */
-    eventId: string;
+    eventId: string
   }
 
   /**
@@ -56,15 +56,15 @@ declare global {
     /**
      * 最新的事件详情数据
      */
-    latestEventDetails: IEventDetailsData;
+    latestEventDetails: IEventDetailsData
     /**
      * 事件统计数据
      */
-    eventStatistics: IEventStatisticsState;
+    eventStatistics: IEventStatisticsState
     /**
      * 事件列表数据集
      */
-    eventList: IEvent[];
+    eventList: IEvent[]
   }
 
   /**
@@ -74,23 +74,23 @@ declare global {
     /**
      * 事件处理状态 -1或不传:全部；0:未处理；1处理中
      */
-    eventStatus?: -1 | 0 | 1 | null;
+    eventStatus?: -1 | 0 | 1 | null
     /**
      * 监控对象ID 不传查询全部
      */
-    monitorId?: string | null;
+    monitorId?: string | null
     /**
      * 排序：默认按时间 0 ：按时间 1：按监控对象
      */
-    sortType: 0 | 1;
+    sortType: 0 | 1
     /**
      * 是否返回首条事件的详情信息 0 不返回 1返回 默认为0
      */
-    isReturnEventDetails: 0 | 1;
+    isReturnEventDetails: 0 | 1
     /**
      * 请求数据时，事件统计方式较上一次请求是否发生改变，即eventStatus字段是否改变
      */
-    isStatisticsMethodChanged?: boolean;
+    isStatisticsMethodChanged?: boolean
   }
 
   /**
@@ -100,28 +100,24 @@ declare global {
     /**
      * 事件列表数据
      */
-    data: IEvent[];
+    data: IEvent[]
     /**
-     * 事件列表当前选中项（当前选中的监控对象）的ID
+     * 当前选中的事件
      */
-    curSelectedMonitorId: IEventDetailsRequest['monitorId'];
+    curSelectedEvent: Partial<IEvent>
   }
 
   /**
    * 事件列表model
    */
   interface IEventListModel extends ModelConfig {
-    state: IEventListState;
+    state: IEventListState
     reducers: {
-      updateData(state: IEventListState, data: IEvent[]): IEventListState;
-      updateCurId(
-        state: IEventListState,
-        curSelectedMonitorId: IEventListState['curSelectedMonitorId']
-      ): IEventListState;
-    };
+      updateState(state: IEventListState, payload: Partial<IEventListState>): IEventListState
+    }
     effects: {
-      fetchData(reqPayload: IEventListRequest): void;
-      setCurId(curSelectedMonitorId: IEventListState['IEventListState']): void;
-    };
+      fetchData(reqPayload: IEventListRequest): void
+      setState(payload: Partial<IEventListState>): void
+    }
   }
 }

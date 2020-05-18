@@ -143,7 +143,7 @@ const apis: APIRequestConfig = {
    * 获取任务列表及任务统计数据
    */
   fetchTaskList: {
-    url: '/clbs/web/v1/dispatch/task/query/unhandledEventTasks',
+    url: '/clbs/web/v1/dispatch/task/unhandledEventTasks',
     method: EHTTPMethod.POST
   },
   /**

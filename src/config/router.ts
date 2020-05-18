@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 路由定义文件
  * @Date: 2019-10-16 11:20:47
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-01-02 15:15:48
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-18 周一 10:13:52
  */
 
 import config from '@/config/index';
@@ -59,7 +59,9 @@ const routesConfig: Routes = {
  * @param route {IRouteProps} 路由配置
  */
 export function beforeRouter(route: IRouteProps) {
-  console.log(`即将进入路由：${route.path}`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`即将进入路由：${route.path}`);
+  }
 }
 
 /**

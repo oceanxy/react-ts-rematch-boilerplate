@@ -8,10 +8,8 @@ module.exports = {
   productionJsSourceMap: false,
 
   devServer: {
-    openPage: 'clbs/intercom',
+    openPage: 'clbs/talkback/kanBanPage', // 启动devServer后自动跳转到的路由。同src/config/index.ts 的basename字段
     host: 'localhost',
-
-    // host: '192.168.110.69',
 
     port: 3001,
     contentBase: path.join(__dirname, '../public'),
@@ -28,6 +26,12 @@ module.exports = {
     watchOptions: {
       ignored: /node_modules/
     },
-    proxy: {}
+    proxy: {
+      '/clbs/web/v1/dispatch/*': {
+        target: 'http://localhost:8080/',
+        changeOrigin: true,     // target是域名的话，需要这个参数，
+        secure: false          // 设置支持https协议的代理
+      }
+    }
   }
 };

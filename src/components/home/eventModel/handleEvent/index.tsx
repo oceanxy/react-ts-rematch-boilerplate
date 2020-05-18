@@ -165,7 +165,7 @@ const HandleEvent = (props: HandleEventProps) => {
   return (
     <Modal
       width={400}
-      title={`${curMassPointInfo?.monitor.monitorName} 报警处理`}
+      title={`${curMassPointInfo?.monitor?.monitorName} 报警处理`}
       visible={visible}
       onCancel={() => closeModal()}
       footer={null}

@@ -4,7 +4,7 @@
  * @Description: 任务列表
  * @Date: 2020-04-13 周一 17:18:47
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-11 周一 11:02:14
+ * @LastModifiedTime: 2020-05-18 周一 10:45:48
  */
 
 import fetchApis from '@/apis';
@@ -34,37 +34,43 @@ const taskList: ITaskListModel = {
   effects: {
     async fetchData(reqPayload, state) {
       let {selectFirstData, ...rest} = reqPayload!;
-      const defaultReqPayload: ITaskListRequest = {
-        monitorId: state!.eventList.curSelectedMonitorId,
-        queryType: -1,
-        taskStatus: -1,
-        eventId: state!.eventDetails.data.eventId,
-        start: 0,
-        length: 2000
-      };
+      const {eventId, monitorId} = state!.eventList.curSelectedEvent;
 
-      if (!rest) {
-        rest = defaultReqPayload;
-      } else {
-        rest = {
-          ...defaultReqPayload,
-          ...rest
+      if (eventId) {
+        const defaultReqPayload: ITaskListRequest = {
+          monitorId: monitorId!,
+          queryType: -1,
+          taskStatus: -1,
+          eventId,
+          start: 0,
+          length: 2000
         };
-      }
 
-      const response: APIResponse<ITaskListResponse> = await fetchApis.fetchTaskList(rest);
-      const {taskList, taskStatistics} = store.dispatch;
-      const {taskPageInfo, taskStatistics: tsData} = response.data;
-      const {records} = taskPageInfo;
+        if (!rest) {
+          rest = defaultReqPayload;
+        } else {
+          rest = {
+            ...defaultReqPayload,
+            ...rest
+          };
+        }
 
-      // 更新任务列表
-      taskList.updateState({data: taskPageInfo});
-      // 更新任务统计数量
-      taskStatistics.updateData(tsData);
+        const response: APIResponse<ITaskListResponse> = await fetchApis.fetchTaskList(rest);
+        const {taskList, taskStatistics} = store.dispatch;
+        const {taskPageInfo, taskStatistics: tsData} = response.data;
+        const records = taskPageInfo?.records;
 
-      // 自动选中当前第一条数据
-      if (records.length && selectFirstData) {
-        taskList.updateState({curSelectedTaskId: records[0].taskId});
+        // 更新任务列表
+        taskList.updateState({data: taskPageInfo});
+        // 更新任务统计数量
+        taskStatistics.updateData(tsData);
+
+        // 自动选中当前第一条数据
+        if (records?.length && selectFirstData) {
+          taskList.updateState({curSelectedTaskId: records[0].taskId});
+        }
+      } else {
+        throw new Error('获取任务列表的参数有误，请确认！');
       }
     },
     async setState(payload) {

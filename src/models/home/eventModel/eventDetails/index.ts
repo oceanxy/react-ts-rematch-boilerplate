@@ -4,8 +4,7 @@
  * @Description: 事件详情model
  * @Date: 2020-03-19 16:31:44
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-07 周四 10:51:09
+ * @LastModifiedTime: 2020-05-18 周一 15:35:04
  */
 
 import fetchApis from '@/apis';
@@ -66,19 +65,12 @@ const defaultData: IEventDetailsData = {
   longitude: 0,
   monitorId: '',
   monitorName: '',
-  startTime: null,
+  startTime: '',
   eventId: ''
-};
-
-const defaultQueryParams: Partial<IEventDetailsRequest> = {
-  startTime: null,
-  monitorId: '',
-  eventType: -1
 };
 
 const eventDetails: IEventDetailsModel = {
   state: {
-    queryParams: {},
     data: defaultData
   },
   reducers: {
@@ -87,31 +79,38 @@ const eventDetails: IEventDetailsModel = {
         ...state,
         ...payload
       };
-    },
-    clearData() {
-      return {
-        data: defaultData,
-        queryParams: defaultQueryParams
-      };
     }
   },
   effects: {
-    async fetchData(reqPayload: IEventDetailsRequest) {
-      if (!reqPayload) {
-        const state = store.getState();
+    async fetchData(reqPayload) {
+      const {startTime, monitorId, eventType} = store.getState().eventList.curSelectedEvent;
 
-        reqPayload = {
-          startTime: state.eventDetails.queryParams.startTime!,
-          monitorId: state.eventList.curSelectedMonitorId,
-          eventType: state.eventDetails.queryParams.eventType!
-        };
+      if (!reqPayload) {
+        if (!startTime || !monitorId || !eventType) {
+          throw new Error('获取事件详情的参数错误，请确认！');
+        } else {
+          reqPayload = {
+            startTime,
+            monitorId,
+            eventType
+          };
+        }
       }
 
-      const {data} = await fetchApis.fetchEventDetails(reqPayload);
-      store.dispatch.eventDetails.updateData({data});
+      const response = await fetchApis.fetchEventDetails(reqPayload);
+
+      if (+response.retCode === 0) {
+        store.dispatch.eventDetails.updateData({data: response.data.eventDetails});
+      } else {
+        throw new Error(response.retMsg);
+      }
     },
-    setState(payload: Partial<IEventDetailsState>) {
-      store.dispatch.eventDetails.updateData(payload);
+    setState(payload) {
+      if (payload) {
+        store.dispatch.eventDetails.updateData(payload);
+      } else {
+        store.dispatch.eventDetails.updateData({data: defaultData});
+      }
     }
   }
 };

@@ -17,15 +17,15 @@ declare global {
     /**
      * 事件开始时间 格式yyyy-MM-dd HH:mm:ss
      */
-    startTime: Date | null
+    startTime: Date | string
     /**
      * 监控对象ID
      */
-    monitorId: string
+    monitorId: IEvent['monitorId']
     /**
      * 事件类型
      */
-    eventType: number
+    eventType: IEvent['eventType']
   }
 
   /**
@@ -95,10 +95,6 @@ declare global {
    */
   interface IEventDetailsState {
     /**
-     * 用于查询数据的参数（注意：此对象内的monitorId暂未使用，现在统一使用的是eventList里面的curSelectedMonitorId）
-     */
-    queryParams: Partial<IEventDetailsRequest>
-    /**
      * 数据
      */
     data: IEventDetailsData
@@ -114,18 +110,13 @@ declare global {
        * @returns {IEventDetailsState}
        */
       updateData(state: IEventDetailsState, payload: Partial<IEventDetailsState>): IEventDetailsState
-      /**
-       * 快速清除数据
-       * @returns {IEventDetailsState}
-       */
-      clearData(): IEventDetailsState
     }
     effects: {
       /**
-       * 设置状态
+       * 设置状态，不传payload则默认为清空详情数据
        * @param {Partial<IEventDetailsState>} payload
        */
-      setState(payload: Partial<IEventDetailsState>): void
+      setState(payload?: Partial<IEventDetailsState>): void
       /**
        * 获取数据
        * @param {IEventDetailsRequest} reqPayload

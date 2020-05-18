@@ -4,7 +4,7 @@
  * @Description: 高德地图组件
  * @Date: 2020-01-04 11:43:57
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-15 周五 16:41:59
+ * @LastModifiedTime: 2020-05-18 周一 16:08:53
  */
 
 import Area from '@/components/UI/amap/area';
@@ -35,7 +35,7 @@ export interface IZWMapProps extends IContainerProps<any> {
   dispatch: IAMapModel['effects']
   intercomGroupState: IIntercomGroupState,
   setIntercomGroupState: IIntercomGroupModel['effects']['setState']
-  curSelectedMonitorId: IEventListState['curSelectedMonitorId']
+  curSelectedEvent: IEventListState['curSelectedEvent']
   triggers: IDisplayContentState['triggers']
   mapFences: IFenceState['mapFences']
   fenceDispatch: IFenceModel['effects']
@@ -51,7 +51,7 @@ export interface IZWMapProps extends IContainerProps<any> {
 const ZWMap = (props: Partial<IZWMapProps>) => {
   const {
     state, dispatch, intercomGroupState,
-    setIntercomGroupState, curSelectedMonitorId,
+    setIntercomGroupState, curSelectedEvent,
     triggers, fenceDispatch, setSearchState,
     mapFences, searchPanelTarget, overlay, setTempGroupState
   } = props;
@@ -92,7 +92,7 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
               fetchWindowInfo={fetchWindowInfo}
               intercomGroupState={intercomGroupState!}
               setIntercomGroupState={setIntercomGroupState!}
-              curSelectedMonitorId={curSelectedMonitorId!}
+              curSelectedEvent={curSelectedEvent}
             />
           </>) :
           <UseMap setState={setState} />

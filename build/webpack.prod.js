@@ -19,7 +19,10 @@ module.exports = merge.smart(baseWebpackConfig, {
   mode: 'production',
   devtool: sourceMapsMode,
   output: {
-    filename: 'js/[name].[contenthash:8].js'
+    //---------------------------------------------------------------------------------------------------------------------
+    // 生产环境打包
+    filename: 'clbs/resources/js/intercom/[name].[contenthash:8].js'
+    //---------------------------------------------------------------------------------------------------------------------
   },
   module: {
     rules: [
@@ -109,7 +112,10 @@ module.exports = merge.smart(baseWebpackConfig, {
     }),
     new InterpolateHtmlPlugin(env.raw),
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[contenthash:8].css'
+      //---------------------------------------------------------------------------------------------------------------------
+      // 生产环境路径
+      filename: 'clbs/resources/css/intercom/[name].[contenthash:8].css'
+      //---------------------------------------------------------------------------------------------------------------------
       // chunkFilename: '[name].[contenthash:8].chunk.css'
     }),
     new CompressionWebpackPlugin({

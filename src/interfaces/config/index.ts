@@ -36,11 +36,11 @@ export interface IConfig {
   /**
    * 全局接口主机IP
    */
-  host: string;
+  host?: string;
   /**
    * 全局接口端口
    */
-  port: number;
+  port?: number;
   /**
    * 根目录
    */
