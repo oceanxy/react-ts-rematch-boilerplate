@@ -26,12 +26,14 @@ const EventDetails = (props: Partial<IEventDetailsProps>) => {
   const {data, curSelectedEvent, fetchData, setState} = props;
 
   useEffect(() => {
-    if (curSelectedEvent?.eventId) {
-      // 获取数据（request可在model内获取）
-      fetchData!();
-    } else {
-      // 清空详情数据
-      setState!();
+    if (!((curSelectedEvent?.eventId || data?.eventId) && curSelectedEvent?.eventId === data?.eventId)) {
+      if (curSelectedEvent?.eventId) {
+        // 获取数据（request可在model内获取）
+        fetchData!();
+      } else {
+        // 清空详情数据
+        setState!();
+      }
     }
   }, [curSelectedEvent?.eventId]);
 
@@ -39,7 +41,7 @@ const EventDetails = (props: Partial<IEventDetailsProps>) => {
     <Container conTheme="style1" style={{marginTop: 10}}>
       <ItemLegend
         name="事件详情"
-        iconColor={eventTypeColor[data!.eventLevel]}
+        iconColor={eventTypeColor[data?.eventLevel || 0]}
         nameStyled={styledComponent.subtitle}
         styled={styledComponent.marginBottom10}
       />

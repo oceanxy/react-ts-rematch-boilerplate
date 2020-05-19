@@ -4,7 +4,7 @@
  * @Description: 事件详情类型定义
  * @Date: 2020-04-13 周一 11:49:28
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-07 周四 10:32:40
+ * @LastModifiedTime: 2020-05-19 周二 09:55:00
  */
 
 import { ModelConfig } from '@rematch/core';
@@ -109,7 +109,7 @@ declare global {
        * @param {Partial<IEventDetailsState>} payload
        * @returns {IEventDetailsState}
        */
-      updateData(state: IEventDetailsState, payload: Partial<IEventDetailsState>): IEventDetailsState
+      updateState(state: IEventDetailsState, payload: Partial<IEventDetailsState>): IEventDetailsState
     }
     effects: {
       /**

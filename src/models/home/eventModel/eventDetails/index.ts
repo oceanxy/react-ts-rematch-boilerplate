@@ -74,7 +74,7 @@ const eventDetails: IEventDetailsModel = {
     data: defaultData
   },
   reducers: {
-    updateData: (state, payload) => {
+    updateState: (state, payload) => {
       return {
         ...state,
         ...payload
@@ -100,16 +100,16 @@ const eventDetails: IEventDetailsModel = {
       const response = await fetchApis.fetchEventDetails(reqPayload);
 
       if (+response.retCode === 0) {
-        store.dispatch.eventDetails.updateData({data: response.data.eventDetails});
+        store.dispatch.eventDetails.setState({data: response.data.eventDetails});
       } else {
         throw new Error(response.retMsg);
       }
     },
     setState(payload) {
       if (payload) {
-        store.dispatch.eventDetails.updateData(payload);
+        store.dispatch.eventDetails.updateState(payload);
       } else {
-        store.dispatch.eventDetails.updateData({data: defaultData});
+        store.dispatch.eventDetails.updateState({data: defaultData});
       }
     }
   }

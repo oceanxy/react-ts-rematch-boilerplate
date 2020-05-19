@@ -34,7 +34,7 @@ const eventList: IEventListModel = {
 
       // 更新事件详情
       if (eventList?.length && !reqPayload.isStatisticsMethodChanged) {
-        store.dispatch.eventDetails.updateData({data: latestEventDetails});
+        store.dispatch.eventDetails.setState({data: latestEventDetails});
       }
 
       // 更新事件数量

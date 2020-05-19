@@ -180,23 +180,25 @@ const mocks: Mocks = {
     retCode: 0,
     retMsg: 'success',
     data: {
-      administrativeRegion: '@county',
-      eventEndAddress: '@county(true)',
-      endTime: '@datetime',
-      eventDurationTime: 19500,
-      eventDurationTimeStr: '5小时25分0秒',
-      'eventLevel|1-4': 1,
-      'eventName|1': ['上班未到岗', '超时长停留'],
-      eventProcessingTime: 3892,
-      eventProcessingTimeStr: '1小时4分52秒',
-      'eventStatus|0-1': 0,
-      eventType: '152',
-      latitude: '29.893485',
-      longitude: '111.730631',
-      monitorId: '@guid',
-      startTime: '@datetime',
-      monitorName: monitorName,
-      eventId: '@guid'
+      eventDetails: {
+        administrativeRegion: '@county',
+        eventEndAddress: '@county(true)',
+        endTime: '@datetime',
+        eventDurationTime: 19500,
+        eventDurationTimeStr: '5小时25分0秒',
+        'eventLevel|1-4': 1,
+        'eventName|1': ['上班未到岗', '超时长停留'],
+        eventProcessingTime: 3892,
+        eventProcessingTimeStr: '1小时4分52秒',
+        'eventStatus|0-1': 0,
+        eventType: '152',
+        latitude: '29.893485',
+        longitude: '111.730631',
+        monitorId: '@guid',
+        startTime: '@datetime',
+        monitorName: monitorName,
+        eventId: '@guid'
+      }
     }
   },
   fetchEventList: {
