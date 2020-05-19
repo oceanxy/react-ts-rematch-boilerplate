@@ -4,7 +4,7 @@
  * @Description: 海量点组件（为了在mock数据时让弹窗位置更真实，本组件做了一些额外的mock逻辑处理）
  * @Date: 2020-01-14 17:50:59
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-18 周一 17:29:00
+ * @LastModifiedTime: 2020-05-19 周二 09:44:02
  */
 
 import config from '@/config';
@@ -73,32 +73,7 @@ const setInfoWindow = (): AMap.InfoWindow => {
  */
 const setMass = (data: IAMapState['massPoints']): AMap.MassMarks => {
   // 海量点图标样式
-  let style;
-  if (!config.mock) {
-    style = data.iconSortList.map((icon) => ({
-      url: icon,
-      anchor: new AMap.Pixel(0, 0),
-      size: new AMap.Size(24, 24)
-    }));
-  } else {
-    style = [{
-      url: carPng,
-      anchor: new AMap.Pixel(12, -5),
-      size: new AMap.Size(24, 24)
-    }, {
-      url: peoplePng,
-      anchor: new AMap.Pixel(12, -5),
-      size: new AMap.Size(24, 24)
-    }, {
-      url: thingPng,
-      anchor: new AMap.Pixel(12, -5),
-      size: new AMap.Size(24, 24)
-    }, {
-      url: suppliesPng,
-      anchor: new AMap.Pixel(12, -5),
-      size: new AMap.Size(24, 24)
-    }];
-  }
+  const style = getStyle(data.iconSortList);
 
   return new AMap.MassMarks(data.positionList, {
     zIndex: 100, // 海量点图层叠加的顺序
@@ -112,8 +87,30 @@ const setMass = (data: IAMapState['massPoints']): AMap.MassMarks => {
  * @param {string[]} iconSortList
  * @returns {AMap.MassMarks.Style[]}
  */
-const getStyle = (iconSortList: string[]): MassMarks.Style[] => {
-  return iconSortList.map((iconSrc) => ({
+const getStyle = (iconSortList?: string[]): MassMarks.Style[] => {
+  if (config.mock) {
+    return [
+      {
+        url: carPng,
+        anchor: new AMap.Pixel(12, -5),
+        size: new AMap.Size(24, 24)
+      }, {
+        url: peoplePng,
+        anchor: new AMap.Pixel(12, -5),
+        size: new AMap.Size(24, 24)
+      }, {
+        url: thingPng,
+        anchor: new AMap.Pixel(12, -5),
+        size: new AMap.Size(24, 24)
+      }, {
+        url: suppliesPng,
+        anchor: new AMap.Pixel(12, -5),
+        size: new AMap.Size(24, 24)
+      }
+    ];
+  }
+
+  return (iconSortList || []).map((iconSrc) => ({
     url: iconSrc,
     anchor: new AMap.Pixel(12, -5),
     size: new AMap.Size(24, 24)
