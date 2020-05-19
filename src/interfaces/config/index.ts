@@ -32,23 +32,23 @@ export interface IConfig {
    * 全局接口协议
    * 注意：websocket链接时，'http://'将自动转换为'ws://'，'https://'将自动转换为'wss://'
    */
-  protocol: EProtocal;
+  protocol: EProtocal
   /**
    * 全局接口主机IP
    */
-  host?: string;
+  host?: string
   /**
    * 全局接口端口
    */
-  port?: number;
+  port?: number
   /**
    * 根目录
    */
-  basename: string;
+  basename: string
   /**
    * mock数据开关
    */
-  mock: boolean;
+  mock: boolean
   /**
    * 地图相关设置
    */
@@ -56,11 +56,11 @@ export interface IConfig {
     /**
      * 地图的key
      */
-    mapKey: string,
+    mapKey: string
     /**
      * 地图版本
      */
-    mapVersion: string,
+    mapVersion: string
     /**
      * 地图鼠标工具配置 目前只支持圆和矩形
      */
