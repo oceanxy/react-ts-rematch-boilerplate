@@ -3,12 +3,13 @@
   right: 460px;
   top: 40.111vh;
   z-index: 2;
+  min-width: 184px;
 
   .inter-plat-temp-group-item-container {
     display: flex;
     flex-direction: column;
     margin: 20px 0 4px;
     overflow-y: auto;
-    height: 130px;
+    max-height: 130px;
   }
 }

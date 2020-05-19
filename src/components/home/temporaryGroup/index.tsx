@@ -4,7 +4,7 @@
  * @Description: 临时组组件
  * @Date: 2020-01-14 14:24:28
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-14 周四 23:05:14
+ * @LastModifiedTime: 2020-05-19 周二 10:17:01
  */
 
 import Container from '@/components/UI/containerComp';
@@ -111,7 +111,7 @@ const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
       <CreateTemporaryGroup />
       <Container className="inter-plat-temp-group-item-container">
         {
-          data?.map((tempGroup, index) => {
+          data?.length ? data.map((tempGroup, index) => {
             return (
               <Trigger
                 key={`inter-plat-temp-group-item-${index}`}
@@ -123,7 +123,7 @@ const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
                 onTriggerClick={() => setShowTempGroup({visible: true, current: tempGroup})}
               />
             );
-          })
+          }) : <div className="no-data-warn">暂无临时组数据</div>
         }
       </Container>
       <Modal
