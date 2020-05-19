@@ -84,7 +84,11 @@ const fence: IFenceModel = {
       store.dispatch.fence.updateState({mapFences: response.data});
     },
     async fetchDetails(reqPayload: IFenceDetailsRequest): Promise<APIResponse<IFenceDetailsResponse>> {
-      return await fetchApis.fetchFenceDetails(reqPayload);
+      store.dispatch.panelControl.setState({loading: true});
+      const response = await fetchApis.fetchFenceDetails(reqPayload);
+      store.dispatch.panelControl.setState({loading: false});
+
+      return response;
     }
   }
 };

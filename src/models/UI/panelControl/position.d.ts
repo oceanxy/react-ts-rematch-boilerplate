@@ -14,6 +14,10 @@ declare global {
    */
   interface IPanelControlState {
     /**
+     * 全局加载状态
+     */
+    loading: boolean
+    /**
      * 是否显示面板
      */
     showPanel: boolean

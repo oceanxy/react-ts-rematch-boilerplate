@@ -12,7 +12,7 @@ import Icon, { iconName, IconSource, IconSourceHover } from '@/components/UI/ico
 import SearchPanel from '@/containers/UI/search/searchPanel';
 import { SearchCondition } from '@/models/UI/search';
 import Select from 'antd/es/select';
-import React, { ButtonHTMLAttributes, ChangeEvent, useRef, useState } from 'react';
+import React, { ButtonHTMLAttributes, ChangeEvent, CompositionEvent, useRef, useState } from 'react';
 import './index.scss';
 
 /**
@@ -73,6 +73,8 @@ const Search = (props: Partial<ISearchProps>) => {
   const {searchCondition, searchKeyword} = searchState!;
   // 搜索框Ref
   const searchBox = useRef<HTMLInputElement>(null);
+  // 组件内部缓存的文本域值，解决antd Input受控时输入中文的问题
+  const [val, setVal] = useState('');
 
   /**
    * 选择搜索方式
@@ -135,19 +137,24 @@ const Search = (props: Partial<ISearchProps>) => {
    * 文本框输入事件
    * @param {React.KeyboardEvent<HTMLInputElement>} e
    */
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onInputChange = (e: ChangeEvent<HTMLInputElement> | CompositionEvent<HTMLInputElement>) => {
     const beSetValue = e.currentTarget.value;
-    setState!({searchKeyword: beSetValue});
+    setVal(beSetValue);
+
+    // 中文输入时，锁定受控文本域
+    if (e.type === 'change') {
+      setState!({searchKeyword: beSetValue});
+    }
 
     // 根据输入框的值内容，设置是否显示搜索结果面板
     if (searchCondition === SearchCondition.POSITION) {
-      if (beSetValue) {
+      if (val) {
         setState({isShowResultPanel: true});
       } else {
         setState({isShowResultPanel: false});
       }
     } else {
-      if (!beSetValue || beSetValue !== searchKeyword) {
+      if (!val || val !== searchKeyword) {
         setState({isShowResultPanel: false});
       }
     }
@@ -176,8 +183,12 @@ const Search = (props: Partial<ISearchProps>) => {
           className="inter-plat-search-input"
           onKeyUp={onEnterSearch}
           autoComplete="off"
-          value={searchKeyword}
+          value={val}
           onChange={onInputChange}
+          maxLength={50}
+          onCompositionStart={onInputChange}
+          onCompositionUpdate={onInputChange}
+          onCompositionEnd={onInputChange}
         />
         <button className="inter-plat-search-button" type="submit" onClick={handleSearch} />
       </Container>

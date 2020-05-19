@@ -4,7 +4,7 @@
  * @Description: 事件列表组件
  * @Date: 2020-03-23 15:50:32
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-18 周一 16:04:38
+ * @LastModifiedTime: 2020-05-19 周二 17:20:29
  */
 
 import ListItem from '@/components/home/listItem';
@@ -53,10 +53,7 @@ const EventDetails = (props: Partial<IEventListProps>) => {
   };
 
   useEffect(() => {
-    props.fetchData!({
-      sortType: 0,
-      isReturnEventDetails: 1
-    } as IEventListRequest);
+    props.fetchData!();
   }, []);
 
   // 如果数据合法且是初次渲染组件，则自动选中当前第一条数据

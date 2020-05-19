@@ -14,6 +14,7 @@ import { store } from '@/store';
  */
 const panelControl: IPanelControlModel = {
   state: {
+    loading: false,
     showPanel: true
   },
   reducers: {

@@ -4,7 +4,7 @@
  * @Description: 区域（围栏）组件
  * @Date: 2020-05-11 周一 16:23:37
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-18 周一 10:43:31
+ * @LastModifiedTime: 2020-05-19 周二 16:07:31
  */
 
 import infoWindowTemplate from '@/components/UI/amap/infoWindow';
@@ -42,7 +42,7 @@ const setInfoWindow = (): AMap.InfoWindow => {
     autoMove: true,
     isCustom: true,
     showShadow: false,
-    offset: new AMap.Pixel(0, 6)
+    offset: new AMap.Pixel(0, -30)
   });
 };
 
@@ -72,7 +72,7 @@ const Area = (props: AreaProps) => {
     if (+response.retCode === 0) {
       setMapState({curArea: response.data});
     } else {
-      message.error('获取信息失败，请稍候再试！');
+      message.error('获取围栏信息失败，请稍候再试！');
     }
   };
 
@@ -165,16 +165,19 @@ const Area = (props: AreaProps) => {
   }, [data]);
 
   useEffect(() => {
-    if (curArea) {
-      const {longitude, latitude} = curArea?.fenceDetails.locationData!;
+    if (curArea?.fenceDetails) {
+      const {longitude, latitude} = curArea?.fenceDetails?.locationData;
 
-      infoWindow.setContent(infoWindowTemplate(curArea));
-      infoWindow.open(map!, [longitude, latitude]);
-      map!.setCenter([longitude, latitude]);
-
-      if (searchPanelTarget) {
-        setSearchState({target: undefined});
+      if (longitude && latitude) {
+        infoWindow.setContent(infoWindowTemplate(curArea));
+        infoWindow.open(map!, [longitude, latitude]);
+        map!.setCenter([longitude, latitude]);
       }
+    }
+
+    // 如果是通过搜索面板触发的围栏信息更新，则重置搜索面板的target状态
+    if (searchPanelTarget) {
+      setSearchState({target: undefined});
     }
   }, [curArea]);
 

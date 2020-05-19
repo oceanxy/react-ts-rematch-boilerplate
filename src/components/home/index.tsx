@@ -4,7 +4,7 @@
  * @Description: 组件组装
  * @Date: 2020-01-04 14:30:18
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-19 周二 11:42:12
+ * @LastModifiedTime: 2020-05-19 周二 16:08:00
  */
 
 import EventModel from '@/components/home/eventModel';
@@ -19,10 +19,12 @@ import TemporaryGroup from '@/containers/home/temporaryGroup';
 import { MonitoringDispatch, Search } from '@/containers/UI';
 import ZWMap from '@/containers/UI/amap';
 import { MouseToolType } from '@/models/UI/amap';
+import { Spin } from 'antd';
 import React, { useEffect } from 'react';
 import './index.scss';
 
 interface IHomeProps {
+  loading: IPanelControlState['loading']
   showPanel: IPanelControlState['showPanel']
   setState: IPanelControlModel['effects']['setState']
   mouseToolType: IAMapState['mouseToolType']
@@ -30,7 +32,7 @@ interface IHomeProps {
 }
 
 const Home = (props: Partial<IHomeProps>) => {
-  const {showPanel, setState, mouseToolType, map} = props;
+  const {showPanel, setState, mouseToolType, map, loading} = props;
 
   useEffect(() => {
     if (mouseToolType === MouseToolType.Null) {
@@ -55,7 +57,7 @@ const Home = (props: Partial<IHomeProps>) => {
           })}
         </Container>
       </Container>
-      <Container className="inter-plat-container">
+      <Spin spinning={loading} wrapperClassName="inter-plat-container" delay={100}>
         <Container className={`inter-plat-left${showPanel ? ' show-panel' : ' not-show-panel'}`}>
           <EventModel />
         </Container>
@@ -72,7 +74,7 @@ const Home = (props: Partial<IHomeProps>) => {
           <ResourceStatistics />
           <TaskModel />
         </Container>
-      </Container>
+      </Spin>
       <MonitoringDispatch />
     </Container>
   );

@@ -12,6 +12,7 @@ import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
+  loading: state.panelControl.loading,
   showPanel: state.panelControl.showPanel,
   mouseToolType: state.map.mouseToolType,
   map: state.map.mapInstance

@@ -4,7 +4,7 @@
  * @Description: 海量点组件（为了在mock数据时让弹窗位置更真实，本组件做了一些额外的mock逻辑处理）
  * @Date: 2020-01-14 17:50:59
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-19 周二 09:44:02
+ * @LastModifiedTime: 2020-05-19 周二 16:07:47
  */
 
 import config from '@/config';
@@ -76,7 +76,7 @@ const setMass = (data: IAMapState['massPoints']): AMap.MassMarks => {
   const style = getStyle(data.iconSortList);
 
   return new AMap.MassMarks(data.positionList, {
-    zIndex: 100, // 海量点图层叠加的顺序
+    zIndex: 1000, // 海量点图层叠加的顺序
     style, // 设置样式对象
     cursor: 'pointer'
   });
@@ -226,13 +226,16 @@ const MassPoint = (props: MassPointProps) => {
     const ele = (e.target as HTMLButtonElement);
 
     if (curMassPoint) {
-      // 处理事件
+      // 打开处理事件对话框
       if (ele?.className.includes('handle-event')) {
-        map.clearInfoWindow();
-        // 海量点弹窗关闭，清除store中当前海量点状态
-        // （注意，若此处清除了该状态，在接下来打开的处理事件对话框中将获取不到此海量点的信息，
-        // 所以，应该在关闭处理事件对话框时再清除store中当前海量点状态）
-        // clearCurMassPoint();
+        // 清除海量点弹窗。目前改为不关闭海量点弹窗，而是移动地图可视区域，以便处理事件对话框不重叠在海量点弹窗上
+        // map.clearInfoWindow();
+
+        // 视图移动前，复位地图视图到原经纬度坐标，防止每点击一次就移动一次地图
+        map.setCenter([curMassPoint.location.longitude, curMassPoint.location.latitude]);
+        // 设置地图视图移动
+        map.panBy(-350, -80);
+
         setIsShowModal(true);
       } /** 开启监控对象对讲面板 */ else if (ele?.className.includes('intercom-call')) {
         const intercomParams = {

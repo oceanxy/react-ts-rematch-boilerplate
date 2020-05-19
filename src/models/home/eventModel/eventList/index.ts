@@ -29,6 +29,13 @@ const eventList: IEventListModel = {
   },
   effects: {
     async fetchData(reqPayload) {
+      if (!reqPayload) {
+        reqPayload = {
+          sortType: 0,
+          isReturnEventDetails: 1
+        };
+      }
+
       const response = await fetchApis.fetchEventList(reqPayload);
       const {latestEventDetails, eventStatistics, eventList}: IEventData = response.data;
 

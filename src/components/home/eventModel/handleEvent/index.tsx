@@ -4,7 +4,7 @@
  * @Description: 处理事件弹窗组件
  * @Date: 2020-05-07 周四 09:30:30
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-12 周二 08:59:03
+ * @LastModifiedTime: 2020-05-19 周二 16:46:53
  */
 
 import Modal from '@/components/UI/modal';
@@ -31,12 +31,12 @@ interface HandleEventProps {
    */
   curMassPointInfo?: InfoWindowResponse
   /**
-   * 清空当前点击的海量点弹窗数据
+   * 重新获取事件列表数据
    */
-  clearCurMassPoint?: IAMapModel['effects']['clearCurMassPoint']
+  fetchEventListData?: IEventListModel['effects']['fetchData']
 
   /**
-   * 设置处理事件对话框状态
+   * 设置处理事件对话框状态，海量点组件传递过来的函数
    * @param {boolean} visible
    */
   setIsShowModal(visible: boolean): void
@@ -63,7 +63,7 @@ interface HandleEventFormProps {
  * @constructor
  */
 const HandleEvent = (props: HandleEventProps) => {
-  const {visible, setIsShowModal, handleEvent, curMassPointInfo, clearCurMassPoint} = props;
+  const {visible, setIsShowModal, handleEvent, curMassPointInfo, fetchEventListData} = props;
   /**
    * 批量全部处理的loading状态
    */
@@ -86,9 +86,7 @@ const HandleEvent = (props: HandleEventProps) => {
   const onFinish = async (values: any) => {
     let response: any;
 
-    /**
-     * 批量全部处理
-     */
+    // 批量全部处理
     if (!values.handleMethod) {
       setLoading(true);
       response = await handleEvent!({
@@ -96,21 +94,19 @@ const HandleEvent = (props: HandleEventProps) => {
         description: values.description
       });
       setLoading(false);
-    }
-    /**
-     * 单条处理
-     */
-    else {
+    }/** 单条处理 */ else {
       setSingleState({
         ...singleState,
         [`${singleCurEvent.eventId}`]: {loading: true}
       });
+
       response = await handleEvent!({
         monitorId: curMassPointInfo!.monitor.monitorId,
         description: values[`description-${singleCurEvent.eventId}`],
         eventType: singleCurEvent.eventType,
         startTime: singleCurEvent.startTime
       });
+
       setSingleState({
         ...singleState,
         [`${singleCurEvent.eventId}`]: {loading: false}
@@ -118,6 +114,8 @@ const HandleEvent = (props: HandleEventProps) => {
     }
 
     if (+response.retCode === 0) {
+      // 刷新事件列表
+      fetchEventListData!();
       message.success('已成功处理事件报警！');
     } else {
       message.error('处理失败，请稍后再试！');
@@ -140,7 +138,6 @@ const HandleEvent = (props: HandleEventProps) => {
    */
   const closeModal = () => {
     setIsShowModal(false);
-    clearCurMassPoint!();
   };
 
   /**
@@ -187,6 +184,7 @@ const HandleEvent = (props: HandleEventProps) => {
             return !getFieldValue('handleMethod') ? (
               <Form.Item name="description">
                 <Input.TextArea
+                  maxLength={50}
                   placeholder="请输入处理描述"
                   rows={4}
                   className="inter-plat-handle-event" />
@@ -209,7 +207,9 @@ const HandleEvent = (props: HandleEventProps) => {
                         placeholder="请输入处理描述"
                         disabled={singleState?.[event.eventId || '']?.disabled || false}
                         rows={4}
-                        className="inter-plat-handle-event" />
+                        className="inter-plat-handle-event"
+                        maxLength={50}
+                      />
                     </Form.Item>
                     <Row justify="end" className="modal-row">
                       <Button

@@ -4,7 +4,7 @@
  * @Description: 通知组件
  * @Date: 2020-04-22 周三 16:53:35
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-28 周二 15:08:30
+ * @LastModifiedTime: 2020-05-19 周二 17:29:14
  */
 
 import Container from '@/components/UI/containerComp';
@@ -54,6 +54,7 @@ const IntercomNotice = (props: Partial<IIntercomNoticeProps>) => {
         onCompositionStart={onChange}
         onCompositionUpdate={onChange}
         onCompositionEnd={onChange}
+        maxLength={80}
       />
     </Container>
   );

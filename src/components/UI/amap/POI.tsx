@@ -4,7 +4,7 @@
  * @Description: 高德地图POI搜索组件
  * @Date: 2020-04-01 周三 09:04:01
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-12 周二 16:36:51
+ * @LastModifiedTime: 2020-05-19 周二 17:44:04
  */
 
 import Icon, { IconSource, IconSourceHover } from '@/components/UI/iconComp';
@@ -18,12 +18,12 @@ import PlaceSearch = AMap.PlaceSearch;
  * 位置搜索接口
  */
 export interface IPositionProp {
-  map: AMap.Map;
-  searchCondition: ISearchState['searchCondition'];
-  data: IPositionState['searchPositions'];
-  setState: IPositionModel['effects']['setState'];
-  setSearchState: ISearchModel['effects']['setState'];
-  keyword: ISearchState['searchKeyword'];
+  map: AMap.Map
+  searchCondition: ISearchState['searchCondition']
+  data: IPositionState['searchPositions']
+  setState: IPositionModel['effects']['setState']
+  setSearchState: ISearchModel['effects']['setState']
+  keyword: ISearchState['searchKeyword']
 }
 
 let autocomplete: any;
@@ -46,9 +46,7 @@ const Position = (props: Partial<IPositionProp>) => {
 
   if (!placeSearch) {
     AMap.plugin(['AMap.PlaceSearch'], () => {
-      placeSearch = new AMap.PlaceSearch({
-        map
-      });
+      placeSearch = new AMap.PlaceSearch({map});
     });
   }
 
@@ -57,7 +55,7 @@ const Position = (props: Partial<IPositionProp>) => {
    * @param {IPosition} position
    */
   const handlePOIClick = (position: IPosition) => {
-    placeSearch.search(position.name, (status: PlaceSearch.SearchStatus, result: string | PlaceSearch.SearchResult) => {
+    placeSearch && placeSearch.search(position.name, (status: PlaceSearch.SearchStatus, result: string | PlaceSearch.SearchResult) => {
       if (status === 'complete' && _.isPlainObject(result)) {
         // 关闭搜索结果面板
         setSearchState!({isShowResultPanel: false});
@@ -67,7 +65,7 @@ const Position = (props: Partial<IPositionProp>) => {
 
   useEffect(() => {
     if (map && searchCondition === SearchCondition.POSITION) {
-      autocomplete.search(
+      autocomplete && autocomplete.search(
         keyword ?? '',
         (status: Autocomplete.SearchStatus, result: Autocomplete.SearchResult | string) => {
           if (status === 'complete' && _.isPlainObject(result)) {
@@ -84,16 +82,18 @@ const Position = (props: Partial<IPositionProp>) => {
 
   return (
     <>
-      {data?.map((position: IPosition, index: number) => (
-        <li className="inter-plat-search-display-item" key={`position-item-${index}`}>
-          <Icon
-            text={position.name}
-            icon={monitorTypeIcon['location'] as IconSource}
-            iconHover={monitorTypeIcon['location_hover'] as IconSourceHover}
-            onClick={handlePOIClick.bind(null, position)}
-          />
-        </li>
-      )) ?? null}
+      {
+        data?.map((position: IPosition, index: number) => (
+          <li className="inter-plat-search-display-item" key={`position-item-${index}`}>
+            <Icon
+              text={position.name}
+              icon={monitorTypeIcon['location'] as IconSource}
+              iconHover={monitorTypeIcon['location_hover'] as IconSourceHover}
+              onClick={handlePOIClick.bind(null, position)}
+            />
+          </li>
+        )) ?? null
+      }
     </>
   );
 };

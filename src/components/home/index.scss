@@ -83,6 +83,30 @@
     display: flex;
     flex: 1;
 
+    & > div > .ant-spin {
+      top: 54px;
+      max-height: calc(100% - 54px);
+      background: rgba(22, 45, 64, .6);
+    }
+
+
+    &.ant-spin-nested-loading,
+    .ant-spin-container {
+      position: inherit;
+    }
+
+    .ant-spin-blur {
+      opacity: 1;
+    }
+
+    .ant-spin-container {
+      &:after {
+        height: calc(100% - 54px);
+        top: 54px;
+        background: none;
+      }
+    }
+
     .inter-plat-left {
       @include block;
       left: 0;

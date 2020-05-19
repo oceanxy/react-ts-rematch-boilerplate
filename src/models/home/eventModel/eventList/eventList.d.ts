@@ -4,7 +4,7 @@
  * @Description: 事件列表类型定义
  * @Date: 2020-04-13 周一 13:32:43
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-18 周一 15:42:07
+ * @LastModifiedTime: 2020-05-19 周二 17:19:00
  */
 
 import { IEventStatisticsState } from '@/models/home/eventModel/eventStatistics';
@@ -80,7 +80,7 @@ declare global {
      */
     monitorId?: string | null
     /**
-     * 排序：默认按时间 0 ：按时间 1：按监控对象
+     * 排序：默认按时间 0:按时间 1:按监控对象
      */
     sortType: 0 | 1
     /**
@@ -116,7 +116,7 @@ declare global {
       updateState(state: IEventListState, payload: Partial<IEventListState>): IEventListState
     }
     effects: {
-      fetchData(reqPayload: IEventListRequest): void
+      fetchData(reqPayload?: IEventListRequest): void
       setState(payload: Partial<IEventListState>): void
     }
   }

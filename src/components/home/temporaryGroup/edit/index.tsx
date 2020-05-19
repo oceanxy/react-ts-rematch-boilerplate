@@ -221,18 +221,20 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
             response = await fetchFixedData();
           }
 
-          const {monitors} = (response as APIResponse<{monitors: IEntity[]}>).data;
-
-          // 临时保存获取到的实体列表（主要用于全选/反选功能）
-          setTempEntities(monitors);
-
           if (response.retCode === 0) {
+            const {monitors} = (response as APIResponse<{monitors: IEntity[]}>).data;
+
+            // 临时保存获取到的实体列表（主要用于全选/反选功能）
+            setTempEntities(monitors);
+
             // 将实体数据回填到antd form上
             createForm.setFieldsValue({
               temporaryGroup: name,
               entities: monitors,
               interlocutorIds: []
             });
+          } else {
+            message.error(response.retMsg);
           }
 
           // 设置全选、反选复选框的状态

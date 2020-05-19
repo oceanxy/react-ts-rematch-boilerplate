@@ -4,7 +4,7 @@
  * @Description: 监控调度model
  * @Date: 2020-04-24 周五 14:07:50
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-25 周六 14:18:57
+ * @LastModifiedTime: 2020-05-19 周二 13:43:51
  */
 
 import fetchApis from '@/apis';
@@ -346,11 +346,14 @@ const monitoringDispatch: IMonitoringDispatchModel = {
   effects: {
     async fetchData() {
       const response = await fetchApis.fetchDispatchServer();
-      const config = response.data;
 
-      store.dispatch.monitoringDispatch.updateState({config});
-      store.dispatch.monitoringDispatch.fetchMediaServiceEngine(config);
-
+      if (+response.retCode === 0) {
+        const config = response.data;
+        store.dispatch.monitoringDispatch.updateState({config});
+        store.dispatch.monitoringDispatch.fetchMediaServiceEngine(config);
+      } else {
+        message.error('登录对讲服务失败！');
+      }
     },
     setState(payload: Partial<IMonitoringDispatchState>): void {
       store.dispatch.monitoringDispatch.updateState(payload);
