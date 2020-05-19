@@ -14,6 +14,10 @@ import styledBlocks, { IStyledComponent } from './styledBlocks';
  * 全局样式
  */
 export const GlobalStyle: GlobalStyleComponent<{}, DefaultTheme> = createGlobalStyle`
+  html {
+    overflow: hidden;
+  }
+
   body {
     margin: 0;
     color: #e4f2ff!important;
@@ -21,6 +25,10 @@ export const GlobalStyle: GlobalStyleComponent<{}, DefaultTheme> = createGlobalS
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Microsoft Yahei', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  
+  #root {
+    overflow: hidden;
   }
   
   code {

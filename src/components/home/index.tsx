@@ -4,7 +4,7 @@
  * @Description: 组件组装
  * @Date: 2020-01-04 14:30:18
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-11 周一 14:30:37
+ * @LastModifiedTime: 2020-05-19 周二 11:42:12
  */
 
 import EventModel from '@/components/home/eventModel';
@@ -18,10 +18,29 @@ import { Intercom } from '@/containers/home/intercom';
 import TemporaryGroup from '@/containers/home/temporaryGroup';
 import { MonitoringDispatch, Search } from '@/containers/UI';
 import ZWMap from '@/containers/UI/amap';
-import React from 'react';
+import { MouseToolType } from '@/models/UI/amap';
+import React, { useEffect } from 'react';
 import './index.scss';
 
-const Home = () => {
+interface IHomeProps {
+  showPanel: IPanelControlState['showPanel']
+  setState: IPanelControlModel['effects']['setState']
+  mouseToolType: IAMapState['mouseToolType']
+  map: IAMapState['mapInstance']
+}
+
+const Home = (props: Partial<IHomeProps>) => {
+  const {showPanel, setState, mouseToolType, map} = props;
+
+  useEffect(() => {
+    if (mouseToolType === MouseToolType.Null) {
+      setState!({showPanel: true});
+    } else {
+      setState!({showPanel: false});
+      map && map.clearInfoWindow();
+    }
+  }, [mouseToolType]);
+
   return (
     <Container className="inter-plat-app">
       <Container className="inter-plat-header">
@@ -37,19 +56,19 @@ const Home = () => {
         </Container>
       </Container>
       <Container className="inter-plat-container">
-        <Container className="inter-plat-left">
+        <Container className={`inter-plat-left${showPanel ? ' show-panel' : ' not-show-panel'}`}>
           <EventModel />
         </Container>
         <Container className="inter-plat-center">
           <ZWMap />
-          <Container className="inter-plat-other">
+          <Container className={`inter-plat-other${showPanel ? ' show' : ' hidden'}`}>
             <Search />
             <DisplayContent />
             <TemporaryGroup />
             <Intercom />
           </Container>
         </Container>
-        <Container className="inter-plat-right">
+        <Container className={`inter-plat-right${showPanel ? ' show-panel' : ' not-show-panel'}`}>
           <ResourceStatistics />
           <TaskModel />
         </Container>

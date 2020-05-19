@@ -8,5 +8,17 @@
  */
 
 import home from '@/components/home';
+import { Dispatch, RootState } from '@/store';
+import { connect } from 'react-redux';
 
-export default home;
+const mapStateToProps = (state: RootState) => ({
+  showPanel: state.panelControl.showPanel,
+  mouseToolType: state.map.mouseToolType,
+  map: state.map.mapInstance
+});
+
+const mapDispatchToProps = (dispatch: Dispatch): any => ({
+  setState: dispatch.panelControl.setState
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(home);
