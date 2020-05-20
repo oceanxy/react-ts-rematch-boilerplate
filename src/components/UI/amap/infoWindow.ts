@@ -149,7 +149,7 @@ const massPointInfoWindow = (data: InfoWindowResponse) => {
  */
 const fenceInfoWindow = (data: IFenceDetailsResponse) => {
   const {fenceDetails} = data;
-  const {longitude, latitude} = fenceDetails.locationData;
+  const {longitude, latitude} = fenceDetails.locationData.centerPoint;
 
   return `
     <div class="info-window-item" title="监控对象最近一次上报的定位时间">

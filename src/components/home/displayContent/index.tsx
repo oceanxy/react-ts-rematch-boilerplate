@@ -34,16 +34,17 @@ const DisplayContent = (props: Partial<IDisplayContent>) => {
     const {trigger, index} = await getCurTrigger!(triggerName);
     // 拷贝原triggers状态
     const newTriggers = [...triggers!];
+    
     // 重置为相反状态
     newTriggers[index] = {...triggers![index], status: !trigger.status};
-    // 设置状态
+    // 设置状态（触发massPoint组件内部监听trigger字段的useEffect逻辑）
     setState!({triggers: newTriggers});
   };
 
   return (
     <Container className="inter-plat-display-container" conTheme="style3">
       <ItemLegend
-        name="显示内容"
+        name="展示内容"
         icon={false}
         styled={styledComponent.justifyContent}
         nameStyled={styledComponent.centerTitle}

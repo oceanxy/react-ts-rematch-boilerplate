@@ -101,7 +101,7 @@ function fetchHttp(fetchApi: IFetchAPI, params?: any): Promise<AxiosResponse> {
       case EHTTPMethod.POST:
         axiosResponse = axios.post(
           url,
-          qs.stringify(params, {indices: false}),
+          qs.stringify(params, {arrayFormat: 'comma'}),
           {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
         );
         break;

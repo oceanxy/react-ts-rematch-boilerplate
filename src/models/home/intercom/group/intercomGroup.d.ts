@@ -26,7 +26,7 @@ declare global {
     /**
      * 【第三方平台】对讲ID（群组/监控对象的ID）
      */
-    intercomId: string
+    intercomId: number
     /**
      * 当前已激活的群组类别
      */

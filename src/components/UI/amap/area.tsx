@@ -4,7 +4,7 @@
  * @Description: 区域（围栏）组件
  * @Date: 2020-05-11 周一 16:23:37
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-19 周二 16:07:31
+ * @LastModifiedTime: 2020-05-20 周三 09:31:35
  */
 
 import infoWindowTemplate from '@/components/UI/amap/infoWindow';
@@ -56,7 +56,7 @@ const Area = (props: AreaProps) => {
   const areaTrigger: ITrigger = triggers.slice(-1)[0];
 
   /**
-   * 处理围栏点击事件
+   * 处理点击围栏事件
    * @param e
    * @returns {Promise<void>}
    */
@@ -83,7 +83,8 @@ const Area = (props: AreaProps) => {
    */
   const createOverlays = (data: IFenceState['mapFences']) => {
     return data?.fenceList?.map((fence) => {
-      const {longitude, latitude, radius, width, points} = fence.locationData;
+      const {radius, width, points, centerPoint} = fence.locationData;
+      const {longitude, latitude} = centerPoint;
       let tempOverlays;
 
       if (fence.fenceType === FenceType.Circle) {
@@ -166,12 +167,14 @@ const Area = (props: AreaProps) => {
 
   useEffect(() => {
     if (curArea?.fenceDetails) {
-      const {longitude, latitude} = curArea?.fenceDetails?.locationData;
+      const {longitude, latitude} = curArea?.fenceDetails?.locationData.centerPoint;
 
       if (longitude && latitude) {
         infoWindow.setContent(infoWindowTemplate(curArea));
         infoWindow.open(map!, [longitude, latitude]);
         map!.setCenter([longitude, latitude]);
+      } else {
+        console.error('区域的经纬度有误，请确认！');
       }
     }
 

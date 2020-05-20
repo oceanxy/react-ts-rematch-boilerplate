@@ -4,12 +4,12 @@
  * @Description: 实体（监控对象）model
  * @Date: 2020-04-09 周四 09:40:08
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-10 周五 16:26:37
+ * @LastModifiedTime: 2020-05-20 周三 10:05:58
  */
 
 import fetchApis from '@/apis';
 import { APIResponse } from '@/interfaces/api/mock';
-import { store } from '@/store';
+import { RootState, store } from '@/store';
 
 /**
  * 实体（监控对象）类型
@@ -77,16 +77,16 @@ const entity: IEntityModel = {
           supportMonitorType: -1,
           onlineStatus: 1,
           radius: temporaryGroup.radius!,
-          longitude: temporaryGroup.longitude!,
-          latitude: temporaryGroup.latitude!
+          longitude: temporaryGroup.center?.getLng()!,
+          latitude: temporaryGroup.center?.getLat()!
         };
       }
 
       return await fetchApis.fetchEntityByCircle(reqPayload);
     },
-    async fetchDataByRectangle(reqPayload?: IEntityByRectangleRequest): Promise<APIResponse<{monitors: IEntity[]}>> {
+    async fetchDataByRectangle(reqPayload?: IEntityByRectangleRequest, state?: RootState): Promise<APIResponse<{monitors: IEntity[]}>> {
       if (!reqPayload) {
-        const {northWest, southEast} = store.getState().temporaryGroup.backFillInfo;
+        const {northWest, southEast} = state!.temporaryGroup!.backFillInfo;
 
         reqPayload = {
           supportMonitorType: -1,
@@ -98,7 +98,7 @@ const entity: IEntityModel = {
         };
       }
 
-      return await fetchApis.fetchEntityByCircle(reqPayload);
+      return await fetchApis.fetchEntityByRectangle(reqPayload);
     },
     async fetchFixedData(reqPayload?: IEntityRequest): Promise<APIResponse<{monitors: IEntity[]}>> {
       if (!reqPayload) {
@@ -111,14 +111,15 @@ const entity: IEntityModel = {
       return await fetchApis.fetchFixedEntity(reqPayload);
     },
     async fetchConditionData(reqPayload): Promise<APIResponse<{monitors: IEntity[]}>> {
-      const {latitude, longitude, radius} = store.getState().temporaryGroup.backFillInfo;
+      const {backFillInfo} = store.getState().temporaryGroup;
+      const {center, radius} = backFillInfo;
       const request: IEntityByCondition & IEntityByCircleRequest = {
         length: 2000,
         supportMonitorType: -1,
         ageRange: [20, 40],
         radius: radius!,
-        latitude: latitude!,
-        longitude: longitude!,
+        latitude: center?.getLat()!,
+        longitude: center?.getLng()!,
         ...reqPayload
       };
 

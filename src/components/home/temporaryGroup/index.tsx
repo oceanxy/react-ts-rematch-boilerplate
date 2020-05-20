@@ -32,7 +32,7 @@ const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
     data, fetchData, intercomGroupState,
     setIntercomGroupState, unbindTemporaryGroup
   } = props;
-  const {id, curActiveGroupType, name} = intercomGroupState!;
+  const {id, intercomId, curActiveGroupType, name} = intercomGroupState!;
   // 解除临时组绑定时，传递给询问对话框的状态
   const [tempGroup, setShowTempGroup] = useState({visible: false, current: null as ITemporaryGroup | null});
   // 解除绑定loading状态
@@ -92,8 +92,8 @@ const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
       message.success(`临时组（${tempGroup.name}）已解散。`);
 
       // 如果解散临时组时，该临时组的对讲面板处于激活状态，则清空该临时组的对讲面板的所有状态
-      if (id === tempGroup.intercomGroupId) {
-        setIntercomGroupState!({name: '', id: '', curActiveGroupType: CurActiveGroupType.Null});
+      if (intercomId === tempGroup.intercomGroupId) {
+        setIntercomGroupState!({name: '', id: '', intercomId: 0, curActiveGroupType: CurActiveGroupType.Null});
       }
     } else {
       message.success(`未能解散临时组（${tempGroup.name}），请稍后再试。`);
@@ -117,7 +117,7 @@ const TemporaryGroup = (props: Partial<ITemporaryGroupProps>) => {
                 key={`inter-plat-temp-group-item-${index}`}
                 name={tempGroup.name}
                 type={ETriggerType.CLOSE}
-                active={tempGroup.intercomGroupId === id}
+                active={tempGroup.intercomGroupId === intercomId}
                 triggerTitle="解散临时组"
                 onClick={onClick.bind(null, tempGroup)}
                 onTriggerClick={() => setShowTempGroup({visible: true, current: tempGroup})}

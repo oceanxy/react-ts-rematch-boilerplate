@@ -48,7 +48,7 @@ const MouseTool = (props: Partial<IBoundaryProps>) => {
    * @param {any} obj 绘制出来的覆盖物对象。
    */
   const drawOverlay = ({obj}: any) => {
-    // 绘制完成后更新覆盖物状态
+    // 绘制完成后更新覆盖物状态 （触发本组件监听overlay字段的useEffect逻辑）
     setState!({overlay: obj});
     // 结束绘制
     mouseTool.close(true);

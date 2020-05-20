@@ -14,13 +14,13 @@ import { RouteName } from '@/config/router';
  * 路由对象映射
  */
 export type Routes = {
-  [K in RouteName]: IRouteProps;
+  [K in RouteName]?: IRouteProps;
 };
 
 /**
  * 路由路径映射
  */
-export type RoutesMap = { [K in RouteName]: string };
+export type RoutesMap = { [K in RouteName]?: string };
 
 /**
  * 路由接口

@@ -18,12 +18,12 @@ export type RouteName = 'login' | 'home' | 'home2' | 'test' | 'notFound';
  * 路由配置
  */
 const routesConfig: Routes = {
-  login: {
-    path: `${config.basename}/login`,
-    exact: true,
-    component: loadable(() => import('@/containers/login')),
-    title: '登录'
-  },
+  // login: {
+  //   path: `${config.basename}/login`,
+  //   exact: true,
+  //   component: loadable(() => import('@/containers/login')),
+  //   title: '登录'
+  // },
   home: {
     show: true,
     path: config.basename,
@@ -33,25 +33,25 @@ const routesConfig: Routes = {
   },
   home2: {
     show: true,
-    path: `${config.basename}/home2`,
+    path: '/clbs',
     exact: true,
     title: '数据管理'
   },
-  test: {
-    path: `${config.basename}/test`,
-    exact: true,
-    component: loadable(() => import('@/containers/test')),
-    title: '脚手架功能测试',
-    requireAuth: false
-  },
+  // test: {
+  //   path: `${config.basename}/test`,
+  //   exact: true,
+  //   component: loadable(() => import('@/containers/test')),
+  //   title: '脚手架功能测试',
+  //   requireAuth: false
+  // },
 
   // 404(Not Found)
-  notFound: {
-    path: `${config.basename}/*`,
-    exact: true,
-    component: loadable(() => import('@/containers/404')),
-    title: '页面找不到了-404'
-  }
+  // notFound: {
+  //   path: `${config.basename}/*`,
+  //   exact: true,
+  //   component: loadable(() => import('@/containers/404')),
+  //   title: '页面找不到了-404'
+  // }
 };
 
 /**
@@ -71,7 +71,7 @@ const routes = <Routes> Object.fromEntries(
   // 处理路由中的 '//' 为 '/'
   Object.entries(routesConfig).map(([routeName, route]) => {
     // 检测路由中的'//'，并替换为'/'
-    if (route.path && !Array.isArray(route.path)) {
+    if (route?.path && !Array.isArray(route.path)) {
       route.path = route.path.replace('//', '/');
     }
 
@@ -80,7 +80,7 @@ const routes = <Routes> Object.fromEntries(
 );
 
 export const routesMap = <RoutesMap> (
-  Object.fromEntries(Object.entries(routes).map(([routeName, route]) => [routeName, route.path]))
+  Object.fromEntries(Object.entries(routes).map(([routeName, route]) => [routeName, route?.path]))
 );
 
 // eslint-disable-next-line consistent-return

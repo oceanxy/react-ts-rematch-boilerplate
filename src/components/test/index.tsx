@@ -27,7 +27,7 @@ const TestContainer = (props: {
 }) => {
   return (
     <div className="test-color">
-      <Nav title={routes.home.title} to={routesMap.home} />
+      <Nav title={routes.home?.title} to={routesMap.home || '/'} />
       <Increment count={props.test.count} increment={props.increment} incrementAsync={props.incrementAsync} />
       <TestList data={props.test.listData} getData={props.getListData} />
       <TestWebSocket data={props.test.websocketData} getData={props.getWebSocketData}/>

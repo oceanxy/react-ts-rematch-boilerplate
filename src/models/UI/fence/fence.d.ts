@@ -56,17 +56,9 @@ declare global {
    */
   interface ILocation {
     /**
-     * 纬度
-     */
-    latitude: number
-    /**
      * 半径
      */
     radius: number
-    /**
-     * 经度
-     */
-    longitude: number
     /**
      * 线条宽度
      */
@@ -75,6 +67,19 @@ declare global {
      * 点坐标集合
      */
     points: IPoint[]
+    /**
+     * 中心点
+     */
+    centerPoint: {
+      /**
+       * 纬度
+       */
+      latitude: number
+      /**
+       * 经度
+       */
+      longitude: number
+    }
   }
 
   /**

@@ -36,8 +36,9 @@ const members: IIntercomMembersModel = {
         };
       }
 
+      store.dispatch.intercomMembers.updateState({loading: true});
       const response = await fetchApis.fetchIntercomMembers(reqPayload);
-      store.dispatch.intercomMembers.updateState({data: response.data.interlocutorMemberList});
+      store.dispatch.intercomMembers.updateState({data: response.data.interlocutorMemberList, loading: false});
     },
     setState(payload: Partial<IIntercomMembersState>) {
       store.dispatch.intercomMembers.updateState(payload);

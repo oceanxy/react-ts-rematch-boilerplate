@@ -31,7 +31,7 @@ const temporaryGroup: ITemporaryGroupModel = {
   state: {
     data: [],
     ...tempState
-  },
+  } as ITemporaryGroupState,
   reducers: {
     updateState(state: ITemporaryGroupState, payload: Partial<ITemporaryGroupState>): ITemporaryGroupState {
       const {backFillInfo, ...rest} = payload;
@@ -75,7 +75,7 @@ const temporaryGroup: ITemporaryGroupModel = {
 
       store.dispatch.temporaryGroup.updateState(payload);
     },
-    async unbindTemporaryGroup(intercomGroupId: string): Promise<APIResponse> {
+    async unbindTemporaryGroup(intercomGroupId: number): Promise<APIResponse> {
       // 调用第三方解散临时组接口
       store.dispatch.monitoringDispatch.deleteTempGroup();
 

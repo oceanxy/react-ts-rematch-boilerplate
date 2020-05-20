@@ -13,7 +13,7 @@ import Member from '@/components/UI/member';
 import Modal from '@/components/UI/modal';
 import { TemporaryGroupCreationWay } from '@/containers/home/temporaryGroup';
 import { CurActiveGroupType } from '@/models/home/intercom/group';
-import { message } from 'antd';
+import { message, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './index.scss';
 
@@ -69,7 +69,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
 
     message.destroy();
     if (response.retCode === 0) {
-      message.success(`已成功删除成员：（${member.current?.userName}）`);
+      message.success(`已成功删除成员：（${member.current?.monitorName}）`);
     } else {
       message.success('删除成员失败， 请稍后再试！');
     }
@@ -85,25 +85,27 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
 
   return (
     <Container className="inter-plat-intercom-member">
-      {
-        data?.map((member, index) => {
-          return (
-            <Member
-              key={`inter-plat-intercom-member-${index}`}
-              title={member.userName}
-              name={member.userName}
-              online={member.onlineStatus}
-              onClick={handleRemoveMember.bind(null, member)}
-            />
-          );
-        }) ?? null
-      }
-      {
-        // 只有临时组能加人
-        curTempGroupState?.curActiveGroupType === CurActiveGroupType.Temporary ? (
-          <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAddMembers} />
-        ) : null
-      }
+      <Spin delay={100} spinning={loading}>
+        {
+          data?.map((member, index) => {
+            return (
+              <Member
+                key={`inter-plat-intercom-member-${index}`}
+                title={member.monitorName}
+                name={member.monitorName}
+                online={member.onlineStatus}
+                onClick={handleRemoveMember.bind(null, member)}
+              />
+            );
+          })
+        }
+        {
+          // 只有临时组能加人
+          curTempGroupState?.curActiveGroupType === CurActiveGroupType.Temporary ? (
+            <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAddMembers} />
+          ) : null
+        }
+      </Spin>
       <Modal
         width={350}
         visible={member.visible && member.type === 'remove'}
@@ -111,7 +113,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
         onCancel={() => setMember({visible: false, type: undefined, current: undefined})}
         onOk={onRemoveMember}
       >
-        确定从{curActiveGroupType === CurActiveGroupType.Task ? '任务' : '临时'}组中删除成员（{member.current?.userName}）吗？
+        确定从{curActiveGroupType === CurActiveGroupType.Task ? '任务' : '临时'}组中删除成员（{member.current?.monitorName}）吗？
       </Modal>
       <TemporaryGroupCreationWay
         visible={member.visible && member.type === 'add'}

@@ -117,19 +117,19 @@ declare global {
     /**
      * 第三方调度服务引擎
      */
-    hjMediaEngine: HiJoyEngine | null,
+    hjMediaEngine: HiJoyEngine | null
     /**
      * 当前呼叫模式
      */
-    callModeEnum: CallModeEnum,
+    callModeEnum: CallModeEnum
     /**
      * 登录响应状态
      */
-    loginResponseStatus: boolean,
+    loginResponseStatus: boolean
     /**
      * 第三方调度登录接口需要的配置参数
      */
-    config: IMonitoringDispatchConfig
+    config?: IMonitoringDispatchConfig
   }
 
   /**
@@ -147,6 +147,9 @@ declare global {
       updateState(state: IMonitoringDispatchState, payload: Partial<IMonitoringDispatchState>): IMonitoringDispatchState
     }
     effects: {
+      /**
+       * 从后台获取登录第三方服务的参数列表。如果成功获取，则立即调用第三方服务的登录接口
+       */
       fetchData(): void
       /**
        * 设置状态
@@ -191,7 +194,7 @@ declare global {
        * 添加临时组成员
        * @param {number[]} memberIds
        */
-      addTempGroupMember(memberIds: string[]): void
+      addTempGroupMember(memberIds: number[]): void
 
       /**
        * 创建临时组

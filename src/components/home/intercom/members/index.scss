@@ -1,12 +1,20 @@
 .inter-plat-intercom-member {
-  display: flex;
-  overflow-y: auto;
-  width: 280px;
-  height: 118px;
-  flex-wrap: wrap;
   box-shadow: rgba(82, 169, 255, 0.24) 0 0 12px 3px inset;
   padding: 10px;
   margin-top: 10px;
+  width: 280px;
+
+  .ant-spin-nested-loading {
+    display: flex;
+
+    .ant-spin-container {
+      display: flex;
+      flex-wrap: wrap;
+      overflow-y: auto;
+      height: 100px;
+      align-content: flex-start;
+    }
+  }
 
   .icon-container {
     width: unset;

@@ -4,7 +4,7 @@
  * @Description: 图表组件-突发事件周围资源
  * @Date: 2020-01-10 11:46:14
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-18 周一 16:50:01
+ * @LastModifiedTime: 2020-05-20 周三 17:41:36
  */
 
 import Container from '@/components/UI/containerComp';
@@ -20,7 +20,7 @@ import './index.scss';
 interface ISuddenEventProps {
   className: string
   data: IResourceStatisticsData
-  getData: (reqPayload?: ISuddenEventRequest) => void,
+  getData: ISuddenEventsModel['effects']['getData']
   range: IRangeControlState['range'],
   eventId: IEventDetailsData['eventId']
 }
@@ -41,8 +41,8 @@ const SuddenEvents = (props: Partial<ISuddenEventProps>) => {
     },
     grid: {
       left: 20,
-      top: 5,
-      bottom: 20
+      top: 10,
+      bottom: 30
     },
     xAxis: [
       {
@@ -53,7 +53,9 @@ const SuddenEvents = (props: Partial<ISuddenEventProps>) => {
         },
         axisLabel: {
           color: '#ffffff',
-          fontSize: '50%' as unknown as number
+          fontSize: '50%' as unknown as number,
+          interval: 0,
+          rotate: 40
         },
         axisLine: {
           lineStyle: {
@@ -70,7 +72,17 @@ const SuddenEvents = (props: Partial<ISuddenEventProps>) => {
         },
         axisLabel: {
           color: '#ffffff',
-          fontSize: '50%' as unknown as number
+          fontSize: '50%' as unknown as number,
+          margin: 2,
+          formatter: (value: any) => {
+            if (value >= 10000 && value < 10000000) {
+              value = value / 10000 + '万';
+            } else if (value >= 10000000) {
+              value = value / 10000000 + '千万';
+            }
+
+            return value;
+          }
         },
         axisLine: {
           lineStyle: {

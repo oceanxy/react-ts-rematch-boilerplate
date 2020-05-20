@@ -18,7 +18,7 @@ declare global {
     /**
      * 对讲群组ID
      */
-    intercomGroupId: string
+    intercomGroupId: number
     /**
      * 对讲对象状态 0：全部 1：在线 2：离线
      */

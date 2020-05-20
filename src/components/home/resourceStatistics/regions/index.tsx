@@ -50,7 +50,7 @@ const Region = (props: Partial<IRegionProps>) => {
     grid: {
       left: 20,
       top: 10,
-      bottom: 20
+      bottom: 30
     },
     xAxis: [
       {
@@ -61,7 +61,9 @@ const Region = (props: Partial<IRegionProps>) => {
         },
         axisLabel: {
           color: '#ffffff',
-          fontSize: '50%' as unknown as number
+          fontSize: '50%' as unknown as number,
+          interval: 0,
+          rotate: 40
         },
         axisLine: {
           lineStyle: {
@@ -78,7 +80,17 @@ const Region = (props: Partial<IRegionProps>) => {
         },
         axisLabel: {
           color: '#ffffff',
-          fontSize: '50%' as unknown as number
+          fontSize: '50%' as unknown as number,
+          margin: 2,
+          formatter: (value: any) => {
+            if (value >= 10000 && value < 10000000) {
+              value = value / 10000 + '万';
+            } else if (value >= 10000000) {
+              value = value / 10000000 + '千万';
+            }
+
+            return value;
+          }
         },
         axisLine: {
           lineStyle: {

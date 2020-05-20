@@ -4,11 +4,12 @@
  * @Description: 实体（监控对象）类型定义
  * @Date: 2020-04-13 周一 14:16:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-29 周三 15:54:21
+ * @LastModifiedTime: 2020-05-20 周三 09:59:18
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
 import { EntityType } from '@/models/UI/entity/index';
+import { RootState } from '@/store';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
@@ -278,10 +279,11 @@ declare global {
       fetchDataByCircle(reqPayload?: IEntityByCircleRequest): Promise<APIResponse<{monitors: IEntity[]}>>
       /**
        * 根据地图矩形圈选获取实体数据
-       * @param {IEntityByCircleRequest} reqPayload
+       * @param {IEntityByRectangleRequest} reqPayload
+       * @param {RootState} state
        * @returns {Promise<APIResponse<{monitors: IEntity[]}>>}
        */
-      fetchDataByRectangle(reqPayload?: IEntityByRectangleRequest): Promise<APIResponse<{monitors: IEntity[]}>>
+      fetchDataByRectangle(reqPayload?: IEntityByRectangleRequest, state?: RootState): Promise<APIResponse<{monitors: IEntity[]}>>
       /**
        * 获取固定的实体（监控对象）
        * @param {IEntityByCircleRequest} reqPayload

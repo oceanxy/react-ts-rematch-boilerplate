@@ -311,7 +311,7 @@ declare global {
     /**
      * 对象ID（群组ID或者用户ID）
      */
-    objectId: string
+    objectId: number
   }
 
   /**
@@ -377,11 +377,11 @@ declare global {
     /**
      * 临时组ID
      */
-    tempGroupId: string
+    tempGroupId: number
     /**
      * 临时组成员用户ID列表
      */
-    tempGroupMemberMsIdList: string[]
+    tempGroupMemberMsIdList: number[]
   }
 
   /**
@@ -396,7 +396,7 @@ declare global {
     /**
      * 对讲用户ID
      */
-    targetMsId: string
+    targetMsId: number
   }
 
   /**
@@ -522,7 +522,7 @@ declare global {
      * 删除临时组
      * @param {number} tempGroupId 要删除的临时组ID
      */
-    deleteTempGroup(tempGroupId: number): void
+    deleteTempGroup({tempGroupId}: {tempGroupId: number}): void
 
     /**
      * 创建临时组响应事件

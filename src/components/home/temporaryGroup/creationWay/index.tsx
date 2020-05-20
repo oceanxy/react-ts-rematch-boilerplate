@@ -38,7 +38,7 @@ const CreationWay = (props: Partial<ICreationWayProps>) => {
 
       // 设置实体model的状态
       setEntityState!({byCondition});
-      // 激活地图鼠标工具
+      // 激活地图鼠标工具（触发mouseTool组件内部监听mouseToolType字段的useEffect逻辑）
       setAMapState!({
         mouseToolType: type.mouseToolType
       });

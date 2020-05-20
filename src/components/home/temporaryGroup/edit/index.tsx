@@ -13,7 +13,7 @@ import { MouseToolType } from '@/models/UI/amap';
 import { Button, Checkbox, Form, Input, message, Row, Select, Slider } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { CheckboxValueType } from 'antd/es/checkbox/Group';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './index.scss';
 
 /**
@@ -46,12 +46,9 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   } = entityDispatch!;
   const {isShowEditModal, title, loading, backFillInfo} = state!;
   const {radius, name} = backFillInfo;
-
-  // 避免不必要的渲染
-  // if (!isShowEditModal) return null;
-
   const [searchForm] = Form.useForm();
   const [createForm] = Form.useForm();
+  const createFormRef = useRef(null);
   /**
    * 根据圈选范围获取的监控对象临时数组状态
    */
@@ -208,6 +205,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   useEffect(() => {
     if (isShowEditModal) {
       (async () => {
+        // 跳过按条件搜索实体的表单，直接加载实体列表
         if (!byCondition) {
           let response: any;
 
@@ -221,7 +219,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
             response = await fetchFixedData();
           }
 
-          if (response.retCode === 0) {
+          if (+response.retCode === 0) {
             const {monitors} = (response as APIResponse<{monitors: IEntity[]}>).data;
 
             // 临时保存获取到的实体列表（主要用于全选/反选功能）
@@ -239,7 +237,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
 
           // 设置全选、反选复选框的状态
           listenersCheck([]);
-        } else {
+        } /** 加载自定义搜索实体的表单后，按条件搜索实体 */ else {
           setSearchLoading(true);
           const response = await fetchConditionForEntity();
           setSearchLoading(false);
@@ -254,6 +252,13 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
         }
       })();
     }
+
+    return () => {
+      // 清空上一次搜索到的监控对象
+      if (createFormRef.current) {
+        createForm && createForm.setFieldsValue({entities: []});
+      }
+    };
   }, [isShowEditModal]);
 
   return (
@@ -480,6 +485,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
           form={createForm}
           onFinish={onFinish}
           autoComplete="off"
+          ref={createFormRef}
           initialValues={{temporaryGroup: name}}
         >
           <Form.Item
@@ -526,14 +532,16 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                         (
                           <Checkbox.Group onChange={listenersCheck}>
                             {
-                              getFieldValue('entities').map((entity: IEntity) => (
-                                <Checkbox
-                                  key={`temp-group-edit-modal-entity-${entity.userId}`}
-                                  value={entity.userId}
-                                >
-                                  {entity.monitorName}
-                                </Checkbox>
-                              ))
+                              getFieldValue('entities').map((entity: IEntity) => {
+                                return entity.userId ? (
+                                  <Checkbox
+                                    key={`temp-group-edit-modal-entity-${entity.userId}`}
+                                    value={entity.userId}
+                                  >
+                                    {entity.monitorName}
+                                  </Checkbox>
+                                ) : null;
+                              })
                             }
                           </Checkbox.Group>
                         ) :

@@ -63,14 +63,25 @@ const map: IAMapModel = {
         }, [] as EntityType[]);
       }
 
-      const response: APIResponse<MassPointResponse> = await fetchApis.fetchMassPoint(monitorType);
+      // 至少需要显示一种类型时，发送请求
+      if (monitorType?.length) {
+        const response: APIResponse<MassPointResponse> = await fetchApis.fetchMassPoint({monitorType});
 
-      store.dispatch.map.updateState({
-        massPoints: {
-          positionList: response.data.positionList || [],
-          iconSortList: response.data.iconSortList || []
-        }
-      });
+        store.dispatch.map.updateState({
+          massPoints: {
+            positionList: response.data.positionList || [],
+            iconSortList: response.data.iconSortList || []
+          }
+        });
+      } /** 全部关闭时不发送请求，直接清空地图上的点 */ else {
+        store.dispatch.map.updateState({
+          massPoints: {
+            positionList: [],
+            iconSortList: []
+          }
+        });
+      }
+
     },
     async fetchWindowInfo(reqPayload?: InfoWindowRequest): Promise<APIResponse<InfoWindowResponse>> {
       if (!reqPayload) {

@@ -7,12 +7,11 @@
  * @LastModifiedTime: 2019-12-28 14:29:40
  */
 
-import React from 'react';
-import { Route, Redirect, Switch, RouteComponentProps } from 'react-router-dom';
-import { SwitchProps } from 'react-router-dom';
+import config from '@/config';
 import { beforeRouter } from '@/config/router';
 import { IRouteProps, Routes } from '@/interfaces/router';
-import config from '@/config';
+import React from 'react';
+import { Redirect, Route, RouteComponentProps, Switch, SwitchProps } from 'react-router-dom';
 
 /**
  * 渲染路由组件
@@ -37,7 +36,7 @@ const renderRoutes = (
     <Switch {...switchProps}>
       {
         Object.values(routes).map((route, i: number) => (
-          <Route
+          route ? <Route
             key={`react-route-${i}`}
             path={route.path}
             exact={route.exact}
@@ -58,7 +57,7 @@ const renderRoutes = (
 
               return <Redirect to={{pathname: authenticationPath, state: {from: props.location}}} />;
             }}
-          />
+          /> : null
         ))
       }
     </Switch>

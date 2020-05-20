@@ -36,7 +36,7 @@ const intercom: IIntercomModel = {
         store.dispatch.intercomGroup.updateState({
           name: '',
           id: '',
-          intercomId: '',
+          intercomId: -1,
           curActiveGroupType: CurActiveGroupType.Null
         });
       }

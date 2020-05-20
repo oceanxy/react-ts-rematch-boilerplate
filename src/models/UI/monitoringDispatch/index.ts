@@ -308,32 +308,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
     hjMediaEngine: null,
     callModeEnum: CallModeEnum.NULL,
     loginResponseStatus: false,
-    config: {
-      isSupportVideoConferece: true,
-      isSupportVideoCall: true,
-      isSupportAudioConferece: true,
-      isSupportMessageText: false,
-      audioServerIP: 'hj.iwalkie.cn',
-      isSupportRTAudioMessage: false,
-      dispatchServicePort: '9000',
-      isOwnPreventSpeechRole: true,
-      userOwnTempAssignmentIntercomGroupIdList: [],
-      audioServerPort: 9000,
-      pid: '63183d88-5000-492e-b42f-9047f684ced2',
-      isSupportVideoFunc: false,
-      eventServicePort: 443,
-      isSupportMessageImage: false,
-      isSupportFenceEnable: false,
-      custId: 94,
-      name: 'xiaoyun',
-      isSupportAudio: true,
-      attributes: 2,
-      isSupportVideo: false,
-      isSupportSensor: false,
-      id: 6590,
-      isSupportGis: false,
-      isSupportPatrolEnable: false
-    }
+    config: undefined
   },
   reducers: {
     updateState(state: IMonitoringDispatchState, payload: Partial<IMonitoringDispatchState>): IMonitoringDispatchState {
@@ -352,7 +327,8 @@ const monitoringDispatch: IMonitoringDispatchModel = {
         store.dispatch.monitoringDispatch.updateState({config});
         store.dispatch.monitoringDispatch.fetchMediaServiceEngine(config);
       } else {
-        message.error('登录对讲服务失败！');
+        // 后续修改成自动登录
+        message.error('登录对讲服务失败，请刷新页面重试！');
       }
     },
     setState(payload: Partial<IMonitoringDispatchState>): void {
@@ -375,12 +351,8 @@ const monitoringDispatch: IMonitoringDispatchModel = {
         updateState, login, onDuplexCallingRing
       } = store.dispatch.monitoringDispatch;
 
-      // 创建
+      // 创建第三方调度服务引擎
       const hjMediaEngine = hjMediaService.createEngine(mediaGlobalConfig);
-      // 获取到
-      updateState({hjMediaEngine});
-      login();
-
       // ================================= 注册事件 =======================================
       hjMediaEngine.audioEngine.onLoginResponse = onLoginResponse;
       hjMediaEngine.audioEngine.onLogout = onLogout;
@@ -392,7 +364,14 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       hjMediaEngine.audioEngine.onTempGroupUpdate = onTempGroupUpdate;
       hjMediaEngine.audioEngine.onAddTempGroupMemberResponse = onAddTempGroupMemberResponse;
 
-      // todo 加一个电话接通事件
+      // TODO 加一个电话接通事件
+
+      // ==================================================================================
+
+      // 更新服务引擎的状态
+      updateState({hjMediaEngine});
+      // 登录第三方调度服务
+      login();
     },
     login(): void {
       const {hjMediaEngine} = store.getState().monitoringDispatch;
@@ -401,6 +380,16 @@ const monitoringDispatch: IMonitoringDispatchModel = {
         // 调度服务登录
         hjMediaEngine.audioEngine.login();
       }
+    },
+    onLoginResponse(response) {
+      if (response.result === LoginResultEnum.LOGIN_RESULT_SUCCESS) {
+        // 设置登录状态
+        store.dispatch.monitoringDispatch.updateState({loginResponseStatus: true});
+      }
+    },
+    onLogout(): void {
+      store.dispatch.monitoringDispatch.updateState({loginResponseStatus: false});
+      message.info('第三方调度服务已退出');
     },
     startCalling(request: StartCallingRequest): void {
       const {hjMediaEngine} = store.getState().monitoringDispatch;
@@ -447,7 +436,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
         message.error('第三方对讲服务未启动！');
       }
     },
-    addTempGroupMember(memberIds: string[]): void {
+    addTempGroupMember(memberIds: number[]): void {
       const {
         monitoringDispatch: {hjMediaEngine},
         intercomGroup: {intercomId}
@@ -463,61 +452,13 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       }
     },
     createTempGroup(request: CreateTempGroupRequest): void {
-      const {hjMediaEngine} = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
-      if (hjMediaEngine) {
+      if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.createTempGroup(request);
       } else {
         message.error('第三方对讲服务未启动！');
       }
-    },
-    deleteTempGroup(tempGroupId: number): void {
-      const {hjMediaEngine} = store.getState().monitoringDispatch;
-
-      if (hjMediaEngine) {
-        hjMediaEngine.audioEngine.deleteTempGroup(tempGroupId);
-      } else {
-        message.error('第三方对讲服务未启动！');
-      }
-    },
-    remoteControlMs(request: RemoteControlMsRequest): void {
-      const {hjMediaEngine} = store.getState().monitoringDispatch;
-
-      if (hjMediaEngine) {
-        hjMediaEngine.audioEngine.remoteControlMs(request);
-
-        // 记录日志
-        store.dispatch.log.addLog({
-          type: request.controlCmd === ControlCmd.BAN ?
-            LogType.Ban :
-            LogType.LiftBan,
-          id: store.getState().intercomGroup.id
-        });
-      } else {
-        message.error('第三方对讲服务未启动！');
-      }
-    },
-
-    onLoginResponse(response) {
-      if (response.result === LoginResultEnum.LOGIN_RESULT_SUCCESS) {
-        // 设置登录状态
-        store.dispatch.monitoringDispatch.updateState({loginResponseStatus: true});
-      }
-    },
-    onLogout(): void {
-      store.dispatch.monitoringDispatch.updateState({loginResponseStatus: false});
-    },
-    onTempGroupList(response): void {
-      // TODO 更新临时组数据
-    },
-    onDuplexCallingRing(response: DuplexCallingRingResponse) {
-      store.dispatch.intercomOperation.onDuplexCallingRing(response);
-    },
-    onCallingStartResponse(response): void {
-      store.dispatch.intercomOperation.onCallingStartResponse(response);
-    },
-    onCallingStop(response): void {
-      // TODO 主呼停止事件处理（非主动停止主呼时）
     },
     async onCreateTempGroupResponse(response) {
       // 关闭创建临时组loading状态以及关闭创建临时组对话框
@@ -544,6 +485,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
         if (Number(res.retCode) === 0) {
           // 成功创建临时组后，刷新临时组数据
           store.dispatch.temporaryGroup.fetchData();
+
           message.success('创建临时组成功！');
         } else {
           message.warning('创建临时组失败，请稍候再试！');
@@ -551,6 +493,44 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       } else {
         message.warning('创建临时组失败，请稍候再试！');
       }
+    },
+    deleteTempGroup(tempGroupId: number): void {
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
+
+      if (hjMediaEngine && loginResponseStatus) {
+        hjMediaEngine.audioEngine.deleteTempGroup({tempGroupId});
+      } else {
+        message.error('第三方对讲服务未启动！');
+      }
+    },
+    remoteControlMs(request: RemoteControlMsRequest): void {
+      const {hjMediaEngine} = store.getState().monitoringDispatch;
+
+      if (hjMediaEngine) {
+        hjMediaEngine.audioEngine.remoteControlMs(request);
+
+        // 记录日志
+        store.dispatch.log.addLog({
+          type: request.controlCmd === ControlCmd.BAN ?
+            LogType.Ban :
+            LogType.LiftBan,
+          id: store.getState().intercomGroup.id
+        });
+      } else {
+        message.error('第三方对讲服务未启动！');
+      }
+    },
+    onTempGroupList(response): void {
+      // TODO 更新临时组数据
+    },
+    onDuplexCallingRing(response: DuplexCallingRingResponse) {
+      store.dispatch.intercomOperation.onDuplexCallingRing(response);
+    },
+    onCallingStartResponse(response): void {
+      store.dispatch.intercomOperation.onCallingStartResponse(response);
+    },
+    onCallingStop(response): void {
+      // TODO 主呼停止事件处理（非主动停止主呼时）
     },
     onTempGroupUpdate(response): void {
       // TODO 临时组更新

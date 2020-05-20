@@ -524,7 +524,7 @@ const mocks: Mocks = {
     data: {
       statistics: {
         'itemName|7': ['@cname'],
-        'totalNum|7': ['@integer(100,500)']
+        'totalNum|7': ['@integer(10000,50000)']
       }
     }
   },
@@ -534,7 +534,7 @@ const mocks: Mocks = {
     data: {
       statistics: {
         'itemName|7': ['@cname'],
-        'totalNum|7': ['@integer(100,500)']
+        'totalNum|7': ['@integer(10000,50000)']
       }
     }
   },
@@ -704,7 +704,7 @@ const mocks: Mocks = {
         {
 
           'onlineStatus': () => Random.integer(0, 1),
-          'userName': monitorName,
+          'monitorName': monitorName,
           'type': () => Random.integer(0, 2),
           'userId': () => Random.integer(),
           'deviceId': () => Random.integer().toString(),
@@ -929,7 +929,11 @@ const mocks: Mocks = {
                 '106.507062',
                 '29.533976'
               ]
-            ]
+            ],
+            'centerPoint': {
+              'latitude': 29.540497,
+              'longitude': 106.500611
+            }
           },
           'fenceType': 'zw_m_line',
           'transparency': '78',
@@ -939,8 +943,10 @@ const mocks: Mocks = {
         {
           'fenceName': '北京中位科技-标注',
           'locationData': {
-            'latitude': 29.540497,
-            'longitude': 106.500611
+            'centerPoint': {
+              'latitude': 29.540497,
+              'longitude': 106.500611
+            }
           },
           'fenceType': 'zw_m_marker',
           'transparency': '78',
@@ -950,9 +956,11 @@ const mocks: Mocks = {
         {
           'fenceName': '北京中位科技-圆形',
           'locationData': {
-            'latitude': 29.534322,
             'radius': 183.41971479710175,
-            'longitude': 106.494165
+            'centerPoint': {
+              'latitude': 29.540497,
+              'longitude': 106.500611
+            }
           },
           'fenceType': 'zw_m_circle',
           'transparency': '78',
@@ -968,7 +976,11 @@ const mocks: Mocks = {
               [106.535276, 29.523987],
               [106.512702, 29.516817],
               [106.481803, 29.515846]
-            ]
+            ],
+            'centerPoint': {
+              'latitude': 29.540497,
+              'longitude': 106.500611
+            }
           },
           'fenceType': 'zw_m_polygon',
           'transparency': '78',
@@ -985,9 +997,11 @@ const mocks: Mocks = {
       'fenceDetails': {
         'fenceName': 'yuan',
         'locationData': {
-          'latitude': 29.530537,
           'radius': 1658.8359961204733,
-          'longitude': 106.495806
+          'centerPoint': {
+            'latitude': 29.540497,
+            'longitude': 106.500611
+          }
         },
         'fenceType': 'zw_m_circle',
         'transparency': '50',

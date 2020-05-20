@@ -29,7 +29,7 @@ declare global {
     /**
      * 临时组ID（第三方的对讲组ID）
      */
-    intercomGroupId: string
+    intercomGroupId: number
     /**
      * 临时组名称
      */
@@ -146,7 +146,7 @@ declare global {
        * @param {string} intercomGroupId
        * @returns {Promise<APIResponse>}
        */
-      unbindTemporaryGroup(intercomGroupId: string): Promise<APIResponse>
+      unbindTemporaryGroup(intercomGroupId: number): Promise<APIResponse>
       /**
        * 创建临时组
        * @returns {Promise<APIResponse>}
