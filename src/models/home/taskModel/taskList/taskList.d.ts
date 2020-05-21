@@ -59,9 +59,9 @@ declare global {
      */
     data: ITaskListResponse['taskPageInfo']
     /**
-     * 当前选中的任务ID
+     * 当前选中的任务对象
      */
-    curSelectedTaskId: string
+    curSelectedTask?: ITask
   }
 
   /**

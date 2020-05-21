@@ -4,7 +4,7 @@
  * @Description: 任务列表
  * @Date: 2020-04-13 周一 17:18:47
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-18 周一 10:45:48
+ * @LastModifiedTime: 2020-05-21 周四 15:46:33
  */
 
 import fetchApis from '@/apis';
@@ -21,7 +21,7 @@ const taskList: ITaskListModel = {
       page: 1,
       end: 0
     },
-    curSelectedTaskId: ''
+    curSelectedTask: undefined
   },
   reducers: {
     updateState(state, payload) {
@@ -35,42 +35,46 @@ const taskList: ITaskListModel = {
     async fetchData(reqPayload, state) {
       let {selectFirstData, ...rest} = reqPayload!;
       const {eventId, monitorId} = state!.eventList.curSelectedEvent;
+      let defaultReqPayload: any;
 
+      // 如果选中了事件，则按照事件查任务
       if (eventId) {
-        const defaultReqPayload: ITaskListRequest = {
+        defaultReqPayload = <ITaskListRequest> {
           monitorId: monitorId!,
-          queryType: -1,
+          queryType: 1,
           taskStatus: -1,
           eventId,
           start: 0,
           length: 2000
         };
+      } /** 如果未选中事件，则查询全部任务 */ else {
+        defaultReqPayload = <ITaskListRequest> {
+          length: 2000
+        };
+      }
 
-        if (!rest) {
-          rest = defaultReqPayload;
-        } else {
-          rest = {
-            ...defaultReqPayload,
-            ...rest
-          };
-        }
+      // 如果组件传入了除selectFirstData之外的其余参数，则合并之
+      rest = {
+        ...defaultReqPayload,
+        ...rest
+      };
 
-        const response: APIResponse<ITaskListResponse> = await fetchApis.fetchTaskList(rest);
-        const {taskList, taskStatistics} = store.dispatch;
-        const {taskPageInfo, taskStatistics: tsData} = response.data;
-        const records = taskPageInfo?.records;
+      // 调用后端接口并获取数据
+      const response: APIResponse<ITaskListResponse> = await fetchApis.fetchTaskList(rest);
+      const {taskPageInfo, taskStatistics: tsData} = response.data;
+      const records = taskPageInfo?.records;
 
-        // 更新任务列表
-        taskList.updateState({data: taskPageInfo});
-        // 更新任务统计数量
-        taskStatistics.updateData(tsData);
+      // 更新任务列表
+      const {taskList, taskStatistics} = store.dispatch;
+      taskList.updateState({data: taskPageInfo});
+      // 更新任务统计数量
+      taskStatistics.updateData(tsData);
 
-        // 自动选中当前第一条数据
-        if (records?.length && selectFirstData) {
-          taskList.updateState({curSelectedTaskId: records[0].taskId});
-        }
+      // 自动选中当前第一条数据
+      if (records?.length && selectFirstData) {
+        taskList.updateState({curSelectedTask: records[0]});
       } else {
-        throw new Error('获取任务列表的参数有误，请确认！');
+        taskList.updateState({curSelectedTask: undefined});
       }
     },
     async setState(payload) {

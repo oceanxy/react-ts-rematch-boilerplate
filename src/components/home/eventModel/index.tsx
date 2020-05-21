@@ -20,10 +20,10 @@ const EventModel = () => {
       titleExtraElementStyle={{ marginLeft: 10 }}
       titleExtraElement={
         <React.Fragment>
-          <ItemLegend name={eventTypeText[4]} iconColor={eventTypeColor[4]} />
-          <ItemLegend name={eventTypeText[3]} iconColor={eventTypeColor[3]} />
-          <ItemLegend name={eventTypeText[2]} iconColor={eventTypeColor[2]} />
           <ItemLegend name={eventTypeText[1]} iconColor={eventTypeColor[1]} />
+          <ItemLegend name={eventTypeText[2]} iconColor={eventTypeColor[2]} />
+          <ItemLegend name={eventTypeText[3]} iconColor={eventTypeColor[3]} />
+          <ItemLegend name={eventTypeText[4]} iconColor={eventTypeColor[4]} />
         </React.Fragment>
       }
     >

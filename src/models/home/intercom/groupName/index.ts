@@ -35,7 +35,7 @@ export enum CurActiveGroupType {
  * 对讲群组model
  * @type {{effects: {setState(payload: Partial<IIntercomGroupState>): void}; reducers: {updateState(state, payload): {name: string; curActiveGroupType: CurActiveGroupType; id: string}}; state: {name: string; curActiveGroupType: CurActiveGroupType; id: string}}}
  */
-const group: IIntercomGroupModel = {
+const group: IIntercomGroupNameModel = {
   state: {
     name: '',
     id: '',
@@ -51,10 +51,10 @@ const group: IIntercomGroupModel = {
     }
   },
   effects: {
-    setState(payload: Partial<IIntercomGroupState>): void {
+    setState(payload: Partial<IIntercomGroupNameState>): void {
       // 根据当前激活群组类型自动打开/关闭对讲面板
       store.dispatch.intercom.setActive(Boolean(payload.curActiveGroupType));
-      store.dispatch.intercomGroup.updateState(payload);
+      store.dispatch.intercomGroupName.updateState(payload);
     }
   }
 };

@@ -3,15 +3,15 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 任务操作按钮组件
  * @Date: 2020-04-15 周三 11:48:41
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-15 周三 11:48:41
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-21 周四 17:06:10
  */
 
 import Container from '@/components/UI/containerComp';
 import Icon, { IconSource } from '@/components/UI/iconComp';
 import CompleteTask from '@/containers/home/taskModel/completeTask';
 import EditTask from '@/containers/home/taskModel/editTask';
-import { CurActiveGroupType } from '@/models/home/intercom/group';
+import { CurActiveGroupType } from '@/models/home/intercom/groupName';
 import { TaskStatus } from '@/models/home/taskModel/taskDetails';
 import { message } from 'antd';
 import React from 'react';
@@ -19,12 +19,12 @@ import './index.scss';
 
 interface ITaskOperationProps {
   data?: ITask
-  intercomGroupState: IIntercomGroupState
+  intercomGroupState: IIntercomGroupNameState
   isShowEditTaskModal: IEditTaskState['isShowModal']
   isShowCompleteTaskModal: ICompleteTaskState['isShowModal']
   showEditTaskModal: IEditTaskModel['effects']['showModal']
   showCompleteTaskModal: ICompleteTaskModel['effects']['showModal']
-  setIntercomGroupState: IIntercomGroupModel['effects']['setState']
+  setIntercomGroupState: IIntercomGroupNameModel['effects']['setState']
 }
 
 /**
@@ -57,6 +57,7 @@ const OperationTask = (props: Partial<ITaskOperationProps>) => {
         setIntercomGroupState!({
           name: data.taskName,
           id: data.taskId,
+          intercomId: data.intercomId,
           curActiveGroupType: CurActiveGroupType.Task
         });
       } else if (curActiveGroupType === CurActiveGroupType.Task) {

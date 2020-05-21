@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 第三方调度服务API类型定义
  * @Date: 2020-04-25 周六 14:17:44
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-25 周六 14:17:44
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-21 周四 17:25:42
  */
 
 import {
@@ -335,7 +335,7 @@ declare global {
   /**
    * 退出群组request
    */
-  interface ExitGroupRequest {
+  interface JoinOrExitGroupRequest {
     /**
      * 退出群主ID
      */
@@ -453,9 +453,15 @@ declare global {
     stopCalling(): void
 
     /**
+     * 加入群组
+     * @param {{groupId: number}} request
+     */
+    joinGroup(request: JoinOrExitGroupRequest): void
+
+    /**
      * 退出群组
      */
-    exitGroup(request: ExitGroupRequest): void
+    exitGroup(request: JoinOrExitGroupRequest): void
 
     /**
      * 删除群组成员

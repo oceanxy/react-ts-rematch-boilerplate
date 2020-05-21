@@ -4,12 +4,11 @@
  * @Description: 任务详情
  * @Date: 2020-04-14 周二 09:24:12
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-21 周二 09:56:15
+ * @LastModifiedTime: 2020-05-21 周四 17:08:20
  */
 
 import fetchApis from '@/apis';
 import { ESeverity } from '@/components/UI/itemLegend';
-import { CurActiveGroupType } from '@/models/home/intercom/group';
 import { store } from '@/store';
 
 /**
@@ -134,6 +133,7 @@ const defaultData: ITask = {
   startTime: null,
   status: 0,
   taskId: '',
+  intercomId: -1,
   taskLevel: 0,
   taskName: '',
   taskPeriod: TaskPeriod.Immediate,
@@ -153,26 +153,28 @@ const taskDetails: ITaskDetailsModel = {
     data: defaultData
   },
   reducers: {
-    updateData: (state, data) => {
+    updateData: (state, payload) => {
       return {
         ...state,
-        data
-      };
-    },
-    clearData() {
-      return {
-        data: defaultData
+        ...payload
       };
     }
   },
   effects: {
     async fetchData(reqPayload?: ITaskDetailsRequest) {
       if (!reqPayload) {
-        reqPayload = {taskId: store.getState().taskList.curSelectedTaskId};
+        reqPayload = {taskId: store.getState().taskList.curSelectedTask!.taskId};
       }
 
       const response = await fetchApis.fetchTaskDetails(reqPayload);
-      store.dispatch.taskDetails.updateData(response.data.taskInfo);
+      store.dispatch.taskDetails.updateData({data: response.data.taskInfo});
+    },
+    setState(payload?: Partial<ITaskDetailsState>) {
+      if (payload) {
+        store.dispatch.taskDetails.updateData(payload);
+      } else {
+        store.dispatch.taskDetails.updateData({data: defaultData});
+      }
     }
   }
 };

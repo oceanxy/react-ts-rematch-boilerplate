@@ -1,7 +1,7 @@
 /**
  * @Author: Oceanxy
  * @Email: xieyang@zwlbs.com
- * @Description: 对讲成员组件
+ * @Description: 临时组/任务组对讲成员组件
  * @Date: 2020-04-21 周二 15:45:40
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
  * @LastModifiedTime: 2020-05-15 周五 13:53:02
@@ -12,13 +12,13 @@ import Icon, { IconSource } from '@/components/UI/iconComp';
 import Member from '@/components/UI/member';
 import Modal from '@/components/UI/modal';
 import { TemporaryGroupCreationWay } from '@/containers/home/temporaryGroup';
-import { CurActiveGroupType } from '@/models/home/intercom/group';
+import { CurActiveGroupType } from '@/models/home/intercom/groupName';
 import { message, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './index.scss';
 
 interface IIntercomMembersProps {
-  curTempGroupState: IIntercomGroupState
+  curTempGroupState: IIntercomGroupNameState
   state: IIntercomMembersState
   dispatches: IIntercomMembersModel['effects']
   isActiveIntercom: IIntercomState['active']
@@ -101,9 +101,15 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
         }
         {
           // 只有临时组能加人
-          curTempGroupState?.curActiveGroupType === CurActiveGroupType.Temporary ? (
-            <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAddMembers} />
-          ) : null
+          !loading ?
+            curTempGroupState?.curActiveGroupType === CurActiveGroupType.Temporary ?
+              (
+                <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAddMembers} />
+              ) :
+              !data?.length ?
+                <div className="no-data-warn">暂无成员</div> :
+                null :
+            null
         }
       </Spin>
       <Modal

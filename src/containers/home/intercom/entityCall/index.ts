@@ -12,7 +12,7 @@ import { RootState } from '@/store';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
-  curTempGroupState: state.intercomGroup,
+  curTempGroupState: state.intercomGroupName,
   curMassPoint: state.map.curMassPoint
 });
 

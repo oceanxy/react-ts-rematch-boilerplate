@@ -17,27 +17,27 @@ import React, { useEffect } from 'react';
 import './index.scss';
 
 interface ITaskDetailsProps {
-  data: ITaskDetailsState['data'];
-  curSelTaskId: ITaskListState['curSelectedTaskId'];
-  fetchData: ITaskDetailsModel['effects']['fetchData'];
-  clearData: ITaskDetailsModel['reducers']['clearData'];
+  data: ITaskDetailsState['data']
+  curSelTask: ITaskListState['curSelectedTask']
+  fetchData: ITaskDetailsModel['effects']['fetchData']
+  setState: ITaskDetailsModel['effects']['setState']
 }
 
 const TaskDetails = (props: Partial<ITaskDetailsProps>) => {
-  const {data, curSelTaskId, fetchData, clearData} = props;
-
-  useEffect(() => {
-    if (curSelTaskId) {
-      fetchData!({taskId: curSelTaskId});
-    } else {
-      clearData!();
-    }
-  }, [curSelTaskId]);
+  const {data, curSelTask, fetchData, setState} = props;
 
   const dateDuplicateText = data?.dateDuplicateType
     .split(',')
     .map((str) => dateDuplicateTypeText[Number(str)])
     .join('，');
+
+  useEffect(() => {
+    if (curSelTask?.taskId) {
+      fetchData!({taskId: curSelTask.taskId});
+    } else {
+      setState!();
+    }
+  }, [curSelTask?.taskId]);
 
   return (
     <Container conTheme="style1" style={{marginTop: 10}}>

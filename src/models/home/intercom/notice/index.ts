@@ -7,7 +7,7 @@
  * @LastModifiedTime: 2020-04-23 周四 10:42:05
  */
 
-import { CurActiveGroupType } from '@/models/home/intercom/group';
+import { CurActiveGroupType } from '@/models/home/intercom/groupName';
 import { store } from '@/store';
 import { message } from 'antd';
 
@@ -32,7 +32,7 @@ const notice: IIntercomNoticeModel = {
           hjMediaEngine
         },
         intercomNotice: {value},
-        intercomGroup: {curActiveGroupType, intercomId}
+        intercomGroupName: {curActiveGroupType, intercomId}
       } = state;
 
       if (!reqPayload) {

@@ -31,20 +31,20 @@ const members: IIntercomMembersModel = {
         const state = store.getState();
 
         reqPayload = {
-          intercomGroupId: state.intercomGroup.intercomId,
+          intercomGroupId: state.intercomGroupName.intercomId,
           interlocutorStatus: 0
         };
       }
 
       store.dispatch.intercomMembers.updateState({loading: true});
       const response = await fetchApis.fetchIntercomMembers(reqPayload);
-      store.dispatch.intercomMembers.updateState({data: response.data.interlocutorMemberList, loading: false});
+      store.dispatch.intercomMembers.updateState({data: response?.data?.interlocutorMemberList || [], loading: false});
     },
     setState(payload: Partial<IIntercomMembersState>) {
       store.dispatch.intercomMembers.updateState(payload);
     },
     async removeMember(member) {
-      const {intercomId, id} = store.getState().intercomGroup;
+      const {intercomId, id} = store.getState().intercomGroupName;
 
       // 调用第三方接口
       store.dispatch.monitoringDispatch.removeTempGroupMember({
@@ -69,7 +69,7 @@ const members: IIntercomMembersModel = {
       return response;
     },
     async addMember(memberIds: number[]): Promise<APIResponse> {
-      const {id} = store.getState().intercomGroup;
+      const {id} = store.getState().intercomGroupName;
 
       const response = await fetchApis.addMember(<IIntercomAddMembersRequest> {
         intercomGroupId: id,

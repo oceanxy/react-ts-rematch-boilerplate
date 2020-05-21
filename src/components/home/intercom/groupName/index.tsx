@@ -11,11 +11,11 @@ import ItemLegend from '@/components/UI/itemLegend';
 import styledBlocks from '@/styled';
 import React from 'react';
 
-interface IIntercomGroupProps {
-  name: IIntercomGroupState['name']
+interface IIntercomGroupNameProps {
+  name: IIntercomGroupNameState['name']
 }
 
-const IntercomGroupName = (props: Partial<IIntercomGroupProps>) => {
+const IntercomGroupName = (props: Partial<IIntercomGroupNameProps>) => {
   const {name} = props;
 
   return (

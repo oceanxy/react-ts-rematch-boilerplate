@@ -7,10 +7,10 @@
  * @LastModifiedTime: 2020-04-21 周二 15:05:35
  */
 
-import IntercomGroup from '@/components/home/intercom/group';
+import IntercomGroupName from '@/components/home/intercom/groupName';
 import { RootState } from '@/store';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: RootState) => ({name: state.intercomGroup.name});
+const mapStateToProps = (state: RootState) => ({name: state.intercomGroupName.name});
 
-export default connect(mapStateToProps)(IntercomGroup);
+export default connect(mapStateToProps)(IntercomGroupName);

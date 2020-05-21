@@ -17,12 +17,16 @@ import { getEntityTypeText } from '@/utils/helper';
  * @returns {string}
  */
 function getTasks(tasks: ITask[]) {
-  return `
-    <p class="task-tag">当前任务</p>
-    <ul class="task-item">
-      ${generatorTaskItems(tasks)}
-    </ul>
-  `;
+  const taskList = generatorTaskItems(tasks);
+
+  if (tasks?.length) {
+    return `
+      <p class="task-tag">当前任务</p>
+      <ul class="task-item">${taskList}</ul>
+    `;
+  }
+
+  return '<p class="task-tag">当前暂无任务</p>';
 }
 
 /**

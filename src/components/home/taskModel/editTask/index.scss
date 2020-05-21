@@ -116,176 +116,162 @@
             }
           }
 
-          .ant-picker {
-            .ant-picker-active-bar {
-              background: #40a9ff;
-            }
-          }
-
-          &.input textarea {
-            resize: none;
-          }
-
-          &.input input,
-          &.input textarea,
-          .ant-picker {
-            padding: 4px 10px;
-          }
-
-          &.input input,
-          &.input textarea,
-          .ant-select .ant-select-selector,
-          .ant-picker {
-            @include bg;
-            width: 100%;
-            outline: none;
-            color: #a8aeba;
-          }
-
-          &.input input:hover,
-          &.input textarea:hover,
-          &:hover .ant-select-selector,
-          .ant-picker:hover {
-            @include bg_hover;
-          }
-
-          &.input input:focus,
-          &.input textarea:focus,
-          .ant-select.ant-select-focused .ant-select-selector,
-          .ant-picker.ant-picker-focused {
-            @include bg_focus;
-          }
-
           &.ant-form-item-has-error .ant-select .ant-select-selector,
-          &.ant-form-item-has-error.input input,
-          &.ant-form-item-has-error.input textarea {
+          &.ant-form-item-has-error .ant-input {
             border-color: #ff4d4f !important;
+            @include bg;
           }
 
-          .ant-col.ant-form-item-control {
-            .ant-select-selector {
-              padding: 0;
-
-              .ant-select-selection-search {
-                input {
-                  margin-left: 10px;
-                }
-              }
-
-              .ant-select-selection-placeholder {
-                color: #a8aeba;
-                opacity: 1;
-              }
-            }
-
-            .ant-select-clear,
-            .ant-picker-clear {
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              color: #999;
-              background: none;
-              transition: all .3s cubic-bezier(.645, .045, .355, 1);
-
-              &:hover {
-                transform: scale(1.2);
-                color: #3b7caf;
-              }
-            }
-
-            .ant-picker-clear {
-              &:hover {
-                transform: scale(1.2) translate(5%, -45%);
-              }
-            }
-          }
-
-          &.radio,
-          &.checkbox {
-            &.radio-require .ant-form-item-label label:before {
-              display: inline-block;
-              margin-right: .208vw;
-              color: #ff4d4f;
-              font-size: .729vw;
-              font-family: SimSun, sans-serif;
-              line-height: 1;
-              content: '*';
-            }
-
-            .ant-radio-wrapper,
-            .ant-checkbox-wrapper {
-              margin-right: 10px;
-              margin-left: 0;
-
-              &:hover {
-                .ant-checkbox,
-                .ant-radio {
-                  &:after {
-                    @include bg_hover;
-                  }
-                }
-              }
-
-              &:hover {
-                .ant-radio-inner,
-                .ant-checkbox-inner {
-                  @include bg_hover;
-                  transform: scale(1);
-                }
-              }
-            }
-
-            .ant-radio-inner,
-            .ant-checkbox-inner {
-              transform: scale(0.9);
-              @include bg;
-            }
-          }
-
-          .ant-select-selection-item {
-            background: none;
-            @include border-color;
-          }
-
-          &.slider .ant-slider {
-            .ant-slider-handle,
-            .ant-slider-track {
-              transition: background, border .3s cubic-bezier(.645, .045, .355, 1);
-            }
-
-            .ant-slider-rail,
-            .ant-slider-track {
-              @include bg;
-            }
-
-            .ant-slider-track,
-            .ant-slider-track-1 {
-              border: 1px solid rgba(45, 60, 76, 1);
-              background: rgb(52, 99, 139);
-            }
-
-            .ant-slider-handle {
-              border: 1px solid rgba(45, 60, 76, .4);
-              background: rgb(52, 99, 139);
-
-              &.ant-slider-handle-click-focused {
-                border-color: rgba(64, 169, 255, .42);
-                box-shadow: 0 0 0 6px rgba(24, 144, 255, .12);
-              }
-            }
-
-            &:hover {
-              .ant-slider-track,
-              .ant-slider-handle {
-                @include bg-hover;
-              }
-            }
+          &.radio-require .ant-form-item-label label:before {
+            display: inline-block;
+            margin-right: .208vw;
+            color: #ff4d4f;
+            font-size: .729vw;
+            font-family: SimSun, sans-serif;
+            line-height: 1;
+            content: '*';
           }
         }
       }
     }
   }
 }
+
+//===================================antd 组件样式覆盖================================================
+
+.ant-select.ant-select-multiple .ant-select-selection-item {
+  background: none;
+  @include border-color;
+}
+
+.ant-input.ant-input,
+.ant-select.ant-select .ant-select-selector,
+.ant-picker.ant-picker {
+  @include bg;
+  width: 100%;
+  outline: none;
+  color: #a8aeba;
+  padding: 4px 10px;
+  line-height: 1.6715;
+
+  &.ant-select-selector {
+    padding: 0;
+    line-height: inherit;
+
+    .ant-select-selection-search {
+      input {
+        margin-left: 10px;
+      }
+    }
+
+    .ant-select-selection-placeholder {
+      color: #a8aeba;
+      opacity: 1;
+    }
+  }
+
+  & .ant-picker-active-bar {
+    background: #40a9ff;
+  }
+
+  &.ant-input {
+    resize: none;
+  }
+
+  &.ant-input-focused,
+  &.ant-select-focused .ant-select-selector,
+  &.ant-picker-focused {
+    @include bg_focus;
+  }
+}
+
+.ant-input.ant-input .ant-input-clear,
+.ant-select.ant-select .ant-select-clear,
+.ant-picker.ant-picker .ant-picker-clear {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+  background: none;
+  transition: all .3s cubic-bezier(.645, .045, .355, 1);
+
+  &:hover {
+    transform: scale(1.2);
+    color: #3b7caf;
+  }
+
+  &.ant-picker-clear {
+    &:hover {
+      transform: scale(1.2) translate(5%, -45%);
+    }
+  }
+}
+
+.ant-radio-group.ant-radio-group,
+.ant-checkbox-group.ant-checkbox-group {
+  .ant-radio-wrapper,
+  .ant-checkbox-wrapper {
+    margin-right: 10px;
+    margin-left: 0;
+
+    &:hover {
+      .ant-checkbox,
+      .ant-radio {
+        &:after {
+          @include bg_hover;
+        }
+      }
+    }
+
+    &:hover {
+      .ant-radio-inner,
+      .ant-checkbox-inner {
+        @include bg_hover;
+        transform: scale(1);
+      }
+    }
+  }
+
+  .ant-radio-inner,
+  .ant-checkbox-inner {
+    transform: scale(0.9);
+    @include bg;
+  }
+}
+
+.ant-slider.ant-slider {
+  transition: background, border .3s cubic-bezier(.645, .045, .355, 1);
+
+  &:hover .ant-slider-rail,
+  .ant-slider-rail,
+  .ant-slider-track {
+    @include bg;
+  }
+
+  .ant-slider-track {
+    border: 1px solid rgba(45, 60, 76, 1);
+    background: rgb(52, 99, 139);
+  }
+
+  &:hover .ant-slider-track {
+    border: 1px solid rgba(45, 60, 76, 1);
+  }
+
+  .ant-slider-handle {
+    border: 1px solid rgba(45, 60, 76, .4);
+    background: rgb(52, 99, 139);
+
+    &:hover {
+      box-shadow: 0 0 0 4px rgba(24, 144, 255, .12);
+    }
+
+    &.ant-slider-handle-click-focused {
+      box-shadow: 0 0 0 6px rgba(24, 144, 255, .12);
+    }
+  }
+}
+
+//============================================================================================================
 
 .inter-plat-dropdown.ant-select-dropdown.task-operation-modal-select {
   background: rgba(21, 47, 69, .98);

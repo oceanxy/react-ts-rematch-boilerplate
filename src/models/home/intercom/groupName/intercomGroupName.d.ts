@@ -3,18 +3,18 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 对讲群组类型定义
  * @Date: 2020-04-21 周二 11:17:57
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-21 周二 11:17:57
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-21 周四 17:36:49
  */
 
-import { CurActiveGroupType } from '@/models/home/intercom/group/index';
+import { CurActiveGroupType } from '@/models/home/intercom/groupName';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
   /**
    * 对讲群组state
    */
-  interface IIntercomGroupState {
+  interface IIntercomGroupNameState {
     /**
      * 群组名称
      */
@@ -33,23 +33,23 @@ declare global {
     curActiveGroupType: CurActiveGroupType
   }
 
-  interface IIntercomGroupModel extends ModelConfig {
+  interface IIntercomGroupNameModel extends ModelConfig {
     state: IIntercomGroupState
     reducers: {
       /**
        * 更新本地状态
-       * @param {IIntercomGroupState} state
-       * @param {Partial<IIntercomGroupState>} payload
-       * @returns {IIntercomGroupState}
+       * @param {IIntercomGroupNameState} state
+       * @param {Partial<IIntercomGroupNameState>} payload
+       * @returns {IIntercomGroupNameState}
        */
-      updateState(state: IIntercomGroupState, payload: Partial<IIntercomGroupState>): IIntercomGroupState
+      updateState(state: IIntercomGroupNameState, payload: Partial<IIntercomGroupNameState>): IIntercomGroupNameState
     }
     effects: {
       /**
        * 设置状态
-       * @param {Partial<IIntercomGroupState>} payload
+       * @param {Partial<IIntercomGroupNameState>} payload
        */
-      setState(payload: Partial<IIntercomGroupState>): void
+      setState(payload: Partial<IIntercomGroupNameState>): void
     }
   }
 }

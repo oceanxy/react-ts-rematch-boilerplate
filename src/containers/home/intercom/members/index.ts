@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
   state: state.intercomMembers,
-  curTempGroupState: state.intercomGroup,
+  curTempGroupState: state.intercomGroupName,
   isActiveIntercom: state.intercom.active
 });
 

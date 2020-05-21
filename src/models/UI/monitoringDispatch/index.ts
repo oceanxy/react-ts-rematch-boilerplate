@@ -401,12 +401,21 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       }
     },
     stopCalling(): void {
-      const {hjMediaEngine} = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
-      if (hjMediaEngine) {
+      if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.stopCalling();
       } else {
         message.error('第三方对讲服务已断开！');
+      }
+    },
+    joinGroup(request: JoinOrExitGroupRequest) {
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
+
+      if (hjMediaEngine && loginResponseStatus) {
+        hjMediaEngine.audioEngine.joinGroup(request);
+      } else {
+        message.error('第三方对讲服务未启动！');
       }
     },
     exitGroup(request): void {
@@ -439,7 +448,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
     addTempGroupMember(memberIds: number[]): void {
       const {
         monitoringDispatch: {hjMediaEngine},
-        intercomGroup: {intercomId}
+        intercomGroupName: {intercomId}
       } = store.getState();
 
       if (hjMediaEngine) {
@@ -514,7 +523,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
           type: request.controlCmd === ControlCmd.BAN ?
             LogType.Ban :
             LogType.LiftBan,
-          id: store.getState().intercomGroup.id
+          id: store.getState().intercomGroupName.id
         });
       } else {
         message.error('第三方对讲服务未启动！');
@@ -560,7 +569,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
           // 添加日志
           await store.dispatch.log.addLog({
             type: LogType.AddIntercomGroup,
-            id: store.getState().intercomGroup.id
+            id: store.getState().intercomGroupName.id
           });
           message.success('添加成功！');
         } else {

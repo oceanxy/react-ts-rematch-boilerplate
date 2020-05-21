@@ -9,7 +9,7 @@
 
 import Container from '@/components/UI/containerComp';
 import Icon, { iconName, IconSource } from '@/components/UI/iconComp';
-import { CurActiveGroupType } from '@/models/home/intercom/group';
+import { CurActiveGroupType } from '@/models/home/intercom/groupName';
 import { CallModeEnum, ControlCmd } from '@/models/UI/monitoringDispatch';
 import moment from 'moment';
 import React, { useState } from 'react';
@@ -21,7 +21,7 @@ import './index.scss';
  */
 interface IIntercomOperationProps {
   state: IIntercomOperationState
-  intercomGroupState: IIntercomGroupState
+  intercomGroupNameState: IIntercomGroupNameState
   intercomNoticeState: IIntercomNoticeState
   intercomNoticeDispatch: IIntercomNoticeModel['effects']
   dispatches: IIntercomOperationModel['effects']
@@ -36,14 +36,14 @@ interface IIntercomOperationProps {
  */
 const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   const {
-    intercomGroupState, intercomNoticeState, intercomNoticeDispatch,
+    intercomGroupNameState, intercomNoticeState, intercomNoticeDispatch,
     dispatches, curMassPoint, state
   } = props;
   const {timing, intercomCallProcessing, callProcessing, callState} = state!;
   const {active, value} = intercomNoticeState!;
   const {setState: setNoticeState, sendData} = intercomNoticeDispatch!;
   const {call, stopCall, entityControl} = dispatches!;
-  const {curActiveGroupType, intercomId} = intercomGroupState!;
+  const {curActiveGroupType, intercomId} = intercomGroupNameState!;
   /**
    * 当前监控对象禁言状态
    */
@@ -54,7 +54,7 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
    * @param {boolean} isShowNotice 是否显示对讲通知组件
    */
   const onNotice = (isShowNotice: boolean) => {
-    setNoticeState!({active: isShowNotice});
+    setNoticeState!({active: isShowNotice, value: ''});
   };
 
   /**

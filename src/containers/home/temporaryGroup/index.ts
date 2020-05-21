@@ -16,11 +16,11 @@ import EditTemporaryGroup from './edit';
 
 const mapStateToProps = (state: RootState) => ({
   data: state.temporaryGroup.data,
-  intercomGroupState: state.intercomGroup
+  intercomGroupState: state.intercomGroupName
 });
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   fetchData: dispatch.temporaryGroup.fetchData,
-  setIntercomGroupState: dispatch.intercomGroup.setState,
+  setIntercomGroupState: dispatch.intercomGroupName.setState,
   unbindTemporaryGroup: dispatch.temporaryGroup.unbindTemporaryGroup
 });
 

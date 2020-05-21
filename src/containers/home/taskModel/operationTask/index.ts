@@ -13,14 +13,14 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
   data: state.taskDetails.data,
-  intercomGroupState: state.intercomGroup,
+  intercomGroupState: state.intercomGroupName,
   isShowEditTaskModal: state.editTask.isShowModal,
   isShowCompleteTaskModal: state.completeTask.isShowModal
 });
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   showEditTaskModal: dispatch.editTask.showModal,
   showCompleteTaskModal: dispatch.completeTask.showModal,
-  setIntercomGroupState: dispatch.intercomGroup.setState
+  setIntercomGroupState: dispatch.intercomGroupName.setState
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OperationTask);

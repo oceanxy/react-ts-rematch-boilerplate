@@ -4,23 +4,25 @@
  * @Description: 任务统计组件
  * @Date: 2020-04-14 周二 10:52:10
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-11 周一 10:21:37
+ * @LastModifiedTime: 2020-05-21 周四 15:49:41
  */
 
 import Button from '@/components/UI/button';
 import Container from '@/components/UI/containerComp';
 import { TaskStatisticsMethod } from '@/models/home/taskModel/taskStatistics';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './index.scss';
 
 interface ITaskStatisticsProps {
   fetchData: ITaskListModel['effects']['fetchData']
-  data: IEventStatisticsState
+  data: IEventStatisticsState,
+  curSelectedEvent: IEventListState['curSelectedEvent']
 }
 
 const TaskStatistics = (props: Partial<ITaskStatisticsProps>) => {
-  const [taskStatisticsMethod, setTaskStatisticsMethod] = useState(-1);
-  const {data, fetchData} = props;
+  const {data, fetchData, curSelectedEvent} = props;
+  // 当前tab的选中状态
+  const [taskStatisticsMethod, setTaskStatisticsMethod] = useState(TaskStatisticsMethod.ALL);
 
   /**
    * 切换统计状态的点击事件
@@ -38,6 +40,11 @@ const TaskStatistics = (props: Partial<ITaskStatisticsProps>) => {
     // 更新组件状态
     setTaskStatisticsMethod(reqTaskStatisticsMethod);
   };
+
+  // 当前选中的事件状态变动时，重置任务tab选中状态
+  useEffect(() => {
+    setTaskStatisticsMethod(TaskStatisticsMethod.ALL);
+  }, [curSelectedEvent?.eventId]);
 
   return (
     <Container className="task-button-container">

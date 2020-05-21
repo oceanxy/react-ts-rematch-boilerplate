@@ -1,7 +1,7 @@
 .title-container {
   display: flex;
   flex-direction: column;
-  //overflow: hidden;
+  overflow: hidden;
 
   .title-header {
     box-sizing: border-box;
@@ -42,8 +42,13 @@
   }
 
   .title-content {
-    //overflow: hidden;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
+  }
+
+  &.no-hidden,
+  .title-content {
+    overflow: inherit;
   }
 }

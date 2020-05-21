@@ -11,16 +11,16 @@ import Container from '@/components/UI/containerComp';
 import Modal from '@/components/UI/modal';
 import Trigger, { ETriggerType } from '@/components/UI/triggerComp';
 import { CreateTemporaryGroup } from '@/containers/home/temporaryGroup';
-import { CurActiveGroupType } from '@/models/home/intercom/group';
+import { CurActiveGroupType } from '@/models/home/intercom/groupName';
 import { message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './index.scss';
 
 interface ITemporaryGroupProps {
   data: ITemporaryGroupState['data']
-  intercomGroupState: IIntercomGroupState
+  intercomGroupState: IIntercomGroupNameState
   fetchData: ITemporaryGroupModel['effects']['fetchData']
-  setIntercomGroupState: IIntercomGroupModel['effects']['setState']
+  setIntercomGroupState: IIntercomGroupNameModel['effects']['setState']
   unbindTemporaryGroup: ITemporaryGroupModel['effects']['unbindTemporaryGroup']
 }
 

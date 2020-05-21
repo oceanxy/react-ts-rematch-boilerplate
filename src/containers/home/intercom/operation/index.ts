@@ -12,7 +12,7 @@ import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
-  intercomGroupState: state.intercomGroup,
+  intercomGroupNameState: state.intercomGroupName,
   intercomNoticeState: state.intercomNotice,
   curMassPoint: state.map.curMassPoint,
   state: state.intercomOperation

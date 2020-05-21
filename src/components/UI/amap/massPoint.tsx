@@ -4,12 +4,12 @@
  * @Description: 海量点组件（为了在mock数据时让弹窗位置更真实，本组件做了一些额外的mock逻辑处理）
  * @Date: 2020-01-14 17:50:59
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-19 周二 16:07:47
+ * @LastModifiedTime: 2020-05-21 周四 15:49:11
  */
 
 import config from '@/config';
 import { HandleEvent } from '@/containers/home/eventModel';
-import { CurActiveGroupType } from '@/models/home/intercom/group';
+import { CurActiveGroupType } from '@/models/home/intercom/groupName';
 import { message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import carPng from './images/dispatch-car.png';
@@ -34,8 +34,8 @@ export interface MassPointProps {
   fetchMassPoint: IAMapModel['effects']['fetchMassPoint']
   fetchWindowInfo: IAMapModel['effects']['fetchWindowInfo']
   data: IAMapState['massPoints']
-  intercomGroupState: IIntercomGroupState,
-  setIntercomGroupState: IIntercomGroupModel['effects']['setState']
+  intercomGroupState: IIntercomGroupNameState,
+  setIntercomGroupState: IIntercomGroupNameModel['effects']['setState']
   mapDispatchers: IAMapModel['effects']
   curSelectedEvent?: IEventListState['curSelectedEvent']
   searchPanelTarget: ISearchState['target']
@@ -47,8 +47,8 @@ export interface MassPointProps {
  * 实体对讲Props
  */
 interface EntityIntercomCallProps {
-  intercomGroupState: IIntercomGroupState,
-  setIntercomGroupState: IIntercomGroupModel['effects']['setState'],
+  intercomGroupState: IIntercomGroupNameState,
+  setIntercomGroupState: IIntercomGroupNameModel['effects']['setState'],
   curMassPointInfo: InfoWindowResponse
 }
 
@@ -314,13 +314,18 @@ const MassPoint = (props: MassPointProps) => {
   }, [intercomGroupState, curMassPoint]);
 
   /**
-   * 点击海量点或事件激活弹窗时，获取弹窗数据
+   * 点击海量点或点击事件激活弹窗时，获取弹窗数据
    */
   useEffect(() => {
     if (curSelectedEvent?.eventId) {
       (async () => {
         // 请求弹窗内的数据
-        const response = await fetchWindowInfo();
+        const response = await fetchWindowInfo({
+          queryType: 1, // 按事件查
+          monitorId: curSelectedEvent.monitorId!,
+          startTime: curSelectedEvent.startTime,
+          eventType: curSelectedEvent.eventType
+        });
 
         if (+response.retCode === 0) {
           setState({curMassPoint: response.data});
@@ -338,6 +343,8 @@ const MassPoint = (props: MassPointProps) => {
           message.error('获取信息失败，请稍候再试！');
         }
       })();
+    } /** 取消选中事件时清除弹框 */ else {
+      map.clearInfoWindow();
     }
   }, [curSelectedEvent?.eventId]);
 

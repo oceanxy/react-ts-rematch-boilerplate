@@ -16,7 +16,7 @@ import POI from './POI';
 const mapStateToProps = (state: RootState) => ({
   state: state.map,
   mapFences: state.fence.mapFences,
-  intercomGroupState: state.intercomGroup,
+  intercomGroupState: state.intercomGroupName,
   curSelectedEvent: state.eventList.curSelectedEvent,
   triggers: state.displayContent.triggers,
   searchPanelTarget: state.search.target,
@@ -25,7 +25,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   dispatch: dispatch.map,
-  setIntercomGroupState: dispatch.intercomGroup.setState,
+  setIntercomGroupState: dispatch.intercomGroupName.setState,
   fenceDispatch: dispatch.fence,
   setSearchState: dispatch.search.setState,
   setTempGroupState: dispatch.temporaryGroup.setState

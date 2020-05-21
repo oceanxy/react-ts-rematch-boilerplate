@@ -8,7 +8,7 @@
  */
 
 import { store } from '@/store';
-import intercomGroup, { CurActiveGroupType } from './group';
+import intercomGroupName, { CurActiveGroupType } from './groupName';
 import intercomMembers from './members';
 import intercomNotice from './notice';
 import intercomOperation from './operation';
@@ -33,7 +33,7 @@ const intercom: IIntercomModel = {
       store.dispatch.intercom.updateState({active});
 
       if (!active) {
-        store.dispatch.intercomGroup.updateState({
+        store.dispatch.intercomGroupName.updateState({
           name: '',
           id: '',
           intercomId: -1,
@@ -44,4 +44,4 @@ const intercom: IIntercomModel = {
   }
 };
 
-export default {intercom, intercomGroup, intercomMembers, intercomOperation, intercomNotice};
+export default {intercom, intercomGroupName, intercomMembers, intercomOperation, intercomNotice};

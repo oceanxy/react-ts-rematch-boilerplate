@@ -702,7 +702,6 @@ const mocks: Mocks = {
     data: {
       'interlocutorMemberList|30-50': [
         {
-
           'onlineStatus': () => Random.integer(0, 1),
           'monitorName': monitorName,
           'type': () => Random.integer(0, 2),

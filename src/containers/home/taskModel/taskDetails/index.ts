@@ -4,7 +4,7 @@
  * @Description: 任务详情组件
  * @Date: 2020-04-14 周二 10:10:44
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-14 周二 17:33:25
+ * @LastModifiedTime: 2020-05-21 周四 18:28:21
  */
 
 import TaskDetails from '@/components/home/taskModel/taskDetails';
@@ -13,11 +13,11 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
   ...state.taskDetails,
-  curSelTaskId: state.taskList.curSelectedTaskId
+  curSelTask: state.taskList.curSelectedTask
 });
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   fetchData: dispatch.taskDetails.fetchData,
-  clearData: dispatch.taskDetails.clearData
+  setState: dispatch.taskDetails.setState
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskDetails);

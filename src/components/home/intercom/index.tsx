@@ -10,12 +10,12 @@
 import Container from '@/components/UI/containerComp';
 import {
   IntercomEntityCall,
-  IntercomGroup,
+  IntercomGroupName,
   IntercomMembers,
   IntercomNotice,
   IntercomOperation
 } from '@/containers/home/intercom';
-import { CurActiveGroupType } from '@/models/home/intercom/group';
+import { CurActiveGroupType } from '@/models/home/intercom/groupName';
 import React from 'react';
 import './index.scss';
 
@@ -26,7 +26,7 @@ interface IIntercomProps {
   active: IIntercomState['active']
   setActive: IIntercomModel['effects']['setActive']
   isIntercomNoticeActive: IIntercomNoticeState['active']
-  curActiveGroupType: IIntercomGroupState['curActiveGroupType']
+  curActiveGroupType: IIntercomGroupNameState['curActiveGroupType']
 }
 
 /**
@@ -49,7 +49,7 @@ const Intercom = (props: Partial<IIntercomProps>) => {
       close={!isIntercomNoticeActive}
       onClose={onClose}
     >
-      <IntercomGroup />
+      <IntercomGroupName />
       <Container className="inter-plat-intercom-content">
         {isIntercomNoticeActive ?
           <IntercomNotice /> :

@@ -1,7 +1,7 @@
 /**
  * @Author: Oceanxy
  * @Email: xieyang@zwlbs.com
- * @Description: 实体对讲成员组件
+ * @Description: 实体（监控对象）对讲成员组件
  * @Date: 2020-05-09 周六 11:55:01
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
  * @LastModifiedTime: 2020-05-09 周六 16:16:50

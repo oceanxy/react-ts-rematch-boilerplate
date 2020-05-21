@@ -1,4 +1,4 @@
-.ant-select.resource-statistics-fence.resource-statistics-fence {
+.ant-select.resource-statistics-fence {
   height: 25px;
   display: flex;
 
@@ -7,9 +7,16 @@
     background: rgba(21, 47, 69, 0.8);
     border: 1px solid rgba(45, 60, 76, 0.8);
     color: #999999;
-    display: flex;
-    height: 100%;
+    overflow: hidden;
     padding: 0 6px;
+    width: 100%;
+    display: flex;
+    overflow-y: auto;
+    text-overflow: ellipsis;
+
+    &:after {
+      content: '';
+    }
 
     &:hover {
       border: 1px solid #2e72ab;
@@ -19,19 +26,77 @@
       border: 1px solid #40a9ff;
     }
 
-    .ant-select-selection-item,
-    .ant-select-selection-placeholder {
+    .ant-select-selection-item {
+      height: 20px;
+      line-height: inherit;
+      padding-left: 4px;
+      margin: 0 0 0 2px;
+
+      .ant-select-selection-item-content {
+        .ant-select-selection-search-input {
+          height: 100%;
+        }
+
+        .ant-select-selection-placeholder {
+          color: rgba(255, 255, 255, .7) !important;
+          opacity: unset;
+          left: 6px;
+        }
+
+        .icon-container {
+          justify-content: start;
+          padding: 0;
+
+          &:hover {
+            background: none;
+          }
+
+          .icon-img-box {
+            height: 80%;
+
+            .icon-img {
+              height: 1em;
+              width: 1em;
+            }
+          }
+
+          .icon-text {
+            text-indent: 2px;
+            display: block;
+            font-size: 12px;
+            width: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+      }
+
+      .ant-select-selection-item-remove {
+        color: #a8aeba;
+        display: flex;
+        align-items: center;
+
+        .anticon {
+          transition: all .3s cubic-bezier(.645, .045, .355, 1);
+
+          &:hover {
+            color: #2e72ab;
+            transform: scale(1.3);
+          }
+        }
+      }
+    }
+
+    .ant-select-selection-search {
+      margin-left: 3px !important;
       display: flex;
       align-items: center;
-    }
+      justify-content: flex-start;
 
-    .ant-select-selection-search-input {
-      height: 100%;
-    }
-
-    .ant-select-selection-placeholder {
-      color: #a8aeba;
-      opacity: unset;
+      input {
+        margin-left: 0 !important;
+      }
     }
   }
 
@@ -39,15 +104,9 @@
     top: 50%;
     right: 12px;
 
-    .anticon-down {
+    .anticon {
       color: #999999;
     }
-  }
-
-  .icon-container {
-    justify-content: start;
-    padding: 0;
-    color: #a8aeba;
   }
 
   .ant-select-clear {
@@ -66,50 +125,46 @@
 }
 
 .ant-select-dropdown.resource-statistics-fence-dropdown {
-  .ant-select-item.ant-select-item-group {
-    color: #b4b4b4;
-    font-size: 12px;
-    font-weight: bolder;
-    border-top: 1px solid rgba(45, 60, 76, 1);
-    border-bottom: 1px solid rgba(45, 60, 76, 1);
-
-    & .icon-container {
-      background: #152f45;
-    }
-  }
-
   .icon-container {
     justify-content: start;
   }
 
-  // 目前控制Ant design的Select下拉框的样式在 src/components/UI/search/index.scss 文件内统一管理
-  //  background: rgba(21, 47, 69, 0.8);
-  //  border: 1px solid rgba(45, 60, 76, 0.8);
-  //
-  //  .ant-select-item {
-  //    display: flex;
-  //    padding: 0 10px;
-  //    align-items: center;
-  //
-  //    .ant-select-item-option-content {
-  //      color: #999999;
-  //      transition: all .3s cubic-bezier(.645, .045, .355, 1);
-  //    }
-  //
-  //    &.ant-select-item-option-selected {
-  //      background: rgba(2, 66, 104, 0.65);
-  //    }
-  //
-  //    &.ant-select-item-option-active {
-  //      background: rgba(2, 62, 93, .5);
-  //
-  //      .ant-select-item-option-content {
-  //        color: #3b7caf;
-  //      }
-  //    }
-  //  }
-  //
-  //  .ant-empty-description{
-  //    color: #a8aeba;
-  //  }
+  .ant-select-item.ant-select-item-group {
+    color: #b4b4b4;
+    font-size: 16px;
+    border-top: 1px solid rgba(45, 60, 76, 1);
+    border-bottom: 1px solid rgba(45, 60, 76, 1);
+
+    .icon-container {
+      background: #152f45;
+
+      & .icon-text, &:hover .icon-text {
+        color: #3b7caf;
+      }
+    }
+  }
+
+  .ant-select-item.ant-select-item-option {
+    padding-left: 10px;
+
+    &.ant-select-item-option-selected {
+      background: rgba(2, 66, 104, .65);
+
+      .ant-select-item-option-content {
+        background: none;
+      }
+
+      .ant-select-item-option-state {
+        margin-right: 8px;
+      }
+    }
+
+    &:hover {
+      background: rgba(2, 66, 104, .65);
+
+      .icon-container {
+        background: none;
+      }
+    }
+  }
 }

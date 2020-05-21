@@ -4,7 +4,7 @@
  * @Description: 监控调度类型定义
  * @Date: 2020-04-24 周五 13:42:22
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-28 周二 15:22:54
+ * @LastModifiedTime: 2020-05-21 周四 17:25:33
  */
 
 import { CallModeEnum } from '@/models/UI/monitoringDispatch/index';
@@ -174,10 +174,7 @@ declare global {
        * 主动停止主呼时不会触发主呼停止事件
        */
       stopCalling(): void
-      /**
-       * 退出群组
-       */
-      exitGroup(request: ExitGroupRequest): void
+
       /**
        * 删除群组成员
        * @param {RemoveGroupMemberRequest} request
@@ -213,6 +210,18 @@ declare global {
        * @param {RemoteControlMsRequest} request
        */
       remoteControlMs(request: RemoteControlMsRequest): void
+
+      /**
+       * 加入群组
+       * @param {{groupId: number}} request
+       */
+      joinGroup(request: JoinOrExitGroupRequest): void
+
+      /**
+       * 退出群组
+       * @param {{groupId: number}} request
+       */
+      exitGroup(request: JoinOrExitGroupRequest): void
 
       /**
        * 登录响应事件

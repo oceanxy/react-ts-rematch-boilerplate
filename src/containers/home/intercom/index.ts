@@ -11,14 +11,14 @@ import IntercomPanel from '@/components/home/intercom';
 import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 import IntercomEntityCall from './entityCall';
-import IntercomGroup from './group';
+import IntercomGroupName from './groupName';
 import IntercomMembers from './members';
 import IntercomNotice from './notice';
 import IntercomOperation from './operation';
 
 const mapStateToProps = (state: RootState) => ({
   active: state.intercom.active,
-  curActiveGroupType: state.intercomGroup.curActiveGroupType,
+  curActiveGroupType: state.intercomGroupName.curActiveGroupType,
   isIntercomNoticeActive: state.intercomNotice.active
 });
 
@@ -28,4 +28,4 @@ const mapDispatchToProps = (dispatch: Dispatch): any => ({
 
 const Intercom = connect(mapStateToProps, mapDispatchToProps)(IntercomPanel);
 
-export { IntercomGroup, IntercomMembers, IntercomOperation, Intercom, IntercomNotice, IntercomEntityCall };
+export { IntercomGroupName, IntercomMembers, IntercomOperation, Intercom, IntercomNotice, IntercomEntityCall };

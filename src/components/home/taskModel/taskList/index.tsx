@@ -4,41 +4,51 @@
  * @Description: 任务列表组件
  * @Date: 2020-04-14 周二 10:56:15
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-18 周一 16:07:54
+ * @LastModifiedTime: 2020-05-21 周四 18:05:09
  */
 
 import ListItem from '@/components/home/listItem';
 import Container from '@/components/UI/containerComp';
 import { taskTypeColor, taskTypeStatus } from '@/models/home/taskModel/taskDetails';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './index.scss';
 
 interface ITaskListProps {
   data: ITaskListResponse['taskPageInfo']
-  curSelectedTaskId: ITaskListState['curSelectedTaskId']
+  curSelectedTask: ITaskListState['curSelectedTask']
   curSelectedEvent: IEventListState['curSelectedEvent']
   setState: ITaskListModel['effects']['setState']
   fetchData: ITaskListModel['effects']['fetchData']
 }
 
 const TaskList = (props: Partial<ITaskListProps>) => {
-  const {data, curSelectedTaskId, fetchData, setState, curSelectedEvent} = props;
+  const {data, curSelectedTask, fetchData, setState, curSelectedEvent} = props;
+  // 是否是首次加载组件
+  const [isFirstLoad, setFirstLoad] = useState(true);
+
   /**
    * 任务点击
-   * @param {IEventDetailsRequest} payload
+   * @param {ITask} task
    */
-  const onClick = (payload: ITaskDetailsRequest) => {
+  const onClick = (task: ITask) => {
     // 检测当前点击的任务是否选中。如果已选中，则取消选中；反之则选中。
-    if (curSelectedTaskId === payload.taskId) {
-      setState?.({curSelectedTaskId: ''});
+    if (curSelectedTask?.taskId === task.taskId) {
+      setState?.({curSelectedTask: undefined});
     } else {
-      setState?.({curSelectedTaskId: payload.taskId});
+      setState?.({curSelectedTask: task});
     }
   };
 
   useEffect(() => {
-    if (curSelectedEvent?.eventId) {
+    // 因为首次加载页面时，必定会进入useEffect函数，
+    // 其实这次请求是没有意义的，因为首次加载页面时也会加载事件列表，
+    // 而事件列表的当前选中事件状态更新后会立即触发本useEffect执行，
+    // 从而导致在首次加载页面时，会连续发送两次事件列表的请求，
+    // 造成资源浪费，所以这里在本组件内部用一个单独的状态来监测是否是首次加载页面
+    if (!isFirstLoad) {
       fetchData!({selectFirstData: true});
+    } else {
+      setFirstLoad(false);
     }
   }, [curSelectedEvent?.eventId]);
 
@@ -46,17 +56,15 @@ const TaskList = (props: Partial<ITaskListProps>) => {
     <Container className="task-list-container">
       {
         data?.records.length ?
-          data.records.map((item, index) => (
+          data.records.map((task, index) => (
             <ListItem
               key={`event-list-${index}`}
-              className={curSelectedTaskId === item.taskId ? 'active' : ''}
-              name={item.taskName}
-              status={taskTypeStatus[item.status]}
-              iconColor={taskTypeColor[item.taskLevel]}
-              time={item.startTime}
-              onClick={onClick.bind(null, {
-                taskId: item.taskId
-              })}
+              className={curSelectedTask?.taskId === task.taskId ? 'active' : ''}
+              name={task.taskName}
+              status={taskTypeStatus[task.status]}
+              iconColor={taskTypeColor[task.taskLevel]}
+              time={task.startTime}
+              onClick={onClick.bind(null, task)}
             />
           )) :
           null

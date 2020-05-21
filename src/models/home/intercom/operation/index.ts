@@ -40,7 +40,7 @@ const operation: IIntercomOperationModel = {
     async call(callMode: CallModeEnum) {
       const state = store.getState();
       const {
-        intercomGroup: {intercomId}
+        intercomGroupName: {intercomId}
       } = state;
 
       const request = {
@@ -59,7 +59,7 @@ const operation: IIntercomOperationModel = {
       // 成功发起电话呼叫，记录日志
       log.addLog({
         type: CallModeEnum.DUPLEX_CALL_MODE,
-        id: store.getState().intercomGroup.id
+        id: store.getState().intercomGroupName.id
       });
 
       // 更新电话状态，触发页面更新
@@ -102,7 +102,7 @@ const operation: IIntercomOperationModel = {
         }
 
         // 记录日志
-        log.addLog({type, id: store.getState().intercomGroup.id});
+        log.addLog({type, id: store.getState().intercomGroupName.id});
         // 更新状态
         intercomOperation.updateState(state);
       }
@@ -122,7 +122,7 @@ const operation: IIntercomOperationModel = {
       if (!request) {
         request = {
           controlCmd: ControlCmd.BAN,
-          targetMsId: store.getState().intercomGroup.intercomId
+          targetMsId: store.getState().intercomGroupName.intercomId
         };
       }
 

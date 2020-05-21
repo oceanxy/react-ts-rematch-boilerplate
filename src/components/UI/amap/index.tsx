@@ -33,8 +33,8 @@ const UseMap = useScript(`https://webapi.amap.com/maps?v=${config.map.mapVersion
 export interface IZWMapProps extends IContainerProps<any> {
   state: IAMapState,
   dispatch: IAMapModel['effects']
-  intercomGroupState: IIntercomGroupState,
-  setIntercomGroupState: IIntercomGroupModel['effects']['setState']
+  intercomGroupState: IIntercomGroupNameState,
+  setIntercomGroupState: IIntercomGroupNameModel['effects']['setState']
   curSelectedEvent: IEventListState['curSelectedEvent']
   triggers: IDisplayContentState['triggers']
   mapFences: IFenceState['mapFences']

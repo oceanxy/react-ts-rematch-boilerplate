@@ -12,7 +12,7 @@ import { APIResponse } from '@/interfaces/api/mock';
 import { MouseToolType } from '@/models/UI/amap';
 import { Button, Checkbox, Form, Input, message, Row, Select, Slider } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { CheckboxValueType } from 'antd/es/checkbox/Group';
+import CheckboxGroup, { CheckboxValueType } from 'antd/es/checkbox/Group';
 import React, { useEffect, useRef, useState } from 'react';
 import './index.scss';
 
@@ -507,20 +507,22 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                   label="监控对象"
                 >
                   <Form.Item className="checkbox-operation">
-                    <Checkbox
-                      className="checkbox-all"
-                      onChange={checkAll}
-                      checked={checked.all}
-                    >全 选</Checkbox>
-                    {
-                      showInvert ? (
-                        <Checkbox
-                          className="checkbox-invert"
-                          onChange={checkInvert}
-                          checked={checked.invert}
-                        >反 选</Checkbox>
-                      ) : null
-                    }
+                    <CheckboxGroup>
+                      <Checkbox
+                        className="checkbox-all"
+                        onChange={checkAll}
+                        checked={checked.all}
+                      >全 选</Checkbox>
+                      {
+                        showInvert ? (
+                          <Checkbox
+                            className="checkbox-invert"
+                            onChange={checkInvert}
+                            checked={checked.invert}
+                          >反 选</Checkbox>
+                        ) : null
+                      }
+                    </CheckboxGroup>
                   </Form.Item>
                   <Form.Item
                     name="interlocutorIds"
