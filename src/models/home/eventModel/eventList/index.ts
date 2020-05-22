@@ -8,6 +8,7 @@
  */
 
 import fetchApis from '@/apis';
+import { APIResponse } from '@/interfaces/api/mock';
 import { store } from '@/store';
 
 /**
@@ -31,13 +32,12 @@ const eventList: IEventListModel = {
     async fetchData(reqPayload) {
       if (!reqPayload) {
         reqPayload = {
-          sortType: 0,
           isReturnEventDetails: 1
         };
       }
 
       const response = await fetchApis.fetchEventList(reqPayload);
-      const {latestEventDetails, eventStatistics, eventList}: IEventData = response.data;
+      const {latestEventDetails, eventStatistics, eventList}: IEventListResponse = response.data;
 
       // 更新事件详情
       if (eventList?.length && !reqPayload.isStatisticsMethodChanged) {
@@ -48,6 +48,13 @@ const eventList: IEventListModel = {
       store.dispatch.eventStatistics.updateData(eventStatistics);
       // 更新事件列表
       store.dispatch.eventList.updateState({data: eventList});
+    },
+    async fetchDataForSelect(reqPayload?: IEventListRequest): Promise<APIResponse<IEventListResponse>> {
+      if (!reqPayload) {
+        reqPayload = {sortType: 1};
+      }
+
+      return await fetchApis.fetchEventList(reqPayload);
     },
     async setState(payload) {
       store.dispatch.eventList.updateState(payload);

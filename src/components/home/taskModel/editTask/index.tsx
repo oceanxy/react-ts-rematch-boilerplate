@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 编辑任务
  * @Date: 2020-04-15 周三 16:01:46
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-15 周三 16:01:46
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-22 周五 10:53:49
  */
 
 import config from '@/config';
@@ -37,6 +37,7 @@ interface IEditTaskProps extends Modal {
   isShowModal: IEditTaskState['isShowModal']
   showModal: IEditTaskModel['effects']['showModal']
   updateRemoteTask: IEditTaskModel['effects']['updateRemoteTask']
+  fetchDataForSelect: IEventListModel['effects']['fetchDataForSelect']
 }
 
 /**
@@ -52,15 +53,11 @@ const StyledModal = styled(Modal)(styledBlocks.containerTheme);
  * @constructor
  */
 const EditTask = (props: Partial<IEditTaskProps>) => {
-  const {showModal, updateRemoteTask, data, isShowModal} = props;
+  const {showModal, updateRemoteTask, data, isShowModal, fetchDataForSelect} = props;
   /**
    * 提交修改按钮的loading状态
    */
   const [loading, setLoading] = useState(false);
-  // 关联事件下拉列表数据源
-  let events = config.mock ?
-    data?.events.concat(props.events!) ?? [] :
-    data?.events ?? [];
   /**
    * antd hooks
    */
@@ -109,12 +106,25 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
     }
   };
 
+  // 获取关联事件下拉列表数据
   useEffect(() => {
-    // 处理数据
+    (async () => {
+      const response = await fetchDataForSelect!();
+      if (+response.retCode === 0) {
+        form.setFieldsValue({
+          eventSelectData: response.data?.eventList || []
+        });
+      } else {
+        message.error('获取关联事件数据失败！');
+      }
+    })();
+  }, []);
+
+  // 准备表单回填数据
+  useEffect(() => {
     const eventIds = data?.events.map((event) => event.eventId) ?? [];
     const designateMonitorIds = data?.executors.map((entity) => entity.monitorId) ?? [];
-    const dateDuplicateType = data?.dateDuplicateType.split(',').reduce(
-      (str, cur) => {
+    const dateDuplicateType = data?.dateDuplicateType.split(',').reduce((str, cur) => {
         str.push(Number(cur));
         return str;
       },
@@ -129,9 +139,9 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
       taskTime: [moment(data?.startTime!, dateFormat), moment(data?.endTime!, dateFormat)],
       taskAddress: data?.address!,
       taskPeriod: data?.taskPeriod!,
-      remark: data?.remark!,
+      description: data?.description!,
       taskId: data?.taskId!,
-      taskLevel: data?.taskLevel!
+      taskLevel: +data?.taskLevel!
     });
   }, []);
 
@@ -147,7 +157,15 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
       maskClosable={false}
       getContainer={false}
     >
-      <Form form={form} onFinish={onFinish}>
+      <Form form={form} onFinish={onFinish} initialValues={{
+        /**
+         * 关联事件字段下拉列表数据
+         * mock数据时直接采用事件列表的数据加上任务详情绑定的事件
+         */
+        eventSelectData: config.mock ?
+          data?.events.concat(props.events!) ?? [] :
+          []
+      }}>
         <Form.Item
           label="任务名称"
           name="taskName"
@@ -156,25 +174,41 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
         >
           <Input type="text" placeholder="请输入任务名称" />
         </Form.Item>
-        <Form.Item label="关联事件" name="eventIds" rules={[{required: true, message: '请选择任务关联的事件'}]}>
-          <Select
-            mode="multiple"
-            allowClear={true}
-            placeholder="请选择任务关联的事件"
-            dropdownClassName="inter-plat-dropdown task-operation-modal-select"
-            showSearch
-            optionFilterProp="children"
-          >
-            {
-              events?.map((event, i) => {
-                return (
-                  <Select.Option key={`task-operation-modal-eventId-${i}`} value={event.eventId}>
-                    {event.eventName}
-                  </Select.Option>
-                );
-              })
-            }
-          </Select>
+        <Form.Item
+          noStyle
+          shouldUpdate={(prev, cur) => prev.eventSelectData !== cur.eventSelectData}
+        >
+          {({getFieldValue}) => (
+            <Form.Item
+              label="关联事件"
+              name="eventIds"
+              rules={[{required: true, message: '请选择任务关联的事件'}]}
+            >
+              <Select
+                mode="multiple"
+                allowClear={true}
+                placeholder="请选择任务关联的事件"
+                dropdownClassName="inter-plat-dropdown task-operation-modal-select"
+                showSearch
+                optionFilterProp="children"
+              >
+                {
+                  getFieldValue('eventSelectData').map((event: IEvent) => {
+                    return (
+                      <Select.Option
+                        key={`task-operation-modal-eventId-${event.eventId}`}
+                        value={event.eventId}
+                      >
+                        <div className='task-operation-modal-item' title={event.eventName}>
+                          {event.eventName}
+                        </div>
+                      </Select.Option>
+                    );
+                  })
+                }
+              </Select>
+            </Form.Item>
+          )}
         </Form.Item>
         <Form.Item
           label="任务等级"
@@ -260,7 +294,7 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
         </Form.Item>
         <Form.Item
           label="任务描述"
-          name="remark"
+          name="description"
           rules={[{required: true, message: '请输入任务描述'}]}
           className="input"
         >

@@ -38,8 +38,15 @@
   }
 }
 
-.task-operation-modal.ant-model {
-
+.ant-modal.task-operation-modal .ant-modal-content .ant-modal-body .ant-form .ant-row.ant-form-item {
+  .ant-select-selector {
+    .task-operation-modal-item {
+      max-width: 60px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
 }
 
 .ant-modal {

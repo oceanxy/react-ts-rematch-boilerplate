@@ -21,10 +21,6 @@ declare global {
      */
     address: string
     /**
-     * 任务描述
-     */
-    remark: string
-    /**
      * 创建时间
      */
     createDataTime: Date | null

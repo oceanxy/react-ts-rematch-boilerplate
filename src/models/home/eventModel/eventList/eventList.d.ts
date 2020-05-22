@@ -4,9 +4,10 @@
  * @Description: 事件列表类型定义
  * @Date: 2020-04-13 周一 13:32:43
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-19 周二 17:19:00
+ * @LastModifiedTime: 2020-05-22 周五 10:20:19
  */
 
+import { APIResponse } from '@/interfaces/api/mock';
 import { IEventStatisticsState } from '@/models/home/eventModel/eventStatistics';
 import { ModelConfig } from '@rematch/core';
 
@@ -52,7 +53,7 @@ declare global {
   /**
    * 事件模块数据
    */
-  interface IEventData {
+  interface IEventListResponse {
     /**
      * 最新的事件详情数据
      */
@@ -72,21 +73,21 @@ declare global {
    */
   interface IEventListRequest {
     /**
-     * 事件处理状态 -1或不传:全部；0:未处理；1处理中
+     * 事件处理状态 -1:全部（默认） 0:未处理 1:处理中
      */
-    eventStatus?: -1 | 0 | 1 | null
+    eventStatus?: -1 | 0 | 1
     /**
-     * 监控对象ID 不传查询全部
+     * 监控对象ID 不传查询全部(默认)
      */
     monitorId?: string | null
     /**
      * 排序：默认按时间 0:按时间 1:按监控对象
      */
-    sortType: 0 | 1
+    sortType?: 0 | 1
     /**
-     * 是否返回首条事件的详情信息 0 不返回 1返回 默认为0
+     * 是否返回首条事件的详情信息 0:不返回（默认） 1:返回
      */
-    isReturnEventDetails: 0 | 1
+    isReturnEventDetails?: 0 | 1
     /**
      * 请求数据时，事件统计方式较上一次请求是否发生改变，即eventStatus字段是否改变
      */
@@ -113,10 +114,30 @@ declare global {
   interface IEventListModel extends ModelConfig {
     state: IEventListState
     reducers: {
+      /**
+       * 更新本地状态
+       * @param {IEventListState} state
+       * @param {Partial<IEventListState>} payload
+       * @returns {IEventListState}
+       */
       updateState(state: IEventListState, payload: Partial<IEventListState>): IEventListState
     }
     effects: {
+      /**
+       * 获取事件列表数据
+       * @param {IEventListRequest} reqPayload
+       */
       fetchData(reqPayload?: IEventListRequest): void
+      /**
+       * 获取事件下拉列表数据
+       * @param {IEventListRequest} reqPayload
+       * @returns {Promise<APIResponse<IEventListResponse>>}
+       */
+      fetchDataForSelect(reqPayload?: IEventListRequest): Promise<APIResponse<IEventListResponse>>
+      /**
+       * 设置状态
+       * @param {Partial<IEventListState>} payload
+       */
       setState(payload: Partial<IEventListState>): void
     }
   }

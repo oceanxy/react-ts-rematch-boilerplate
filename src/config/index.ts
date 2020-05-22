@@ -14,7 +14,7 @@ import { EProtocal, IConfig } from '@/interfaces/config';
  */
 const config: IConfig = {
   // 接口相关配置
-  // =====================本地调试使用devServer的代理，解决跨域问题========================================
+  // =======本地调试可使用devServer的代理，解决跨域问题。如果后端处理跨域，则可根据需要配置port和host=============
   // protocol: EProtocal.HTTP,
   // port: 3001,
   // host: 'localhost',

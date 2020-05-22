@@ -100,10 +100,10 @@ export const taskLevelText = ['', '一般', '重要', '紧急'];
  * 任务等级 （0:没有数据 1:一般、2:重要、3:紧急）
  */
 export enum TaskLevel {
-  Null,
-  General,
-  Important,
-  Urgent
+  Null = 0,
+  General = 1,
+  Important = 2,
+  Urgent = 3
 }
 
 /**
@@ -118,7 +118,6 @@ export const taskTypeColor = [ESeverity.GRAY, ESeverity.GENERAL_TASK, ESeverity.
  */
 const defaultData: ITask = {
   address: '',
-  remark: '',
   createDataTime: null,
   createDataUsername: '',
   description: '',
