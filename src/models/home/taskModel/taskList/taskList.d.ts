@@ -113,10 +113,19 @@ declare global {
     effects: {
       /**
        * 获取数据
-       * @param {Partial<ITaskListRequest> & {selectFirstData?: boolean}} reqPayload
+       * @param {Partial<ITaskListRequest> & {selectFirstData?: boolean, byMonitorId?: boolean}} reqPayload
        * @param {RootState} rootState
        */
-      fetchData(reqPayload?: Partial<ITaskListRequest> & {selectFirstData?: boolean}, rootState?: RootState): void
+      fetchData(reqPayload?: Partial<ITaskListRequest> & {
+        /**
+         * 获取数据后，是否选中第一条数据
+         */
+        selectFirstData?: boolean,
+        /**
+         * 按照监控对象查
+         */
+        byMonitorId?: boolean
+      }, rootState?: RootState): void
       /**
        * 设置状态
        * @param {Partial<ITaskListState>} payload

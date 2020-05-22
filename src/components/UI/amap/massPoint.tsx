@@ -10,6 +10,7 @@
 import config from '@/config';
 import { HandleEvent } from '@/containers/home/eventModel';
 import { CurActiveGroupType } from '@/models/home/intercom/groupName';
+import { store } from '@/store';
 import { message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import carPng from './images/dispatch-car.png';
@@ -204,6 +205,16 @@ const MassPoint = (props: MassPointProps) => {
 
     if (+response.retCode === 0) {
       setState({curMassPoint: response.data});
+
+      // 请求弹窗信息成功后，获取当前监控对象的所有事件下的所有任务
+      store.dispatch.taskList.fetchData({
+        selectFirstData: true,
+        byMonitorId: true,
+        monitorId: response.data.monitor.monitorId,
+        queryType: 0,
+        length: 2000
+      });
+
       // 开启mock时，直接使用当前点击的海量点的坐标
       if (config.mock) {
         infoWindow.setContent(infoWindowTemplate(response.data));

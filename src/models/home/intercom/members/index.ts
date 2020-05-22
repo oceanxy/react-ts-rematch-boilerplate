@@ -76,7 +76,7 @@ const members: IIntercomMembersModel = {
         userIds: memberIds
       });
 
-      if (response.retCode === 0) {
+      if (+response.retCode === 0) {
         // 刷新对讲成员数据
         store.dispatch.intercomMembers.fetchData();
         // 操作成功后添加新增成员的日志

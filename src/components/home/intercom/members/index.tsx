@@ -68,7 +68,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
     setState({loading: false});
 
     message.destroy();
-    if (response.retCode === 0) {
+    if (+response.retCode === 0) {
       message.success(`已成功删除成员：（${member.current?.monitorName}）`);
     } else {
       message.success('删除成员失败， 请稍后再试！');
