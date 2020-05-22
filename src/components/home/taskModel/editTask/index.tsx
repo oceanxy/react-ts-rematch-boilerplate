@@ -17,7 +17,7 @@ import {
   taskPeriodText
 } from '@/models/home/taskModel/taskDetails';
 import styledBlocks from '@/styled/styledBlocks';
-import { Button, Checkbox, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from 'antd';
+import { Button, Checkbox, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin } from 'antd';
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import { RadioChangeEvent } from 'antd/lib/radio/interface';
 import moment from 'moment';
@@ -58,6 +58,8 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
    * 提交修改按钮的loading状态
    */
   const [loading, setLoading] = useState(false);
+  // 表单loading状态
+  const [formLoading, setFormLoading] = useState(true);
   /**
    * antd hooks
    */
@@ -109,7 +111,10 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
   // 获取关联事件下拉列表数据
   useEffect(() => {
     (async () => {
+      setFormLoading(true);
       const response = await fetchDataForSelect!();
+      setFormLoading(false);
+
       if (+response.retCode === 0) {
         form.setFieldsValue({
           eventSelectData: response.data?.eventList || []
@@ -122,28 +127,30 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
 
   // 准备表单回填数据
   useEffect(() => {
-    const eventIds = data?.events.map((event) => event.eventId) ?? [];
-    const designateMonitorIds = data?.executors.map((entity) => entity.monitorId) ?? [];
-    const dateDuplicateType = data?.dateDuplicateType.split(',').reduce((str, cur) => {
-        str.push(Number(cur));
-        return str;
-      },
-      [] as DateDuplicateType[]
-    ) ?? [];
+    if (!formLoading) {
+      const eventIds = data?.events.map((event) => event.eventId) ?? [];
+      const designateMonitorIds = data?.executors.map((entity) => entity.monitorId) ?? [];
+      const dateDuplicateType = data?.dateDuplicateType.split(',').reduce((str, cur) => {
+          str.push(Number(cur));
+          return str;
+        },
+        [] as DateDuplicateType[]
+      ) ?? [];
 
-    form.setFieldsValue({
-      designateMonitorIds,
-      eventIds,
-      dateDuplicateType,
-      taskName: data?.taskName!,
-      taskTime: [moment(data?.startTime!, dateFormat), moment(data?.endTime!, dateFormat)],
-      taskAddress: data?.address!,
-      taskPeriod: data?.taskPeriod!,
-      description: data?.description!,
-      taskId: data?.taskId!,
-      taskLevel: +data?.taskLevel!
-    });
-  }, []);
+      form.setFieldsValue({
+        designateMonitorIds,
+        eventIds,
+        dateDuplicateType,
+        taskName: data?.taskName!,
+        taskTime: [moment(data?.startTime!, dateFormat), moment(data?.endTime!, dateFormat)],
+        taskAddress: data?.address!,
+        taskPeriod: data?.taskPeriod!,
+        description: data?.description!,
+        taskId: data?.taskId!,
+        taskLevel: +data?.taskLevel!
+      });
+    }
+  }, [formLoading]);
 
   return (
     <StyledModal
@@ -157,154 +164,158 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
       maskClosable={false}
       getContainer={false}
     >
-      <Form form={form} onFinish={onFinish} initialValues={{
-        /**
-         * 关联事件字段下拉列表数据
-         * mock数据时直接采用事件列表的数据加上任务详情绑定的事件
-         */
-        eventSelectData: config.mock ?
-          data?.events.concat(props.events!) ?? [] :
-          []
-      }}>
-        <Form.Item
-          label="任务名称"
-          name="taskName"
-          rules={[{required: true, message: '请输入任务名称'}]}
-          className="input"
-        >
-          <Input type="text" placeholder="请输入任务名称" />
-        </Form.Item>
-        <Form.Item
-          noStyle
-          shouldUpdate={(prev, cur) => prev.eventSelectData !== cur.eventSelectData}
-        >
-          {({getFieldValue}) => (
-            <Form.Item
-              label="关联事件"
-              name="eventIds"
-              rules={[{required: true, message: '请选择任务关联的事件'}]}
-            >
-              <Select
-                mode="multiple"
-                allowClear={true}
-                placeholder="请选择任务关联的事件"
-                dropdownClassName="inter-plat-dropdown task-operation-modal-select"
-                showSearch
-                optionFilterProp="children"
-              >
-                {
-                  getFieldValue('eventSelectData').map((event: IEvent) => {
-                    return (
-                      <Select.Option
-                        key={`task-operation-modal-eventId-${event.eventId}`}
-                        value={event.eventId}
-                      >
-                        <div className='task-operation-modal-item' title={event.eventName}>
-                          {event.eventName}
-                        </div>
-                      </Select.Option>
-                    );
-                  })
-                }
-              </Select>
-            </Form.Item>
-          )}
-        </Form.Item>
-        <Form.Item
-          label="任务等级"
-          name="taskLevel"
-          rules={[{required: true, message: '请选择任务等级'}]}
-          className="radio"
-        >
-          <Radio.Group>
-            <Radio value={TaskLevel.General}>{taskLevelText[TaskLevel.General]}</Radio>
-            <Radio value={TaskLevel.Important}>{taskLevelText[TaskLevel.Important]}</Radio>
-            <Radio value={TaskLevel.Urgent}>{taskLevelText[TaskLevel.Urgent]}</Radio>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item label="任务时间" name="taskTime" rules={[{required: true, message: '请选择任务时间'}]}>
-          <DatePicker.RangePicker
-            locale={locale}
-            ranges={{
-              今日: [moment(), moment()],
-              本月: [moment().startOf('month'), moment().endOf('month')]
-            }}
-            showTime
-            format="YYYY-MM-DD HH:mm:ss"
-            dropdownClassName="inter-plat-picker-dropdown task-operation-modal-picker"
-          />
-        </Form.Item>
-        <Form.Item
-          label="任务地址"
-          name="taskAddress"
-          rules={[{required: true, message: '请输入任务地址'}]}
-          className="input"
-        >
-          <Input type="text" placeholder="请输入任务地址" />
-        </Form.Item>
-        <Form.Item
-          label="任务周期"
-          rules={[{required: true, message: '请选择任务周期'}]}
-          className="radio radio-require"
-        >
-          <Form.Item name="taskPeriod" rules={[{required: true, message: '请选择任务周期'}]}>
-            <Radio.Group onChange={radioChange}>
-              <Radio value={TaskPeriod.Immediate}>{taskPeriodText[TaskPeriod.Immediate]}</Radio>
-              <Radio value={TaskPeriod.Timing}>{taskPeriodText[TaskPeriod.Timing]}</Radio>
-            </Radio.Group>
+      <Spin spinning={formLoading}>
+        <Form form={form} onFinish={onFinish} initialValues={{
+          /**
+           * 关联事件字段下拉列表数据
+           * mock数据时直接采用事件列表的数据加上任务详情绑定的事件
+           */
+          eventSelectData: config.mock ?
+            data?.events.concat(props.events!) ?? [] :
+            []
+        }}>
+          <Form.Item
+            label="任务名称"
+            name="taskName"
+            rules={[{required: true, message: '请输入任务名称'}]}
+            className="input"
+          >
+            <Input type="text" placeholder="请输入任务名称" />
           </Form.Item>
           <Form.Item
             noStyle
-            shouldUpdate={(prevValues, currentValues) => prevValues.taskPeriod !== currentValues.taskPeriod}
+            shouldUpdate={(prev, cur) => prev.eventSelectData !== cur.eventSelectData}
           >
-            {({getFieldValue}) => {
-              return getFieldValue('taskPeriod') === TaskPeriod.Timing ? (
-                <Form.Item
-                  name="dateDuplicateType"
-                  rules={[{required: true, message: '请勾选定时任务的具体时间'}]}
-                  className="checkbox"
+            {({getFieldValue}) => (
+              <Form.Item
+                label="关联事件"
+                name="eventIds"
+                rules={[{required: true, message: '请选择任务关联的事件'}]}
+              >
+                <Select
+                  mode="multiple"
+                  allowClear={true}
+                  placeholder="请选择任务关联的事件"
+                  dropdownClassName="inter-plat-dropdown task-operation-modal-select"
+                  showSearch
+                  optionFilterProp="children"
                 >
-                  <Checkbox.Group>
-                    <Checkbox value={DateDuplicateType.Monday}>
-                      {dateDuplicateTypeText[DateDuplicateType.Monday]}
-                    </Checkbox>
-                    <Checkbox value={DateDuplicateType.Tuesday}>
-                      {dateDuplicateTypeText[DateDuplicateType.Tuesday]}
-                    </Checkbox>
-                    <Checkbox value={DateDuplicateType.Wednesday}>
-                      {dateDuplicateTypeText[DateDuplicateType.Wednesday]}
-                    </Checkbox>
-                    <Checkbox value={DateDuplicateType.Thursday}>
-                      {dateDuplicateTypeText[DateDuplicateType.Thursday]}
-                    </Checkbox>
-                    <Checkbox value={DateDuplicateType.Friday}>
-                      {dateDuplicateTypeText[DateDuplicateType.Friday]}
-                    </Checkbox>
-                    <Checkbox value={DateDuplicateType.Saturday}>
-                      {dateDuplicateTypeText[DateDuplicateType.Saturday]}
-                    </Checkbox>
-                    <Checkbox value={DateDuplicateType.Sunday}>
-                      {dateDuplicateTypeText[DateDuplicateType.Sunday]}
-                    </Checkbox>
-                  </Checkbox.Group>
-                </Form.Item>
-              ) : null;
-            }}
+                  {
+                    getFieldValue('eventSelectData').map((event: IEvent) => {
+                      return (
+                        <Select.Option
+                          key={`task-operation-modal-eventId-${event.eventId}`}
+                          value={event.eventId}
+                        >
+                          <div
+                            className="task-operation-modal-item"
+                            title={`事件名称：${event.eventName}\n监控对象：${event.monitorName}`}
+                          >
+                            {event.eventName} {`（${event.monitorName}）`}
+                          </div>
+                        </Select.Option>
+                      );
+                    })
+                  }
+                </Select>
+              </Form.Item>
+            )}
           </Form.Item>
-        </Form.Item>
-        <Form.Item
-          label="任务描述"
-          name="description"
-          rules={[{required: true, message: '请输入任务描述'}]}
-          className="input"
-        >
-          <Input.TextArea placeholder="请输入任务描述" rows={3} />
-        </Form.Item>
-        <Row justify="end" className="modal-row">
-          <Button size="small" type="primary" htmlType="submit" loading={loading}>提 交</Button>
-          <Button size="small" type="primary" onClick={editTaskCancel}>取 消</Button>
-        </Row>
-      </Form>
+          <Form.Item
+            label="任务等级"
+            name="taskLevel"
+            rules={[{required: true, message: '请选择任务等级'}]}
+            className="radio"
+          >
+            <Radio.Group>
+              <Radio value={TaskLevel.General}>{taskLevelText[TaskLevel.General]}</Radio>
+              <Radio value={TaskLevel.Important}>{taskLevelText[TaskLevel.Important]}</Radio>
+              <Radio value={TaskLevel.Urgent}>{taskLevelText[TaskLevel.Urgent]}</Radio>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item label="任务时间" name="taskTime" rules={[{required: true, message: '请选择任务时间'}]}>
+            <DatePicker.RangePicker
+              locale={locale}
+              ranges={{
+                今日: [moment(), moment()],
+                本月: [moment().startOf('month'), moment().endOf('month')]
+              }}
+              showTime
+              format="YYYY-MM-DD HH:mm:ss"
+              dropdownClassName="inter-plat-picker-dropdown task-operation-modal-picker"
+            />
+          </Form.Item>
+          <Form.Item
+            label="任务地址"
+            name="taskAddress"
+            rules={[{required: true, message: '请输入任务地址'}]}
+            className="input"
+          >
+            <Input type="text" placeholder="请输入任务地址" />
+          </Form.Item>
+          <Form.Item
+            label="任务周期"
+            rules={[{required: true, message: '请选择任务周期'}]}
+            className="radio radio-require"
+          >
+            <Form.Item name="taskPeriod" rules={[{required: true, message: '请选择任务周期'}]}>
+              <Radio.Group onChange={radioChange}>
+                <Radio value={TaskPeriod.Immediate}>{taskPeriodText[TaskPeriod.Immediate]}</Radio>
+                <Radio value={TaskPeriod.Timing}>{taskPeriodText[TaskPeriod.Timing]}</Radio>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item
+              noStyle
+              shouldUpdate={(prevValues, currentValues) => prevValues.taskPeriod !== currentValues.taskPeriod}
+            >
+              {({getFieldValue}) => {
+                return getFieldValue('taskPeriod') === TaskPeriod.Timing ? (
+                  <Form.Item
+                    name="dateDuplicateType"
+                    rules={[{required: true, message: '请勾选定时任务的具体时间'}]}
+                    className="checkbox"
+                  >
+                    <Checkbox.Group>
+                      <Checkbox value={DateDuplicateType.Monday}>
+                        {dateDuplicateTypeText[DateDuplicateType.Monday]}
+                      </Checkbox>
+                      <Checkbox value={DateDuplicateType.Tuesday}>
+                        {dateDuplicateTypeText[DateDuplicateType.Tuesday]}
+                      </Checkbox>
+                      <Checkbox value={DateDuplicateType.Wednesday}>
+                        {dateDuplicateTypeText[DateDuplicateType.Wednesday]}
+                      </Checkbox>
+                      <Checkbox value={DateDuplicateType.Thursday}>
+                        {dateDuplicateTypeText[DateDuplicateType.Thursday]}
+                      </Checkbox>
+                      <Checkbox value={DateDuplicateType.Friday}>
+                        {dateDuplicateTypeText[DateDuplicateType.Friday]}
+                      </Checkbox>
+                      <Checkbox value={DateDuplicateType.Saturday}>
+                        {dateDuplicateTypeText[DateDuplicateType.Saturday]}
+                      </Checkbox>
+                      <Checkbox value={DateDuplicateType.Sunday}>
+                        {dateDuplicateTypeText[DateDuplicateType.Sunday]}
+                      </Checkbox>
+                    </Checkbox.Group>
+                  </Form.Item>
+                ) : null;
+              }}
+            </Form.Item>
+          </Form.Item>
+          <Form.Item
+            label="任务描述"
+            name="description"
+            className="input"
+          >
+            <Input.TextArea placeholder="请输入任务描述" rows={3} />
+          </Form.Item>
+          <Row justify="end" className="modal-row">
+            <Button size="small" type="primary" htmlType="submit" loading={loading}>提 交</Button>
+            <Button size="small" type="primary" onClick={editTaskCancel}>取 消</Button>
+          </Row>
+        </Form>
+      </Spin>
     </StyledModal>
   );
 };
