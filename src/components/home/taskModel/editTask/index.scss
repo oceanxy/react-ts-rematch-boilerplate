@@ -123,10 +123,18 @@
             }
           }
 
+          &.ant-form-item-has-error .ant-input,
+          &.ant-form-item-has-error .ant-input:hover,
           &.ant-form-item-has-error .ant-select .ant-select-selector,
           &.ant-form-item-has-error .ant-input {
             border-color: #ff4d4f !important;
             @include bg;
+          }
+
+          &.ant-form-item-has-error .ant-input-affix-wrapper,
+          &.ant-form-item-has-error .ant-input-affix-wrapper:hover {
+            border: none;
+            background: none;
           }
 
           &.radio-require .ant-form-item-label label:before {
@@ -151,6 +159,45 @@
   @include border-color;
 }
 
+.ant-input-affix-wrapper-textarea-with-clear-btn.ant-input-affix-wrapper-textarea-with-clear-btn {
+  background: none;
+  border: none;
+}
+
+.ant-input-affix-wrapper.ant-input-affix-wrapper {
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+
+  .ant-input-textarea-clear-icon,
+  .ant-input-suffix {
+    position: absolute;
+    opacity: 0;
+    margin-left: 0;
+    right: 12px;
+    top: 30%;
+    transition: all .3s cubic-bezier(.645, .045, .355, 1);
+  }
+
+  &:hover {
+    .ant-input-textarea-clear-icon,
+    .ant-input-suffix {
+      opacity: 1;
+    }
+  }
+
+  &:hover .ant-input {
+    @include bg_hover;
+  }
+
+  & .ant-input:focus,
+  &.ant-input-affix-wrapper-focused .ant-input {
+    @include bg_focus;
+  }
+}
+
+.ant-input-affix-wrapper.ant-input-affix-wrapper .ant-input,
 .ant-input.ant-input,
 .ant-select.ant-select .ant-select-selector,
 .ant-picker.ant-picker {
@@ -160,6 +207,10 @@
   color: #a8aeba;
   padding: 4px 10px;
   line-height: 1.6715;
+
+  &.ant-input-affix-wrapper-textarea-with-clear-btn {
+    @include bg;
+  }
 
   &.ant-select-selector {
     padding: 0;
@@ -185,6 +236,10 @@
     resize: none;
   }
 
+  &:hover:hover {
+    @include bg_hover;
+  }
+
   &.ant-input-focused,
   &.ant-select-focused .ant-select-selector,
   &.ant-picker-focused {
@@ -192,6 +247,8 @@
   }
 }
 
+.ant-input-affix-wrapper.ant-input-affix-wrapper .ant-input-textarea-clear-icon,
+.ant-input-affix-wrapper.ant-input-affix-wrapper .ant-input-suffix,
 .ant-input.ant-input .ant-input-clear,
 .ant-select.ant-select .ant-select-clear,
 .ant-picker.ant-picker .ant-picker-clear {

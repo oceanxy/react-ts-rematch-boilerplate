@@ -38,6 +38,7 @@ interface IEditTaskProps extends Modal {
   showModal: IEditTaskModel['effects']['showModal']
   updateRemoteTask: IEditTaskModel['effects']['updateRemoteTask']
   fetchDataForSelect: IEventListModel['effects']['fetchDataForSelect']
+  fetchEventDetailsData: IEventDetailsModel['effects']['fetchData']
 }
 
 /**
@@ -53,17 +54,26 @@ const StyledModal = styled(Modal)(styledBlocks.containerTheme);
  * @constructor
  */
 const EditTask = (props: Partial<IEditTaskProps>) => {
-  const {showModal, updateRemoteTask, data, isShowModal, fetchDataForSelect} = props;
+  const {showModal, updateRemoteTask, data, isShowModal, fetchDataForSelect, fetchEventDetailsData} = props;
   /**
    * 提交修改按钮的loading状态
    */
   const [loading, setLoading] = useState(false);
   // 表单loading状态
   const [formLoading, setFormLoading] = useState(true);
+  // 关联事件下拉列表当前选中的ID数组。用此状态来管理关联事件下拉列表选中的第一个值变化后，更新任务地址文本框
+  const [selectedEventIds, setSelectedEventIds] = useState(null as string[] | null);
   /**
    * antd hooks
    */
   const [form] = Form.useForm();
+  // 表单校验规则
+  const validateMessages = {
+    required: '${label}为必填项！',
+    string: {
+      max: '请输入${max}个以内的字符'
+    }
+  };
 
   /**
    * 提交表单
@@ -86,6 +96,33 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
       message.info('修改成功');
     } else {
       message.info('修改失败，请稍后再试。');
+    }
+  };
+
+  /**
+   * 处理关联事件下拉列表change事件
+   * @param {IEvent["eventId"][]} ids
+   * @param options
+   * @returns {Promise<void>}
+   */
+  const handleEventChange = async (ids: IEvent['eventId'][], options: any) => {
+    const temp = ids?.[0];
+
+    if (!temp) {
+      form.setFieldsValue({taskAddress: ''});
+    } else if (temp !== selectedEventIds![0]) {
+      setSelectedEventIds(ids);
+      setFormLoading(true);
+      // 根据关联事件下拉列表的第一个值去请求该事件的详情数据，然后回填到任务地址文本框
+      const details: IEventDetailsData = await fetchEventDetailsData!({
+        updateEventDetails: false,
+        monitorId: options[0].monitorid,
+        eventType: options[0].eventtype,
+        startTime: options[0].starttime
+      });
+
+      form.setFieldsValue({taskAddress: details.eventEndAddress});
+      setFormLoading(false);
     }
   };
 
@@ -127,7 +164,7 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
 
   // 准备表单回填数据
   useEffect(() => {
-    if (!formLoading) {
+    if (!formLoading && !selectedEventIds) {
       const eventIds = data?.events.map((event) => event.eventId) ?? [];
       const designateMonitorIds = data?.executors.map((entity) => entity.monitorId) ?? [];
       const dateDuplicateType = data?.dateDuplicateType.split(',').reduce((str, cur) => {
@@ -137,6 +174,10 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
         [] as DateDuplicateType[]
       ) ?? [];
 
+      // 设置当前关联事件下拉列表选中的第一个事件ID
+      setSelectedEventIds(eventIds);
+
+      // 设置antd表单回填值
       form.setFieldsValue({
         designateMonitorIds,
         eventIds,
@@ -165,22 +206,33 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
       getContainer={false}
     >
       <Spin spinning={formLoading}>
-        <Form form={form} onFinish={onFinish} initialValues={{
-          /**
-           * 关联事件字段下拉列表数据
-           * mock数据时直接采用事件列表的数据加上任务详情绑定的事件
-           */
-          eventSelectData: config.mock ?
-            data?.events.concat(props.events!) ?? [] :
-            []
-        }}>
+        <Form
+          form={form}
+          onFinish={onFinish}
+          initialValues={{
+            /**
+             * 关联事件字段下拉列表数据
+             * mock数据时直接采用事件列表的数据加上任务详情绑定的事件
+             */
+            eventSelectData: config.mock ?
+              data?.events.concat(props.events!) ?? [] :
+              []
+          }}
+          validateMessages={validateMessages}
+        >
           <Form.Item
             label="任务名称"
             name="taskName"
-            rules={[{required: true, message: '请输入任务名称'}]}
+            rules={[
+              {required: true},
+              {
+                pattern: /^[a-zA-Z\u4e00-\u9fa50-9-]{1,10}$/,
+                message: '请输入10个字符以内的中文、字母、数字或中划线'
+              }
+            ]}
             className="input"
           >
-            <Input type="text" placeholder="请输入任务名称" />
+            <Input type="text" placeholder="请输入任务名称" autoComplete="off" allowClear={true} />
           </Form.Item>
           <Form.Item
             noStyle
@@ -199,6 +251,7 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
                   dropdownClassName="inter-plat-dropdown task-operation-modal-select"
                   showSearch
                   optionFilterProp="children"
+                  onChange={handleEventChange}
                 >
                   {
                     getFieldValue('eventSelectData').map((event: IEvent) => {
@@ -206,6 +259,9 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
                         <Select.Option
                           key={`task-operation-modal-eventId-${event.eventId}`}
                           value={event.eventId}
+                          starttime={event.startTime}
+                          monitorid={event.monitorId}
+                          eventtype={event.eventType}
                         >
                           <div
                             className="task-operation-modal-item"
@@ -248,10 +304,13 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
           <Form.Item
             label="任务地址"
             name="taskAddress"
-            rules={[{required: true, message: '请输入任务地址'}]}
             className="input"
+            rules={[
+              {required: true, message: '请输入任务地址'},
+              {type: 'string', max: 50}
+            ]}
           >
-            <Input type="text" placeholder="请输入任务地址" />
+            <Input type="text" placeholder="请输入任务地址" autoComplete="off" allowClear={true} />
           </Form.Item>
           <Form.Item
             label="任务周期"
@@ -307,8 +366,9 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
             label="任务描述"
             name="description"
             className="input"
+            rules={[{type: 'string', max: 50}]}
           >
-            <Input.TextArea placeholder="请输入任务描述" rows={3} />
+            <Input.TextArea placeholder="请输入任务描述" rows={3} allowClear={true} />
           </Form.Item>
           <Row justify="end" className="modal-row">
             <Button size="small" type="primary" htmlType="submit" loading={loading}>提 交</Button>

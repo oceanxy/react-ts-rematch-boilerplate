@@ -19,7 +19,8 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   showModal: dispatch.editTask.showModal,
   updateRemoteTask: dispatch.editTask.updateRemoteTask,
-  fetchDataForSelect: dispatch.eventList.fetchDataForSelect
+  fetchDataForSelect: dispatch.eventList.fetchDataForSelect,
+  fetchEventDetailsData: dispatch.eventDetails.fetchData
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditTask);

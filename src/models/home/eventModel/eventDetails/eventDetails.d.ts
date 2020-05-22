@@ -7,6 +7,7 @@
  * @LastModifiedTime: 2020-05-19 周二 09:55:00
  */
 
+import { APIResponse } from '@/interfaces/api/mock';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
@@ -119,9 +120,10 @@ declare global {
       setState(payload?: Partial<IEventDetailsState>): void
       /**
        * 获取数据
-       * @param {IEventDetailsRequest} reqPayload
+       * @param {IEventDetailsRequest & {updateEventDetails?: boolean}} reqPayload:请求参数。updateEventDetails:获取数据后是否更新事件详情组件的数据，默认true
+       * @returns {Promise<APIResponse["data"]["eventDetails"]>}
        */
-      fetchData(reqPayload?: IEventDetailsRequest): void
+      fetchData(reqPayload?: IEventDetailsRequest & {updateEventDetails?: boolean}): Promise<APIResponse['data']['eventDetails']> | void
     }
   }
 }

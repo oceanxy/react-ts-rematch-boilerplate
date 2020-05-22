@@ -86,21 +86,22 @@ const eventDetails: IEventDetailsModel = {
       const {startTime, monitorId, eventType} = store.getState().eventList.curSelectedEvent;
 
       if (!reqPayload) {
-        if (!startTime || !monitorId || !eventType) {
-          throw new Error('获取事件详情的参数错误，请确认！');
-        } else {
-          reqPayload = {
-            startTime,
-            monitorId,
-            eventType
-          };
-        }
+        reqPayload = {
+          startTime: startTime!,
+          monitorId: monitorId!,
+          eventType: eventType!
+        };
       }
 
       const response = await fetchApis.fetchEventDetails(reqPayload);
 
       if (+response.retCode === 0) {
-        store.dispatch.eventDetails.setState({data: response.data.eventDetails});
+        // 检测是否是临时获取事件详情数据，如果是则返回这个临时数据，否则更新事件详情组件的数据
+        if (!reqPayload || !('updateEventDetails' in reqPayload) || reqPayload.updateEventDetails) {
+          store.dispatch.eventDetails.setState({data: response.data.eventDetails});
+        }
+
+        return response.data.eventDetails;
       } else {
         throw new Error(response.retMsg);
       }
