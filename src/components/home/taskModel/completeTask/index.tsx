@@ -47,7 +47,7 @@ const CompleteTask = (props: Partial<ICompleteTaskProps>) => {
    */
   const completeTaskOK = async () => {
     setLoading(true);
-    const response = await completeRemoteTask!({taskId: ''});
+    const response = await completeRemoteTask!();
     setLoading(false);
     showModal!(false);
 

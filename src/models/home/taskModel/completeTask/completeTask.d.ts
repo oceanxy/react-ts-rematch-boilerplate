@@ -8,6 +8,7 @@
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
+import { RootState } from '@/store';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
@@ -54,9 +55,10 @@ declare global {
       /**
        * 向服务端发送完成任务的请求
        * @param {ICompleteTaskRequest} completeTask
+       * @param {RootState} state
        * @returns {Promise<APIResponse>}
        */
-      completeRemoteTask(completeTask: ICompleteTaskRequest): Promise<APIResponse>
+      completeRemoteTask(completeTask?: ICompleteTaskRequest, state?: RootState): Promise<APIResponse>
       /**
        * 设置状态
        * @param {Partial<IEditTaskState>} payload

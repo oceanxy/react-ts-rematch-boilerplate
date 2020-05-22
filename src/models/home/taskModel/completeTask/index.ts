@@ -30,7 +30,11 @@ const editTask: ICompleteTaskModel = {
     async showModal(isShowModal) {
       store.dispatch.completeTask.updateModalState({isShowModal: isShowModal ?? true});
     },
-    async completeRemoteTask(completeTask) {
+    async completeRemoteTask(completeTask, state) {
+      if (!completeTask) {
+        completeTask = {taskId: state?.taskList.curSelectedTask?.taskId!};
+      }
+
       const response = await fetchApis.completeTask(completeTask);
 
       if (Number(response.retCode) === 0) {
