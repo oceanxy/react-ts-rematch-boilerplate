@@ -205,8 +205,9 @@ declare global {
       /**
        * 设置状态
        * @param {Partial<IAMapState>} payload
+       * @param {RootState} state
        */
-      setState(payload: Partial<IAMapState>): void
+      setState(payload: Partial<IAMapState>, state?: RootState): void
       /**
        * 清除当前弹框的海量点信息
        */

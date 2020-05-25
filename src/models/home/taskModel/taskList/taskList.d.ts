@@ -62,6 +62,11 @@ declare global {
      * 当前选中的任务对象
      */
     curSelectedTask?: ITask
+    /**
+     * 查询任务的方式
+     * -1:全部(默认) 0:按监控对象查询 1:按事件查询
+     */
+    queryType?: ITaskListRequest['queryType']
   }
 
   /**
@@ -73,7 +78,7 @@ declare global {
      */
     monitorId: string
     /**
-     * 查询方式
+     * 查询任务的方式
      * -1:全部（默认） 0:按监控对象查询 1:按事件查询
      */
     queryType: -1 | 0 | 1

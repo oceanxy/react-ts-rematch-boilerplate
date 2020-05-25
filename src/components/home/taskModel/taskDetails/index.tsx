@@ -26,16 +26,18 @@ interface ITaskDetailsProps {
 const TaskDetails = (props: Partial<ITaskDetailsProps>) => {
   const {data, curSelTask, fetchData, setState} = props;
 
-  const dateDuplicateText = data?.dateDuplicateType
+  const dateDuplicateText = (data?.dateDuplicateType || '')
     .split(',')
     .map((str) => dateDuplicateTypeText[Number(str)])
     .join('，');
 
   useEffect(() => {
-    if (curSelTask?.taskId) {
-      fetchData!({taskId: curSelTask.taskId});
-    } else {
-      setState!();
+    if ((curSelTask?.taskId || data?.taskId) && curSelTask?.taskId !== data?.taskId) {
+      if (curSelTask?.taskId) {
+        fetchData!({taskId: curSelTask.taskId});
+      } else {
+        setState!();
+      }
     }
   }, [curSelTask?.taskId]);
 

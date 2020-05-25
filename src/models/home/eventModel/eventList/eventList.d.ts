@@ -104,8 +104,10 @@ declare global {
     data: IEvent[]
     /**
      * 当前选中的事件
+     * 注意：在组件内部清空此字段使用{};其他组件清空此字段请直接复制undefined
+     * 因为此组件与任务列表组件联动，在setState时，会通过此逻辑来为任务列表的查询字段（queryType）设置状态
      */
-    curSelectedEvent: Partial<IEvent>
+    curSelectedEvent?: Partial<IEvent>
   }
 
   /**

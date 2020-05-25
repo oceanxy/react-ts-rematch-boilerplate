@@ -328,34 +328,36 @@ const MassPoint = (props: MassPointProps) => {
    * 点击海量点或点击事件激活弹窗时，获取弹窗数据
    */
   useEffect(() => {
-    if (curSelectedEvent?.eventId) {
-      (async () => {
-        // 请求弹窗内的数据
-        const response = await fetchWindowInfo({
-          queryType: 1, // 按事件查
-          monitorId: curSelectedEvent.monitorId!,
-          startTime: curSelectedEvent.startTime,
-          eventType: curSelectedEvent.eventType
-        });
+    if (curSelectedEvent) {
+      if (curSelectedEvent.eventId) {
+        (async () => {
+          // 请求弹窗内的数据
+          const response = await fetchWindowInfo({
+            queryType: 1, // 按事件查
+            monitorId: curSelectedEvent.monitorId!,
+            startTime: curSelectedEvent.startTime,
+            eventType: curSelectedEvent.eventType
+          });
 
-        if (+response.retCode === 0) {
-          setState({curMassPoint: response.data});
-          // 开启mock时，使用mock数据展示
-          if (config.mock) {
-            const {data} = response;
-            const {location: {longitude, latitude}} = data;
+          if (+response.retCode === 0) {
+            setState({curMassPoint: response.data});
+            // 开启mock时，使用mock数据展示
+            if (config.mock) {
+              const {data} = response;
+              const {location: {longitude, latitude}} = data;
 
-            infoWindow.setContent(infoWindowTemplate(response.data));
-            infoWindow.open(map!, [longitude, latitude]);
-            map.setCenter([longitude, latitude]);
+              infoWindow.setContent(infoWindowTemplate(response.data));
+              infoWindow.open(map!, [longitude, latitude]);
+              map.setCenter([longitude, latitude]);
+            }
+          } else {
+            clearCurMassPoint();
+            message.error('获取信息失败，请稍候再试！');
           }
-        } else {
-          clearCurMassPoint();
-          message.error('获取信息失败，请稍候再试！');
-        }
-      })();
-    } /** 取消选中事件时清除弹框 */ else {
-      map.clearInfoWindow();
+        })();
+      } /** 取消选中事件时清除弹框 */ else {
+        map.clearInfoWindow();
+      }
     }
   }, [curSelectedEvent?.eventId]);
 

@@ -57,6 +57,15 @@ const eventList: IEventListModel = {
       return await fetchApis.fetchEventList(reqPayload);
     },
     async setState(payload) {
+      // 根据当前选中事件状态，来改变任务列表model的queryType（任务查询方式）的状态
+      if ('curSelectedEvent' in payload) {
+        if (payload.curSelectedEvent && Object.keys(payload.curSelectedEvent).length) {
+          store.dispatch.taskList.setState({queryType: 1});
+        } else if (payload.curSelectedEvent) {
+          store.dispatch.taskList.setState({queryType: -1});
+        }
+      }
+
       store.dispatch.eventList.updateState(payload);
     }
   }

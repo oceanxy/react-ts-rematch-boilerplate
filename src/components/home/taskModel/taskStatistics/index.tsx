@@ -34,11 +34,11 @@ const TaskStatistics = (props: Partial<ITaskStatisticsProps>) => {
     // 禁止重复点击切换统计状态
     if (!isStatisticsMethodChanged) return;
 
-    // 获取新的列表数据
-    fetchData!({taskStatus: reqTaskStatisticsMethod});
-
     // 更新组件状态
     setTaskStatisticsMethod(reqTaskStatisticsMethod);
+
+    // 获取新的列表数据
+    fetchData!({taskStatus: reqTaskStatisticsMethod});
   };
 
   // 当前选中的事件状态变动时，重置任务tab选中状态

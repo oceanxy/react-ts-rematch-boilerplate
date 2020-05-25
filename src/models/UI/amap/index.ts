@@ -47,10 +47,22 @@ const map: IAMapModel = {
   },
   effects: {
     setState(payload: Partial<IAMapState>): void {
+      if ('curMassPoint' in payload && payload.curMassPoint) {
+        // 当点击海量点时，任务列表model的queryType（任务查询方式）状态有且仅有一个固定值：0
+        store.dispatch.taskList.setState({queryType: 0});
+      }
+
       store.dispatch.map.updateState(payload);
     },
     clearCurMassPoint() {
       store.dispatch.map.updateState({curMassPoint: undefined});
+      // 清空当前海量点弹窗信息时，任务列表model的queryType（任务查询方式）状态有且仅有一个固定值：-1
+      store.dispatch.taskList.setState({queryType: -1});
+      // 检测是否有事件被选中
+      if (!store.getState().eventList.curSelectedEvent?.eventId) {
+        // 当前海量点信息变更后，重新请求任务列表（当前未选中事件和海量点，应请求全部任务数据）
+        store.dispatch.taskList.fetchData({queryType: -1, selectFirstData: true});
+      }
     },
     async fetchMassPoint(monitorType?: IEntity['monitorType'][], state?: RootState) {
       if (!monitorType) {
@@ -85,7 +97,7 @@ const map: IAMapModel = {
     },
     async fetchWindowInfo(reqPayload?: InfoWindowRequest): Promise<APIResponse<InfoWindowResponse>> {
       if (!reqPayload) {
-        const {monitorId} = store.getState().eventList.curSelectedEvent;
+        const {monitorId} = store.getState().eventList.curSelectedEvent!;
 
         if (monitorId) {
           reqPayload = {monitorId};

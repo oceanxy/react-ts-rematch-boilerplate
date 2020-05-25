@@ -83,7 +83,7 @@ const eventDetails: IEventDetailsModel = {
   },
   effects: {
     async fetchData(reqPayload) {
-      const {startTime, monitorId, eventType} = store.getState().eventList.curSelectedEvent;
+      const {startTime, monitorId, eventType} = store.getState().eventList.curSelectedEvent!;
 
       if (!reqPayload) {
         reqPayload = {

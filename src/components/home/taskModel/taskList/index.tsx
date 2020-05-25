@@ -40,12 +40,19 @@ const TaskList = (props: Partial<ITaskListProps>) => {
   };
 
   useEffect(() => {
+    // isFirstLoad字段规则：
     // 因为首次加载页面时，必定会进入useEffect函数，
     // 其实这次请求是没有意义的，因为首次加载页面时也会加载事件列表，
     // 而事件列表的当前选中事件状态更新后会立即触发本useEffect执行，
     // 从而导致在首次加载页面时，会连续发送两次事件列表的请求，
     // 造成资源浪费，所以这里在本组件内部用一个单独的状态来监测是否是首次加载页面
-    if (!isFirstLoad) {
+    // curSelectedEvent状态规则：
+    // 因事件列表与任务列表有联动效果，而海量点与任务列表也有联动效果
+    // 所以规定当前选中事件状态（curSelectedEvent）有三种状态
+    // 1：undefined。通过非事件列表组件触发的状态更新，且为假值时，规定为undefined
+    // 2：{}。通过事件列表组件内部触发的状态更新，切为假值时，规定为空对象
+    // 3：正常设置当前事件信息，为一个事件对象 IEvent。
+    if (!isFirstLoad && curSelectedEvent) {
       fetchData!({selectFirstData: true});
     } else {
       setFirstLoad(false);
