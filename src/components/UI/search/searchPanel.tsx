@@ -139,7 +139,7 @@ const SearchPanel = (props: ISearchPanelProps) => {
     const response = await fetchDetails({
       fenceId: id,
       queryType: 1,
-      fenceType: FenceType.Circle
+      fenceType: fence.objType
     });
 
     if (+response.retCode === 0) {

@@ -35,7 +35,7 @@ declare global {
     /**
      * 围栏的类型
      */
-    objType: '';
+    objType: FenceType;
     /**
      * 围栏图标
      */
