@@ -167,7 +167,7 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
     if (!formLoading && !selectedEventIds) {
       const eventIds = data?.events.map((event) => event.eventId) ?? [];
       const designateMonitorIds = data?.executors.map((entity) => entity.monitorId) ?? [];
-      const dateDuplicateType = data?.dateDuplicateType.split(',').reduce((str, cur) => {
+      const dateDuplicateType = (data?.dateDuplicateType || '').split(',').reduce((str, cur) => {
           str.push(Number(cur));
           return str;
         },

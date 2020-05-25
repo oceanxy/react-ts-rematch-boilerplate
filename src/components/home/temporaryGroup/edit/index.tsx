@@ -96,6 +96,10 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
    */
   const handleSearchEntity = async (values: any) => {
     setSearchLoading(true);
+    if (values.ageRange.join(',') === '0,0') {
+      delete values.ageRange;
+    }
+
     const response = await fetchConditionData!({
       ...values
     });
@@ -277,7 +281,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
             <Form form={searchForm} onFinish={handleSearchEntity} autoComplete="off" initialValues={{
               radius,
               gender: [1, 2],
-              ageRange: [20, 40]
+              ageRange: [0, 0]
             }}>
               <Row className="inter-plat-row-text">请根据条件搜索监控对象</Row>
               <Form.Item
@@ -461,14 +465,19 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                 label="年龄范围"
                 name="ageRange"
                 className="slider"
-                rules={[{required: true, message: '请选择年龄范围'}]}
               >
                 <Slider range={true} />
               </Form.Item>
               <Form.Item
                 label="半径（m）"
                 name="radius"
-                rules={[{required: true, message: '请输入半径'}]}
+                rules={[
+                  {required: true, message: '请输入半径'},
+                  {
+                    pattern: /^[1-9]\d*(\.\d+)?$/,
+                    message: '请输入大于0的数字'
+                  }
+                ]}
                 className="input"
               >
                 <Input type="text" placeholder="请输入半径" />

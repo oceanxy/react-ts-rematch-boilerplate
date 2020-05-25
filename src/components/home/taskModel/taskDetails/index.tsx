@@ -4,7 +4,7 @@
  * @Description: 任务详情组件
  * @Date: 2020-04-14 周二 10:47:56
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-15 周三 10:11:19
+ * @LastModifiedTime: 2020-05-25 周一 16:53:13
  */
 
 import Container from '@/components/UI/containerComp';
@@ -17,14 +17,14 @@ import React, { useEffect } from 'react';
 import './index.scss';
 
 interface ITaskDetailsProps {
-  data: ITaskDetailsState['data']
-  curSelTask: ITaskListState['curSelectedTask']
-  fetchData: ITaskDetailsModel['effects']['fetchData']
-  setState: ITaskDetailsModel['effects']['setState']
+  data: ITaskDetailsState['data'];
+  curSelTask: ITaskListState['curSelectedTask'];
+  fetchData: ITaskDetailsModel['effects']['fetchData'];
+  setState: ITaskDetailsModel['effects']['setState'];
 }
 
 const TaskDetails = (props: Partial<ITaskDetailsProps>) => {
-  const {data, curSelTask, fetchData, setState} = props;
+  const { data, curSelTask, fetchData, setState } = props;
 
   const dateDuplicateText = (data?.dateDuplicateType || '')
     .split(',')
@@ -34,7 +34,7 @@ const TaskDetails = (props: Partial<ITaskDetailsProps>) => {
   useEffect(() => {
     if ((curSelTask?.taskId || data?.taskId) && curSelTask?.taskId !== data?.taskId) {
       if (curSelTask?.taskId) {
-        fetchData!({taskId: curSelTask.taskId});
+        fetchData!({ taskId: curSelTask.taskId });
       } else {
         setState!();
       }
@@ -42,7 +42,7 @@ const TaskDetails = (props: Partial<ITaskDetailsProps>) => {
   }, [curSelTask?.taskId]);
 
   return (
-    <Container conTheme="style1" style={{marginTop: 10}}>
+    <Container conTheme="style1" style={{ marginTop: 10 }}>
       <ItemLegend
         name="任务详情"
         iconColor={taskTypeColor[data!.taskLevel]}

@@ -49,7 +49,7 @@ declare global {
   /**
    * 点
    */
-  type IPoint = [number, number]
+  type IPoint = [number, number];
 
   /**
    * 围栏区域位置信息
@@ -58,19 +58,19 @@ declare global {
     /**
      * 半径
      */
-    radius: number
+    radius: number;
     /**
      * 线条宽度
      */
-    width: number
+    width: number;
     /**
      * 点坐标集合
      */
-    points: IPoint[]
+    points: IPoint[];
     /**
      * 位置信息
      */
-    position: string
+    position: string;
     /**
      * 中心点
      */
@@ -78,12 +78,12 @@ declare global {
       /**
        * 纬度
        */
-      latitude: number
+      latitude: number;
       /**
        * 经度
        */
-      longitude: number
-    }
+      longitude: number;
+    };
   }
 
   /**
@@ -93,27 +93,27 @@ declare global {
     /**
      * 围栏ID
      */
-    fenceId: string
+    fenceId: string;
     /**
      * 围栏名称
      */
-    fenceName: string
+    fenceName: string;
     /**
      * 围栏种类
      */
-    fenceType: FenceType
+    fenceType: FenceType;
     /**
      * 围栏展示颜色
      */
-    colorCode: string
+    colorCode: string;
     /**
      * 透明度
      */
-    transparency: number
+    transparency: number;
     /**
      * 围栏位置数据数组(与获取围栏详情相同)
      */
-    locationData: ILocation
+    locationData: ILocation;
   }
 
   /**
@@ -123,7 +123,11 @@ declare global {
     /**
      * 围栏种类名称或围栏名称关键字。为空查询全部
      */
-    queryParam?: IFence['name'] | string
+    queryParam?: IFence['name'] | string;
+    /**
+     * 是否返回标注围栏 0：不返回 1：返回（默认）
+     */
+    isReturnMarkFence?: 0 | 1;
   }
 
   /**
@@ -133,15 +137,15 @@ declare global {
     /**
      * 围栏ID
      */
-    fenceId: string
+    fenceId: string;
     /**
      * 0：不返回经纬度信息 1：返回经纬度信息 默认0
      */
-    queryType?: 0 | 1
+    queryType?: 0 | 1;
     /**
      * 围栏类型
      */
-    fenceType: FenceType
+    fenceType: FenceType;
   }
 
   /**
@@ -155,35 +159,35 @@ declare global {
       /**
        * 围栏ID
        */
-      fenceId: string
+      fenceId: string;
       /**
        * 围栏名称
        */
-      fenceName: string
+      fenceName: string;
       /**
        * 围栏种类
        */
-      fenceType: FenceType
+      fenceType: FenceType;
       /**
        * 围栏展示颜色
        */
-      colorCode: string
+      colorCode: string;
       /**
        * 透明度
        */
-      transparency: number
+      transparency: number;
       /**
        * 围栏位置数据数组
        */
-      locationData: ILocation
-    }
+      locationData: ILocation;
+    };
   }
 
   /**
    * 围栏区域数据response（用于在地图上绘制围栏）
    */
   interface IFenceAreaResponse {
-    fenceList: IFenceArea[]
+    fenceList: IFenceArea[];
   }
 
   /**
@@ -193,26 +197,26 @@ declare global {
     /**
      * 当前用户下所有有权限的围栏（平台所属组织的下级组织所有的围栏）
      */
-    fences: IFence[]
+    fences: IFence[];
     /**
      * 搜索框根据关键字获取的围栏数据
      */
-    searchFences: IFence[]
+    searchFences: IFence[];
     /**
      * 用于在地图上绘制围栏的数据集
      */
-    mapFences?: IFenceAreaResponse
+    mapFences?: IFenceAreaResponse;
     /**
      * 当前围栏ID
      */
-    currentFenceId: string
+    currentFenceId: string;
   }
 
   /**
    * 围栏model接口
    */
   interface IFenceModel extends ModelConfig {
-    state: IFenceState,
+    state: IFenceState;
     reducers: {
       /**
        * 更新围栏列表数据
@@ -220,29 +224,29 @@ declare global {
        * @param {Partial<IFenceState>} payload
        * @returns {IFenceState}
        */
-      updateState(state: IFenceState, payload?: Partial<IFenceState>): IFenceState
-    },
+      updateState(state: IFenceState, payload?: Partial<IFenceState>): IFenceState;
+    };
     effects: {
       /**
        * 从远程获取围栏列表数据 （用于搜索、下拉列表等）
        * @param {IFenceRequest} reqPayload 请求参数
        */
-      fetchData(reqPayload: IFenceRequest): void
+      fetchData(reqPayload: IFenceRequest): void;
       /**
        * 设置状态
        * @param {Partial<IFenceState>} payload
        */
-      setState(payload: Partial<IFenceState>): void
+      setState(payload: Partial<IFenceState>): void;
       /**
        * 获取围栏区域数据（用于在地图上绘制围栏）
        */
-      fetchAreaData(): void
+      fetchAreaData(): void;
       /**
        * 获取围栏详情数据
        * @param {IFenceDetailsRequest} reqPayload
        * @returns {Promise<APIResponse<IFenceDetailsResponse>>}
        */
-      fetchDetails(reqPayload: IFenceDetailsRequest): Promise<APIResponse<IFenceDetailsResponse>>
-    }
+      fetchDetails(reqPayload: IFenceDetailsRequest): Promise<APIResponse<IFenceDetailsResponse>>;
+    };
   }
 }
