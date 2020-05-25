@@ -234,6 +234,10 @@
 
   &.ant-input {
     resize: none;
+
+    &[disabled] {
+      background: rgba(21,47,69,.8);
+    }
   }
 
   &:hover:hover {

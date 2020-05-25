@@ -4,7 +4,7 @@
  * @Description: 编辑临时组信息
  * @Date: 2020-04-26 周日 16:06:54
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-25 周一 17:32:33
+ * @LastModifiedTime: 2020-05-25 周一 18:29:12
  */
 
 import Modal from '@/components/UI/modal';
@@ -265,6 +265,10 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
     };
   }, [isShowEditModal]);
 
+  useEffect(() => {
+    createForm.setFieldsValue({isCreate: title.includes('创建')});
+  }, [title]);
+
   return (
     <Modal
       width={530}
@@ -292,7 +296,6 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                   <Form.Item
                     label="人员技能"
                     name="skillIds"
-                    className="select"
                   >
                     <Select
                       mode="multiple"
@@ -326,7 +329,6 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                   <Form.Item
                     label="对讲机型"
                     name="intercomModelIds"
-                    className="select"
                   >
                     <Select
                       mode="multiple"
@@ -359,7 +361,6 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                   <Form.Item
                     label="驾照类别"
                     name="driverLicenseCategoryIds"
-                    className="select"
                   >
                     <Select
                       mode="multiple"
@@ -392,7 +393,6 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                   <Form.Item
                     label="资格证书"
                     name="qualificationIds"
-                    className="select"
                   >
                     <Select
                       mode="multiple"
@@ -425,7 +425,6 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                   <Form.Item
                     label="血型"
                     name="bloodTypeIds"
-                    className="select"
                   >
                     <Select
                       mode="multiple"
@@ -453,7 +452,6 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
               <Form.Item
                 label="性别"
                 name="gender"
-                className="radio"
                 rules={[{required: true, message: '请选择性别'}]}
               >
                 <Checkbox.Group>
@@ -464,7 +462,6 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
               <Form.Item
                 label="年龄范围"
                 name="ageRange"
-                className="slider"
               >
                 <Slider range={true} />
               </Form.Item>
@@ -478,7 +475,6 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                     message: '请输入大于0的数字'
                   }
                 ]}
-                className="input"
               >
                 <Input type="text" placeholder="请输入半径" />
               </Form.Item>
@@ -495,25 +491,24 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
           onFinish={onFinish}
           autoComplete="off"
           ref={createFormRef}
-          initialValues={{temporaryGroup: name}}
+          initialValues={{temporaryGroup: name, isCreate: title.includes('创建')}}
         >
           <Form.Item
             label="名称"
             name="temporaryGroup"
             rules={[{required: true, message: '请输入任务名称'}]}
-            className="input"
           >
             <Input type="text" placeholder="请输入任务名称" disabled={!!name} />
           </Form.Item>
           <Form.Item
             noStyle
-            shouldUpdate={(prevValues, currentValues) => prevValues.entities !== currentValues.entities}
+            shouldUpdate={(prev, curr) => prev.entities !== curr.entities || prev.isCreate !== curr.isCreate}
           >
             {({getFieldValue}) => {
               return (
                 <Form.Item
-                  className="checkbox"
                   label="监控对象"
+                  className={`${getFieldValue('isCreate') ? '' : 'checkbox-entity-content'}`}
                 >
                   <Form.Item className="checkbox-operation">
                     <CheckboxGroup>
@@ -535,8 +530,10 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                   </Form.Item>
                   <Form.Item
                     name="interlocutorIds"
-                    rules={[{required: true, message: '请勾选加入临时组的监控对象'}]}
-                    className="checkbox-entity-content"
+                    rules={[{
+                      required: !getFieldValue('isCreate'),
+                      message: '请勾选加入临时组的监控对象'
+                    }]}
                   >
                     {
                       (getFieldValue('entities') || []).length ?

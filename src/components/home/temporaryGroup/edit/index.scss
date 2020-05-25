@@ -98,18 +98,22 @@
     color: #40a9ff !important;
   }
 
-  .checkbox-entity-content .ant-checkbox-group {
-    max-height: 80px;
-    overflow-y: auto;
-  }
+  .checkbox-entity-content {
+    .ant-checkbox-group {
+      max-height: 80px;
+      overflow-y: auto;
+    }
 
-  .checkbox .ant-form-item-label label::before {
-    display: inline-block;
-    margin-right: .208vw;
-    color: #ff4d4f;
-    font-size: .729vw;
-    font-family: SimSun, sans-serif;
-    line-height: 1;
-    content: '*';
+    & > .ant-form-item-label > label::before {
+      display: inline-block;
+      margin-right: .208vw;
+      color: #ff4d4f;
+      font-size: .729vw;
+      font-family: SimSun, sans-serif;
+      line-height: 1;
+      content: '*';
+    }
+
+
   }
 }
