@@ -4,7 +4,7 @@
  * @Description: 搜索结果面板组件
  * @Date: 2020-03-30 周一 14:03:30
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-12 周二 13:53:02
+ * @LastModifiedTime: 2020-05-25 周一 10:07:54
  */
 
 import Icon, { IconSource, IconSourceHover } from '@/components/UI/iconComp';
@@ -135,14 +135,6 @@ const SearchPanel = (props: ISearchPanelProps) => {
   const handleFenceClick = async (fence: IFence) => {
     const {id} = fence;
 
-    // 设置当前激活的搜索面板的项
-    setState!({
-      target: {
-        id: id!,
-        type: 'area'!
-      }
-    });
-
     // 请求弹窗内的数据
     const response = await fetchDetails({
       fenceId: id,
@@ -151,6 +143,15 @@ const SearchPanel = (props: ISearchPanelProps) => {
     });
 
     if (+response.retCode === 0) {
+      // 设置当前激活的搜索面板的项
+      setState!({
+        target: {
+          id,
+          type: 'area',
+          details: response.data.fenceDetails
+        }
+      });
+
       setMapState({curArea: response.data});
     } else {
       message.error('获取信息失败，请稍候再试！');

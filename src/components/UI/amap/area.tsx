@@ -10,7 +10,7 @@
 import infoWindowTemplate from '@/components/UI/amap/infoWindow';
 import { FenceType } from '@/models/UI/fence';
 import { message } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './index.scss';
 import Overlay = AMap.Overlay;
 
@@ -27,7 +27,7 @@ export interface AreaProps {
   triggers: IDisplayContentState['triggers']
   dispatch: IFenceModel['effects']
   curArea: IAMapState['curArea']
-  searchPanelTarget: ISearchState['target']
+  searchPanelState: ISearchState
   setSearchState: ISearchModel['effects']['setState']
 }
 
@@ -47,13 +47,22 @@ const setInfoWindow = (): AMap.InfoWindow => {
 };
 
 /**
- * 海量点组件
+ * 区域（围栏）组件
+ * @param {AreaProps} props
+ * @returns {null}
+ * @constructor
  */
 const Area = (props: AreaProps) => {
-  const {map, triggers, dispatch, data, curArea, mapDispatch, searchPanelTarget, setSearchState} = props;
+  const {map, triggers, dispatch, data, curArea, mapDispatch, searchPanelState, setSearchState} = props;
+  const {target, isShowResultPanel} = searchPanelState;
   const {setState: setMapState} = mapDispatch;
   const {fetchAreaData, setState, fetchDetails} = dispatch;
   const areaTrigger: ITrigger = triggers.slice(-1)[0];
+  /**
+   * 绘制的临时围栏集合
+   * @type {[any[], React.Dispatch<React.SetStateAction<any[]>>]}
+   */
+  const [tempArea, setTempArea] = useState({ids: [] as string[], overlays: [] as any});
 
   /**
    * 处理点击围栏事件
@@ -78,11 +87,28 @@ const Area = (props: AreaProps) => {
 
   /**
    * 创建围栏
-   * @param {IFenceState["mapFences"]} data
-   * @returns {any[] | undefined}
+   * @param {IFenceArea[]} data
+   * @param {boolean} tempFence 绘制为临时围栏
+   * @returns {any[]}
    */
-  const createOverlays = (data: IFenceState['mapFences']) => {
-    return data?.fenceList?.map((fence) => {
+  const createOverlays = (data: IFenceArea[], tempFence?: boolean) => {
+    let fenceStyle: any;
+
+    if (!tempFence) {
+      fenceStyle = {
+        strokeWeight: 0,  // 边框线粗细度
+        strokeColor: 'transparent' // 边框线颜色
+      };
+    } else {
+      fenceStyle = {
+        strokeWeight: 2,  // 边框线粗细度
+        strokeColor: '#3f8ee0', // 边框线颜色
+        strokeStyle: 'dashed', // 边框线类型
+        zIndex: 1000
+      };
+    }
+
+    return data.map((fence) => {
       const {radius, width, points, centerPoint} = fence.locationData;
       const {longitude, latitude} = centerPoint;
       let tempOverlays;
@@ -90,10 +116,9 @@ const Area = (props: AreaProps) => {
       if (fence.fenceType === FenceType.Circle) {
         tempOverlays = new AMap.Circle({
           extData: fence,
+          ...fenceStyle,
           center: new AMap.LngLat(longitude, latitude), // 圆心位置
           radius: radius,  // 半径
-          strokeWeight: 0,  // 线粗细度
-          strokeColor: 'transparent',
           fillColor: `#${fence.colorCode}`,  // 填充颜色
           fillOpacity: fence.transparency / 100 // 填充透明度
         });
@@ -106,24 +131,26 @@ const Area = (props: AreaProps) => {
       } else if (fence.fenceType === FenceType.Line) {
         tempOverlays = new AMap.Polyline({
           extData: fence,
+          ...fenceStyle,
           path: points,
           borderWeight: width, // 线条宽度，默认为 1
-          strokeColor: `#${fence.colorCode}`, // 线条颜色
-          lineJoin: 'round' // 折线拐点连接处样式
+          lineJoin: 'round', // 折线拐点连接处样式
+          strokeColor: `#${fence.colorCode}` // 线条颜色
         });
       } else {
         tempOverlays = new AMap.Polygon({
           extData: fence,
+          ...fenceStyle,
           path: points,
           fillColor: `#${fence.colorCode}`, // 多边形填充颜色
           fillOpacity: fence.transparency / 100,
-          strokeWeight: 0,
-          strokeColor: 'transparent',
           lineJoin: 'round' // 折线拐点连接处样式
         });
       }
 
-      (tempOverlays as Overlay).on('click', handleClickOverlay);
+      if (!tempFence) {
+        (tempOverlays as Overlay).on('click', handleClickOverlay);
+      }
 
       return tempOverlays;
     });
@@ -145,6 +172,7 @@ const Area = (props: AreaProps) => {
     });
   }
 
+  // 显示内容组件控制的地图围栏显示状态
   useEffect(() => {
     if (areaTrigger.status) {
       fetchAreaData();
@@ -153,8 +181,9 @@ const Area = (props: AreaProps) => {
     }
   }, [areaTrigger.status]);
 
+  // 区域数据变更后触发地图上的区域重绘
   useEffect(() => {
-    const areas = createOverlays(data);
+    const areas = createOverlays(data?.fenceList || []);
 
     // 清除地图上已存在的覆盖物
     map?.clearMap();
@@ -165,24 +194,49 @@ const Area = (props: AreaProps) => {
     }
   }, [data]);
 
+  // 地图上当前选中区域状态变更后触发弹窗
   useEffect(() => {
-    if (curArea?.fenceDetails) {
-      const {longitude, latitude} = curArea?.fenceDetails?.locationData.centerPoint;
+    if (curArea) {
+      if (curArea?.fenceDetails) {
+        const {longitude, latitude} = curArea?.fenceDetails?.locationData.centerPoint;
 
-      if (longitude && latitude) {
-        infoWindow.setContent(infoWindowTemplate(curArea));
-        infoWindow.open(map!, [longitude, latitude]);
-        map!.setCenter([longitude, latitude]);
+        // 如果是通过搜索面板触发的围栏信息更新，则在地图上新绘制一个临时围栏
+        if (target) {
+          // 避免重复绘制
+          if (!tempArea.ids.includes(target.id)) {
+            const overlay = createOverlays([target.details as IFenceArea], true);
+
+            setTempArea({
+              ids: [...tempArea.ids, target.id],
+              overlays: [...tempArea.overlays, overlay[0]]
+            });
+            map!.add(overlay);
+          }
+
+          // 重置搜索面板的target状态
+          setSearchState({target: undefined});
+        }
+
+        if (longitude && latitude) {
+          infoWindow.setContent(infoWindowTemplate(curArea));
+          infoWindow.open(map!, [longitude, latitude]);
+          map!.setCenter([longitude, latitude]);
+        } else {
+          console.error('区域的经纬度有误，请确认！');
+        }
       } else {
-        console.error('区域的经纬度有误，请确认！');
+        message.error('获取围栏信息失败，请稍候再试！');
       }
     }
-
-    // 如果是通过搜索面板触发的围栏信息更新，则重置搜索面板的target状态
-    if (searchPanelTarget) {
-      setSearchState({target: undefined});
-    }
   }, [curArea]);
+
+  // 如果关闭了搜索组件的搜索结果面板，则清空临时围栏
+  useEffect(() => {
+    if (!isShowResultPanel && tempArea.overlays.length) {
+      map?.remove(tempArea.overlays);
+      setTempArea({ids: [], overlays: []});
+    }
+  }, [isShowResultPanel]);
 
   return null;
 };

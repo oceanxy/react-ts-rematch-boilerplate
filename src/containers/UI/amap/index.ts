@@ -4,7 +4,7 @@
  * @Description: amap组件
  * @Date: 2020-03-31 周二 17:03:31
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-18 周一 16:08:45
+ * @LastModifiedTime: 2020-05-25 周一 11:06:10
  */
 
 import AMap from '@/components/UI/amap';
@@ -19,7 +19,7 @@ const mapStateToProps = (state: RootState) => ({
   intercomGroupState: state.intercomGroupName,
   curSelectedEvent: state.eventList.curSelectedEvent,
   triggers: state.displayContent.triggers,
-  searchPanelTarget: state.search.target,
+  searchPanelState: state.search,
   overlay: state.map.overlay
 });
 

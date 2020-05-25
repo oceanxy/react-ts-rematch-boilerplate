@@ -54,7 +54,7 @@ const search: ISearchModel = {
   state: {
     searchCondition: SearchCondition.ENTITY,
     isShowResultPanel: false,
-    searchKeyword: '',
+    searchKeyword: ''
   },
   reducers: {
     updateState: (state, payload) => ({

@@ -4,7 +4,7 @@
  * @Description: 搜索组件类型定义
  * @Date: 2020-04-13 周一 10:42:06
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-12 周二 15:04:22
+ * @LastModifiedTime: 2020-05-25 周一 09:56:45
  */
 
 import { EntityType } from '@/models/UI/entity';
@@ -45,9 +45,15 @@ declare global {
        */
       type: EntityType | 'area',
       /**
-       * ID
+       * 触发项的ID
        */
       id: string
+      /**
+       * 触发项的详细信息
+       * 此状态主要用于在搜索面板搜索区域数据后，在 地图 -> 区域 组件内绘制临时围栏
+       * 或 用在搜索实体（监控对象）后，暂时缓存数据，以备后用
+       */
+      details?: IFenceArea | IEntity
     }
   }
 
