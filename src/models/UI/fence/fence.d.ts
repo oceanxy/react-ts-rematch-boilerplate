@@ -68,6 +68,10 @@ declare global {
      */
     points: IPoint[]
     /**
+     * 位置信息
+     */
+    position: string
+    /**
      * 中心点
      */
     centerPoint: {

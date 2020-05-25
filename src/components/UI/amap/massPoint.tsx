@@ -77,7 +77,7 @@ const setMass = (data: IAMapState['massPoints']): AMap.MassMarks => {
   const style = getStyle(data.iconSortList);
 
   return new AMap.MassMarks(data.positionList, {
-    zIndex: 1000, // 海量点图层叠加的顺序
+    zIndex: 119, // 海量点图层叠加的顺序
     style, // 设置样式对象
     cursor: 'pointer'
   });
