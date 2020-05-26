@@ -30,13 +30,13 @@ const routesConfig: Routes = {
     exact: true,
     component: loadable(() => import('@/containers/home')),
     title: '指挥调度'
-  },
-  home2: {
-    show: true,
-    path: '/clbs',
-    exact: true,
-    title: '数据管理'
   }
+  // home2: {
+  //   show: true,
+  //   path: '/clbs',
+  //   exact: true,
+  //   title: '数据管理'
+  // },
   // test: {
   //   path: `${config.basename}/test`,
   //   exact: true,

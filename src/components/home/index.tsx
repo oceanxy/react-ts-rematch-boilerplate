@@ -55,6 +55,7 @@ const Home = (props: Partial<IHomeProps>) => {
           {renderRoutes.map((route, index) => {
             return route && <Nav key={`route-${index}`} to={route.path} title={route.title} exact={route.exact} />;
           })}
+          <a aria-current="page" className="inter-plat-nav-item" href="/clbs">数据管理</a>
         </Container>
       </Container>
       <Spin spinning={loading} wrapperClassName="inter-plat-container" delay={100}>
