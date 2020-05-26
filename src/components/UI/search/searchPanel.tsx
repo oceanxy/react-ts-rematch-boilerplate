@@ -11,8 +11,8 @@ import Icon, { IconSource, IconSourceHover } from '@/components/UI/iconComp';
 import { ISearchProps } from '@/components/UI/search/index';
 import { POI } from '@/containers/UI/amap';
 import { EntityType } from '@/models/UI/entity';
-import { FenceType } from '@/models/UI/fence';
 import { monitorTypeIcon, SearchCondition } from '@/models/UI/search';
+import { store } from '@/store';
 import { message } from 'antd';
 import React, { useEffect, useRef } from 'react';
 import styled, { StyledComponent } from 'styled-components';
@@ -118,7 +118,20 @@ const SearchPanel = (props: ISearchPanelProps) => {
     });
 
     if (+response.retCode === 0) {
-      setMapState({curMassPoint: response.data});
+      if (!response.data.location) {
+        message.info(`监控对象（${response.data.monitor.monitorName}）暂无定位信息！`);
+      } else {
+        setMapState({curMassPoint: response.data});
+      }
+
+      // 请求弹窗信息成功后，获取当前监控对象的所有事件下的所有任务
+      store.dispatch.taskList.fetchData({
+        selectFirstData: true,
+        byMonitorId: true,
+        monitorId: response.data.monitor.monitorId,
+        queryType: 0,
+        length: 2000
+      });
     } else {
       message.error('获取信息失败，请稍候再试！');
 
