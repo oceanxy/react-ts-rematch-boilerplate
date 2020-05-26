@@ -176,6 +176,7 @@ const MassPoint = (props: MassPointProps) => {
    * 处理事件对话框显示状态
    */
   const [isShowModal, setIsShowModal] = useState(false);
+  const [massPointPolling, setMassPointPolling] = useState(0);
 
   if (!mass) {
     mass = setMass(props.data);
@@ -270,6 +271,17 @@ const MassPoint = (props: MassPointProps) => {
   // 获取海量点数据
   useEffect(() => {
     fetchMassPoint();
+
+    if (!massPointPolling) {
+      setMassPointPolling(setInterval(() => {
+        fetchMassPoint();
+      }, 30000));
+    }
+
+    return () => {
+      clearInterval(massPointPolling);
+      setMassPointPolling(0);
+    };
   }, [JSON.stringify(triggers.slice(0, 4))]);
 
   // 海量点数据变更时更新地图上的海量点

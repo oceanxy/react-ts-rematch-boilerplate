@@ -63,6 +63,7 @@ const Area = (props: AreaProps) => {
    * @type {[any[], React.Dispatch<React.SetStateAction<any[]>>]}
    */
   const [tempArea, setTempArea] = useState({ids: [] as string[], overlays: [] as any});
+  const [areaPolling, setAreaPolling] = useState(0);
 
   /**
    * 处理点击围栏事件
@@ -176,9 +177,22 @@ const Area = (props: AreaProps) => {
   useEffect(() => {
     if (areaTrigger.status) {
       fetchAreaData();
+
+      if (!areaPolling) {
+        setAreaPolling(setInterval(() => {
+          fetchAreaData();
+        }, 30000));
+      }
     } else {
       setState({mapFences: undefined});
+      clearInterval(areaPolling);
+      setAreaPolling(0);
     }
+
+    return () => {
+      clearInterval(areaPolling);
+      setAreaPolling(0);
+    };
   }, [areaTrigger.status]);
 
   // 区域数据变更后触发地图上的区域重绘
