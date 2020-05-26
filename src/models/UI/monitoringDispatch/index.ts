@@ -539,11 +539,10 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       store.dispatch.intercomOperation.onCallingStartResponse(response);
     },
     onCallingStop(response): void {
-      alert('组呼停止');
+      message.warning('主呼已经断开！');
       // TODO 主呼停止事件处理（非主动停止主呼时）
     },
     onTempGroupUpdate(response): void {
-      alert('临时组更新');
       // TODO 临时组更新
     },
     async onAddTempGroupMemberResponse(response) {

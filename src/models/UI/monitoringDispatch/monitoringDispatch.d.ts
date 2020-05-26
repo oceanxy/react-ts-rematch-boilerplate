@@ -250,7 +250,7 @@ declare global {
        */
       onCallingStartResponse(response: CallingStartResponse): void
       /**
-       * 主呼停止事件
+       * 主呼停止事件 (非主动停止主呼时)
        */
       onCallingStop(response: CallingStopResponse): void
       /**

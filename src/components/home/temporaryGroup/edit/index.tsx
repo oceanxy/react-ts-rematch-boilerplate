@@ -266,8 +266,10 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   }, [isShowEditModal]);
 
   useEffect(() => {
-    createForm.setFieldsValue({isCreate: title.includes('创建')});
-  }, [title]);
+    if (isShowEditModal) {
+      createForm.setFieldsValue({isCreate: title.includes('创建')});
+    }
+  }, [isShowEditModal]);
 
   return (
     <Modal
