@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 行政区划内资源模块类型定义文件
  * @Date: 2020-04-10 周五 16:36:57
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-10 周五 16:36:57
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-26 周二 11:39:18
  */
 
 import LngLat = AMap.LngLat;
@@ -35,6 +35,10 @@ declare global {
      * 依次为 省/直辖市、市、区/县
      */
     value: [string?, string?, string?]
+    /**
+     * 地区编码
+     */
+    adcode: number
     /**
      * 当前选中的行政区划的边界值（来自高德地图）
      */

@@ -5,7 +5,7 @@
  * @Date: 2020-04-07 周二 15:39:30
  * @Date: 2020-04-13 周一 10:12:41
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-13 周一 10:12:41
+ * @LastModifiedTime: 2020-05-26 周二 11:41:30
  */
 
 import fetchApis from '@/apis';
@@ -21,6 +21,7 @@ const defaultState: IAdminDivisionResourcesState = {
     itemName: [],
     totalNum: []
   },
+  adcode: 0,
   value: [],
   bounds: []
 };
