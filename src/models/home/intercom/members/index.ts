@@ -4,7 +4,7 @@
  * @Description: 对讲成员model
  * @Date: 2020-04-21 周二 11:15:11
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-30 周四 09:12:04
+ * @LastModifiedTime: 2020-05-26 周二 09:53:46
  */
 
 import fetchApis from '@/apis';
@@ -46,6 +46,8 @@ const members: IIntercomMembersModel = {
     async removeMember(member) {
       const {intercomId, id} = store.getState().intercomGroupName;
 
+      debugger;
+
       // 调用第三方接口
       store.dispatch.monitoringDispatch.removeTempGroupMember({
         tempGroupId: intercomId,
@@ -55,8 +57,8 @@ const members: IIntercomMembersModel = {
       // 调用平台接口，维护平台后台的数据
       // 以下代码应该写在第三方删除成员事件里，但第三方未提供
       const response = await fetchApis.removeMember(<IIntercomRemoveMembersRequest> {
-        intercomGroupId: id,
-        interlocutorId: member.monitorId
+        intercomGroupId: intercomId,
+        userIds: member.userId
       });
 
       if (+response.retCode === 0) {

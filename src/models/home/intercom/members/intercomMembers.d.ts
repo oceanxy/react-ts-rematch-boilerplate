@@ -4,7 +4,7 @@
  * @Description: 对讲成员model
  * @Date: 2020-04-21 周二 11:32:16
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-30 周四 09:15:59
+ * @LastModifiedTime: 2020-05-26 周二 09:53:20
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
@@ -32,7 +32,7 @@ declare global {
     /**
      * 对讲组id
      */
-    intercomGroupId: IIntercomGroupState['id']
+    intercomGroupId: IIntercomGroupNameState['intercomId']
     /**
      * 对讲对象id集合
      */
@@ -46,11 +46,11 @@ declare global {
     /**
      * 对讲组id
      */
-    intercomGroupId: IIntercomGroupState['id']
+    intercomGroupId: IIntercomGroupNameState['intercomId']
     /**
      * 对讲对象id
      */
-    interlocutorId: IEntity['monitorId']
+    userIds: IEntity['userId']
   }
 
   /**
