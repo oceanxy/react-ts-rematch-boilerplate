@@ -29,8 +29,9 @@ const intercom: IIntercomModel = {
     setState(payload): void {
       store.dispatch.intercom.updateState(payload);
     },
-    setActive(active: boolean): void {
+    setActive(active: boolean, state): void {
       store.dispatch.intercom.updateState({active});
+      const {intercomId} = state?.intercomGroupName;
 
       if (!active) {
         store.dispatch.intercomGroupName.updateState({
@@ -39,6 +40,12 @@ const intercom: IIntercomModel = {
           intercomId: -1,
           curActiveGroupType: CurActiveGroupType.Null
         });
+
+        // 调用第三方加入群组接口
+        store.dispatch.monitoringDispatch.exitGroup({groupId: intercomId});
+      } else {
+        // 调用第三方加入群组接口
+        store.dispatch.monitoringDispatch.joinGroup({groupId: intercomId});
       }
     }
   }

@@ -419,9 +419,9 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       }
     },
     exitGroup(request): void {
-      const {hjMediaEngine} = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
-      if (hjMediaEngine) {
+      if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.exitGroup(request);
       } else {
         message.error('第三方对讲服务未启动！');
@@ -539,9 +539,11 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       store.dispatch.intercomOperation.onCallingStartResponse(response);
     },
     onCallingStop(response): void {
+      alert('组呼停止');
       // TODO 主呼停止事件处理（非主动停止主呼时）
     },
     onTempGroupUpdate(response): void {
+      alert('临时组更新');
       // TODO 临时组更新
     },
     async onAddTempGroupMemberResponse(response) {

@@ -53,7 +53,7 @@ const Home = (props: Partial<IHomeProps>) => {
         </Container>
         <Container className="inter-plat-nav-container">
           {renderRoutes.map((route, index) => {
-            return route && <Nav key={`route-${index}`} to={route.path} title={route.title} />;
+            return route && <Nav key={`route-${index}`} to={route.path} title={route.title} exact={route.exact} />;
           })}
         </Container>
       </Container>

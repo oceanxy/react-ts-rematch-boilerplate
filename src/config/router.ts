@@ -36,7 +36,7 @@ const routesConfig: Routes = {
     path: '/clbs',
     exact: true,
     title: '数据管理'
-  },
+  }
   // test: {
   //   path: `${config.basename}/test`,
   //   exact: true,

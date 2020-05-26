@@ -12,8 +12,9 @@ import { NavLink } from 'react-router-dom';
 import './index.scss';
 
 interface INav {
-  to: string;
-  title?: string;
+  to: string
+  title?: string
+  exact?: boolean
 }
 
 /**
@@ -21,7 +22,7 @@ interface INav {
  */
 const Nav = (props: INav) => {
   return (
-    <NavLink to={props.to} className="inter-plat-nav-item" activeClassName="active">
+    <NavLink exact={props.exact} to={props.to} className="inter-plat-nav-item" activeClassName="active">
       {props.title}
     </NavLink>
   );

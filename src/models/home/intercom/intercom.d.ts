@@ -7,6 +7,7 @@
  * @LastModifiedTime: 2020-04-21 周二 16:32:06
  */
 
+import { RootState } from '@/store';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
@@ -40,8 +41,9 @@ declare global {
       /**
        * 设置对讲面板激活状态以及快速清空对讲组状态
        * @param {boolean} active
+       * @param {RootState} state
        */
-      setActive(active: boolean): void
+      setActive(active: boolean, state?: RootState): void
     }
   }
 }
