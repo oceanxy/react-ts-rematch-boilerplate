@@ -205,6 +205,9 @@ const MassPoint = (props: MassPointProps) => {
     });
 
     if (+response.retCode === 0) {
+      // 按监控对象查，则清空当前选中事件（按监控对象查，与按事件查互斥）
+      // 非事件组件内部重置此状态时，设置为undefined，禁止设置为空对象，此字段的undefined和{}是两种不同的状态
+      store.dispatch.eventList.setState({curSelectedEvent: undefined});
       setState({curMassPoint: response.data});
 
       // 请求弹窗信息成功后，获取当前监控对象的所有事件下的所有任务
@@ -337,7 +340,7 @@ const MassPoint = (props: MassPointProps) => {
   }, [intercomGroupState, curMassPoint]);
 
   /**
-   * 点击海量点或点击事件激活弹窗时，获取弹窗数据
+   * 点击事件激活弹窗时，获取弹窗数据
    */
   useEffect(() => {
     if (curSelectedEvent) {

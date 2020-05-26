@@ -91,12 +91,6 @@ const taskList: ITaskListModel = {
 
         // 检测是否是切换任务的tab标签
         if (taskStatus ?? true) {
-          // 按监控对象查，则清空当前选中事件（按监控对象查，与按事件查互斥）
-          if (byMonitorId) {
-            // 非内部事件组件内部重置此状态时，设置为undefined，禁止设置为空对象
-            store.dispatch.eventList.setState({ curSelectedEvent: undefined });
-          }
-
           // 自动选中当前第一条数据
           if (selectFirstData) {
             if (records?.length) {

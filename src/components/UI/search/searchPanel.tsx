@@ -121,6 +121,9 @@ const SearchPanel = (props: ISearchPanelProps) => {
       if (!response.data.location) {
         message.info(`监控对象（${response.data.monitor.monitorName}）暂无定位信息！`);
       } else {
+        // 按监控对象查，则清空当前选中事件（按监控对象查，与按事件查互斥）
+        // 非事件组件内部重置此状态时，设置为undefined，禁止设置为空对象，此字段的undefined和{}是两种不同的状态
+        store.dispatch.eventList.setState({curSelectedEvent: undefined});
         setMapState({curMassPoint: response.data});
       }
 

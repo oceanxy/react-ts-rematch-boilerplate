@@ -46,8 +46,8 @@ const map: IAMapModel = {
     })
   },
   effects: {
-    setState(payload: Partial<IAMapState>): void {
-      if ('curMassPoint' in payload && payload.curMassPoint) {
+    setState(payload: Partial<IAMapState>, state): void {
+      if ('curMassPoint' in payload && payload.curMassPoint && !state?.eventList.curSelectedEvent?.eventId) {
         // 当点击海量点时，任务列表model的queryType（任务查询方式）状态有且仅有一个固定值：0
         store.dispatch.taskList.setState({queryType: 0});
       }

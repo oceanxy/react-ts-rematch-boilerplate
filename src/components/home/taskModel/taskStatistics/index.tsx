@@ -39,7 +39,9 @@ const TaskStatistics = (props: Partial<ITaskStatisticsProps>) => {
     setTaskStatisticsMethod(reqTaskStatisticsMethod);
 
     // 获取新的列表数据
-    fetchData!({taskStatus: reqTaskStatisticsMethod});
+    fetchData!({
+      taskStatus: reqTaskStatisticsMethod
+    });
   };
 
   // 当前选中的事件状态以及当前海量点信息变动时，重置任务tab选中状态
