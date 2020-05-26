@@ -130,7 +130,7 @@ const massPointInfoWindow = (data: InfoWindowResponse) => {
 
   return `
     ${setWindowFields(data, happenEvent)}
-    <div class="info-window-item" title="上报事件的监控对象名称">
+    <div class="info-window-item" title="监控对象名称">
       <span class="key">监控对象</span>
       <span class="value">${monitor?.monitorName}</span>
     </div>

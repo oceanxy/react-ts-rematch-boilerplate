@@ -28,9 +28,7 @@ const IntercomEntityCall = (props: Partial<IIntercomEntityCallProps>) => {
 
   return (
     <Container className="inter-plat-intercom-entity-call">
-      <Member
-        name={`(${getEntityTypeText(tempCurMassPoint?.monitor.monitorType!)})`}
-        online={tempCurMassPoint?.monitor.onlineStatus}
+      <Member online={!!tempCurMassPoint?.monitor.onlineStatus}
       />
     </Container>
   );

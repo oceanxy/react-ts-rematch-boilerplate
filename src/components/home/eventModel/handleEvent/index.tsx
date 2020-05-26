@@ -138,6 +138,7 @@ const HandleEvent = (props: HandleEventProps) => {
    */
   const closeModal = () => {
     setIsShowModal(false);
+    form.resetFields();
   };
 
   /**

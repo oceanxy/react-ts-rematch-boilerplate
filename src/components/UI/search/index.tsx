@@ -138,7 +138,7 @@ const Search = (props: Partial<ISearchProps>) => {
    * @param {React.KeyboardEvent<HTMLInputElement>} e
    */
   const onInputChange = (e: ChangeEvent<HTMLInputElement> | CompositionEvent<HTMLInputElement>) => {
-    const beSetValue = e.currentTarget.value;
+    const beSetValue = e.currentTarget.value.trim();
     setVal(beSetValue);
 
     // 中文输入时，锁定受控文本域

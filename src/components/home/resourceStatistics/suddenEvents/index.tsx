@@ -121,7 +121,7 @@ const SuddenEvents = (props: Partial<ISuddenEventProps>) => {
   return (
     <Container className="resource-statistics-left">
       <ItemLegend
-        name="突发事件周边资源"
+        name="事件周边资源"
         nameStyled={styledBlocks.subtitle}
         styled={styledBlocks.marginBottom10}
         icon={false}

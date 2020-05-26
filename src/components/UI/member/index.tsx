@@ -4,7 +4,7 @@
  * @Description: 成员组件
  * @Date: 2020-01-13 16:12:38
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-25 周六 16:50:20
+ * @LastModifiedTime: 2020-05-26 周二 18:30:52
  */
 
 import Container from '@/components/UI/containerComp';
@@ -68,7 +68,9 @@ const Member = (props: IMemberProps) => {
       onClick={onClick}
     >
       <div className="member-img-box"><img src={props.src ?? user} alt={props.alt ?? ''} /></div>
-      <span className="member-name">{props.name}</span>
+      {
+        !props.name ? null : <span className="member-name">{props.name}</span>
+      }
     </StyledMember>
   );
 };
