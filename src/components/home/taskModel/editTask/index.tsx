@@ -4,7 +4,7 @@
  * @Description: 编辑任务
  * @Date: 2020-04-15 周三 16:01:46
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-22 周五 10:53:49
+ * @LastModifiedTime: 2020-05-26 周二 16:22:21
  */
 
 import config from '@/config';
@@ -38,6 +38,7 @@ interface IEditTaskProps extends Modal {
   showModal: IEditTaskModel['effects']['showModal']
   updateRemoteTask: IEditTaskModel['effects']['updateRemoteTask']
   fetchDataForSelect: IEventListModel['effects']['fetchDataForSelect']
+  fetchEventListData: IEventListModel['effects']['fetchData']
   fetchEventDetailsData: IEventDetailsModel['effects']['fetchData']
 }
 
@@ -54,7 +55,7 @@ const StyledModal = styled(Modal)(styledBlocks.containerTheme);
  * @constructor
  */
 const EditTask = (props: Partial<IEditTaskProps>) => {
-  const {showModal, updateRemoteTask, data, isShowModal, fetchDataForSelect, fetchEventDetailsData} = props;
+  const {showModal, updateRemoteTask, data, isShowModal, fetchDataForSelect, fetchEventDetailsData, fetchEventListData} = props;
   /**
    * 提交修改按钮的loading状态
    */
@@ -94,6 +95,9 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
 
     if (!Number(response.retCode)) {
       message.info('修改成功');
+
+      // 刷新事件列表
+      fetchEventListData!();
     } else {
       message.info('修改失败，请稍后再试。');
     }
