@@ -4,7 +4,7 @@
  * @Description: 任务统计组件
  * @Date: 2020-04-14 周二 10:12:37
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-21 周四 16:02:20
+ * @LastModifiedTime: 2020-05-26 周二 16:43:13
  */
 
 import TaskStatistics from '@/components/home/taskModel/taskStatistics';
@@ -13,7 +13,8 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
   data: state.taskStatistics,
-  curSelectedEvent: state.eventList.curSelectedEvent
+  curSelectedEvent: state.eventList.curSelectedEvent,
+  curMassPoint: state.map.curMassPoint
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({

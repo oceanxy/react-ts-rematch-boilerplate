@@ -4,7 +4,7 @@
  * @Description: 任务统计组件
  * @Date: 2020-04-14 周二 10:52:10
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-21 周四 15:49:41
+ * @LastModifiedTime: 2020-05-26 周二 16:41:31
  */
 
 import Button from '@/components/UI/button';
@@ -17,10 +17,11 @@ interface ITaskStatisticsProps {
   fetchData: ITaskListModel['effects']['fetchData']
   data: IEventStatisticsState,
   curSelectedEvent: IEventListState['curSelectedEvent']
+  curMassPoint: IAMapState['curMassPoint']
 }
 
 const TaskStatistics = (props: Partial<ITaskStatisticsProps>) => {
-  const {data, fetchData, curSelectedEvent} = props;
+  const {data, fetchData, curSelectedEvent, curMassPoint} = props;
   // 当前tab的选中状态
   const [taskStatisticsMethod, setTaskStatisticsMethod] = useState(TaskStatisticsMethod.ALL);
 
@@ -41,10 +42,10 @@ const TaskStatistics = (props: Partial<ITaskStatisticsProps>) => {
     fetchData!({taskStatus: reqTaskStatisticsMethod});
   };
 
-  // 当前选中的事件状态变动时，重置任务tab选中状态
+  // 当前选中的事件状态以及当前海量点信息变动时，重置任务tab选中状态
   useEffect(() => {
     setTaskStatisticsMethod(TaskStatisticsMethod.ALL);
-  }, [curSelectedEvent?.eventId]);
+  }, [curSelectedEvent?.eventId, curMassPoint?.monitor.monitorId]);
 
   return (
     <Container className="task-button-container">
