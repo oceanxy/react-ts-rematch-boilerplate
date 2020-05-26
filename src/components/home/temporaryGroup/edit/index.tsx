@@ -496,9 +496,9 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
           <Form.Item
             label="名称"
             name="temporaryGroup"
-            rules={[{required: true, message: '请输入任务名称'}]}
+            rules={[{required: true, message: '请输入临时组名称'}]}
           >
-            <Input type="text" placeholder="请输入任务名称" disabled={!!name} />
+            <Input type="text" placeholder="请输入临时组名称" disabled={!!name} />
           </Form.Item>
           <Form.Item
             noStyle
