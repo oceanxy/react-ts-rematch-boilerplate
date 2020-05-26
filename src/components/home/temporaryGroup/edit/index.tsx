@@ -12,7 +12,7 @@ import { APIResponse } from '@/interfaces/api/mock';
 import { MouseToolType } from '@/models/UI/amap';
 import { Button, Checkbox, Form, Input, message, Row, Select, Slider } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
-import CheckboxGroup, { CheckboxValueType } from 'antd/es/checkbox/Group';
+import { CheckboxValueType } from 'antd/es/checkbox/Group';
 import React, { useEffect, useRef, useState } from 'react';
 import './index.scss';
 
@@ -20,13 +20,13 @@ import './index.scss';
  * 编辑临时组组件Render Props
  */
 interface IEditTaskProps {
-  state: ITemporaryGroupState
-  setState: ITemporaryGroupModel['effects']['setState']
-  createTemporaryGroup: ITemporaryGroupModel['effects']['createTemporaryGroup']
-  entityDispatch: IEntityModel['effects']
-  addTempGroupMember: IMonitoringDispatchModel['effects']['addTempGroupMember']
-  mouseToolType: IAMapState['mouseToolType']
-  byCondition: IEntityState['byCondition']
+  state: ITemporaryGroupState;
+  setState: ITemporaryGroupModel['effects']['setState'];
+  createTemporaryGroup: ITemporaryGroupModel['effects']['createTemporaryGroup'];
+  entityDispatch: IEntityModel['effects'];
+  addTempGroupMember: IMonitoringDispatchModel['effects']['addTempGroupMember'];
+  mouseToolType: IAMapState['mouseToolType'];
+  byCondition: IEntityState['byCondition'];
 }
 
 /**
@@ -37,15 +37,23 @@ interface IEditTaskProps {
  */
 const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   const {
-    state, setState, createTemporaryGroup, byCondition,
-    addTempGroupMember, mouseToolType, entityDispatch
+    state,
+    setState,
+    createTemporaryGroup,
+    byCondition,
+    addTempGroupMember,
+    mouseToolType,
+    entityDispatch
   } = props;
   const {
-    fetchFixedData, fetchDataByCircle, fetchConditionData, fetchDataByRectangle,
+    fetchFixedData,
+    fetchDataByCircle,
+    fetchConditionData,
+    fetchDataByRectangle,
     fetchConditionForEntity
   } = entityDispatch!;
-  const {isShowEditModal, title, loading, backFillInfo} = state!;
-  const {radius, name} = backFillInfo;
+  const { isShowEditModal, title, loading, backFillInfo } = state!;
+  const { radius, name } = backFillInfo;
   const [searchForm] = Form.useForm();
   const [createForm] = Form.useForm();
   const createFormRef = useRef(null);
@@ -56,15 +64,13 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   /**
    * 全选、反选复选框选中状态
    */
-  const [checked, setChecked] = useState({all: false, invert: false} as {all?: boolean, invert?: boolean});
+  const [checked, setChecked] = useState({ all: false, invert: false } as { all?: boolean; invert?: boolean });
   /**
    * 反选复选框显示状态
    */
   const [showInvert, setShowInvert] = useState(false);
   // 搜索按钮loading状态
   const [searchLoading, setSearchLoading] = useState(false);
-  // 创建临时组提交按钮禁用状态，初始值以byCondition（是否是按固定条件创建）为准
-  const [createButtonDisabled, setCreateButtonDisabled] = useState(byCondition);
 
   /**
    * 提交表单，创建/编辑临时组
@@ -75,7 +81,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
     // 进入loading状态
     // 注意：因为第三方提供的API非直接返回调用接口的状态，而是通过监听事件的方式返回结果，
     // 所以要到 IMonitoringDispatchModel 去关闭loading状态以及对话框
-    setState!({loading: true});
+    setState!({ loading: true });
     // 检查是创建临时组还是添加临时组成员
     if (title.includes('创建')) {
       const reqPayload = {
@@ -90,7 +96,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   };
 
   /**
-   * 搜索实体数据并处理得到结果后的逻辑
+   * 执行实体搜索并处理得到结果后的逻辑
    * @param values
    * @returns {Promise<void>}
    */
@@ -106,19 +112,17 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
     setSearchLoading(false);
 
     if (+response.retCode === 0) {
-      const {monitors} = response.data;
+      const { monitors } = response.data;
 
       // 临时保存获取到的实体列表（主要用于全选/反选功能）
       setTempEntities(monitors);
-      // 设置提交临时组按钮的禁用状态
-      setCreateButtonDisabled(false);
+
       // 设置antd form表单的内置状态（渲染实体数据到表单上）
       createForm.setFieldsValue({
         entities: monitors
       });
     } else {
       message.error('搜索监控对象时发生错误，请稍后重试！');
-      setCreateButtonDisabled(true);
       setTempEntities([]);
     }
   };
@@ -129,7 +133,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   const resetSearchForm = () => {
     searchForm.setFieldsValue({
       gender: [1, 2],
-      ageRange: [20, 40],
+      ageRange: [0, 0],
       radius,
       skillIds: undefined,
       intercomModelIds: undefined,
@@ -144,7 +148,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
    */
   const editTempGroupCancel = () => {
     // 关闭对话框
-    setState!({isShowEditModal: false});
+    setState!({ isShowEditModal: false });
   };
 
   /**
@@ -162,7 +166,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
       interlocutorIds: e.target.checked ? getEntityIds() : []
     });
 
-    setChecked({all: e.target.checked});
+    setChecked({ all: e.target.checked });
     setShowInvert(false);
   };
 
@@ -171,9 +175,9 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
    * @param {CheckboxChangeEvent} e
    */
   const checkInvert = (e: CheckboxChangeEvent) => {
-    const allCheckedEntities = tempEntities.map((entity) => entity.userId);
+    const allEntities = tempEntities.map((entity) => entity.userId);
     const curCheckedEntities = createForm.getFieldValue('interlocutorIds');
-    const invertCheckedEntities = allCheckedEntities.reduce((invertCheckedEntities, userId) => {
+    const invertCheckedEntities = allEntities.reduce((invertCheckedEntities, userId) => {
       if (!curCheckedEntities.includes(userId)) {
         invertCheckedEntities.push(userId!);
       }
@@ -185,7 +189,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
       interlocutorIds: invertCheckedEntities
     });
 
-    setChecked({invert: e.target.checked});
+    setChecked({ invert: e.target.checked, all: false });
   };
 
   /**
@@ -194,13 +198,13 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
    */
   const listenersCheck = (checkedValues: CheckboxValueType[]) => {
     if (checkedValues.length && checkedValues.length === tempEntities.length) {
-      setChecked({all: true, invert: false});
+      setChecked({ all: true, invert: false });
       setShowInvert(false);
     } else if (!checkedValues.length) {
-      setChecked({all: false, invert: false});
+      setChecked({ all: false, invert: false });
       setShowInvert(false);
     } else {
-      setChecked({all: false, invert: false});
+      setChecked({ all: false, invert: false });
       setShowInvert(true);
     }
   };
@@ -224,7 +228,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
           }
 
           if (+response.retCode === 0) {
-            const {monitors} = (response as APIResponse<{monitors: IEntity[]}>).data;
+            const { monitors } = (response as APIResponse<{ monitors: IEntity[] }>).data;
 
             // 临时保存获取到的实体列表（主要用于全选/反选功能）
             setTempEntities(monitors);
@@ -233,22 +237,31 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
             createForm.setFieldsValue({
               temporaryGroup: name,
               entities: monitors,
-              interlocutorIds: []
+              interlocutorIds: [],
+              isCreate: title.includes('创建')
             });
           } else {
             message.error(response.retMsg);
           }
 
           // 设置全选、反选复选框的状态
-          listenersCheck([]);
+          // listenersCheck([]);
         } /** 加载自定义搜索实体的表单后，按条件搜索实体 */ else {
           setSearchLoading(true);
           const response = await fetchConditionForEntity();
           setSearchLoading(false);
 
           if (+response.retCode === 0) {
-            searchForm.setFieldsValue(response.data);
-            createForm.setFieldsValue({temporaryGroup: name});
+            searchForm.setFieldsValue({
+              ...response.data,
+              gender: [1, 2],
+              ageRange: [0, 0],
+              radius
+            });
+            createForm.setFieldsValue({
+              temporaryGroup: name,
+              isCreate: title.includes('创建')
+            });
           } else {
             message.error('初始化条件列表失败！');
             editTempGroupCancel();
@@ -260,15 +273,9 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
     return () => {
       // 清空上一次搜索到的监控对象
       if (createFormRef.current) {
-        createForm && createForm.setFieldsValue({entities: []});
+        createForm && createForm.setFieldsValue({ entities: [] });
       }
     };
-  }, [isShowEditModal]);
-
-  useEffect(() => {
-    if (isShowEditModal) {
-      createForm.setFieldsValue({isCreate: title.includes('创建')});
-    }
   }, [isShowEditModal]);
 
   return (
@@ -282,299 +289,246 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
       destroyOnClose={true}
     >
       <>
-        {
-          !byCondition ? null : (
-            <Form form={searchForm} onFinish={handleSearchEntity} autoComplete="off" initialValues={{
+        {!byCondition ? null : (
+          <Form
+            form={searchForm}
+            onFinish={handleSearchEntity}
+            autoComplete="off"
+            initialValues={{
               radius,
               gender: [1, 2],
               ageRange: [0, 0]
-            }}>
-              <Row className="inter-plat-row-text">请根据条件搜索监控对象</Row>
-              <Form.Item
-                noStyle={true}
-                shouldUpdate={(prev, cur) => prev.skillList !== cur.skillList}
-              >
-                {({getFieldValue}) => (
-                  <Form.Item
-                    label="人员技能"
-                    name="skillIds"
+            }}
+          >
+            <Row className="inter-plat-row-text">请根据条件搜索监控对象</Row>
+            <Form.Item noStyle={true} shouldUpdate={(prev, cur) => prev.skillList !== cur.skillList}>
+              {({ getFieldValue }) => (
+                <Form.Item label="人员技能" name="skillIds">
+                  <Select
+                    mode="multiple"
+                    allowClear={true}
+                    placeholder="请选择人员技能"
+                    dropdownClassName="inter-plat-dropdown task-operation-modal-select"
+                    showSearch
+                    optionFilterProp="children"
                   >
-                    <Select
-                      mode="multiple"
-                      allowClear={true}
-                      placeholder="请选择人员技能"
-                      dropdownClassName="inter-plat-dropdown task-operation-modal-select"
-                      showSearch
-                      optionFilterProp="children"
-                    >
-                      {
-                        (getFieldValue('skillList') || []).map((skill: ICondition) => (
-                          <Select.Option
-                            key={`inter-plat-dropdown-temp-group-skill-${skill.id}`}
-                            value={skill.id}
-                            title={`技能类别：${skill.skillCategoryName}\n技能：${skill.skillName}`}
-                          >
-                            <span style={{color: '#686868'}}>（{skill.skillCategoryName}）</span>
-                            {skill.skillName}
-                          </Select.Option>
-                        ))
-                      }
-                    </Select>
-                  </Form.Item>
-                )}
-              </Form.Item>
-              <Form.Item
-                noStyle={true}
-                shouldUpdate={(prev, cur) => prev.intercomModelList !== cur.intercomModelList}
-              >
-                {({getFieldValue}) => (
-                  <Form.Item
-                    label="对讲机型"
-                    name="intercomModelIds"
+                    {(getFieldValue('skillList') || []).map((skill: ICondition) => (
+                      <Select.Option
+                        key={`inter-plat-dropdown-temp-group-skill-${skill.id}`}
+                        value={skill.id}
+                        title={`技能类别：${skill.skillCategoryName}\n技能：${skill.skillName}`}
+                      >
+                        <span style={{ color: '#686868' }}>（{skill.skillCategoryName}）</span>
+                        {skill.skillName}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              )}
+            </Form.Item>
+            <Form.Item noStyle={true} shouldUpdate={(prev, cur) => prev.intercomModelList !== cur.intercomModelList}>
+              {({ getFieldValue }) => (
+                <Form.Item label="对讲机型" name="intercomModelIds">
+                  <Select
+                    mode="multiple"
+                    allowClear={true}
+                    placeholder="请选择对讲机型"
+                    dropdownClassName="inter-plat-dropdown task-operation-modal-select"
+                    showSearch
+                    optionFilterProp="children"
                   >
-                    <Select
-                      mode="multiple"
-                      allowClear={true}
-                      placeholder="请选择对讲机型"
-                      dropdownClassName="inter-plat-dropdown task-operation-modal-select"
-                      showSearch
-                      optionFilterProp="children"
-                    >
-                      {
-                        (getFieldValue('intercomModelList') || []).map((intercomModel: ICondition) => (
-                          <Select.Option
-                            key={`inter-plat-dropdown-temp-group-intercom-model-${intercomModel.id}`}
-                            value={intercomModel.id}
-                            title={intercomModel.name}
-                          >
-                            {intercomModel.name}
-                          </Select.Option>
-                        ))
-                      }
-                    </Select>
-                  </Form.Item>
-                )}
-              </Form.Item>
-              <Form.Item
-                noStyle={true}
-                shouldUpdate={(prev, cur) => prev.driverLicenseCategoryList !== cur.driverLicenseCategoryList}
-              >
-                {({getFieldValue}) => (
-                  <Form.Item
-                    label="驾照类别"
-                    name="driverLicenseCategoryIds"
+                    {(getFieldValue('intercomModelList') || []).map((intercomModel: ICondition) => (
+                      <Select.Option
+                        key={`inter-plat-dropdown-temp-group-intercom-model-${intercomModel.id}`}
+                        value={intercomModel.id}
+                        title={intercomModel.name}
+                      >
+                        {intercomModel.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              )}
+            </Form.Item>
+            <Form.Item
+              noStyle={true}
+              shouldUpdate={(prev, cur) => prev.driverLicenseCategoryList !== cur.driverLicenseCategoryList}
+            >
+              {({ getFieldValue }) => (
+                <Form.Item label="驾照类别" name="driverLicenseCategoryIds">
+                  <Select
+                    mode="multiple"
+                    allowClear={true}
+                    placeholder="请选择驾照类别"
+                    dropdownClassName="inter-plat-dropdown task-operation-modal-select"
+                    showSearch
+                    optionFilterProp="children"
                   >
-                    <Select
-                      mode="multiple"
-                      allowClear={true}
-                      placeholder="请选择驾照类别"
-                      dropdownClassName="inter-plat-dropdown task-operation-modal-select"
-                      showSearch
-                      optionFilterProp="children"
-                    >
-                      {
-                        (getFieldValue('driverLicenseCategoryList') || []).map((dlc: ICondition) => (
-                          <Select.Option
-                            key={`inter-plat-dropdown-temp-group-dlc-${dlc.id}`}
-                            value={dlc.id}
-                            title={dlc.name}
-                          >
-                            {dlc.name}
-                          </Select.Option>
-                        ))
-                      }
-                    </Select>
-                  </Form.Item>
-                )}
-              </Form.Item>
-              <Form.Item
-                noStyle={true}
-                shouldUpdate={(prev, cur) => prev.qualificationList !== cur.qualificationList}
-              >
-                {({getFieldValue}) => (
-                  <Form.Item
-                    label="资格证书"
-                    name="qualificationIds"
+                    {(getFieldValue('driverLicenseCategoryList') || []).map((dlc: ICondition) => (
+                      <Select.Option
+                        key={`inter-plat-dropdown-temp-group-dlc-${dlc.id}`}
+                        value={dlc.id}
+                        title={dlc.name}
+                      >
+                        {dlc.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              )}
+            </Form.Item>
+            <Form.Item noStyle={true} shouldUpdate={(prev, cur) => prev.qualificationList !== cur.qualificationList}>
+              {({ getFieldValue }) => (
+                <Form.Item label="资格证书" name="qualificationIds">
+                  <Select
+                    mode="multiple"
+                    allowClear={true}
+                    placeholder="请选择资格证书"
+                    dropdownClassName="inter-plat-dropdown task-operation-modal-select"
+                    showSearch
+                    optionFilterProp="children"
                   >
-                    <Select
-                      mode="multiple"
-                      allowClear={true}
-                      placeholder="请选择资格证书"
-                      dropdownClassName="inter-plat-dropdown task-operation-modal-select"
-                      showSearch
-                      optionFilterProp="children"
-                    >
-                      {
-                        (getFieldValue('qualificationList') || []).map((qualification: ICondition) => (
-                          <Select.Option
-                            key={`inter-plat-dropdown-temp-group-qualification-${qualification.id}`}
-                            value={qualification.id}
-                            title={qualification.name}
-                          >
-                            {qualification.name}
-                          </Select.Option>
-                        ))
-                      }
-                    </Select>
-                  </Form.Item>
-                )}
-              </Form.Item>
-              <Form.Item
-                noStyle={true}
-                shouldUpdate={(prev, cur) => prev.bloodTypeList !== cur.bloodTypeList}
-              >
-                {({getFieldValue}) => (
-                  <Form.Item
-                    label="血型"
-                    name="bloodTypeIds"
+                    {(getFieldValue('qualificationList') || []).map((qualification: ICondition) => (
+                      <Select.Option
+                        key={`inter-plat-dropdown-temp-group-qualification-${qualification.id}`}
+                        value={qualification.id}
+                        title={qualification.name}
+                      >
+                        {qualification.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              )}
+            </Form.Item>
+            <Form.Item noStyle={true} shouldUpdate={(prev, cur) => prev.bloodTypeList !== cur.bloodTypeList}>
+              {({ getFieldValue }) => (
+                <Form.Item label="血型" name="bloodTypeIds">
+                  <Select
+                    mode="multiple"
+                    allowClear={true}
+                    placeholder="请选择血型"
+                    dropdownClassName="inter-plat-dropdown task-operation-modal-select"
+                    showSearch
+                    optionFilterProp="children"
                   >
-                    <Select
-                      mode="multiple"
-                      allowClear={true}
-                      placeholder="请选择血型"
-                      dropdownClassName="inter-plat-dropdown task-operation-modal-select"
-                      showSearch
-                      optionFilterProp="children"
-                    >
-                      {
-                        (getFieldValue('bloodTypeList') || []).map((bloodType: ICondition) => (
-                          <Select.Option
-                            key={`inter-plat-dropdown-temp-group-blood-type-${bloodType.id}`}
-                            value={bloodType.id}
-                            title={bloodType.name}
-                          >
-                            {bloodType.name}
-                          </Select.Option>
-                        ))
-                      }
-                    </Select>
-                  </Form.Item>
-                )}
-              </Form.Item>
-              <Form.Item
-                label="性别"
-                name="gender"
-                rules={[{required: true, message: '请选择性别'}]}
-              >
-                <Checkbox.Group>
-                  <Checkbox value={1}>男</Checkbox>
-                  <Checkbox value={2}>女</Checkbox>
-                </Checkbox.Group>
-              </Form.Item>
-              <Form.Item
-                label="年龄范围"
-                name="ageRange"
-              >
-                <Slider range={true} />
-              </Form.Item>
-              <Form.Item
-                label="半径（m）"
-                name="radius"
-                rules={[
-                  {required: true, message: '请输入半径'},
-                  {
-                    pattern: /^[1-9]\d*(\.\d+)?$/,
-                    message: '请输入大于0的数字'
-                  }
-                ]}
-              >
-                <Input type="text" placeholder="请输入半径" />
-              </Form.Item>
-              <Row justify="end" className="temp-group-edit-modal-row bottom-line">
-                <Button size="small" type="primary" htmlType="submit" loading={searchLoading}>搜 索</Button>
-                <Button size="small" type="primary" onClick={resetSearchForm}>重 置</Button>
-              </Row>
-              <Row className="inter-plat-row-text">{title ? title : '创建临时组'}</Row>
-            </Form>
-          )
-        }
+                    {(getFieldValue('bloodTypeList') || []).map((bloodType: ICondition) => (
+                      <Select.Option
+                        key={`inter-plat-dropdown-temp-group-blood-type-${bloodType.id}`}
+                        value={bloodType.id}
+                        title={bloodType.name}
+                      >
+                        {bloodType.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              )}
+            </Form.Item>
+            <Form.Item label="性别" name="gender" rules={[{ required: true, message: '请选择性别' }]}>
+              <Checkbox.Group>
+                <Checkbox value={1}>男</Checkbox>
+                <Checkbox value={2}>女</Checkbox>
+              </Checkbox.Group>
+            </Form.Item>
+            <Form.Item label="年龄范围" name="ageRange">
+              <Slider range={true} />
+            </Form.Item>
+            <Form.Item
+              label="半径（m）"
+              name="radius"
+              rules={[
+                { required: true, message: '请输入半径' },
+                {
+                  pattern: /^(?!0(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d+)?$/,
+                  message: '请输入大于0的数字'
+                }
+              ]}
+            >
+              <Input type="text" placeholder="请输入半径" />
+            </Form.Item>
+            <Row justify="end" className="temp-group-edit-modal-row bottom-line">
+              <Button size="small" type="primary" htmlType="submit" loading={searchLoading}>
+                搜 索
+              </Button>
+              <Button size="small" type="primary" onClick={resetSearchForm}>
+                重 置
+              </Button>
+            </Row>
+            <Row className="inter-plat-row-text">{title ? title : '创建临时组'}</Row>
+          </Form>
+        )}
         <Form
           form={createForm}
           onFinish={onFinish}
           autoComplete="off"
           ref={createFormRef}
-          initialValues={{temporaryGroup: name, isCreate: title.includes('创建')}}
+          initialValues={{ temporaryGroup: name, isCreate: title.includes('创建') }}
         >
-          <Form.Item
-            label="名称"
-            name="temporaryGroup"
-            rules={[{required: true, message: '请输入临时组名称'}]}
-          >
+          <Form.Item label="名称" name="temporaryGroup" rules={[{ required: true, message: '请输入临时组名称' }]}>
             <Input type="text" placeholder="请输入临时组名称" disabled={!!name} />
           </Form.Item>
           <Form.Item
             noStyle
             shouldUpdate={(prev, curr) => prev.entities !== curr.entities || prev.isCreate !== curr.isCreate}
           >
-            {({getFieldValue}) => {
+            {({ getFieldValue }) => {
               return (
-                <Form.Item
-                  label="监控对象"
-                  className={`${getFieldValue('isCreate') ? '' : 'checkbox-entity-content'}`}
-                >
+                <Form.Item label="监控对象" className={`${getFieldValue('isCreate') ? '' : 'checkbox-entity-content'}`}>
                   <Form.Item className="checkbox-operation">
-                    <CheckboxGroup>
+                    <Checkbox
+                      key="temp-group-edit-modal-checkbox-all"
+                      className="checkbox-all"
+                      onChange={checkAll}
+                      checked={checked.all}
+                    >
+                      全 选
+                    </Checkbox>
+                    {showInvert ? (
                       <Checkbox
-                        className="checkbox-all"
-                        onChange={checkAll}
-                        checked={checked.all}
-                      >全 选</Checkbox>
-                      {
-                        showInvert ? (
-                          <Checkbox
-                            className="checkbox-invert"
-                            onChange={checkInvert}
-                            checked={checked.invert}
-                          >反 选</Checkbox>
-                        ) : null
-                      }
-                    </CheckboxGroup>
+                        key="temp-group-edit-modal-checkbox-invert"
+                        className="checkbox-invert"
+                        onChange={checkInvert}
+                        checked={checked.invert}
+                      >
+                        反 选
+                      </Checkbox>
+                    ) : null}
                   </Form.Item>
                   <Form.Item
                     name="interlocutorIds"
-                    rules={[{
-                      required: !getFieldValue('isCreate'),
-                      message: '请勾选加入临时组的监控对象'
-                    }]}
+                    rules={[
+                      {
+                        required: !getFieldValue('isCreate'),
+                        message: '请勾选加入临时组的监控对象'
+                      }
+                    ]}
                   >
-                    {
-                      (getFieldValue('entities') || []).length ?
-                        (
-                          <Checkbox.Group onChange={listenersCheck}>
-                            {
-                              getFieldValue('entities').map((entity: IEntity) => {
-                                return entity.userId ? (
-                                  <Checkbox
-                                    key={`temp-group-edit-modal-entity-${entity.userId}`}
-                                    value={entity.userId}
-                                  >
-                                    {entity.monitorName}
-                                  </Checkbox>
-                                ) : null;
-                              })
-                            }
-                          </Checkbox.Group>
-                        ) :
-                        <span>暂无监控对象数据</span>
-                    }
+                    {(getFieldValue('entities') || []).length ? (
+                      <Checkbox.Group onChange={listenersCheck}>
+                        {getFieldValue('entities').map((entity: IEntity) => {
+                          return entity.userId ? (
+                            <Checkbox key={`temp-group-edit-modal-entity-${entity.userId}`} value={entity.userId}>
+                              {entity.monitorName}
+                            </Checkbox>
+                          ) : null;
+                        })}
+                      </Checkbox.Group>
+                    ) : (
+                      <span>暂无监控对象数据</span>
+                    )}
                   </Form.Item>
                 </Form.Item>
               );
             }}
           </Form.Item>
           <Row justify="end" className="temp-group-edit-modal-row">
-            <Button
-              size="small"
-              type="primary"
-              htmlType="submit"
-              loading={loading}
-              disabled={createButtonDisabled}
-            >提 交</Button>
-            <Button
-              size="small"
-              type="primary"
-              onClick={editTempGroupCancel}
-            >取 消</Button>
+            <Button size="small" type="primary" htmlType="submit" loading={loading}>
+              提 交
+            </Button>
+            <Button size="small" type="primary" onClick={editTempGroupCancel}>
+              取 消
+            </Button>
           </Row>
         </Form>
       </>

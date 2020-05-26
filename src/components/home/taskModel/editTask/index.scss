@@ -236,7 +236,7 @@
     resize: none;
 
     &[disabled] {
-      background: rgba(21,47,69,.8);
+      background: rgba(21, 47, 69, .8);
     }
   }
 
@@ -276,9 +276,13 @@
 }
 
 .ant-radio-group.ant-radio-group,
-.ant-checkbox-group.ant-checkbox-group {
+.ant-checkbox-group.ant-checkbox-group,
+.ant-radio-wrapper.ant-radio-wrapper,
+.ant-checkbox-wrapper.ant-checkbox-wrapper {
   .ant-radio-wrapper,
-  .ant-checkbox-wrapper {
+  .ant-checkbox-wrapper,
+  &.ant-radio-wrapper,
+  &.ant-checkbox-wrapper {
     margin-right: 10px;
     margin-left: 0;
 

@@ -19,21 +19,21 @@ import './index.scss';
  * 创建临时组组件Render Props
  */
 interface ICreateTempGroupProps {
-  setState: ITemporaryGroupModel['effects']['setState']
+  setState: ITemporaryGroupModel['effects']['setState'];
 }
 
 const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
-  const {setState} = props;
+  const { setState } = props;
 
   // 创建临时组时，传递给询问对话框的状态
-  const [showTempGroupModal, setShowTempGroupModal] = useState({visible: false});
+  const [showTempGroupModal, setShowTempGroupModal] = useState({ visible: false });
 
   /**
    * 处理点击‘创建临时组’按钮事件
    */
   const handleClick = () => {
-    setState!({title: '创建临时组'});
-    setShowTempGroupModal({visible: true});
+    setState!({ title: '创建临时组' });
+    setShowTempGroupModal({ visible: true });
   };
 
   return (
@@ -52,10 +52,9 @@ const CreateTempGroup = (props: Partial<ICreateTempGroupProps>) => {
         nameStyled={styledComponent.centerTitle}
         styled={styledComponent.justifyContent}
       />
-      <TemporaryGroupCreationWay
-        visible={showTempGroupModal.visible}
-        setState={setShowTempGroupModal}
-      />
+      {showTempGroupModal.visible ? (
+        <TemporaryGroupCreationWay visible={showTempGroupModal.visible} setState={setShowTempGroupModal} />
+      ) : null}
       <EditTemporaryGroup />
     </Container>
   );

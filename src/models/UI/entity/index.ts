@@ -65,11 +65,11 @@ const entity: IEntityModel = {
     async fetchData(reqPayload) {
       const response = await fetchApis.fetchSearchByMonitorName(reqPayload);
       // 按实体名称搜索时（默认）
-      let params: Partial<IEntityState> = {searchEntities: response.data.monitors || []};
+      let params: Partial<IEntityState> = { searchEntities: response.data.monitors || [] };
 
       store.dispatch.entity.updateState(params);
     },
-    async fetchDataByCircle(reqPayload): Promise<APIResponse<{monitors: IEntity[]}>> {
+    async fetchDataByCircle(reqPayload): Promise<APIResponse<{ monitors: IEntity[] }>> {
       if (!reqPayload) {
         const temporaryGroup = store.getState().temporaryGroup.backFillInfo;
 
@@ -84,9 +84,12 @@ const entity: IEntityModel = {
 
       return await fetchApis.fetchEntityByCircle(reqPayload);
     },
-    async fetchDataByRectangle(reqPayload?: IEntityByRectangleRequest, state?: RootState): Promise<APIResponse<{monitors: IEntity[]}>> {
+    async fetchDataByRectangle(
+      reqPayload?: IEntityByRectangleRequest,
+      state?: RootState
+    ): Promise<APIResponse<{ monitors: IEntity[] }>> {
       if (!reqPayload) {
-        const {northWest, southEast} = state!.temporaryGroup!.backFillInfo;
+        const { northWest, southEast } = state!.temporaryGroup!.backFillInfo;
 
         reqPayload = {
           supportMonitorType: -1,
@@ -100,7 +103,7 @@ const entity: IEntityModel = {
 
       return await fetchApis.fetchEntityByRectangle(reqPayload);
     },
-    async fetchFixedData(reqPayload?: IEntityRequest): Promise<APIResponse<{monitors: IEntity[]}>> {
+    async fetchFixedData(reqPayload?: IEntityRequest): Promise<APIResponse<{ monitors: IEntity[] }>> {
       if (!reqPayload) {
         reqPayload = {
           length: 2000,
@@ -110,13 +113,12 @@ const entity: IEntityModel = {
 
       return await fetchApis.fetchFixedEntity(reqPayload);
     },
-    async fetchConditionData(reqPayload): Promise<APIResponse<{monitors: IEntity[]}>> {
-      const {backFillInfo} = store.getState().temporaryGroup;
-      const {center, radius} = backFillInfo;
+    async fetchConditionData(reqPayload): Promise<APIResponse<{ monitors: IEntity[] }>> {
+      const { backFillInfo } = store.getState().temporaryGroup;
+      const { center, radius } = backFillInfo;
       const request: IEntityByCondition & IEntityByCircleRequest = {
         length: 2000,
         supportMonitorType: -1,
-        ageRange: [20, 40],
         radius: radius!,
         latitude: center?.getLat()!,
         longitude: center?.getLng()!,
