@@ -20,13 +20,13 @@ import './index.scss';
  * 对讲操作组件Render Props
  */
 interface IIntercomOperationProps {
-  state: IIntercomOperationState
-  intercomGroupNameState: IIntercomGroupNameState
-  intercomNoticeState: IIntercomNoticeState
-  intercomNoticeDispatch: IIntercomNoticeModel['effects']
-  dispatches: IIntercomOperationModel['effects']
-  curMassPoint: IAMapState['curMassPoint']
-  monitoringDispatchConfig: IMonitoringDispatchState['config']
+  state: IIntercomOperationState;
+  intercomGroupNameState: IIntercomGroupNameState;
+  intercomNoticeState: IIntercomNoticeState;
+  intercomNoticeDispatch: IIntercomNoticeModel['effects'];
+  dispatches: IIntercomOperationModel['effects'];
+  curMassPoint: IAMapState['curMassPoint'];
+  monitoringDispatchConfig: IMonitoringDispatchState['config'];
 }
 
 /**
@@ -37,14 +37,19 @@ interface IIntercomOperationProps {
  */
 const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   const {
-    intercomGroupNameState, intercomNoticeState, intercomNoticeDispatch,
-    dispatches, curMassPoint, state, monitoringDispatchConfig
+    intercomGroupNameState,
+    intercomNoticeState,
+    intercomNoticeDispatch,
+    dispatches,
+    curMassPoint,
+    state,
+    monitoringDispatchConfig
   } = props;
-  const {timing, intercomCallProcessing, callProcessing, callState} = state!;
-  const {active, value} = intercomNoticeState!;
-  const {setState: setNoticeState, sendData} = intercomNoticeDispatch!;
-  const {call, stopCall, entityControl} = dispatches!;
-  const {curActiveGroupType, intercomId} = intercomGroupNameState!;
+  const { timing, intercomCallProcessing, callProcessing, callState } = state!;
+  const { active, value } = intercomNoticeState!;
+  const { setState: setNoticeState, sendData } = intercomNoticeDispatch!;
+  const { call, stopCall, entityControl } = dispatches!;
+  const { curActiveGroupType, intercomId } = intercomGroupNameState!;
   /**
    * 当前监控对象禁言状态
    */
@@ -55,7 +60,7 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
    * @param {boolean} isShowNotice 是否显示对讲通知组件
    */
   const onNotice = (isShowNotice: boolean) => {
-    setNoticeState!({active: isShowNotice, value: ''});
+    setNoticeState!({ active: isShowNotice, value: '' });
   };
 
   /**
@@ -93,8 +98,10 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
    * @param {number} timing
    */
   const exitCallingWhenTimeout = (timing: number) => {
-    if ((intercomCallProcessing && timing <= 0) || (callProcessing && timing <= 0)) {
-      stopCall();
+    if (!callState) {
+      if ((intercomCallProcessing && timing <= 0) || (callProcessing && timing <= 0)) {
+        stopCall();
+      }
     }
   };
 
@@ -105,55 +112,48 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   const buttons = () => {
     if (active) {
       // 通知面板按钮
-      return (<>
-        <Icon
-          icon={IconSource.RETURN}
-          onClick={onNotice.bind(null, false)}
-          title={iconName.RETURN}
-        />
-        <Icon
-          icon={IconSource.SEND}
-          onClick={sendSMS}
-          title={iconName.SEND}
-          disabled={!value}
-        />
-      </>);
+      return (
+        <>
+          <Icon icon={IconSource.RETURN} onClick={onNotice.bind(null, false)} title={iconName.RETURN} />
+          <Icon icon={IconSource.SEND} onClick={sendSMS} title={iconName.SEND} disabled={!value} />
+        </>
+      );
     } else {
       if (curActiveGroupType !== CurActiveGroupType.Null) {
-        return (<>
-          <Icon
-            icon={!intercomCallProcessing ? IconSource.INTERCOMCALL : IconSource.INTERCOMCALLING}
-            onClick={handleCallModel.bind(
-              null,
-              curActiveGroupType === CurActiveGroupType.Entity ?
-                CallModeEnum.INDIVIDUAL_CALL_MODE :
-                CallModeEnum.GROUP_CALL_MODE
-            )}
-            title={
-              intercomCallProcessing ?
-                '停止' :
-                curActiveGroupType === CurActiveGroupType.Entity ? '个呼' : '组呼'
-            }
-            disabled={callProcessing}
-          />
-          {
-            curActiveGroupType === CurActiveGroupType.Entity ? (<>
-              <Icon
-                icon={callProcessing ? IconSource.HANGUP : IconSource.CALL}
-                onClick={handleCallModel.bind(null, CallModeEnum.DUPLEX_CALL_MODE)}
-                title={callProcessing ? '挂断' : '电话'}
-                disabled={intercomCallProcessing}
-              />
-              <Icon
-                icon={ban ? IconSource.BANNED : IconSource.BAN}
-                onClick={onBan}
-                title={ban ? '解除禁言' : '禁言'}
-                disabled={!monitoringDispatchConfig?.isOwnPreventSpeechRole}
-              />
-            </>) : null
-          }
-          <Icon icon={IconSource.NOTICE} onClick={onNotice.bind(null, true)} title="通知" />
-        </>);
+        return (
+          <>
+            <Icon
+              icon={!intercomCallProcessing ? IconSource.INTERCOMCALL : IconSource.INTERCOMCALLING}
+              onClick={handleCallModel.bind(
+                null,
+                curActiveGroupType === CurActiveGroupType.Entity
+                  ? CallModeEnum.INDIVIDUAL_CALL_MODE
+                  : CallModeEnum.GROUP_CALL_MODE
+              )}
+              title={
+                intercomCallProcessing ? '停止' : curActiveGroupType === CurActiveGroupType.Entity ? '个呼' : '组呼'
+              }
+              disabled={callProcessing}
+            />
+            {curActiveGroupType === CurActiveGroupType.Entity ? (
+              <>
+                <Icon
+                  icon={callProcessing ? IconSource.HANGUP : IconSource.CALL}
+                  onClick={handleCallModel.bind(null, CallModeEnum.DUPLEX_CALL_MODE)}
+                  title={callProcessing ? '挂断' : '电话'}
+                  disabled={intercomCallProcessing}
+                />
+                <Icon
+                  icon={ban ? IconSource.BANNED : IconSource.BAN}
+                  onClick={onBan}
+                  title={ban ? '解除禁言' : '禁言'}
+                  disabled={!monitoringDispatchConfig?.isOwnPreventSpeechRole}
+                />
+              </>
+            ) : null}
+            <Icon icon={IconSource.NOTICE} onClick={onNotice.bind(null, true)} title="通知" />
+          </>
+        );
       }
     }
 

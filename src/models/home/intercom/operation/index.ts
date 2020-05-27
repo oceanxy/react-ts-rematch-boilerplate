@@ -40,21 +40,20 @@ const operation: IIntercomOperationModel = {
     async call(callMode: CallModeEnum) {
       const state = store.getState();
       const {
-        intercomGroupName: {intercomId}
+        intercomGroupName: { intercomId }
       } = state;
 
       const request = {
         callMode: callMode,
-        targetIdType: callMode === CallModeEnum.GROUP_CALL_MODE ?
-          GroupIDTypeEnum.GROUP_ID_TYPE_ID :
-          UserIDTypeEnum.USER_ID_TYPE_ID,
+        targetIdType:
+          callMode === CallModeEnum.GROUP_CALL_MODE ? GroupIDTypeEnum.GROUP_ID_TYPE_ID : UserIDTypeEnum.USER_ID_TYPE_ID,
         targetId: intercomId
       };
 
       store.dispatch.monitoringDispatch.startCalling(request);
     },
     onDuplexCallingRing(response: DuplexCallingRingResponse): void {
-      const {intercomOperation, log} = store.dispatch;
+      const { intercomOperation, log } = store.dispatch;
 
       // 成功发起电话呼叫，记录日志
       log.addLog({
@@ -70,14 +69,21 @@ const operation: IIntercomOperationModel = {
       });
     },
     onCallingStartResponse(response: CallingStartResponse) {
-      const {log, intercomOperation} = store.dispatch;
+      const { log, intercomOperation } = store.dispatch;
 
       // 根据呼叫结果，处理状态
       if (response.result !== CallingStartResultEnum.CALLING_START_SUCCESS) {
+        // 更新状态，触发页面更新
+        intercomOperation.updateState({
+          timing: false,
+          callProcessing: false,
+          intercomCallProcessing: false,
+          callState: false
+        });
         message.error('呼叫失败，请稍候重试！');
       } else {
         let type = null;
-        const state = {timing: true} as IIntercomOperationState;
+        const state = { timing: true } as IIntercomOperationState;
 
         switch (response.callMode) {
           case CallModeEnum.GROUP_CALL_MODE:
@@ -102,7 +108,7 @@ const operation: IIntercomOperationModel = {
         }
 
         // 记录日志
-        log.addLog({type, id: store.getState().intercomGroupName.id});
+        log.addLog({ type, id: store.getState().intercomGroupName.id });
         // 更新状态
         intercomOperation.updateState(state);
       }

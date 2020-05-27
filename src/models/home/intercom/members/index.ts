@@ -36,17 +36,18 @@ const members: IIntercomMembersModel = {
         };
       }
 
-      store.dispatch.intercomMembers.updateState({loading: true});
+      store.dispatch.intercomMembers.updateState({ loading: true });
       const response = await fetchApis.fetchIntercomMembers(reqPayload);
-      store.dispatch.intercomMembers.updateState({data: response?.data?.interlocutorMemberList || [], loading: false});
+      store.dispatch.intercomMembers.updateState({
+        data: response?.data?.interlocutorMemberList || [],
+        loading: false
+      });
     },
     setState(payload: Partial<IIntercomMembersState>) {
       store.dispatch.intercomMembers.updateState(payload);
     },
     async removeMember(member) {
-      const {intercomId, id} = store.getState().intercomGroupName;
-
-      debugger;
+      const { intercomId, id } = store.getState().intercomGroupName;
 
       // 调用第三方接口
       store.dispatch.monitoringDispatch.removeTempGroupMember({
@@ -56,14 +57,14 @@ const members: IIntercomMembersModel = {
 
       // 调用平台接口，维护平台后台的数据
       // 以下代码应该写在第三方删除成员事件里，但第三方未提供
-      const response = await fetchApis.removeMember(<IIntercomRemoveMembersRequest> {
+      const response = await fetchApis.removeMember(<IIntercomRemoveMembersRequest>{
         intercomGroupId: intercomId,
         userIds: member.userId
       });
 
       if (+response.retCode === 0) {
         // 调用增加日志接口
-        await store.dispatch.log.addLog({type: LogType.ExitIntercomGroup, id});
+        await store.dispatch.log.addLog({ type: LogType.ExitIntercomGroup, id });
         // 刷新对讲面板成员列表
         store.dispatch.intercomMembers.fetchData();
       }
@@ -71,9 +72,9 @@ const members: IIntercomMembersModel = {
       return response;
     },
     async addMember(memberIds: number[]): Promise<APIResponse> {
-      const {id} = store.getState().intercomGroupName;
+      const { id } = store.getState().intercomGroupName;
 
-      const response = await fetchApis.addMember(<IIntercomAddMembersRequest> {
+      const response = await fetchApis.addMember(<IIntercomAddMembersRequest>{
         intercomGroupId: id,
         userIds: memberIds
       });
@@ -82,7 +83,7 @@ const members: IIntercomMembersModel = {
         // 刷新对讲成员数据
         store.dispatch.intercomMembers.fetchData();
         // 操作成功后添加新增成员的日志
-        await store.dispatch.log.addLog({type: LogType.AddIntercomGroup, id});
+        await store.dispatch.log.addLog({ type: LogType.AddIntercomGroup, id });
       }
 
       return response;
