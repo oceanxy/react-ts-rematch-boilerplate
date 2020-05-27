@@ -374,9 +374,9 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       login();
     },
     login(): void {
-      const {hjMediaEngine} = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
-      if (hjMediaEngine) {
+      if (hjMediaEngine && !loginResponseStatus) {
         // 调度服务登录
         hjMediaEngine.audioEngine.login();
       }
@@ -389,12 +389,13 @@ const monitoringDispatch: IMonitoringDispatchModel = {
     },
     onLogout(): void {
       store.dispatch.monitoringDispatch.updateState({loginResponseStatus: false});
-      message.info('第三方调度服务已退出');
+      message.config({top: 60});
+      message.warning('第三方调度服务已退出，所有调度功能将受限！', 0);
     },
     startCalling(request: StartCallingRequest): void {
-      const {hjMediaEngine} = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
-      if (hjMediaEngine) {
+      if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.startCalling(request);
       } else {
         message.error('第三方对讲服务未启动！');
@@ -428,18 +429,18 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       }
     },
     removeGroupMember(request: RemoveGroupMemberRequest): void {
-      const {hjMediaEngine} = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
-      if (hjMediaEngine) {
+      if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.removeGroupMember(request);
       } else {
         message.error('第三方对讲服务未启动！');
       }
     },
     removeTempGroupMember(request: RemoveTempGroupMemberRequest): void {
-      const {hjMediaEngine} = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
-      if (hjMediaEngine) {
+      if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.removeTempGroupMember(request);
       } else {
         message.error('第三方对讲服务未启动！');
@@ -447,11 +448,11 @@ const monitoringDispatch: IMonitoringDispatchModel = {
     },
     addTempGroupMember(memberIds: number[]): void {
       const {
-        monitoringDispatch: {hjMediaEngine},
+        monitoringDispatch: {hjMediaEngine, loginResponseStatus},
         intercomGroupName: {intercomId}
       } = store.getState();
 
-      if (hjMediaEngine) {
+      if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.addTempGroupMember({
           tempGroupId: intercomId,
           tempGroupMemberMsIdList: memberIds
@@ -543,6 +544,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       // TODO 主呼停止事件处理（非主动停止主呼时）
     },
     onTempGroupUpdate(response): void {
+      // 其他用户对临时组的操作会触发此事件，目前没有处理这个事件的需求，暂不做处理
       // TODO 临时组更新
     },
     async onAddTempGroupMemberResponse(response) {
