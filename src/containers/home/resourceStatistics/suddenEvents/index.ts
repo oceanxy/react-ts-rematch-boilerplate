@@ -4,7 +4,7 @@
  * @Description: 突发事件周边资源
  * @Date: 2020-04-02 周四 17:47:00
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-19 周二 09:44:50
+ * @LastModifiedTime: 2020-05-27 周三 11:29:33
  */
 
 import SuddenEvents from '@/components/home/resourceStatistics/suddenEvents';
@@ -18,7 +18,8 @@ const mapStateToProps = (state: RootState) => ({
   eventId: state.eventDetails.data?.eventId
 });
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
-  getData: dispatch.suddenEvents.getData
+  getData: dispatch.suddenEvents.getData,
+  setState: dispatch.suddenEvents.setState
 });
 
 export { RangeControl };

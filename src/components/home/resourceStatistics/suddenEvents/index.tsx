@@ -23,15 +23,17 @@ interface ISuddenEventProps {
   getData: ISuddenEventsModel['effects']['getData']
   range: IRangeControlState['range'],
   eventId: IEventDetailsData['eventId']
+  setState: ISuddenEventsModel['effects']['setState']
 }
 
-const SuddenEvents = (props: Partial<ISuddenEventProps>) => {
-  const {data, getData, range, eventId} = props;
-  /**
-   * 图表配置
-   * @type {EChartOption}
-   */
-  const option: echarts.EChartOption = {
+/**
+ * 获取eCharts图表配置
+ * @param {string[]} itemName X轴数据数组
+ * @param {number[]} totalNum series数据数组
+ * @returns {echarts.EChartOption}
+ */
+function getOption(itemName: string[], totalNum: number[]): echarts.EChartOption {
+  return {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -47,7 +49,7 @@ const SuddenEvents = (props: Partial<ISuddenEventProps>) => {
     xAxis: [
       {
         type: 'category',
-        data: data?.itemName ?? [],
+        data: itemName,
         axisTick: {
           show: false
         },
@@ -101,7 +103,7 @@ const SuddenEvents = (props: Partial<ISuddenEventProps>) => {
         name: '',
         type: 'bar',
         barWidth: '40%' as unknown as number,
-        data: data?.totalNum ?? [],
+        data: totalNum,
         itemStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {offset: 0, color: '#55a4d0'},
@@ -111,10 +113,17 @@ const SuddenEvents = (props: Partial<ISuddenEventProps>) => {
       }
     ]
   };
+}
+
+const SuddenEvents = (props: Partial<ISuddenEventProps>) => {
+  const {data, getData, range, eventId, setState} = props;
+  const option = getOption(data?.itemName ?? [], data?.totalNum ?? []);
 
   useEffect(() => {
     if (eventId) {
       getData!();
+    } else {
+      setState!({data: {itemName: [], totalNum: []}});
     }
   }, [range, eventId]);
 
@@ -127,7 +136,11 @@ const SuddenEvents = (props: Partial<ISuddenEventProps>) => {
         icon={false}
       />
       <RangeControl />
-      <Histogram option={option} classNameForCon="resource-statistics-left-chart" style={{height: px2vw(130)}} />
+      <Histogram
+        option={option}
+        classNameForCon="resource-statistics-left-chart"
+        style={{height: px2vw(130)}}
+      />
     </Container>
   );
 };

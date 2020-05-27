@@ -4,7 +4,7 @@
  * @Description: 突发事件周边资源model
  * @Date: 2020-04-02 周四 17:01:08
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-18 周一 16:49:56
+ * @LastModifiedTime: 2020-05-27 周三 11:24:36
  */
 
 import fetchApis from '@/apis';
@@ -22,10 +22,10 @@ const suddenEvents: ISuddenEventsModel = {
     }
   },
   reducers: {
-    updateData: (state, data) => {
+    updateData: (state, payload: Partial<ISuddenEventsState>) => {
       return {
         ...state,
-        data
+        ...payload
       };
     }
   },
@@ -36,7 +36,7 @@ const suddenEvents: ISuddenEventsModel = {
       if (reqPayload) {
         response = await fetchApis.fetchAroundEvent(reqPayload);
       } else {
-        const {eventDetails, rangeControl}= store.getState();
+        const {eventDetails, rangeControl} = store.getState();
 
         response = await fetchApis.fetchAroundEvent({
           supportMonitorType: -1, // 默认全部
@@ -47,7 +47,10 @@ const suddenEvents: ISuddenEventsModel = {
         });
       }
 
-      store.dispatch.suddenEvents.updateData(response.data.statistics);
+      store.dispatch.suddenEvents.updateData({data: response.data.statistics});
+    },
+    setState(payload: Partial<ISuddenEventsState>) {
+      store.dispatch.suddenEvents.updateData(payload);
     }
   }
 };
