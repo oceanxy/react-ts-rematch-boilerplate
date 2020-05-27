@@ -4,7 +4,7 @@
  * @Description: 对讲组名称组件
  * @Date: 2020-04-21 周二 15:07:10
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-10 周日 11:12:59
+ * @LastModifiedTime: 2020-05-27 周三 10:35:46
  */
 
 import Container from '@/components/UI/containerComp';
@@ -26,6 +26,7 @@ interface IIntercomOperationProps {
   intercomNoticeDispatch: IIntercomNoticeModel['effects']
   dispatches: IIntercomOperationModel['effects']
   curMassPoint: IAMapState['curMassPoint']
+  monitoringDispatchConfig: IMonitoringDispatchState['config']
 }
 
 /**
@@ -37,7 +38,7 @@ interface IIntercomOperationProps {
 const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   const {
     intercomGroupNameState, intercomNoticeState, intercomNoticeDispatch,
-    dispatches, curMassPoint, state
+    dispatches, curMassPoint, state, monitoringDispatchConfig
   } = props;
   const {timing, intercomCallProcessing, callProcessing, callState} = state!;
   const {active, value} = intercomNoticeState!;
@@ -147,6 +148,7 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
                 icon={ban ? IconSource.BANNED : IconSource.BAN}
                 onClick={onBan}
                 title={ban ? '解除禁言' : '禁言'}
+                disabled={!monitoringDispatchConfig?.isOwnPreventSpeechRole}
               />
             </>) : null
           }
