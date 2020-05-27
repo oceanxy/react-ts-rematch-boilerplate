@@ -77,7 +77,7 @@ const temporaryGroup: ITemporaryGroupModel = {
     },
     async unbindTemporaryGroup(intercomGroupId: number): Promise<APIResponse> {
       // 调用第三方解散临时组接口
-      store.dispatch.monitoringDispatch.deleteTempGroup();
+      store.dispatch.monitoringDispatch.deleteTempGroup(intercomGroupId);
 
       // 调用平台后台的接口，维护平台的后台数据
       const response = await fetchApis.unbindTemporaryGroup({intercomGroupId});
