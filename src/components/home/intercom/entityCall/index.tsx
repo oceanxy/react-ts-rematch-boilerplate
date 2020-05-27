@@ -9,7 +9,6 @@
 
 import Container from '@/components/UI/containerComp';
 import Member from '@/components/UI/member';
-import { getEntityTypeText } from '@/utils/helper';
 import React, { useState } from 'react';
 import './index.scss';
 

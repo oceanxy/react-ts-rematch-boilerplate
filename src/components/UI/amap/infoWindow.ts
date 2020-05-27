@@ -9,7 +9,6 @@
 
 import { taskTypeColor, taskTypeStatus } from '@/models/home/taskModel/taskDetails';
 import { AssignmentTypeText, EntityType } from '@/models/UI/entity';
-import { getEntityTypeText } from '@/utils/helper';
 
 /**
  * 获取任务HTML element
@@ -75,7 +74,7 @@ function setWindowFields(data: InfoWindowResponse, happenEvent: boolean) {
       let curAssignmentName = monitor.curAssignmentName;
       let curAssignmentType = '';
       let curAssignmentTitle = curAssignmentName;
-      
+
       if (!curAssignmentName) {
         curAssignmentName = '-';
       } else {
@@ -158,7 +157,7 @@ const massPointInfoWindow = (data: InfoWindowResponse) => {
     </div>
     <div class="info-window-item">
       <span class="key">类型</span>
-      <span class="value" title="${getEntityTypeText(+monitor?.monitorTypeText!)}">${getEntityTypeText(+monitor?.monitorTypeText!)}</span>
+      <span class="value" title="${monitor?.monitorTypeText}">${monitor.monitorTypeText}</span>
     </div>
     <div class="info-window-item">
       <span class="key" title="监控对象最近一次上报的位置描述">位置</span>
