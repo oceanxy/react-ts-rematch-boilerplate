@@ -256,8 +256,14 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
               ...response.data,
               gender: [1, 2],
               ageRange: [0, 0],
-              radius
+              radius,
+              skillIds: undefined,
+              intercomModelIds: undefined,
+              driverLicenseCategoryIds: undefined,
+              qualificationIds: undefined,
+              bloodTypeIds: undefined
             });
+
             createForm.setFieldsValue({
               temporaryGroup: name,
               isCreate: title.includes('创建')
