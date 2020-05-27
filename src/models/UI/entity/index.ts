@@ -78,7 +78,8 @@ const entity: IEntityModel = {
           onlineStatus: 1,
           radius: temporaryGroup.radius!,
           longitude: temporaryGroup.center?.getLng()!,
-          latitude: temporaryGroup.center?.getLat()!
+          latitude: temporaryGroup.center?.getLat()!,
+          dispatchStatus: 1
         };
       }
 
@@ -97,7 +98,8 @@ const entity: IEntityModel = {
           leftLatitude: northWest!.getLat(),
           leftLongitude: northWest!.getLng(),
           rightLatitude: southEast!.getLat(),
-          rightLongitude: southEast!.getLng()
+          rightLongitude: southEast!.getLng(),
+          dispatchStatus: 1
         };
       }
 
@@ -107,7 +109,8 @@ const entity: IEntityModel = {
       if (!reqPayload) {
         reqPayload = {
           length: 2000,
-          supportMonitorType: -1
+          supportMonitorType: -1,
+          dispatchStatus: 1
         };
       }
 
@@ -122,6 +125,7 @@ const entity: IEntityModel = {
         radius: radius!,
         latitude: center?.getLat()!,
         longitude: center?.getLng()!,
+        dispatchStatus: 1,
         ...reqPayload
       };
 

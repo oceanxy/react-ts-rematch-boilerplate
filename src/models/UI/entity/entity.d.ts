@@ -117,6 +117,10 @@ declare global {
      * 分组ID
      */
     assignmentId?: string
+    /**
+     * 调度状态 -1:全部（默认） 1:可调度 2:不可调度 3:在组
+     */
+    dispatchStatus?: (-1 | 1 | 2 | 3) | IEntityRequest['dispatchStatus'][]
   }
 
   /**
