@@ -8,7 +8,7 @@
  */
 
 import { taskTypeColor, taskTypeStatus } from '@/models/home/taskModel/taskDetails';
-import { EntityType } from '@/models/UI/entity';
+import { AssignmentTypeText, EntityType } from '@/models/UI/entity';
 import { getEntityTypeText } from '@/utils/helper';
 
 /**
@@ -72,10 +72,23 @@ function setWindowFields(data: InfoWindowResponse, happenEvent: boolean) {
       </div>
     `;
     } else {
+      let curAssignmentName = monitor.curAssignmentName;
+      let curAssignmentType = '';
+      let curAssignmentTitle = curAssignmentName;
+      
+      if (!curAssignmentName) {
+        curAssignmentName = '-';
+      } else {
+        curAssignmentType = `（${AssignmentTypeText[monitor.curAssignmentType]}）`;
+        curAssignmentTitle = `当前组：${curAssignmentName}\n组类型：${curAssignmentType}`;
+      }
+
       str += `
       <div class="info-window-item">
         <span class="key">当前组</span>
-        <span class="value" title="${monitor?.curAssignmentName}">${monitor?.curAssignmentName}</span>
+        <span class="value" title="${curAssignmentTitle}">
+          ${curAssignmentName}${curAssignmentType}
+        </span>
       </div>
     `;
     }
@@ -128,11 +141,20 @@ const massPointInfoWindow = (data: InfoWindowResponse) => {
   const {monitor, location, tasks, eventList} = data;
   const happenEvent = !!eventList?.length;
 
+  let onlineStatus: any = '';
+  let monitorTitle: any = monitor.monitorName;
+  if (+monitor.monitorType !== 9) {
+    onlineStatus = +monitor.onlineStatus ? '（在线）' : '（离线）';
+    monitorTitle = `监控对象：${monitor?.monitorName}\n状态：${+monitor.onlineStatus ? '在线' : '离线'}`;
+  }
+
   return `
     ${setWindowFields(data, happenEvent)}
     <div class="info-window-item">
       <span class="key">监控对象</span>
-      <span class="value" title="${monitor?.monitorName}">${monitor?.monitorName}</span>
+      <span class="value" title="${monitorTitle}">
+        ${monitor?.monitorName}${onlineStatus}
+      </span>
     </div>
     <div class="info-window-item">
       <span class="key">类型</span>

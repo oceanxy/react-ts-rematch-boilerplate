@@ -9,7 +9,7 @@
 
 import { APIResponse } from '@/interfaces/api/mock';
 import { MouseToolType } from '@/models/UI/amap/index';
-import { EntityType } from '@/models/UI/entity';
+import { AssignmentType, EntityType } from '@/models/UI/entity';
 import { RootState } from '@/store';
 import { ModelConfig } from '@rematch/core';
 
@@ -75,7 +75,7 @@ declare global {
       /**
        * 当前组类型，1：固定组 2：任务组 3：临时组
        */
-      curAssignmentType: 1 | 2 | 3
+      curAssignmentType: AssignmentType
       /**
        * 设备在线状态 0：离线 1：在线
        */
