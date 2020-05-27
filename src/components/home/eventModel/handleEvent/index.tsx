@@ -113,7 +113,7 @@ const HandleEvent = (props: HandleEventProps) => {
         });
 
         setLoading(false);
-      }/** 单条处理或 */ else {
+      }/** 单条处理 */ else {
         setSingleState({
           ...singleState,
           [`${singleCurEvent.eventId}`]: {loading: true}

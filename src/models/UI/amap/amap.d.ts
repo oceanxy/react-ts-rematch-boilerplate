@@ -58,6 +58,13 @@ declare global {
        */
       monitorType: EntityType
       /**
+       * 监控对象类型对应的具体类型
+       * 人员时：职位类别
+       * 车辆时：车辆类型
+       * 物品时：物品类型
+       */
+      monitorTypeText: string
+      /**
        * 监控对象名称
        */
       monitorName: string

@@ -55,27 +55,27 @@ function setWindowFields(data: InfoWindowResponse, happenEvent: boolean) {
   let str: string = '';
 
   // 监控对象类型不为静态物资时
-  if (data.monitor?.monitorType !== EntityType.Supplies) {
+  if (+data.monitor?.monitorType !== EntityType.Supplies) {
     str += `
-    <div class="info-window-item" title="监控对象最近一次上报的定位时间">
-      <span class="key">时间</span>
-      <span class="value">${location?.gpsTime}</span>
+    <div class="info-window-item">
+      <span class="key" title="监控对象最近一次上报的定位时间">时间</span>
+      <span class="value" title="${location?.gpsTime}">${location?.gpsTime}</span>
     </div>
   `;
 
     // 是否有事件上报
     if (happenEvent) {
       str += `
-      <div class="info-window-item" title="事件名称">
+      <div class="info-window-item">
         <span class="key">事件名称</span>
-        <span class="value">${eventNames}</span>
+        <span class="value" title="${eventNames}">${eventNames}</span>
       </div>
     `;
     } else {
       str += `
-      <div class="info-window-item" title="当前组">
+      <div class="info-window-item">
         <span class="key">当前组</span>
-        <span class="value">${monitor?.curAssignmentName}</span>
+        <span class="value" title="${monitor?.curAssignmentName}">${monitor?.curAssignmentName}</span>
       </div>
     `;
     }
@@ -130,17 +130,17 @@ const massPointInfoWindow = (data: InfoWindowResponse) => {
 
   return `
     ${setWindowFields(data, happenEvent)}
-    <div class="info-window-item" title="监控对象名称">
+    <div class="info-window-item">
       <span class="key">监控对象</span>
-      <span class="value">${monitor?.monitorName}</span>
+      <span class="value" title="${monitor?.monitorName}">${monitor?.monitorName}</span>
     </div>
-    <div class="info-window-item" title="监控对象的类型">
+    <div class="info-window-item">
       <span class="key">类型</span>
-      <span class="value">${getEntityTypeText(+monitor?.monitorType!)}</span>
+      <span class="value" title="${getEntityTypeText(+monitor?.monitorTypeText!)}">${getEntityTypeText(+monitor?.monitorTypeText!)}</span>
     </div>
-    <div class="info-window-item" title="监控对象最近一次上报的位置描述">
-      <span class="key">位置</span>
-      <span class="value">${location?.address}</span>
+    <div class="info-window-item">
+      <span class="key" title="监控对象最近一次上报的位置描述">位置</span>
+      <span class="value" title="${location?.address}">${location?.address}</span>
     </div>
     ${setWindowButton(data, tasks, !!monitor?.onlineStatus, happenEvent)}
   `;
@@ -156,13 +156,13 @@ const fenceInfoWindow = (data: IFenceDetailsResponse) => {
   const {fenceName, locationData} = fenceDetails;
 
   return `
-    <div class="info-window-item" title="监控对象最近一次上报的定位时间">
+    <div class="info-window-item">
       <span class="key">名称</span>
-      <span class="value">${fenceName}</span>
+      <span class="value" title="${fenceName}">${fenceName}</span>
     </div>
-    <div class="info-window-item" title="事件名称">
+    <div class="info-window-item">
       <span class="key">位置</span>
-      <span class="value">${locationData.position || '-'}</span>
+      <span class="value" title="${locationData.position || '暂无位置信息'}">${locationData.position || '-'}</span>
     </div>
   `;
 };
@@ -188,10 +188,12 @@ const infoWindowTemplate = (data?: InfoWindowResponse | IFenceDetailsResponse) =
     }
   }
 
-  return template += `
+  template += `
     </div>
     <div class="inter-plat-map-info-window-content-sharp"></div>
   </div>`;
+
+  return template;
 };
 
 export default infoWindowTemplate;
