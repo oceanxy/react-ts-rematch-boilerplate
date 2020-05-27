@@ -4,7 +4,7 @@
  * @Description: 处理事件弹窗组件
  * @Date: 2020-05-07 周四 09:30:30
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-19 周二 16:46:53
+ * @LastModifiedTime: 2020-05-27 周三 09:54:45
  */
 
 import Modal from '@/components/UI/modal';
@@ -30,6 +30,10 @@ interface HandleEventProps {
    * 当前海量点窗体承载的信息
    */
   curMassPointInfo?: InfoWindowResponse
+  /**
+   * 当前选中的事件信息对象
+   */
+  curSelectedEvent?: IEventListState['curSelectedEvent']
   /**
    * 重新获取事件列表数据
    */
@@ -63,7 +67,7 @@ interface HandleEventFormProps {
  * @constructor
  */
 const HandleEvent = (props: HandleEventProps) => {
-  const {visible, setIsShowModal, handleEvent, curMassPointInfo, fetchEventListData} = props;
+  const {visible, setIsShowModal, handleEvent, curMassPointInfo, fetchEventListData, curSelectedEvent} = props;
   /**
    * 批量全部处理的loading状态
    */
@@ -86,31 +90,47 @@ const HandleEvent = (props: HandleEventProps) => {
   const onFinish = async (values: any) => {
     let response: any;
 
-    // 批量全部处理
-    if (!values.handleMethod) {
+    // 处理事件列表的事件弹窗
+    if (curSelectedEvent?.eventId) {
       setLoading(true);
+
       response = await handleEvent!({
         monitorId: curMassPointInfo!.monitor.monitorId,
-        description: values.description
+        description: values.description,
+        eventType: curSelectedEvent.eventType,
+        startTime: curSelectedEvent.startTime
       });
+
       setLoading(false);
-    }/** 单条处理 */ else {
-      setSingleState({
-        ...singleState,
-        [`${singleCurEvent.eventId}`]: {loading: true}
-      });
+    } /** 处理海量点或搜索实体结果的事件弹窗 */ else {
+      // 批量全部处理
+      if (!values.handleMethod) {
+        setLoading(true);
 
-      response = await handleEvent!({
-        monitorId: curMassPointInfo!.monitor.monitorId,
-        description: values[`description-${singleCurEvent.eventId}`],
-        eventType: singleCurEvent.eventType,
-        startTime: singleCurEvent.startTime
-      });
+        response = await handleEvent!({
+          monitorId: curMassPointInfo!.monitor.monitorId,
+          description: values.description
+        });
 
-      setSingleState({
-        ...singleState,
-        [`${singleCurEvent.eventId}`]: {loading: false}
-      });
+        setLoading(false);
+      }/** 单条处理或 */ else {
+        setSingleState({
+          ...singleState,
+          [`${singleCurEvent.eventId}`]: {loading: true}
+        });
+
+        response = await handleEvent!({
+          monitorId: curMassPointInfo!.monitor.monitorId,
+          description: values[`description-${singleCurEvent.eventId}`],
+          eventType: singleCurEvent.eventType,
+          startTime: singleCurEvent.startTime
+        });
+
+        setSingleState({
+          ...singleState,
+          [`${singleCurEvent.eventId}`]: {loading: false}
+        });
+      }
     }
 
     if (+response.retCode === 0) {
@@ -163,7 +183,11 @@ const HandleEvent = (props: HandleEventProps) => {
   return (
     <Modal
       width={400}
-      title={`${curMassPointInfo?.monitor?.monitorName} 报警处理`}
+      title={
+        curSelectedEvent?.eventId ?
+          `${curMassPointInfo?.monitor?.monitorName} ${curSelectedEvent.eventName} 处理` :
+          `${curMassPointInfo?.monitor?.monitorName} 报警处理`
+      }
       visible={visible}
       onCancel={() => closeModal()}
       footer={null}
@@ -171,12 +195,16 @@ const HandleEvent = (props: HandleEventProps) => {
       className="inter-plat-handle-event-modal"
     >
       <Form form={form} onFinish={onFinish} initialValues={{handleMethod: 0} as HandleEventFormProps}>
-        <Form.Item name="handleMethod" className="radio">
-          <RadioGroup onChange={handleMethodChange}>
-            <Radio value={0}>全部处理</Radio>
-            <Radio value={1}>单条处理</Radio>
-          </RadioGroup>
-        </Form.Item>
+        {
+          !curSelectedEvent?.eventId ? (
+            <Form.Item name="handleMethod" className="radio">
+              <RadioGroup onChange={handleMethodChange}>
+                <Radio value={0}>全部处理</Radio>
+                <Radio value={1}>单条处理</Radio>
+              </RadioGroup>
+            </Form.Item>
+          ) : null
+        }
         <Form.Item
           noStyle
           shouldUpdate={(prevValues, currentValues) => prevValues.handleMethod !== currentValues.handleMethod}

@@ -376,13 +376,14 @@ const MassPoint = (props: MassPointProps) => {
     }
   }, [curSelectedEvent?.eventId]);
 
-  return (
+  return isShowModal ? (
+    // 事件处理组件
     <HandleEvent
       visible={isShowModal}
       curMassPointInfo={curMassPoint}
       setIsShowModal={setIsShowModal}
     />
-  );
+  ) : null;
 };
 
 export default MassPoint;
