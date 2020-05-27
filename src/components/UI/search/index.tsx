@@ -138,12 +138,12 @@ const Search = (props: Partial<ISearchProps>) => {
    * @param {React.KeyboardEvent<HTMLInputElement>} e
    */
   const onInputChange = (e: ChangeEvent<HTMLInputElement> | CompositionEvent<HTMLInputElement>) => {
-    const beSetValue = e.currentTarget.value.trim();
+    const beSetValue = e.currentTarget.value;
     setVal(beSetValue);
 
     // 中文输入时，锁定受控文本域
     if (e.type === 'change') {
-      setState!({searchKeyword: beSetValue});
+      setState!({searchKeyword: beSetValue.trim()});
     }
 
     // 根据输入框的值内容，设置是否显示搜索结果面板
