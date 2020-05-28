@@ -77,9 +77,10 @@ function setWindowFields(data: InfoWindowResponse, happenEvent: boolean) {
 
       if (!curAssignmentName) {
         curAssignmentName = '-';
+        curAssignmentTitle = '';
       } else {
         curAssignmentType = `（${AssignmentTypeText[monitor.curAssignmentType]}）`;
-        curAssignmentTitle = `当前组：${curAssignmentName}\n组类型：${curAssignmentType}`;
+        curAssignmentTitle = `当前组：${curAssignmentName}\n组类型：${AssignmentTypeText[monitor.curAssignmentType]}`;
       }
 
       str += `

@@ -41,7 +41,7 @@ const intercom: IIntercomModel = {
           curActiveGroupType: CurActiveGroupType.Null
         });
 
-        // 调用第三方加入群组接口
+        // 调用第三方退出群组接口
         store.dispatch.monitoringDispatch.exitGroup({groupId: intercomId});
       } else {
         // 调用第三方加入群组接口
