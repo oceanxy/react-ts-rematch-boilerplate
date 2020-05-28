@@ -37,13 +37,8 @@ interface IIntercomOperationProps {
  */
 const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   const {
-    intercomGroupNameState,
-    intercomNoticeState,
-    intercomNoticeDispatch,
-    dispatches,
-    curMassPoint,
-    state,
-    monitoringDispatchConfig
+    intercomGroupNameState, intercomNoticeState, intercomNoticeDispatch, dispatches,
+    curMassPoint, state, monitoringDispatchConfig
   } = props;
   const { timing, intercomCallProcessing, callProcessing, callState } = state!;
   const { active, value } = intercomNoticeState!;

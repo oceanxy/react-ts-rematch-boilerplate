@@ -4,7 +4,7 @@
  * @Description: 临时组/任务组对讲成员组件
  * @Date: 2020-04-21 周二 15:45:40
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-15 周五 13:53:02
+ * @LastModifiedTime: 2020-05-28 周四 13:54:27
  */
 
 import Container from '@/components/UI/containerComp';
@@ -20,13 +20,14 @@ import './index.scss';
 interface IIntercomMembersProps {
   curTempGroupState: IIntercomGroupNameState
   state: IIntercomMembersState
+  timing: IIntercomOperationState['timing']
   dispatches: IIntercomMembersModel['effects']
   isActiveIntercom: IIntercomState['active']
   setTemporaryGroupState: ITemporaryGroupModel['effects']['setState']
 }
 
 const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
-  const {state, isActiveIntercom, dispatches, curTempGroupState, setTemporaryGroupState} = props;
+  const {state, isActiveIntercom, dispatches, curTempGroupState, setTemporaryGroupState, timing} = props;
   const {data, loading} = state!;
   const {fetchData, setState, removeMember} = dispatches!;
   const {curActiveGroupType, name} = curTempGroupState!;
@@ -103,9 +104,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
           // 只有临时组能加人
           !loading ?
             curTempGroupState?.curActiveGroupType === CurActiveGroupType.Temporary ?
-              (
-                <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAddMembers} />
-              ) :
+              <Icon icon={IconSource.ADD} title="新增成员" onClick={handleAddMembers} disabled={timing} /> :
               !data?.length ?
                 <div className="no-data-warn">暂无成员</div> :
                 null :
