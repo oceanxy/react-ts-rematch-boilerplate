@@ -23,6 +23,7 @@
     "echarts-for-react": "^2.0.15-beta.1",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
+    "net": "^1.0.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-is": "^16.13.1",
@@ -31,7 +32,9 @@
     "react-router-dom": "^5.1.2",
     "reconnecting-websocket": "^4.2.0",
     "redux": "^4.0.4",
-    "sass": "^1.26.3"
+    "sass": "^1.26.3",
+    "sockjs-client": "^1.4.0",
+    "stompjs": "^2.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -57,6 +60,9 @@
     "@types/react-dom": "^16.9.5",
     "@types/react-redux": "^7.1.7",
     "@types/react-router-dom": "^5.1.3",
+    "@types/sockjs": "^0.3.32",
+    "@types/sockjs-client": "^1.1.1",
+    "@types/stompjs": "^2.3.4",
     "@types/styled-components": "^5.0.1",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",

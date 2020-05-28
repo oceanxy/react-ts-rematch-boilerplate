@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 接口API函数约束
  * @Date: 2019-12-23 17:06:41
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2019-12-26 17:03:14
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-28 周四 14:04:28
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
@@ -12,7 +12,10 @@ import { EHTTPMethod, EProtocal } from '@/interfaces/config';
 
 export type WebsocketCallback = (response: APIResponse) => void
 
-export interface IFetchAPI {
+/**
+ * 请求服务接口配置
+ */
+export interface IFetchConfig {
   /**
    * 后台接口的地址
    * url写法
@@ -33,17 +36,6 @@ export interface IFetchAPI {
    */
   method?: EHTTPMethod
   /**
-   * 是否是websocket长链接
-   * 注意：websocket不支持mock，开发时请在 /build/websocketServer/index.js 编写本地websocket服务的逻辑，用于模拟数据支撑。或者使用轮询来代替。
-   * 注意：如果是websocket长链接且url字段不是完整的websocket地址，请务必设置为true
-   */
-  isWebsocket?: boolean
-  /**
-   * 是否采用原生websocket
-   */
-  isNativeWebsocket?: boolean
-
-  /**
    * 单独指定端口
    * 如果这个值为空则使用全局的port（即config文件里面配置的port）
    */
@@ -61,7 +53,44 @@ export interface IFetchAPI {
    *  https:// => wss://
    */
   protocol?: EProtocal
+}
 
+/**
+ * 请求websocket服务接口配置
+ * 注意：Websocket的URL协议是“ws://“或“wss://“
+ */
+export interface IFetchWebsocket extends IFetchConfig {
+  /**
+   * 是否是websocket长链接
+   * 注意：websocket不支持mock，开发时请在 /build/websocketServer/index.js 编写本地websocket服务的逻辑，用于模拟数据支撑。或者使用轮询来代替。
+   * 注意：如果是websocket长链接且url字段不是完整的websocket地址，请务必设置为true
+   */
+  isWebsocket?: boolean
+  /**
+   * 是否启用stomp上层协议
+   */
+  enableStomp: boolean
+}
+
+/**
+ * 请求SockJs服务接口配置
+ * 注意：SockJS的URL协议是“http://“或“https://“模式，而不是“ws://“或“wss://“
+ */
+export interface IFetchSockJs extends IFetchConfig {
+  /**
+   * 是否采用SockJs包发送websocket
+   */
+  isSockJs?: boolean
+  /**
+   * 是否启用stomp上层协议
+   */
+  enableStomp: boolean
+}
+
+/**
+ * 请求服务接口配置
+ */
+export interface IFetchAPI extends IFetchConfig{
   /**
    * 自定义配置项
    * 为特殊情况预留

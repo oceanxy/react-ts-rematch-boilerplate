@@ -221,6 +221,10 @@ declare global {
      * 服务器端口
      */
     serverPort: string
+    /**
+     * 音频播放元素
+     */
+    playElement: any
   }
 
   /**

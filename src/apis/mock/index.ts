@@ -121,6 +121,14 @@ const mocks: Mocks = {
       'value|1-10': 1
     }
   },
+  fetchTestSockJs: {
+    retMsg: '',
+    retCode: 0,
+    data: {
+      name: 'websocket',
+      'value|1-10': 1
+    }
+  },
   // 测试删除数据接口
   deleteData: {
     retCode: 0,
@@ -202,6 +210,50 @@ const mocks: Mocks = {
     }
   },
   fetchEventList: {
+    retCode: 0,
+    retMsg: '',
+    data: {
+      'eventList|10-15': [
+        {
+          description: null,
+          'eventLevel|1-4': 1,
+          'eventName|1': ['上班未到岗', '超时长停留'],
+          'eventStatus|0-1': 0,
+          eventType: '154',
+          monitorId: '@guid',
+          monitorName: monitorName,
+          startTime: '@datetime',
+          eventId: '@guid'
+        }
+      ],
+      eventStatistics: {
+        'finnishedNum|1-10': 1,
+        'processingNum|1-10': 1,
+        'totalNum|1-10': 1,
+        'untreatedNum|1-10': 1
+      },
+      latestEventDetails: {
+        administrativeRegion: '@county',
+        eventEndAddress: '@county(true)',
+        endTime: '@datetime',
+        eventDurationTime: 19500,
+        eventDurationTimeStr: '5小时25分0秒',
+        'eventLevel|1-4': 1,
+        'eventName|1': ['上班未到岗', '超时长停留'],
+        eventProcessingTime: 3892,
+        eventProcessingTimeStr: '1小时4分52秒',
+        'eventStatus|0-1': 0,
+        eventType: '152',
+        latitude: '29.893485',
+        longitude: '111.730631',
+        monitorId: '@guid',
+        startTime: '@datetime',
+        monitorName: monitorName,
+        eventId: '@guid'
+      }
+    }
+  },
+  fetchEventListByWebsocket: {
     retCode: 0,
     retMsg: '',
     data: {

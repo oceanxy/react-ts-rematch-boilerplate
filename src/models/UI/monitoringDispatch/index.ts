@@ -343,7 +343,8 @@ const monitoringDispatch: IMonitoringDispatchModel = {
         loginName: config.name,
         password: '000000',
         serverIP: config.audioServerIP,
-        serverPort: config.dispatchServicePort
+        serverPort: config.dispatchServicePort,
+        playElement: document.getElementById('received_video')
       };
       const {
         onLoginResponse,

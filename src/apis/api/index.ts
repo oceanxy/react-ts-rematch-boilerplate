@@ -7,14 +7,15 @@
  * @LastModifiedTime: 2020-04-25 周六 15:19:36q
  */
 
-import { IFetchAPI } from '@/interfaces/api';
+import { IFetchAPI, IFetchSockJs, IFetchWebsocket } from '@/interfaces/api';
 import { APIResponse, IPolling } from '@/interfaces/api/mock';
-import { EHTTPMethod } from '@/interfaces/config';
+import { EHTTPMethod, EProtocal } from '@/interfaces/config';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
 export type APIName =
-  'fetchEventDetails' | // 事件详情
-  'fetchEventList' | // 事件列表
+  'fetchEventDetails' | // 获取事件详情
+  'fetchEventList' | // 获取事件列表
+  'fetchEventListByWebsocket' | // 通过websocket获取事件列表
   'fetchSearchByMonitorName' | // 搜索-按监控对象搜索
   'fetchFixedEntity' | // 获取固定监控对象
   'fetchConditionForEntity' | // 获取高级搜索条件的基础数据
@@ -44,12 +45,13 @@ export type APIName =
   'handleEvent' | // 处理监控对象事件
   // 以下为框架测试的API接口，正式发布项目时可删除
   'fetchTest' |
+  'fetchTestSockJs' |
   'fetchTestWebsocket' |
   'fetchECharts' |
   'deleteData';
 
 export type APIRequestConfig = {
-  [K in APIName]: IFetchAPI;
+  [K in APIName]: IFetchAPI | IFetchSockJs | IFetchWebsocket;
 };
 
 export type FetchApis = {
@@ -69,12 +71,22 @@ const apis: APIRequestConfig = {
     forceMock: true
   },
   fetchTestWebsocket: {
+    protocol: EProtocal.HTTP,
+    host: 'localhost',
     url: '/testWebSocket',
     // url: 'ws://121.40.165.18:8800',
     // url: 'ws://localhost:3002/testWebSocket',
     port: 3002, // websocket服务的端口
     isWebsocket: true // 如果是websocket长链接且url字段不是完整的websocket地址请务必设置为true
-  },
+  } as IFetchWebsocket,
+  fetchTestSockJs: {
+    protocol: EProtocal.HTTP,
+    host: 'localhost',
+    port: 8080,
+    url: '/clbs/vehicle',
+    isSockJs: true, // 如果后端采用SockJs包实现的全双工通信，请开启此配置，isWebsocket将失效
+    enableStomp: true
+  } as IFetchSockJs,
   deleteData: {
     url: '/testDelete'
   },
@@ -95,6 +107,10 @@ const apis: APIRequestConfig = {
   fetchEventList: {
     url: '/clbs/web/v1/dispatch/event/unhandledList',
     method: EHTTPMethod.POST
+  },
+  fetchEventListByWebsocket: {
+    url: '/clbs/vehicle',
+    isWebsocket: true
   },
   /**
    * 按监控对象搜索
