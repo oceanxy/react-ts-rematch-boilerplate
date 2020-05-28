@@ -4,7 +4,7 @@
  * @Description: 事件列表组件
  * @Date: 2020-03-23 15:50:32
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-19 周二 17:20:29
+ * @LastModifiedTime: 2020-05-28 周四 11:31:54
  */
 
 import ListItem from '@/components/home/listItem';
@@ -37,7 +37,6 @@ export const eventTypeStatus = ['未处理', '处理中'];
  */
 const EventDetails = (props: Partial<IEventListProps>) => {
   const {data, curSelectedEvent, setState} = props;
-  const [isInit, setInit] = useState(true);
 
   /**
    * 事件点击
@@ -53,14 +52,8 @@ const EventDetails = (props: Partial<IEventListProps>) => {
   };
 
   useEffect(() => {
-    props.fetchData!();
+    props.fetchData!({selectFirstData: true});
   }, []);
-
-  // 如果数据合法且是初次渲染组件，则自动选中当前第一条数据
-  if (data?.length && isInit) {
-    setState!({curSelectedEvent: data[0]});
-    setInit(false);
-  }
 
   return (
     <Container className="event-list-container">

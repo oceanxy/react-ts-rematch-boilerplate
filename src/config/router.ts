@@ -30,20 +30,20 @@ const routesConfig: Routes = {
     exact: true,
     component: loadable(() => import('@/containers/home')),
     title: '指挥调度'
-  }
+  },
   // home2: {
   //   show: true,
   //   path: '/clbs',
   //   exact: true,
   //   title: '数据管理'
   // },
-  // test: {
-  //   path: `${config.basename}/test`,
-  //   exact: true,
-  //   component: loadable(() => import('@/containers/test')),
-  //   title: '脚手架功能测试',
-  //   requireAuth: false
-  // },
+  test: {
+    path: `${config.basename}/test`,
+    exact: true,
+    component: loadable(() => import('@/containers/test')),
+    title: '脚手架功能测试',
+    requireAuth: false
+  },
 
   // 404(Not Found)
   // notFound: {

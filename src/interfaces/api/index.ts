@@ -38,6 +38,10 @@ export interface IFetchAPI {
    * 注意：如果是websocket长链接且url字段不是完整的websocket地址，请务必设置为true
    */
   isWebsocket?: boolean
+  /**
+   * 是否采用原生websocket
+   */
+  isNativeWebsocket?: boolean
 
   /**
    * 单独指定端口

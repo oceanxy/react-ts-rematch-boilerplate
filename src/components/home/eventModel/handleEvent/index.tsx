@@ -4,7 +4,7 @@
  * @Description: 处理事件弹窗组件
  * @Date: 2020-05-07 周四 09:30:30
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-27 周三 09:54:45
+ * @LastModifiedTime: 2020-05-28 周四 11:32:58
  */
 
 import Modal from '@/components/UI/modal';
@@ -134,9 +134,9 @@ const HandleEvent = (props: HandleEventProps) => {
     }
 
     if (+response.retCode === 0) {
-      // 刷新事件列表
-      fetchEventListData!();
       message.success('已成功处理事件报警！');
+      // 刷新事件列表
+      fetchEventListData!({selectFirstData: true});
     } else {
       message.error('处理失败，请稍后再试！');
     }

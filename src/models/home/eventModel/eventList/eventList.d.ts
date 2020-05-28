@@ -4,7 +4,7 @@
  * @Description: 事件列表类型定义
  * @Date: 2020-04-13 周一 13:32:43
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-22 周五 10:20:19
+ * @LastModifiedTime: 2020-05-28 周四 11:27:42
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
@@ -129,7 +129,12 @@ declare global {
        * 获取事件列表数据
        * @param {IEventListRequest} reqPayload
        */
-      fetchData(reqPayload?: IEventListRequest): void
+      fetchData(reqPayload?: IEventListRequest & {
+        /**
+         * 选中第一条数据
+         */
+        selectFirstData?: boolean
+      }): void
       /**
        * 获取事件下拉列表数据
        * @param {IEventListRequest} reqPayload

@@ -30,28 +30,39 @@ const eventList: IEventListModel = {
   },
   effects: {
     async fetchData(reqPayload) {
+      let selectFirstEvent: any;
+
       if (!reqPayload) {
         reqPayload = {
           isReturnEventDetails: 1
         };
+      } else {
+        const {selectFirstData, ...rest} = reqPayload;
+        selectFirstEvent = selectFirstData;
+        reqPayload = rest;
       }
 
       const response = await fetchApis.fetchEventList(reqPayload);
-      const { latestEventDetails, eventStatistics, eventList }: IEventListResponse = response.data;
+      const {latestEventDetails, eventStatistics, eventList}: IEventListResponse = response.data;
 
       // 更新事件详情
       if (eventList?.length && !reqPayload.isStatisticsMethodChanged) {
-        store.dispatch.eventDetails.setState({ data: latestEventDetails });
+        store.dispatch.eventDetails.setState({data: latestEventDetails});
       }
 
       // 更新事件数量
       store.dispatch.eventStatistics.updateData(eventStatistics);
       // 更新事件列表
-      store.dispatch.eventList.updateState({ data: eventList });
+      store.dispatch.eventList.updateState({data: eventList});
+
+      // 选中当前列表第一条数据
+      if (selectFirstEvent) {
+        store.dispatch.eventList.setState!({curSelectedEvent: eventList[0]});
+      }
     },
     async fetchDataForSelect(reqPayload?: IEventListRequest): Promise<APIResponse<IEventListResponse>> {
       if (!reqPayload) {
-        reqPayload = { sortType: 1 };
+        reqPayload = {sortType: 1};
       }
 
       return await fetchApis.fetchEventList(reqPayload);
@@ -60,9 +71,9 @@ const eventList: IEventListModel = {
       // 根据当前选中事件状态，来改变任务列表model的queryType（任务查询方式）的状态
       if ('curSelectedEvent' in payload) {
         if (payload.curSelectedEvent && Object.keys(payload.curSelectedEvent).length) {
-          store.dispatch.taskList.setState({ queryType: 1 });
+          store.dispatch.taskList.setState({queryType: 1});
         } else if (payload.curSelectedEvent) {
-          store.dispatch.taskList.setState({ queryType: -1 });
+          store.dispatch.taskList.setState({queryType: -1});
         }
       }
 

@@ -4,7 +4,7 @@
  * @Description: 组件组装
  * @Date: 2020-01-04 14:30:18
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-19 周二 16:08:00
+ * @LastModifiedTime: 2020-05-28 周四 11:04:25
  */
 
 import EventModel from '@/components/home/eventModel';
@@ -57,6 +57,7 @@ const Home = (props: Partial<IHomeProps>) => {
           })}
           <a aria-current="page" className="inter-plat-nav-item" href="/clbs">数据管理</a>
         </Container>
+        <audio id="received_video" autoPlay />
       </Container>
       <Spin spinning={loading} wrapperClassName="inter-plat-container" delay={100}>
         <Container className={`inter-plat-left${showPanel ? ' show-panel' : ' not-show-panel'}`}>
