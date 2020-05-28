@@ -4,7 +4,7 @@
  * @Description: 对讲组件
  * @Date: 2020-01-14 14:24:28
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-09 周六 11:57:05
+ * @LastModifiedTime: 2020-05-28 周四 13:34:48
  */
 
 import Container from '@/components/UI/containerComp';
@@ -27,13 +27,14 @@ interface IIntercomProps {
   setActive: IIntercomModel['effects']['setActive']
   isIntercomNoticeActive: IIntercomNoticeState['active']
   curActiveGroupType: IIntercomGroupNameState['curActiveGroupType']
+  timing: IIntercomOperationState['timing']
 }
 
 /**
  * 临时组组件
  */
 const Intercom = (props: Partial<IIntercomProps>) => {
-  const {active, setActive, isIntercomNoticeActive, curActiveGroupType} = props;
+  const {active, timing, setActive, isIntercomNoticeActive, curActiveGroupType} = props;
 
   /**
    * 关闭事件
@@ -46,7 +47,7 @@ const Intercom = (props: Partial<IIntercomProps>) => {
     <Container
       className="inter-plat-intercom-container"
       conTheme="style3"
-      close={!isIntercomNoticeActive}
+      close={!isIntercomNoticeActive && !timing}
       onClose={onClose}
     >
       <IntercomGroupName />

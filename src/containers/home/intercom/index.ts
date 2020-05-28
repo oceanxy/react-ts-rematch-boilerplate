@@ -4,7 +4,7 @@
  * @Description: 对讲入口
  * @Date: 2020-04-21 周二 15:04:21
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-09 周六 11:54:19
+ * @LastModifiedTime: 2020-05-28 周四 13:35:26
  */
 
 import IntercomPanel from '@/components/home/intercom';
@@ -18,6 +18,7 @@ import IntercomOperation from './operation';
 
 const mapStateToProps = (state: RootState) => ({
   active: state.intercom.active,
+  timing: state.intercomOperation.timing,
   curActiveGroupType: state.intercomGroupName.curActiveGroupType,
   isIntercomNoticeActive: state.intercomNotice.active
 });
