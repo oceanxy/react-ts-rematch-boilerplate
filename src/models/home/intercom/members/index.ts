@@ -72,10 +72,10 @@ const members: IIntercomMembersModel = {
       return response;
     },
     async addMember(memberIds: number[]): Promise<APIResponse> {
-      const { id } = store.getState().intercomGroupName;
+      const { id, intercomId } = store.getState().intercomGroupName;
 
       const response = await fetchApis.addMember(<IIntercomAddMembersRequest>{
-        intercomGroupId: id,
+        intercomGroupId: intercomId,
         userIds: memberIds
       });
 
