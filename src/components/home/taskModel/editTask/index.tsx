@@ -21,6 +21,7 @@ import styledBlocks from '@/styled/styledBlocks';
 import { Button, Checkbox, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin } from 'antd';
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import { RadioChangeEvent } from 'antd/lib/radio/interface';
+import _ from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -69,6 +70,10 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
   const [formLoading, setFormLoading] = useState(true);
   // 关联事件下拉列表当前选中的ID数组。用此状态来管理关联事件下拉列表选中的第一个值变化后，更新任务地址文本框
   const [selectedEventIds, setSelectedEventIds] = useState(null as string[] | null);
+  /**
+   * 关联事件下拉列表数据缓存
+   */
+  const [eventSelectData, setEventSelectData] = useState([] as IEvent[]);
   /**
    * antd hooks
    */
@@ -163,9 +168,10 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
       setFormLoading(false);
 
       if (+response.retCode === 0) {
-        form.setFieldsValue({
-          eventSelectData: response.data?.eventList || []
-        });
+        const tempEventSelectData = response.data?.eventList || [];
+
+        form.setFieldsValue({eventSelectData: tempEventSelectData});
+        setEventSelectData(tempEventSelectData);
       } else {
         message.error('获取关联事件数据失败！');
       }
@@ -184,7 +190,7 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
         [] as DateDuplicateType[]
       ) ?? [];
 
-      // 设置当前关联事件下拉列表选中的第一个事件ID
+      // 设置当前关联事件下拉列表选中的事件ID
       setSelectedEventIds(eventIds);
 
       // 设置antd表单回填值
@@ -202,6 +208,28 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
       });
     }
   }, [formLoading]);
+
+  // 处理关联事件下拉框不符合条件的回填数据
+  useEffect(() => {
+    if (eventSelectData && eventSelectData.length) {
+      // 获取当前关联事件下拉列表的值
+      const eventSelectData = form.getFieldValue('eventSelectData');
+      // 临时缓存ID
+      const tempEventIds: string[] = [];
+
+      // 检测已关联的事件ID是否存在于下拉别表中，不存在则删除掉
+      selectedEventIds?.forEach((eventId) => {
+        const index = _.findIndex(eventSelectData, (value: IEvent) => value.eventId === eventId);
+        if (index !== -1) {
+          tempEventIds.push(eventId);
+        }
+      });
+
+      form.setFieldsValue({
+        eventIds: tempEventIds
+      });
+    }
+  }, [eventSelectData]);
 
   return (
     <StyledModal
