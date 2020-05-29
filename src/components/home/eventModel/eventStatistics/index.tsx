@@ -44,17 +44,17 @@ const EventDetails = (props: Partial<IEventStatisticsProps>) => {
   return (
     <Container className="event-button-container">
       <Button
-        name={`全部 (${data!.totalNum})`}
+        name={`全部 (${data?.totalNum ?? 0})`}
         onClick={onClick.bind(null, EventStatisticsMethod.ALL)}
         active={eventStatisticsMethod === EventStatisticsMethod.ALL}
       />
       <Button
-        name={`未处理 (${data!.untreatedNum})`}
+        name={`未处理 (${data?.untreatedNum ?? 0})`}
         onClick={onClick.bind(null, EventStatisticsMethod.UNPROCESSED)}
         active={eventStatisticsMethod === EventStatisticsMethod.UNPROCESSED}
       />
       <Button
-        name={`处理中 (${data!.processingNum})`}
+        name={`处理中 (${data?.processingNum ?? 0})`}
         onClick={onClick.bind(null, EventStatisticsMethod.PROCESSING)}
         active={eventStatisticsMethod === EventStatisticsMethod.PROCESSING}
       />

@@ -8,8 +8,8 @@
  */
 
 import fetchApis from '@/apis';
-import { APIResponse } from '@/interfaces/api/mock';
-import { store } from '@/store';
+import {APIResponse} from '@/interfaces/api/mock';
+import {store} from '@/store';
 
 /**
  * 事件列表model
@@ -58,7 +58,7 @@ const eventList: IEventListModel = {
 
       // 选中当前列表第一条数据
       if (selectFirstEvent) {
-        store.dispatch.eventList.setState!({curSelectedEvent: eventList[0]});
+        store.dispatch.eventList.setState!({curSelectedEvent: eventList?.[0] ?? []});
       }
     },
     async fetchDataForSelect(reqPayload?: IEventListRequest): Promise<APIResponse<IEventListResponse>> {

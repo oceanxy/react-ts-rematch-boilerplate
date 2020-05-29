@@ -1,7 +1,7 @@
 /**
  * @Author: Oceanxy
  * @Email: xieyang@zwlbs.com
- * @Description: 生成接口请求函数
+ * @Description: 为每个接口生成请求函数
  * @Date: 2019-11-06 10:31:45
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
  * @LastModifiedTime: 2020-05-28 周四 14:11:13
@@ -44,15 +44,15 @@ function stitchingURL(fetchApi: IFetchAPI | IFetchWebsocket | IFetchSockJs): str
     if ('isSockJs' in fetchApi || 'isWebsocket' in fetchApi) {
       let envPort: any;
 
-      // 检查当前环境
-      if (process.env.NODE_ENV === 'development') {
-        envPort = DEV_SERVER_CONFIG.devServer.port;
-      } else {
-        envPort = 8080; // 默认8080
-      }
-
       // 用 IP+PORT 代替域名
       if (host?.match(/^(((\\d{1,2})|(1\\d{2})|(2[0-4]\\d)|(25[0-5]))\\.){3}((\\d{1,2})|(1\\d{2})|(2[0-4]\\d)|(25[0-5]))$/)) {
+        // 检查当前环境
+        if (process.env.NODE_ENV === 'development') {
+          envPort = DEV_SERVER_CONFIG.devServer.port;
+        } else {
+          envPort = 8080; // 默认8080
+        }
+
         return `${protocols}${host || 'localhost'}:${port || envPort}${fetchApi.url}`;
       }
 
@@ -285,7 +285,7 @@ const fetchApi = (mocks: Mocks, apis: APIRequestConfig) => () => {
     }
 
     /**
-     * 返回包含所有API函数的对象
+     * 返回包含所有接口请求函数的对象
      * @param params 请求数据
      * @returns {Promise<APIResponse | IPolling | ReconnectingWebSocket | WebSocket>}
      */

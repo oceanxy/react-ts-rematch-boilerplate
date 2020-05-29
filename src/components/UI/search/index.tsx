@@ -8,12 +8,13 @@
  */
 
 import Container from '@/components/UI/containerComp';
-import Icon, { iconName, IconSource, IconSourceHover } from '@/components/UI/iconComp';
+import Icon, {iconName, IconSource, IconSourceHover} from '@/components/UI/iconComp';
 import SearchPanel from '@/containers/UI/search/searchPanel';
-import { SearchCondition } from '@/models/UI/search';
+import {SearchCondition} from '@/models/UI/search';
 import Select from 'antd/es/select';
-import React, { ButtonHTMLAttributes, ChangeEvent, CompositionEvent, useRef, useState } from 'react';
+import React, {ButtonHTMLAttributes, ChangeEvent, CompositionEvent, useRef, useState} from 'react';
 import './index.scss';
+import {message} from 'antd';
 
 /**
  * 搜索接口
@@ -46,7 +47,7 @@ const searchConditions: ISearchCondition[] = [
     icon: IconSource.ENTITY,
     iconHover: IconSourceHover.ENTITY,
     value: SearchCondition.ENTITY,
-    placeholder: '查找车辆/人员/物资'
+    placeholder: '查找车辆/人员/物品/物资'
   },
   {
     name: iconName.AREA,
@@ -74,7 +75,7 @@ const Search = (props: Partial<ISearchProps>) => {
   // 搜索框Ref
   const searchBox = useRef<HTMLInputElement>(null);
   // 组件内部缓存的文本域值，解决antd Input受控时输入中文的问题
-  const [val, setVal] = useState('');
+  const [tempSearchKeyword, setTempSearchKeyword] = useState('');
 
   /**
    * 选择搜索方式
@@ -88,6 +89,7 @@ const Search = (props: Partial<ISearchProps>) => {
         searchBox.current!.placeholder = sc.placeholder;
         // 清空搜索关键词、设置新的搜索条件（按对象、区域或位置搜索）、关闭搜索结果面板
         setState!({searchKeyword: '', searchCondition: value, isShowResultPanel: false});
+        setTempSearchKeyword('');
         // 变更搜索条件后，清空搜索数据缓存
         clearData!();
         break;
@@ -119,6 +121,9 @@ const Search = (props: Partial<ISearchProps>) => {
       }
 
       setState({isShowResultPanel: true});
+    } else {
+      message.destroy();
+      message.warning('请输入关键字后再进行搜索！');
     }
   };
 
@@ -139,22 +144,23 @@ const Search = (props: Partial<ISearchProps>) => {
    */
   const onInputChange = (e: ChangeEvent<HTMLInputElement> | CompositionEvent<HTMLInputElement>) => {
     const beSetValue = e.currentTarget.value;
-    setVal(beSetValue);
+    setTempSearchKeyword(beSetValue);
 
     // 中文输入时，锁定受控文本域
     if (e.type === 'change') {
+      setTempSearchKeyword(beSetValue.trim());
       setState!({searchKeyword: beSetValue.trim()});
     }
 
     // 根据输入框的值内容，设置是否显示搜索结果面板
     if (searchCondition === SearchCondition.POSITION) {
-      if (val) {
+      if (tempSearchKeyword) {
         setState({isShowResultPanel: true});
       } else {
         setState({isShowResultPanel: false});
       }
     } else {
-      if (!val || val !== searchKeyword) {
+      if (!tempSearchKeyword || tempSearchKeyword !== searchKeyword) {
         setState({isShowResultPanel: false});
       }
     }
@@ -171,7 +177,7 @@ const Search = (props: Partial<ISearchProps>) => {
         >
           {searchConditions.map((item, index) => (
             <Select.Option key={`inter-plat-select-option-${index}`} value={item.value} title={item.name}>
-              <Icon icon={item.icon} iconHover={item.iconHover} />
+              <Icon icon={item.icon} iconHover={item.iconHover}/>
             </Select.Option>
           ))}
         </Select>
@@ -183,16 +189,16 @@ const Search = (props: Partial<ISearchProps>) => {
           className="inter-plat-search-input"
           onKeyUp={onEnterSearch}
           autoComplete="off"
-          value={val}
+          value={tempSearchKeyword}
           onChange={onInputChange}
           maxLength={50}
           onCompositionStart={onInputChange}
           onCompositionUpdate={onInputChange}
           onCompositionEnd={onInputChange}
         />
-        <button className="inter-plat-search-button" type="submit" onClick={handleSearch} />
+        <button className="inter-plat-search-button" type="submit" onClick={handleSearch}/>
       </Container>
-      <SearchPanel />
+      <SearchPanel/>
     </Container>
   );
 };
