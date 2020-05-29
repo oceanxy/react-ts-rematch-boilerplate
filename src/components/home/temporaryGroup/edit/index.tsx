@@ -52,8 +52,8 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
     fetchDataByRectangle,
     fetchConditionForEntity
   } = entityDispatch!;
-  const { isShowEditModal, title, loading, backFillInfo } = state!;
-  const { radius, name } = backFillInfo;
+  const {isShowEditModal, title, loading, backFillInfo} = state!;
+  const {radius, name} = backFillInfo;
   const [searchForm] = Form.useForm();
   const [createForm] = Form.useForm();
   const createFormRef = useRef(null);
@@ -64,7 +64,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
   /**
    * 全选、反选复选框选中状态
    */
-  const [checked, setChecked] = useState({ all: false, invert: false } as { all?: boolean; invert?: boolean });
+  const [checked, setChecked] = useState({all: false, invert: false} as {all?: boolean; invert?: boolean});
   /**
    * 反选复选框显示状态
    */
@@ -81,7 +81,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
     // 进入loading状态
     // 注意：因为第三方提供的API非直接返回调用接口的状态，而是通过监听事件的方式返回结果，
     // 所以要到 IMonitoringDispatchModel 去关闭loading状态以及对话框
-    setState!({ loading: true });
+    setState!({loading: true});
     // 检查是创建临时组还是添加临时组成员
     if (title.includes('创建')) {
       const reqPayload = {
@@ -112,7 +112,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
     setSearchLoading(false);
 
     if (+response.retCode === 0) {
-      const { monitors } = response.data;
+      const {monitors} = response.data;
 
       // 临时保存获取到的实体列表（主要用于全选/反选功能）
       setTempEntities(monitors);
@@ -148,7 +148,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
    */
   const editTempGroupCancel = () => {
     // 关闭对话框
-    setState!({ isShowEditModal: false });
+    setState!({isShowEditModal: false});
   };
 
   /**
@@ -166,7 +166,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
       interlocutorIds: e.target.checked ? getEntityIds() : []
     });
 
-    setChecked({ all: e.target.checked });
+    setChecked({all: e.target.checked});
     setShowInvert(false);
   };
 
@@ -189,7 +189,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
       interlocutorIds: invertCheckedEntities
     });
 
-    setChecked({ invert: e.target.checked, all: false });
+    setChecked({invert: e.target.checked, all: false});
   };
 
   /**
@@ -198,13 +198,13 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
    */
   const listenersCheck = (checkedValues: CheckboxValueType[]) => {
     if (checkedValues.length && checkedValues.length === tempEntities.length) {
-      setChecked({ all: true, invert: false });
+      setChecked({all: true, invert: false});
       setShowInvert(false);
     } else if (!checkedValues.length) {
-      setChecked({ all: false, invert: false });
+      setChecked({all: false, invert: false});
       setShowInvert(false);
     } else {
-      setChecked({ all: false, invert: false });
+      setChecked({all: false, invert: false});
       setShowInvert(true);
     }
   };
@@ -228,7 +228,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
           }
 
           if (+response.retCode === 0) {
-            const { monitors } = (response as APIResponse<{ monitors: IEntity[] }>).data;
+            const {monitors} = (response as APIResponse<{monitors: IEntity[]}>).data;
 
             // 临时保存获取到的实体列表（主要用于全选/反选功能）
             setTempEntities(monitors);
@@ -279,7 +279,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
     return () => {
       // 清空上一次搜索到的监控对象
       if (createFormRef.current) {
-        createForm && createForm.setFieldsValue({ entities: [] });
+        createForm && createForm.setFieldsValue({entities: []});
       }
     };
   }, [isShowEditModal]);
@@ -308,7 +308,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
           >
             <Row className="inter-plat-row-text">请根据条件搜索监控对象</Row>
             <Form.Item noStyle={true} shouldUpdate={(prev, cur) => prev.skillList !== cur.skillList}>
-              {({ getFieldValue }) => (
+              {({getFieldValue}) => (
                 <Form.Item label="人员技能" name="skillIds">
                   <Select
                     mode="multiple"
@@ -324,7 +324,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                         value={skill.id}
                         title={`技能类别：${skill.skillCategoryName}\n技能：${skill.skillName}`}
                       >
-                        <span style={{ color: '#686868' }}>（{skill.skillCategoryName}）</span>
+                        <span style={{color: '#686868'}}>（{skill.skillCategoryName}）</span>
                         {skill.skillName}
                       </Select.Option>
                     ))}
@@ -333,7 +333,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
               )}
             </Form.Item>
             <Form.Item noStyle={true} shouldUpdate={(prev, cur) => prev.intercomModelList !== cur.intercomModelList}>
-              {({ getFieldValue }) => (
+              {({getFieldValue}) => (
                 <Form.Item label="对讲机型" name="intercomModelIds">
                   <Select
                     mode="multiple"
@@ -360,7 +360,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
               noStyle={true}
               shouldUpdate={(prev, cur) => prev.driverLicenseCategoryList !== cur.driverLicenseCategoryList}
             >
-              {({ getFieldValue }) => (
+              {({getFieldValue}) => (
                 <Form.Item label="驾照类别" name="driverLicenseCategoryIds">
                   <Select
                     mode="multiple"
@@ -384,7 +384,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
               )}
             </Form.Item>
             <Form.Item noStyle={true} shouldUpdate={(prev, cur) => prev.qualificationList !== cur.qualificationList}>
-              {({ getFieldValue }) => (
+              {({getFieldValue}) => (
                 <Form.Item label="资格证书" name="qualificationIds">
                   <Select
                     mode="multiple"
@@ -408,7 +408,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
               )}
             </Form.Item>
             <Form.Item noStyle={true} shouldUpdate={(prev, cur) => prev.bloodTypeList !== cur.bloodTypeList}>
-              {({ getFieldValue }) => (
+              {({getFieldValue}) => (
                 <Form.Item label="血型" name="bloodTypeIds">
                   <Select
                     mode="multiple"
@@ -431,7 +431,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
                 </Form.Item>
               )}
             </Form.Item>
-            <Form.Item label="性别" name="gender" rules={[{ required: true, message: '请选择性别' }]}>
+            <Form.Item label="性别" name="gender" rules={[{required: true, message: '请选择性别'}]}>
               <Checkbox.Group>
                 <Checkbox value={1}>男</Checkbox>
                 <Checkbox value={2}>女</Checkbox>
@@ -444,7 +444,7 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
               label="半径（m）"
               name="radius"
               rules={[
-                { required: true, message: '请输入半径' },
+                {required: true, message: '请输入半径'},
                 {
                   pattern: /^(?!0(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d+)?$/,
                   message: '请输入大于0的数字'
@@ -469,16 +469,19 @@ const EditTemporaryGroup = (props: Partial<IEditTaskProps>) => {
           onFinish={onFinish}
           autoComplete="off"
           ref={createFormRef}
-          initialValues={{ temporaryGroup: name, isCreate: title.includes('创建') }}
+          initialValues={{temporaryGroup: name, isCreate: title.includes('创建')}}
         >
-          <Form.Item label="名称" name="temporaryGroup" rules={[{ required: true, message: '请输入临时组名称' }]}>
+          <Form.Item label="名称" name="temporaryGroup" rules={[
+            {required: true, message: '请输入临时组名称'},
+            {type: 'string', max: 10, message: '临时组名称不能超过10个字符'}
+          ]}>
             <Input type="text" placeholder="请输入临时组名称" disabled={!!name} />
           </Form.Item>
           <Form.Item
             noStyle
             shouldUpdate={(prev, curr) => prev.entities !== curr.entities || prev.isCreate !== curr.isCreate}
           >
-            {({ getFieldValue }) => {
+            {({getFieldValue}) => {
               return (
                 <Form.Item label="监控对象" className={`${getFieldValue('isCreate') ? '' : 'checkbox-entity-content'}`}>
                   <Form.Item className="checkbox-operation">

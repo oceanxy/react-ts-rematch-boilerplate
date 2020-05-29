@@ -11,7 +11,7 @@ import Container from '@/components/UI/containerComp';
 import Icon, { iconName, IconSource } from '@/components/UI/iconComp';
 import { CurActiveGroupType } from '@/models/home/intercom/groupName';
 import { CallModeEnum, ControlCmd } from '@/models/UI/monitoringDispatch';
-import moment from 'moment';
+import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import Timing from '../timing';
 import './index.scss';
@@ -28,6 +28,7 @@ interface IIntercomOperationProps {
   curMassPoint: IAMapState['curMassPoint']
   monitoringDispatchConfig: IMonitoringDispatchState['config']
   startTime: IIntercomOperationState['startTime']
+  membersData: IIntercomMembersState['data']
 }
 
 /**
@@ -39,17 +40,21 @@ interface IIntercomOperationProps {
 const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   const {
     intercomGroupNameState, intercomNoticeState, intercomNoticeDispatch, dispatches,
-    curMassPoint, state, monitoringDispatchConfig, startTime
+    curMassPoint, state, monitoringDispatchConfig, startTime, membersData
   } = props;
   const {timing, intercomCallProcessing, callProcessing, callState} = state!;
   const {active, value} = intercomNoticeState!;
   const {setState: setNoticeState, sendData} = intercomNoticeDispatch!;
-  const {call, stopCall, entityControl, setState} = dispatches!;
+  const {call, stopCall, entityControl} = dispatches!;
   const {curActiveGroupType, intercomId} = intercomGroupNameState!;
   /**
    * 当前监控对象禁言状态
    */
   const [ban, setBan] = useState(curMassPoint?.monitor.hasForbiddenWord);
+  /**
+   * 禁用全部按钮状态（当全员离线时）
+   */
+  const [disabledAllButton, setDisabledAllButton] = useState(false);
 
   /**
    * 对讲通知组件状态控制
@@ -129,7 +134,7 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
               title={
                 intercomCallProcessing ? '停止' : curActiveGroupType === CurActiveGroupType.Entity ? '个呼' : '组呼'
               }
-              disabled={callProcessing}
+              disabled={disabledAllButton || callProcessing}
             />
             {curActiveGroupType === CurActiveGroupType.Entity ? (
               <>
@@ -137,17 +142,22 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
                   icon={callProcessing ? IconSource.HANGUP : IconSource.CALL}
                   onClick={handleCallModel.bind(null, CallModeEnum.DUPLEX_CALL_MODE)}
                   title={callProcessing ? '挂断' : '电话'}
-                  disabled={intercomCallProcessing}
+                  disabled={disabledAllButton || intercomCallProcessing}
                 />
                 <Icon
                   icon={ban ? IconSource.BANNED : IconSource.BAN}
                   onClick={onBan}
                   title={ban ? '解除禁言' : '禁言'}
-                  disabled={!monitoringDispatchConfig?.isOwnPreventSpeechRole}
+                  disabled={disabledAllButton || !monitoringDispatchConfig?.isOwnPreventSpeechRole}
                 />
               </>
             ) : null}
-            <Icon icon={IconSource.NOTICE} onClick={onNotice.bind(null, true)} title="通知" />
+            <Icon
+              icon={IconSource.NOTICE}
+              onClick={onNotice.bind(null, true)}
+              title="通知"
+              disabled={disabledAllButton}
+            />
           </>
         );
       }
@@ -155,6 +165,17 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
 
     return null;
   };
+
+  // 检测全员在离线的状态，来处理按钮禁用状态
+  useEffect(() => {
+    if (membersData?.length) {
+      const isMemberOnline = _.findIndex(membersData, (entity: IEntity) => +entity.onlineStatus! === 1);
+
+      if (isMemberOnline === -1 && curActiveGroupType !== CurActiveGroupType.Entity) {
+        setDisabledAllButton(true);
+      }
+    }
+  }, [membersData]);
 
   return (
     <Container className="inter-plat-intercom-operation">
