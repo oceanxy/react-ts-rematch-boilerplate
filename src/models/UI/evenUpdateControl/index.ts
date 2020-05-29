@@ -45,7 +45,7 @@ const position: IEvenUpdateControlModel = {
 
       const stompClient = await fetchApis.fetchSockJs((stompClient: Client, frame?: Frame) => {
         // 登录用户订阅事件信息
-        stompClient.subscribe(`/user/${name}/eventInfo`, (res) => {
+        stompClient?.subscribe(`/user/${name}/eventInfo`, (res) => {
           const data: IEvent[] = JSON.parse(res.body);
           const tempEventData = [...state?.eventList.data || []];
 
@@ -69,7 +69,7 @@ const position: IEvenUpdateControlModel = {
           store.dispatch.eventList.setState({data: tempEventData});
         });
         // 登录用户订阅任务信息
-        stompClient.subscribe(`/user/${name}/taskInfo`, (res) => {
+        stompClient?.subscribe(`/user/${name}/taskInfo`, (res) => {
           const task = JSON.parse(res.body).data;
 
           const tempEventData = [...state?.taskList.data.records || []];
@@ -92,9 +92,9 @@ const position: IEvenUpdateControlModel = {
           }
         });
 
-        // 触发订阅
-        stompClient.send('/app/taskStatusInfo', {}, JSON.stringify(reqPayload));
-        stompClient.send('/app/vehicle/subscribeStatus', {}, JSON.stringify(reqPayload));
+        // 发送订阅topic
+        stompClient?.send('/app/taskStatusInfo', {}, JSON.stringify(reqPayload));
+        stompClient?.send('/app/vehicle/subscribeStatus', {}, JSON.stringify(reqPayload));
       });
 
       store.dispatch.evenUpdateControl.setState({stompClient});

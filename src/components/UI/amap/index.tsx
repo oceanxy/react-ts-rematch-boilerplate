@@ -9,9 +9,9 @@
 
 import Area from '@/components/UI/amap/area';
 import MassPoint from '@/components/UI/amap/massPoint';
-import Container, { IContainerProps } from '@/components/UI/containerComp';
+import Container, {IContainerProps} from '@/components/UI/containerComp';
 import config from '@/config';
-import { useScript } from '@/utils/hooks/loadScript';
+import {useScript} from '@/utils/hooks/loadScript';
 import React from 'react';
 import Boundary from './boundary';
 import './index.scss';
@@ -84,7 +84,7 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
               map={map}
               data={massPoints}
               setSearchState={setSearchState!}
-              searchPanelTarget={searchPanelState?.target}
+              searchPanelState={searchPanelState!}
               triggers={triggers!}
               mapDispatchers={dispatch!}
               curMassPoint={curMassPoint}
@@ -95,11 +95,11 @@ const ZWMap = (props: Partial<IZWMapProps>) => {
               curSelectedEvent={curSelectedEvent}
             />
           </>) :
-          <UseMap setState={setState} />
+          <UseMap setState={setState}/>
       }
     </Container>
   );
 };
 
-export { POI, Map, Boundary };
+export {POI, Map, Boundary};
 export default ZWMap;

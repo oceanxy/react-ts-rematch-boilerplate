@@ -8,11 +8,11 @@
  */
 
 import config from '@/config';
-import { HandleEvent } from '@/containers/home/eventModel';
-import { CurActiveGroupType } from '@/models/home/intercom/groupName';
-import { store } from '@/store';
-import { message } from 'antd';
-import React, { useEffect, useState } from 'react';
+import {HandleEvent} from '@/containers/home/eventModel';
+import {CurActiveGroupType} from '@/models/home/intercom/groupName';
+import {store} from '@/store';
+import {message} from 'antd';
+import React, {useEffect, useState} from 'react';
 import carPng from './images/dispatch-car.png';
 import peoplePng from './images/dispatch-people.png';
 import suppliesPng from './images/dispatch-supplies.png';
@@ -20,6 +20,7 @@ import thingPng from './images/dispatch-thing.png';
 import './index.scss';
 import infoWindowTemplate from './infoWindow';
 import MassMarks = AMap.MassMarks;
+import Marker = AMap.Marker;
 
 // 事件弹窗实例
 let infoWindow: any;
@@ -39,7 +40,7 @@ export interface MassPointProps {
   setIntercomGroupState: IIntercomGroupNameModel['effects']['setState']
   mapDispatchers: IAMapModel['effects']
   curSelectedEvent?: IEventListState['curSelectedEvent']
-  searchPanelTarget: ISearchState['target']
+  searchPanelState: ISearchState
   setSearchState: ISearchModel['effects']['setState']
   triggers: IDisplayContentState['triggers']
 }
@@ -65,6 +66,20 @@ const setInfoWindow = (): AMap.InfoWindow => {
     isCustom: true,
     showShadow: false,
     offset: new AMap.Pixel(0, 6)
+  });
+};
+
+/**
+ * 创建marker
+ * @param {InfoWindowResponse} point
+ */
+const createMarkers = (point: InfoWindowResponse) => {
+  const {latitude, longitude, icon} = point.location;
+
+  return new AMap.Marker({
+    position: new AMap.LngLat(longitude, latitude),
+    offset: icon ? new AMap.Pixel(-18, 5) : new AMap.Pixel(-10, 5),
+    icon
   });
 };
 
@@ -168,15 +183,17 @@ const MassPoint = (props: MassPointProps) => {
   const {
     fetchMassPoint, data, fetchWindowInfo, curMassPoint,
     curSelectedEvent, intercomGroupState, setIntercomGroupState,
-    mapDispatchers, triggers, searchPanelTarget, setSearchState
+    mapDispatchers, triggers, setSearchState, searchPanelState
   } = props;
+  const {target, isShowResultPanel} = searchPanelState;
   const map = props.map!;
   const {setState, clearCurMassPoint} = mapDispatchers;
-  /**
-   * 处理事件对话框显示状态
-   */
+  // 处理事件对话框显示状态
   const [isShowModal, setIsShowModal] = useState(false);
+  // 定时刷新地图海量点定时器的缓存
   const [massPointPolling, setMassPointPolling] = useState(0);
+  // 临时点集合（通过搜索面板绘制的临时点）
+  const [tempMarker, setTempMarker] = useState({ids: [] as string[], markers: [] as Marker[]});
 
   if (!mass) {
     mass = setMass(props.data);
@@ -305,7 +322,7 @@ const MassPoint = (props: MassPointProps) => {
   // 当前点击海量点弹窗或其他事件激活的弹窗的信息更新
   useEffect(() => {
     // curMassPoint字段更新后打开地图上指定海量点的信息弹窗
-    if ((!config.mock || searchPanelTarget) && curMassPoint) {
+    if ((!config.mock || target) && curMassPoint) {
       const longitude = curMassPoint.location?.longitude;
       const latitude = curMassPoint.location?.latitude;
 
@@ -317,12 +334,33 @@ const MassPoint = (props: MassPointProps) => {
         map.setCenter(lnglat);
 
         // 当通过点击搜索结果面板激活海量点弹窗时，当弹窗打开后清除该状态
-        if (searchPanelTarget) {
+        if (target) {
+          // 避免重复绘制marker
+          if (!tempMarker.ids.includes(target.id)) {
+            const marker = createMarkers(curMassPoint);
+
+            setTempMarker({
+              ids: [...tempMarker.ids, target.id],
+              markers: [...tempMarker.markers, marker]
+            });
+
+            map!.add(marker);
+          }
+
+          // 重置搜索面板的target状态
           setSearchState({target: undefined});
         }
       }
     }
   }, [curMassPoint]);
+
+  // 如果关闭了搜索组件的搜索结果面板，则清空临时marker
+  useEffect(() => {
+    if (!isShowResultPanel && tempMarker.markers.length) {
+      map?.remove(tempMarker.markers);
+      setTempMarker({ids: [], markers: []});
+    }
+  }, [isShowResultPanel]);
 
   /**
    * 根据海量点弹窗信息以及对讲面板状态的变更，重新绑定事件

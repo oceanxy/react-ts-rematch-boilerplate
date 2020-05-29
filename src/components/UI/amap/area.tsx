@@ -58,11 +58,9 @@ const Area = (props: AreaProps) => {
   const {setState: setMapState} = mapDispatch;
   const {fetchAreaData, setState, fetchDetails} = dispatch;
   const areaTrigger: ITrigger = triggers.slice(-1)[0];
-  /**
-   * 绘制的临时围栏集合
-   * @type {[any[], React.Dispatch<React.SetStateAction<any[]>>]}
-   */
+  // 绘制的临时围栏集合
   const [tempArea, setTempArea] = useState({ids: [] as string[], overlays: [] as any});
+  // 定时刷新地图围栏定时器的缓存
   const [areaPolling, setAreaPolling] = useState(0);
 
   /**
@@ -110,7 +108,7 @@ const Area = (props: AreaProps) => {
     }
 
     return data.map((fence) => {
-      const {radius, width, points, centerPoint} = fence.locationData;
+      const {radius, points, centerPoint} = fence.locationData;
       const {longitude, latitude} = centerPoint;
       let tempOverlays;
 
@@ -224,6 +222,7 @@ const Area = (props: AreaProps) => {
               ids: [...tempArea.ids, target.id],
               overlays: [...tempArea.overlays, overlay[0]]
             });
+
             map!.add(overlay);
           }
 

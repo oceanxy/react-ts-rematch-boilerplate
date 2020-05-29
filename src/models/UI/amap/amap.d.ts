@@ -109,6 +109,10 @@ declare global {
        * 纬度
        */
       latitude: number
+      /**
+       * 地图撒点的图标
+       */
+      icon: string
     }
     /**
      * 任务列表

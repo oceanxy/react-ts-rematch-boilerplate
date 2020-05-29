@@ -26,7 +26,7 @@ const config: IConfig = {
 
   // app相关配置
   basename: '/clbs/talkback/kanBanPage',
-  mock: false,
+  mock: true,
 
   // 地图相关配置
   map: {
