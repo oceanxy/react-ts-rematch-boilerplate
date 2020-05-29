@@ -134,7 +134,7 @@ const Area = (props: AreaProps) => {
           extData: fence,
           ...fenceStyle,
           path: points,
-          strokeWeight: width, // 线条宽度，默认为 1
+          strokeWeight: 4, // 线条宽度，默认为 1
           lineJoin: 'round', // 折线拐点连接处样式
           strokeColor: `#${fence.colorCode}` // 线条颜色
         });
