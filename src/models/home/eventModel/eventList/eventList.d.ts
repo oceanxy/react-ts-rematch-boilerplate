@@ -89,10 +89,6 @@ declare global {
      * 是否返回首条事件的详情信息 0:不返回（默认） 1:返回
      */
     isReturnEventDetails?: 0 | 1
-    /**
-     * 请求数据时，事件统计方式较上一次请求是否发生改变，即eventStatus字段是否改变
-     */
-    isStatisticsMethodChanged?: boolean
   }
 
   /**

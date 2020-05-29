@@ -407,10 +407,12 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.startCalling(request);
 
-        // 因第三方js调度文件存在bug，未在双工呼叫时（点击拨打电话，但还未接通时）触发
+        // 因第三方js调度文件存在bug，未在双工呼叫时（点击拨打电话后，但还未接通时）触发
         // onDuplexCallingRing事件（双工主叫响铃事件处理），所以onDuplexCallingRing事件的逻辑暂放在这里执行
         // 以后第三方修复此bug后可直接删除以下代码即可
-        store.dispatch.monitoringDispatch.onDuplexCallingRing();
+        if (request.callMode === CallModeEnum.DUPLEX_CALL_MODE) {
+          store.dispatch.monitoringDispatch.onDuplexCallingRing();
+        }
       } else {
         message.error('第三方对讲服务未启动！');
       }
@@ -557,7 +559,8 @@ const monitoringDispatch: IMonitoringDispatchModel = {
         timing: false,
         callProcessing: false,
         intercomCallProcessing: false,
-        callState: false
+        callState: false,
+        startTime: undefined
       });
 
       message.warning('主呼已经断开！');

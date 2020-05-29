@@ -12,7 +12,7 @@ import Icon, { iconName, IconSource } from '@/components/UI/iconComp';
 import { CurActiveGroupType } from '@/models/home/intercom/groupName';
 import { CallModeEnum, ControlCmd } from '@/models/UI/monitoringDispatch';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Timing from '../timing';
 import './index.scss';
 
@@ -20,13 +20,14 @@ import './index.scss';
  * 对讲操作组件Render Props
  */
 interface IIntercomOperationProps {
-  state: IIntercomOperationState;
-  intercomGroupNameState: IIntercomGroupNameState;
-  intercomNoticeState: IIntercomNoticeState;
-  intercomNoticeDispatch: IIntercomNoticeModel['effects'];
-  dispatches: IIntercomOperationModel['effects'];
-  curMassPoint: IAMapState['curMassPoint'];
-  monitoringDispatchConfig: IMonitoringDispatchState['config'];
+  state: IIntercomOperationState
+  intercomGroupNameState: IIntercomGroupNameState
+  intercomNoticeState: IIntercomNoticeState
+  intercomNoticeDispatch: IIntercomNoticeModel['effects']
+  dispatches: IIntercomOperationModel['effects']
+  curMassPoint: IAMapState['curMassPoint']
+  monitoringDispatchConfig: IMonitoringDispatchState['config']
+  startTime: IIntercomOperationState['startTime']
 }
 
 /**
@@ -38,13 +39,13 @@ interface IIntercomOperationProps {
 const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   const {
     intercomGroupNameState, intercomNoticeState, intercomNoticeDispatch, dispatches,
-    curMassPoint, state, monitoringDispatchConfig
+    curMassPoint, state, monitoringDispatchConfig, startTime
   } = props;
-  const { timing, intercomCallProcessing, callProcessing, callState } = state!;
-  const { active, value } = intercomNoticeState!;
-  const { setState: setNoticeState, sendData } = intercomNoticeDispatch!;
-  const { call, stopCall, entityControl } = dispatches!;
-  const { curActiveGroupType, intercomId } = intercomGroupNameState!;
+  const {timing, intercomCallProcessing, callProcessing, callState} = state!;
+  const {active, value} = intercomNoticeState!;
+  const {setState: setNoticeState, sendData} = intercomNoticeDispatch!;
+  const {call, stopCall, entityControl, setState} = dispatches!;
+  const {curActiveGroupType, intercomId} = intercomGroupNameState!;
   /**
    * 当前监控对象禁言状态
    */
@@ -55,7 +56,7 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
    * @param {boolean} isShowNotice 是否显示对讲通知组件
    */
   const onNotice = (isShowNotice: boolean) => {
-    setNoticeState!({ active: isShowNotice, value: '' });
+    setNoticeState!({active: isShowNotice, value: ''});
   };
 
   /**
@@ -161,7 +162,7 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
         <Timing
           isCountdown={!callState} // 个呼/组呼/电话呼叫中为true，电话接通后为false
           countdownDuration={callProcessing ? 30000 : 35000} // 持续时长：个呼/组呼默认35秒；电话呼叫状态30秒；电话接通后，该字段无意义
-          startTime={moment()}
+          startTime={startTime}
           getTiming={exitCallingWhenTimeout}
           timingTextFormat={!callProcessing ? '' : callState ? '通话中 {timing}' : '连接中 {timing}'}
         />

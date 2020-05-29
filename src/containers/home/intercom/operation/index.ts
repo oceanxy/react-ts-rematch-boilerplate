@@ -16,7 +16,8 @@ const mapStateToProps = (state: RootState) => ({
   intercomNoticeState: state.intercomNotice,
   curMassPoint: state.map.curMassPoint,
   state: state.intercomOperation,
-  monitoringDispatchConfig: state.monitoringDispatch.config
+  monitoringDispatchConfig: state.monitoringDispatch.config,
+  startTime: state.intercomOperation.startTime
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({

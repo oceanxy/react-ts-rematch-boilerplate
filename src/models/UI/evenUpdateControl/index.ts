@@ -53,7 +53,6 @@ const position: IEvenUpdateControlModel = {
           data.forEach((event) => {
             const diffEventIndex = _.findIndex(state?.eventList.data, (value: IEvent, index: number) => value.eventId === event.eventId);
 
-            console.log(diffEventIndex);
             // 如果列表里面不存在则插入这条数据
             if (diffEventIndex === -1) {
               tempEventData.unshift(event);

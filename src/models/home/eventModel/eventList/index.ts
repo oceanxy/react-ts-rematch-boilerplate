@@ -47,7 +47,7 @@ const eventList: IEventListModel = {
       const {latestEventDetails, eventStatistics, eventList}: IEventListResponse = response.data;
 
       // 更新事件详情
-      if (eventList?.length && !reqPayload.isStatisticsMethodChanged) {
+      if (eventList?.length && selectFirstEvent) {
         store.dispatch.eventDetails.setState({data: latestEventDetails});
       }
 

@@ -9,7 +9,7 @@
 
 import { IFetchAPI, IFetchSockJs, IFetchWebsocket } from '@/interfaces/api';
 import { APIResponse, IPolling } from '@/interfaces/api/mock';
-import { EHTTPMethod } from '@/interfaces/config';
+import { EHTTPMethod, EProtocal } from '@/interfaces/config';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
 export type APIName =
@@ -97,6 +97,9 @@ const apis: APIRequestConfig = {
   },
 
   fetchSockJs: {
+    protocol: EProtocal.HTTPS,
+    host: 'zw.iwalkie.cn',
+
     url: '/clbs/vehicle',
     isSockJs: true,
     enableStomp: true

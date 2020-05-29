@@ -51,7 +51,13 @@ function stitchingURL(fetchApi: IFetchAPI | IFetchWebsocket | IFetchSockJs): str
         envPort = 8080; // 默认8080
       }
 
-      return `${protocols}${host || 'localhost'}:${port || envPort}${fetchApi.url}`;
+      // 用 IP+PORT 代替域名
+      if (host?.match(/^(((\\d{1,2})|(1\\d{2})|(2[0-4]\\d)|(25[0-5]))\\.){3}((\\d{1,2})|(1\\d{2})|(2[0-4]\\d)|(25[0-5]))$/)) {
+        return `${protocols}${host || 'localhost'}:${port || envPort}${fetchApi.url}`;
+      }
+
+      // 用域名
+      return `${protocols}${host || 'localhost'}${fetchApi.url}`;
     }
 
     return fetchApi.url;

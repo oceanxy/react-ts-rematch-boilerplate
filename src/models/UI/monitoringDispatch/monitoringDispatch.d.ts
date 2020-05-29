@@ -7,6 +7,7 @@
  * @LastModifiedTime: 2020-05-21 周四 17:25:33
  */
 
+import { EProtocal } from '@/interfaces/config';
 import { CallModeEnum } from '@/models/UI/monitoringDispatch/index';
 import { ModelConfig } from '@rematch/core';
 
@@ -15,95 +16,95 @@ declare global {
     /**
      * 是否支持视频会议
      */
-    isSupportVideoConferece: boolean,
+    isSupportVideoConferece: boolean
     /**
      * 是否支持视频电话
      */
-    isSupportVideoCall: boolean,
+    isSupportVideoCall: boolean
     /**
      * 是否支持语音会议
      */
-    isSupportAudioConferece: boolean,
+    isSupportAudioConferece: boolean
     /**
      * 是否支持发送文本
      */
-    isSupportMessageText: boolean,
+    isSupportMessageText: boolean
     /**
      * 对讲服务器地址
      */
-    audioServerIP: string,
+    audioServerIP: string
     /**
      * 是否支持语音留言
      */
-    isSupportRTAudioMessage: boolean,
+    isSupportRTAudioMessage: boolean
     /**
      * 对讲平台调度服务端口
      */
-    dispatchServicePort: string,
+    dispatchServicePort: string
     /**
      * 是否拥有禁言角色 true:有; false:没有
      */
-    isOwnPreventSpeechRole: boolean,
+    isOwnPreventSpeechRole: boolean
     /**
      * 用户拥有的临时组id集合
      */
-    userOwnTempAssignmentIntercomGroupIdList: [],
+    userOwnTempAssignmentIntercomGroupIdList: []
     /**
      * 对讲服务器端口
      */
-    audioServerPort: number,
+    audioServerPort: number
     /**
      * 会话ID
      */
-    pid: string,
+    pid: string
     /**
      * 是否支持实时视频上传
      */
-    isSupportVideoFunc: boolean,
+    isSupportVideoFunc: boolean
     /**
      * 对讲平台通知服务端口
      */
-    eventServicePort: number,
+    eventServicePort: number
     /**
      * 是否支持发送图片
      */
-    isSupportMessageImage: boolean,
+    isSupportMessageImage: boolean
     /**
      * 是否支持电子围栏
      */
-    isSupportFenceEnable: boolean,
+    isSupportFenceEnable: boolean
     /**
      * 客户ID
      */
-    custId: number,
+    custId: number
     /**
      * 当前账号名称
      */
-    name: string,
+    name: string
     /**
      * 是否支持语音对讲
      */
-    isSupportAudio: boolean,
+    isSupportAudio: boolean
     /**
      * 账号类型 1:I类账号 2:II类账号 3.III类账号
      */
-    attributes: CreateEngineRequest['attribute'],
+    attributes: CreateEngineRequest['attribute']
     /**
      * 是否支持视频功能
      */
-    isSupportVideo: boolean,
+    isSupportVideo: boolean
     /**
      * 是否支持传感
      */
-    isSupportSensor: boolean,
+    isSupportSensor: boolean
     /**
      * 当前账号ID
      */
-    id: number,
+    id: number
     /**
      * 是否支持GIS
      */
-    isSupportGis: boolean,
+    isSupportGis: boolean
     /**
      * 是否支持巡更
      */
