@@ -4,7 +4,7 @@
  * @Description: 处理事件
  * @Date: 2020-05-07 周四 15:38:36
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-27 周三 09:54:35
+ * @LastModifiedTime: 2020-05-29 周五 11:07:58
  */
 
 import HandleEvent from '@/components/home/eventModel/handleEvent';
@@ -18,7 +18,8 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   handleEvent: dispatch.handleEvent.handleEvent,
-  fetchEventListData: dispatch.eventList.fetchData
+  fetchEventListData: dispatch.eventList.fetchData,
+  setEventStatisticsState: dispatch.eventStatistics.setState
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HandleEvent);

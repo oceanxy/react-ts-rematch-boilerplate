@@ -29,7 +29,7 @@ const eventList: IEventListModel = {
     }
   },
   effects: {
-    async fetchData(reqPayload) {
+    async fetchData(reqPayload, state) {
       let selectFirstEvent: any;
 
       if (!reqPayload) {
@@ -51,7 +51,10 @@ const eventList: IEventListModel = {
       }
 
       // 更新事件数量
-      store.dispatch.eventStatistics.updateData(eventStatistics);
+      store.dispatch.eventStatistics.setState({
+        ...state?.eventStatistics,
+        ...eventStatistics
+      });
       // 更新事件列表
       store.dispatch.eventList.updateState({data: eventList});
 

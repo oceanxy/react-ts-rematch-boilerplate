@@ -4,8 +4,11 @@
  * @Description: 事件/任务统计model
  * @Date: 2020-03-23 16:17:59
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-04-13 周一 14:02:43
+ * @LastModifiedTime: 2020-05-29 周五 10:56:02
  */
+
+import { EventStatisticsMethod } from '@/models/home/eventModel/eventDetails';
+import { store } from '@/store';
 
 /**
  * 事件统计model
@@ -16,14 +19,20 @@ const eventStatistics: IEventStatisticsModel = {
     finishedNum: 0,
     processingNum: 0,
     totalNum: 0,
-    untreatedNum: 0
+    untreatedNum: 0,
+    eventStatisticsMethod: EventStatisticsMethod.ALL
   },
   reducers: {
-    updateData: (state, data) => {
+    updateData: (state, payload) => {
       return {
         ...state,
-        ...data
+        ...payload
       };
+    }
+  },
+  effects: {
+    setState(payload: Partial<IEventStatisticsState>) {
+      store.dispatch.eventStatistics.updateData(payload);
     }
   }
 };

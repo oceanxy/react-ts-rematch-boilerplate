@@ -4,11 +4,12 @@
  * @Description: 事件列表类型定义
  * @Date: 2020-04-13 周一 13:32:43
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-28 周四 11:27:42
+ * @LastModifiedTime: 2020-05-29 周五 11:00:41
  */
 
 import { APIResponse } from '@/interfaces/api/mock';
 import { IEventStatisticsState } from '@/models/home/eventModel/eventStatistics';
+import { RootState } from '@/store';
 import { ModelConfig } from '@rematch/core';
 
 declare global {
@@ -127,14 +128,15 @@ declare global {
     effects: {
       /**
        * 获取事件列表数据
-       * @param {IEventListRequest} reqPayload
+       * @param {IEventListRequest & {selectFirstData?: boolean}} reqPayload
+       * @param {RootState} state
        */
       fetchData(reqPayload?: IEventListRequest & {
         /**
          * 选中第一条数据
          */
         selectFirstData?: boolean
-      }): void
+      }, state?: RootState): void
       /**
        * 获取事件下拉列表数据
        * @param {IEventListRequest} reqPayload

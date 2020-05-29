@@ -8,6 +8,7 @@
  */
 
 import Modal from '@/components/UI/modal';
+import { EventStatisticsMethod } from '@/models/home/eventModel/eventDetails';
 import { Button, Form, Input, message, Radio, Row } from 'antd';
 import RadioGroup from 'antd/es/radio/group';
 import { RadioChangeEvent } from 'antd/lib/radio/interface';
@@ -35,9 +36,10 @@ interface HandleEventProps {
    */
   curSelectedEvent?: IEventListState['curSelectedEvent']
   /**
-   * 重新获取事件列表数据
+   * 获取事件列表数据
    */
   fetchEventListData?: IEventListModel['effects']['fetchData']
+  setEventStatisticsState?: IEventStatisticsModel['effects']['setState']
 
   /**
    * 设置处理事件对话框状态，海量点组件传递过来的函数
@@ -67,7 +69,10 @@ interface HandleEventFormProps {
  * @constructor
  */
 const HandleEvent = (props: HandleEventProps) => {
-  const {visible, setIsShowModal, handleEvent, curMassPointInfo, fetchEventListData, curSelectedEvent} = props;
+  const {
+    visible, setIsShowModal, handleEvent, curMassPointInfo,
+    fetchEventListData, curSelectedEvent, setEventStatisticsState
+  } = props;
   /**
    * 批量全部处理的loading状态
    */
@@ -137,6 +142,7 @@ const HandleEvent = (props: HandleEventProps) => {
       message.success('已成功处理事件报警！');
       // 刷新事件列表
       fetchEventListData!({selectFirstData: true});
+      setEventStatisticsState!({eventStatisticsMethod: EventStatisticsMethod.ALL});
     } else {
       message.error('处理失败，请稍后再试！');
     }

@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 事件/任务统计
  * @Date: 2020-03-23 16:14:24
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-03-23 16:14:24
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-29 周五 11:04:02
  */
 
 import Button from '@/components/UI/button';
@@ -14,32 +14,32 @@ import React, { useState } from 'react';
 import './index.scss';
 
 interface IEventStatisticsProps {
-  fetchData: (reqPayload: IEventListRequest) => void;
-  data: IEventStatisticsState;
+  fetchData: (reqPayload: IEventListRequest) => void
+  data: IEventStatisticsState
+  setState: IEventStatisticsModel['effects']['setState']
 }
 
 const EventDetails = (props: Partial<IEventStatisticsProps>) => {
-  const [eventStatisticsMethod, setEventStatisticsMethod] = useState(-1);
-  const { data, fetchData } = props;
+  const { data, fetchData, setState } = props;
 
   /**
    * 切换统计状态的点击事件
    * @param {EventStatisticsMethod} reqEventStatisticsMethod
    */
   const onClick = (reqEventStatisticsMethod: EventStatisticsMethod) => {
-    const isStatisticsMethodChanged = reqEventStatisticsMethod !== eventStatisticsMethod;
+    const isStatisticsMethodChanged = reqEventStatisticsMethod !== data?.eventStatisticsMethod;
 
     // 禁止重复点击切换统计状态
     if (!isStatisticsMethodChanged) return;
 
     // 获取新的列表数据
-    fetchData?.({
+    fetchData!({
       eventStatus: reqEventStatisticsMethod,
       isStatisticsMethodChanged
     } as IEventListRequest);
 
     // 更新组件状态
-    setEventStatisticsMethod(reqEventStatisticsMethod);
+    setState!({eventStatisticsMethod: reqEventStatisticsMethod});
   };
 
   return (
@@ -47,17 +47,17 @@ const EventDetails = (props: Partial<IEventStatisticsProps>) => {
       <Button
         name={`全部 (${data!.totalNum})`}
         onClick={onClick.bind(null, EventStatisticsMethod.ALL)}
-        active={eventStatisticsMethod === EventStatisticsMethod.ALL}
+        active={data?.eventStatisticsMethod === EventStatisticsMethod.ALL}
       />
       <Button
         name={`未处理 (${data!.untreatedNum})`}
         onClick={onClick.bind(null, EventStatisticsMethod.UNPROCESSED)}
-        active={eventStatisticsMethod === EventStatisticsMethod.UNPROCESSED}
+        active={data?.eventStatisticsMethod === EventStatisticsMethod.UNPROCESSED}
       />
       <Button
         name={`处理中 (${data!.processingNum})`}
         onClick={onClick.bind(null, EventStatisticsMethod.PROCESSING)}
-        active={eventStatisticsMethod === EventStatisticsMethod.PROCESSING}
+        active={data?.eventStatisticsMethod === EventStatisticsMethod.PROCESSING}
       />
     </Container>
   );
