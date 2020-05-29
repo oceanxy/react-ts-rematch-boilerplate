@@ -76,29 +76,30 @@ const test = <ModelConfig> {
     },
     async getSockJsData() {
       return await fetchApis.fetchTestSockJs((stompClient: Client, frame?: Frame) => {
-        // setTimeout(() => {
-        //   const requestStr = {
-        //     'desc': {
-        //       'MsgId': 40968,
-        //       'TaskId': null,
-        //       'UserName': 'admin',
-        //       'SysTime': '2020/04/14 10:45:43',
-        //       'ProtocolType': null,
-        //       'ProtocolVersion': null
-        //     }
-        //   };
-        //   // stompClient.subscribe('/user/admin/eventInfo', (res) => {
-        //   //   debugger;
-        //   // });
-        //   //
-        //   // stompClient.subscribe('/user/xieyang/taskInfo', (res) => {
-        //   //   debugger;
-        //   // });
-        //   stompClient.send('/app/taskStatusInfo', {}, JSON.stringify(requestStr)); //订阅任务信息
-        //   stompClient.send('/app/vehicle/subscribeStatus', {}, JSON.stringify(requestStr));
-        // }, 1000);
 
-        this.updateSockJsData({name: 'SockJs', value: 'SockJs通道已打开，但还未订阅消息。'});
+        const requestStr = {
+          'desc': {
+            'MsgId': 40968,
+            'TaskId': null,
+            'UserName': 'admin',
+            'SysTime': '2020/04/14 10:45:43',
+            'ProtocolType': null,
+            'ProtocolVersion': null
+          }
+        };
+
+        stompClient.subscribe('/user/admin/eventInfo', (res) => {
+          this.updateSockJsData({name: 'SockJs', value: '/user/admin/eventInfo 通道消息：' + res});
+        });
+
+        stompClient.subscribe('/user/admin/taskInfo', (res) => {
+          this.updateSockJsData({name: 'SockJs', value: '/user/admin/taskInfo 通道消息：' + res});
+        });
+        
+        stompClient.send('/app/taskStatusInfo', {}, JSON.stringify(requestStr)); //订阅任务信息
+        stompClient.send('/app/vehicle/subscribeStatus', {}, JSON.stringify(requestStr));
+
+        this.updateSockJsData({name: 'SockJs', value: 'SockJs通道已打开，等待服务器发送消息...'});
       });
     },
     async getEChartsData() {

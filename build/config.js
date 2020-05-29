@@ -29,8 +29,14 @@ module.exports = {
     proxy: {
       '/clbs/web/v1/dispatch/*': {
         target: 'http://localhost:8080/',
-        changeOrigin: true,     // target是域名的话，需要这个参数，
+        changeOrigin: true,     // target是域名的话，需要这个参数
         secure: false          // 设置支持https协议的代理
+      },
+      '/clbs/vehicle': {
+        ws: true,
+        target: 'http://localhost:8080/', // 如果使用的是SockJs，HTTP协议请根据实际修改。（SockJs的协议可能是HTTP协议，也可能是WS协议）
+        changeOrigin: true,
+        secure: false
       }
     }
   }

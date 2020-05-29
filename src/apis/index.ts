@@ -18,6 +18,7 @@ import qs from 'qs';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import SockJS from 'sockjs-client';
 import stomp, { Frame } from 'stompjs';
+import DEV_SERVER_CONFIG from '../../build/config';
 import mocks, { Mocks, productionData } from './mock';
 
 /**
@@ -25,25 +26,35 @@ import mocks, { Mocks, productionData } from './mock';
  * @param fetchApi {IFetchAPI} API接口请求配置
  */
 function stitchingURL(fetchApi: IFetchAPI | IFetchWebsocket | IFetchSockJs): string {
-  // 拼接URL并实例化websocket
+  // 拼接协议
   let protocols = fetchApi.protocol ? fetchApi.protocol : config.protocol;
 
+  // websocket转换为ws协议
   if ('isWebsocket' in fetchApi && fetchApi.isWebsocket && (config.protocol === EProtocal.HTTP || config.protocol === EProtocal.HTTPS)) {
-    protocols = config.protocol === EProtocal.HTTP ? EProtocal.WS : EProtocal.WSS;
+    protocols = protocols === EProtocal.HTTP ? EProtocal.WS : EProtocal.WSS;
   }
 
-  // 如果websocket的服务端口未设置，则使用全局配置的端口
+  // 如果服务端口未设置，则使用全局配置的端口
   const port = fetchApi.port ? fetchApi.port : config.port;
-  // 如果websocket的host未设置，则使用全局配置的host
+  // 如果host未设置，则使用全局配置的host
   const host = fetchApi.host ? fetchApi.host : config.host;
 
-  // 如果每个接口以及全局配置均未设置port或host，则使用相对路径。如果数全双工通道，则使用localhost
+  // 如果接口以及全局配置均未设置port或host，则使用相对路径。如果是websocket或SockJs，则使用默认值，保证websocket链接是完整的URL
   if (!port || !host) {
-    // if ('isWebsocket' in fetchApi || 'isSockJs' in fetchApi) {
-    //   return `${protocols}localhost:${port || '8080'}${fetchApi.url}`;
-    // } else {
-      return fetchApi.url;
-    // }
+    if ('isSockJs' in fetchApi || 'isWebsocket' in fetchApi) {
+      let envPort: any;
+
+      // 检查当前环境
+      if (process.env.NODE_ENV === 'development') {
+        envPort = DEV_SERVER_CONFIG.devServer.port;
+      } else {
+        envPort = 8080; // 默认8080
+      }
+
+      return `${protocols}${host || 'localhost'}:${port || envPort}${fetchApi.url}`;
+    }
+
+    return fetchApi.url;
   }
 
   return `${protocols}${host}:${port}${fetchApi.url}`;

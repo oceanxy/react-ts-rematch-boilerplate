@@ -71,18 +71,20 @@ const apis: APIRequestConfig = {
     forceMock: true
   },
   fetchTestWebsocket: {
-    protocol: EProtocal.HTTP,
-    host: 'localhost',
+    // protocol: EProtocal.HTTP,
+    // host: 'localhost',
+    port: 3002, // websocket服务的端口
+
     url: '/testWebSocket',
     // url: 'ws://121.40.165.18:8800',
     // url: 'ws://localhost:3002/testWebSocket',
-    port: 3002, // websocket服务的端口
     isWebsocket: true // 如果是websocket长链接且url字段不是完整的websocket地址请务必设置为true
   } as IFetchWebsocket,
   fetchTestSockJs: {
-    protocol: EProtocal.HTTP,
-    host: 'localhost',
-    port: 8080,
+    // protocol: EProtocal.HTTP,
+    // host: 'localhost',
+    // port: 8080,
+
     url: '/clbs/vehicle',
     isSockJs: true, // 如果后端采用SockJs包实现的全双工通信，请开启此配置，isWebsocket将失效
     enableStomp: true
