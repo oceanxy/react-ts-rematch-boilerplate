@@ -97,6 +97,11 @@ function getLat() {
  * 注意返回对象内的fetchAPI名称需要与api目录内的相应名称对应
  */
 const mocks: Mocks = {
+  fetchSockJs: {
+    retCode: 0,
+    retMsg: '',
+    data: {}
+  },
   // 测试接口
   fetchTest: {
     retCode: 0,

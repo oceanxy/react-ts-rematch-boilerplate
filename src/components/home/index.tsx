@@ -11,6 +11,7 @@ import EventModel from '@/components/home/eventModel';
 import ResourceStatistics from '@/components/home/resourceStatistics';
 import TaskModel from '@/components/home/taskModel';
 import Container from '@/components/UI/containerComp';
+import EvenUpdateControl from '@/containers/UI/evenUpdateControl';
 import Nav from '@/components/UI/nav';
 import { renderRoutes } from '@/config/router';
 import DisplayContent from '@/containers/home/displayContent';
@@ -78,6 +79,7 @@ const Home = (props: Partial<IHomeProps>) => {
         </Container>
       </Spin>
       <MonitoringDispatch />
+      <EvenUpdateControl />
     </Container>
   );
 };

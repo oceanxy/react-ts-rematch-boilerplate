@@ -324,7 +324,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
 
       if (+response.retCode === 0) {
         const config = response.data;
-        store.dispatch.monitoringDispatch.updateState({ config });
+        store.dispatch.monitoringDispatch.updateState({config});
         store.dispatch.monitoringDispatch.fetchMediaServiceEngine(config);
       } else {
         // 后续修改成自动登录
@@ -378,12 +378,12 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       // ==================================================================================
 
       // 更新服务引擎的状态
-      updateState({ hjMediaEngine });
+      updateState({hjMediaEngine});
       // 登录第三方调度服务
       login();
     },
     login(): void {
-      const { hjMediaEngine, loginResponseStatus } = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
       if (hjMediaEngine && !loginResponseStatus) {
         // 调度服务登录
@@ -393,16 +393,16 @@ const monitoringDispatch: IMonitoringDispatchModel = {
     onLoginResponse(response) {
       if (response.result === LoginResultEnum.LOGIN_RESULT_SUCCESS) {
         // 设置登录状态
-        store.dispatch.monitoringDispatch.updateState({ loginResponseStatus: true });
+        store.dispatch.monitoringDispatch.updateState({loginResponseStatus: true});
       }
     },
     onLogout(): void {
-      store.dispatch.monitoringDispatch.updateState({ loginResponseStatus: false });
-      message.config({ top: 60 });
+      store.dispatch.monitoringDispatch.updateState({loginResponseStatus: false, config: undefined});
+      message.config({top: 60});
       message.warning('第三方调度服务已退出，所有调度功能将受限！', 0);
     },
     startCalling(request: StartCallingRequest): void {
-      const { hjMediaEngine, loginResponseStatus } = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
       if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.startCalling(request);
@@ -416,7 +416,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       }
     },
     stopCalling(): void {
-      const { hjMediaEngine, loginResponseStatus } = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
       if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.stopCalling();
@@ -425,7 +425,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       }
     },
     joinGroup(request: JoinOrExitGroupRequest) {
-      const { hjMediaEngine, loginResponseStatus } = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
       if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.joinGroup(request);
@@ -434,7 +434,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       }
     },
     exitGroup(request): void {
-      const { hjMediaEngine, loginResponseStatus } = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
       if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.exitGroup(request);
@@ -443,7 +443,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       }
     },
     removeGroupMember(request: RemoveGroupMemberRequest): void {
-      const { hjMediaEngine, loginResponseStatus } = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
       if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.removeGroupMember(request);
@@ -452,7 +452,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       }
     },
     removeTempGroupMember(request: RemoveTempGroupMemberRequest): void {
-      const { hjMediaEngine, loginResponseStatus } = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
       if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.removeTempGroupMember(request);
@@ -462,8 +462,8 @@ const monitoringDispatch: IMonitoringDispatchModel = {
     },
     addTempGroupMember(memberIds: number[]): void {
       const {
-        monitoringDispatch: { hjMediaEngine, loginResponseStatus },
-        intercomGroupName: { intercomId }
+        monitoringDispatch: {hjMediaEngine, loginResponseStatus},
+        intercomGroupName: {intercomId}
       } = store.getState();
 
       if (hjMediaEngine && loginResponseStatus) {
@@ -476,7 +476,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       }
     },
     createTempGroup(request: CreateTempGroupRequest): void {
-      const { hjMediaEngine, loginResponseStatus } = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
       if (hjMediaEngine && loginResponseStatus) {
         hjMediaEngine.audioEngine.createTempGroup(request);
@@ -486,7 +486,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
     },
     async onCreateTempGroupResponse(response) {
       // 关闭创建临时组loading状态以及关闭创建临时组对话框
-      store.dispatch.temporaryGroup.setState({ loading: false, isShowEditModal: false });
+      store.dispatch.temporaryGroup.setState({loading: false, isShowEditModal: false});
 
       if (response.result === 0) {
         // 获取所有成员ID
@@ -496,10 +496,10 @@ const monitoringDispatch: IMonitoringDispatchModel = {
           }
 
           return ids;
-        }, <number[]>[]);
+        }, <number[]> []);
 
         // 维护平台后台临时组数据
-        const res = await fetchApis.createTemporaryGroup(<ICreateTemporaryGroupRequest>{
+        const res = await fetchApis.createTemporaryGroup(<ICreateTemporaryGroupRequest> {
           temporaryGroup: response.tempGroupName,
           intercomGroupId: response.tempGroupId,
           userIds: ids
@@ -519,16 +519,16 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       }
     },
     deleteTempGroup(tempGroupId: number): void {
-      const { hjMediaEngine, loginResponseStatus } = store.getState().monitoringDispatch;
+      const {hjMediaEngine, loginResponseStatus} = store.getState().monitoringDispatch;
 
       if (hjMediaEngine && loginResponseStatus) {
-        hjMediaEngine.audioEngine.deleteTempGroup({ tempGroupId });
+        hjMediaEngine.audioEngine.deleteTempGroup({tempGroupId});
       } else {
         message.error('第三方对讲服务未启动！');
       }
     },
     remoteControlMs(request: RemoteControlMsRequest): void {
-      const { hjMediaEngine } = store.getState().monitoringDispatch;
+      const {hjMediaEngine} = store.getState().monitoringDispatch;
 
       if (hjMediaEngine) {
         hjMediaEngine.audioEngine.remoteControlMs(request);
@@ -568,7 +568,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
     },
     async onAddTempGroupMemberResponse(response) {
       // 关闭loading状态以及关闭对话框
-      store.dispatch.temporaryGroup.setState({ loading: false, isShowEditModal: false });
+      store.dispatch.temporaryGroup.setState({loading: false, isShowEditModal: false});
 
       if (response.addGroupMemberResult?.length) {
         // 获取所有成员ID
@@ -578,7 +578,7 @@ const monitoringDispatch: IMonitoringDispatchModel = {
           }
 
           return ids;
-        }, <number[]>[]);
+        }, <number[]> []);
 
         // 维护平台后台临时组数据
         const res = await store.dispatch.intercomMembers.addMember(ids);

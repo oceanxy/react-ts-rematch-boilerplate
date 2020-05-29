@@ -63,11 +63,10 @@ function stitchingURL(fetchApi: IFetchAPI | IFetchWebsocket | IFetchSockJs): str
 /**
  * 建立SockJs全双工通道
  * @param {IFetchSockJs} fetchApi API接口请求配置
- * @param params 请求参数
  * @param {WebsocketCallback} callback SockJs接收消息的回调函数
- * @returns {Promise<WebSocket> | undefined}
+ * @returns {Promise<WebSocket>}
  */
-function fetchSockJs(fetchApi: IFetchSockJs, params?: any, callback?: WebsocketCallback): Promise<WebSocket> {
+function fetchSockJs(fetchApi: IFetchSockJs, callback: WebsocketCallback): Promise<WebSocket> {
   let url = fetchApi.url;
   // 如果URL内不带协议，需要自动拼接可访问的URL
   if (!fetchApi.url.match(/^https?:\/\//)) {
@@ -85,7 +84,7 @@ function fetchSockJs(fetchApi: IFetchSockJs, params?: any, callback?: WebsocketC
         reject(err);
       };
 
-      if (callback && _.isFunction(callback)) {
+      if (_.isFunction(callback)) {
         sockJS.onmessage = (messageEvent: WebSocketMessageEvent) => {
           callback(JSON.parse(messageEvent.data));
         };
@@ -94,7 +93,7 @@ function fetchSockJs(fetchApi: IFetchSockJs, params?: any, callback?: WebsocketC
       const stompClient = stomp.over(sockJS);
 
       stompClient.connect({}, (frame?: Frame) => {
-        if (callback && _.isFunction(callback)) {
+        if (_.isFunction(callback)) {
           callback(stompClient, frame);
         }
 
@@ -113,19 +112,18 @@ function fetchSockJs(fetchApi: IFetchSockJs, params?: any, callback?: WebsocketC
 /**
  * 建立websocket通道
  * @param {IFetchWebsocket} fetchApi API接口请求配置
- * @param params 请求参数
  * @param {WebsocketCallback} callback websocket接收消息的回调函数
- * @returns {Promise<ReconnectingWebSocket> | undefined}
+ * @returns {Promise<ReconnectingWebSocket>}
  */
-function fetchWebSocket(fetchApi: IFetchWebsocket, params?: any, callback?: WebsocketCallback): Promise<ReconnectingWebSocket> {
+function fetchWebSocket(fetchApi: IFetchWebsocket, callback: WebsocketCallback): Promise<ReconnectingWebSocket> {
   return new Promise((resolve, reject) => {
     let ws: ReconnectingWebSocket;
     // 检查是否在api中配置了完整的websocket URL
     // 如果是完整地websocket URL，则不再拼接URL
     if (fetchApi.url.includes(EProtocal.WS) || fetchApi.url.includes(EProtocal.WSS)) {
-      ws = new ReconnectingWebSocket(fetchApi.url, '', params);
+      ws = new ReconnectingWebSocket(fetchApi.url, '');
     } else {
-      ws = new ReconnectingWebSocket(stitchingURL(fetchApi), '', params);
+      ws = new ReconnectingWebSocket(stitchingURL(fetchApi), '');
     }
 
     ws.onopen = () => {
@@ -135,7 +133,7 @@ function fetchWebSocket(fetchApi: IFetchWebsocket, params?: any, callback?: Webs
       reject(err);
     };
 
-    if (callback && _.isFunction(callback)) {
+    if (_.isFunction(callback)) {
       ws.onmessage = (messageEvent: MessageEvent) => {
         callback(JSON.parse(messageEvent.data));
       };
@@ -199,20 +197,17 @@ function fetchHttp(fetchApi: IFetchAPI, params?: any): Promise<AxiosResponse> {
 /**
  * 使用HTTP轮询模拟websocket
  * @param fetchApi {APIRequestConfig} API接口请求配置
- * @param [params] {any} 请求数据
- * @param [callback] {WebsocketCallback} websocket接收消息的回调函数
+ * @param callback {WebsocketCallback} websocket接收消息的回调函数
  */
-async function fetchPolling(fetchApi: IFetchAPI, params?: any, callback?: WebsocketCallback): Promise<IPolling> {
+async function fetchPolling(fetchApi: IFetchAPI, callback: WebsocketCallback): Promise<IPolling> {
   // 首次加载时不延迟，立即请求数据
-  const response = await fetchHttp(fetchApi, params);
-  callback && callback(response.data);
+  const response = await fetchHttp(fetchApi);
+  callback(response.data);
 
   // 初始化轮询
   const polling = setInterval(async () => {
-    if (callback) {
-      const response = await fetchHttp(fetchApi, params);
-      callback(response.data);
-    }
+    const response = await fetchHttp(fetchApi);
+    callback(response.data);
   }, 1000);
 
   return <IPolling> {
@@ -224,21 +219,14 @@ async function fetchPolling(fetchApi: IFetchAPI, params?: any, callback?: Websoc
 
 /**
  * 处理请求的方式
- * @param fetchApi {APIRequestConfig} API接口请求配置
- * @param [params] {any} 请求数据
- * @param [callback] {WebsocketCallback} websocket接收消息的回调函数
+ * @param {IFetchAPI | IFetchSockJs | IFetchWebsocket} fetchApi API接口请求配置
+ * @param {any | WebsocketCallback} params 请求参数或者websocket接收消息的回调函数
+ * @returns {Promise<APIResponse | IPolling | ReconnectingWebSocket | WebSocket>}
  */
 async function fetchMethod(
   fetchApi: IFetchAPI | IFetchSockJs | IFetchWebsocket,
-  params?: any,
-  callback?: WebsocketCallback
+  params?: WebsocketCallback | any
 ): Promise<APIResponse | IPolling | ReconnectingWebSocket | WebSocket> {
-  // 处理参数
-  // 当params和callback两者只传入其一时，检测这个传入参数的类型，并做相应的值转换
-  if (_.isFunction(params)) {
-    [callback, params] = [params, callback];
-  }
-
   if (
     ('isSockJs' in fetchApi && fetchApi.isSockJs) ||
     ('isWebsocket' in fetchApi && fetchApi.isWebsocket) ||
@@ -246,17 +234,17 @@ async function fetchMethod(
   ) {
     // 当开启mock数据时，使用轮询的方式模拟websocket
     if (config.mock || fetchApi.forceMock) {
-      const polling = await fetchPolling(fetchApi, params, callback);
+      const polling = await fetchPolling(fetchApi, params as WebsocketCallback);
       return <IPolling> polling;
     } else {
       // 检测是否开启了SockJs功能
       if ('isSockJs' in fetchApi && fetchApi.isSockJs) {
         // 从SockJs服务端获取数据
-        const sockJs = await fetchSockJs(fetchApi as IFetchSockJs, params, callback);
+        const sockJs = await fetchSockJs(fetchApi as IFetchSockJs, params as WebsocketCallback);
         return <WebSocket> sockJs;
       } else /** websocket长链接 */ {
         // 从websocket服务器获取数据
-        const ws = await fetchWebSocket(fetchApi as IFetchWebsocket, params, callback);
+        const ws = await fetchWebSocket(fetchApi as IFetchWebsocket, params as WebsocketCallback);
         return <ReconnectingWebSocket> ws;
       }
 
@@ -292,10 +280,10 @@ const fetchApi = (mocks: Mocks, apis: APIRequestConfig) => () => {
 
     /**
      * 返回包含所有API函数的对象
-     * @param {any} [params] 请求数据
-     * @param {WebsocketCallback} [callback] websocket请求时必传的回调函数
+     * @param params 请求数据
+     * @returns {Promise<APIResponse | IPolling | ReconnectingWebSocket | WebSocket>}
      */
-    fetchApis[fetchName] = (params?: any, callback?: WebsocketCallback) => fetchMethod(fetchApi, params, callback);
+    fetchApis[fetchName] = (params?: any | WebsocketCallback) => fetchMethod(fetchApi, params);
   });
 
   return <FetchApis> fetchApis;

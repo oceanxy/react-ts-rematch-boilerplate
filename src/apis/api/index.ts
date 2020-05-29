@@ -9,10 +9,11 @@
 
 import { IFetchAPI, IFetchSockJs, IFetchWebsocket } from '@/interfaces/api';
 import { APIResponse, IPolling } from '@/interfaces/api/mock';
-import { EHTTPMethod, EProtocal } from '@/interfaces/config';
+import { EHTTPMethod } from '@/interfaces/config';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
 export type APIName =
+  'fetchSockJs' | // 获取SockJs全双工通道，并订阅相关服务推送
   'fetchEventDetails' | // 获取事件详情
   'fetchEventList' | // 获取事件列表
   'fetchEventListByWebsocket' | // 通过websocket获取事件列表
@@ -55,10 +56,9 @@ export type APIRequestConfig = {
 };
 
 export type FetchApis = {
-  [K in keyof APIRequestConfig]: (
-    data?: any,
-    callback?: (response: APIResponse) => void
-  ) => Promise<APIResponse & ReconnectingWebSocket & IPolling>;
+  [K in keyof APIRequestConfig]: (() => Promise<APIResponse>) &
+  ((params: any) => Promise<APIResponse>) &
+  ((callback: (response: APIResponse) => void) => Promise<ReconnectingWebSocket & WebSocket & IPolling>)
 };
 
 /**
@@ -96,6 +96,11 @@ const apis: APIRequestConfig = {
     url: '/testECharts'
   },
 
+  fetchSockJs: {
+    url: '/clbs/vehicle',
+    isSockJs: true,
+    enableStomp: true
+  } as IFetchSockJs,
   /**
    * 获取事件详情
    */
