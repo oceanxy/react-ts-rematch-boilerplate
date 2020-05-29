@@ -45,7 +45,7 @@ const IntercomMembers = (props: Partial<IIntercomMembersProps>) => {
    */
   const handleRemoveMember = (member: IEntity) => {
     // 只有临时组能踢人
-    if (curTempGroupState?.curActiveGroupType === CurActiveGroupType.Temporary) {
+    if (curTempGroupState?.curActiveGroupType === CurActiveGroupType.Temporary && !timing) {
       setMember({visible: true, type: 'remove', current: member});
     }
   };
