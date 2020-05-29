@@ -88,6 +88,10 @@ declare global {
        * 物资类型名称
        */
       thingTypeName: string
+      /**
+       * 地图撒点的图标
+       */
+      icon: string
     }
     /**
      * 定位信息
@@ -109,10 +113,6 @@ declare global {
        * 纬度
        */
       latitude: number
-      /**
-       * 地图撒点的图标
-       */
-      icon: string
     }
     /**
      * 任务列表

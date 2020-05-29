@@ -74,7 +74,7 @@ const setInfoWindow = (): AMap.InfoWindow => {
  * @param {InfoWindowResponse} point
  */
 const createMarkers = (point: InfoWindowResponse) => {
-  const {latitude, longitude, icon} = point.location;
+  const {location: {latitude, longitude}, monitor: {icon}} = point;
 
   return new AMap.Marker({
     position: new AMap.LngLat(longitude, latitude),
