@@ -15,7 +15,7 @@ import './index.scss';
 
 interface ITaskStatisticsProps {
   fetchData: ITaskListModel['effects']['fetchData']
-  data: IEventStatisticsState,
+  data: ITaskStatisticsState
   curSelectedEvent: IEventListState['curSelectedEvent']
   curMassPoint: IAMapState['curMassPoint']
 }

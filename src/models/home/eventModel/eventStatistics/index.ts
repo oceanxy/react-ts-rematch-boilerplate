@@ -16,10 +16,12 @@ import { store } from '@/store';
  */
 const eventStatistics: IEventStatisticsModel = {
   state: {
-    finishedNum: 0,
-    processingNum: 0,
-    totalNum: 0,
-    untreatedNum: 0,
+    data: {
+      finishedNum: 0,
+      processingNum: 0,
+      totalNum: 0,
+      untreatedNum: 0
+    },
     eventStatisticsMethod: EventStatisticsMethod.ALL
   },
   reducers: {

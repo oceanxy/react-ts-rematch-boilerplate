@@ -10,7 +10,7 @@
 import ListItem from '@/components/home/listItem';
 import Container from '@/components/UI/containerComp';
 import { eventTypeColor } from '@/models/home/eventModel/eventDetails';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './index.scss';
 
 /**

@@ -11,7 +11,7 @@ import EventStatistics from '@/components/home/eventModel/eventStatistics';
 import { Dispatch, RootState } from '@/store';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: RootState) => ({ data: state.eventStatistics });
+const mapStateToProps = (state: RootState) => ({ ...state.eventStatistics });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({
   fetchData: dispatch.eventList.fetchData,

@@ -16,21 +16,26 @@ declare global {
    */
   interface IEventStatisticsState {
     /**
-     * 已完成数量
+     * 统计数据
      */
-    finishedNum: number
-    /**
-     * 处理中的数量
-     */
-    processingNum: number
-    /**
-     * 总数（未处理+处理中）
-     */
-    totalNum: number
-    /**
-     * 未处理的数量
-     */
-    untreatedNum: number
+    data: {
+      /**
+       * 已完成数量
+       */
+      finishedNum: number
+      /**
+       * 处理中的数量
+       */
+      processingNum: number
+      /**
+       * 总数（未处理+处理中）
+       */
+      totalNum: number
+      /**
+       * 未处理的数量
+       */
+      untreatedNum: number
+    }
     /**
      * 事件统计状态
      */

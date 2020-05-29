@@ -4,7 +4,7 @@
  * @Description: 编辑任务
  * @Date: 2020-04-15 周三 16:23:22
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-26 周二 16:24:41
+ * @LastModifiedTime: 2020-05-29 周五 12:03:06
  */
 
 import EditTask from '@/components/home/taskModel/editTask';
@@ -21,7 +21,8 @@ const mapDispatchToProps = (dispatch: Dispatch): any => ({
   updateRemoteTask: dispatch.editTask.updateRemoteTask,
   fetchDataForSelect: dispatch.eventList.fetchDataForSelect,
   fetchEventDetailsData: dispatch.eventDetails.fetchData,
-  fetchEventListData: dispatch.eventList.fetchData
+  fetchEventListData: dispatch.eventList.fetchData,
+  setEventStatisticsState: dispatch.eventStatistics.setState
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditTask);

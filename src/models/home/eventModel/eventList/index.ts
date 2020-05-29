@@ -34,7 +34,8 @@ const eventList: IEventListModel = {
 
       if (!reqPayload) {
         reqPayload = {
-          isReturnEventDetails: 1
+          isReturnEventDetails: 1,
+          eventStatus: state?.eventStatistics.eventStatisticsMethod
         };
       } else {
         const {selectFirstData, ...rest} = reqPayload;
@@ -51,10 +52,7 @@ const eventList: IEventListModel = {
       }
 
       // 更新事件数量
-      store.dispatch.eventStatistics.setState({
-        ...state?.eventStatistics,
-        ...eventStatistics
-      });
+      store.dispatch.eventStatistics.setState({data: eventStatistics});
       // 更新事件列表
       store.dispatch.eventList.updateState({data: eventList});
 

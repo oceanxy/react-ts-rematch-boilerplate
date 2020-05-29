@@ -4,10 +4,11 @@
  * @Description: 编辑任务
  * @Date: 2020-04-15 周三 16:01:46
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-26 周二 16:22:21
+ * @LastModifiedTime: 2020-05-29 周五 12:02:37
  */
 
 import config from '@/config';
+import { EventStatisticsMethod } from '@/models/home/eventModel/eventDetails';
 import {
   DateDuplicateType,
   dateDuplicateTypeText,
@@ -40,6 +41,7 @@ interface IEditTaskProps extends Modal {
   fetchDataForSelect: IEventListModel['effects']['fetchDataForSelect']
   fetchEventListData: IEventListModel['effects']['fetchData']
   fetchEventDetailsData: IEventDetailsModel['effects']['fetchData']
+  setEventStatisticsState: IEventStatisticsModel['effects']['setState']
 }
 
 /**
@@ -55,7 +57,10 @@ const StyledModal = styled(Modal)(styledBlocks.containerTheme);
  * @constructor
  */
 const EditTask = (props: Partial<IEditTaskProps>) => {
-  const {showModal, updateRemoteTask, data, isShowModal, fetchDataForSelect, fetchEventDetailsData, fetchEventListData} = props;
+  const {
+    showModal, updateRemoteTask, data, isShowModal, setEventStatisticsState,
+    fetchDataForSelect, fetchEventDetailsData, fetchEventListData
+  } = props;
   /**
    * 提交修改按钮的loading状态
    */
@@ -98,6 +103,7 @@ const EditTask = (props: Partial<IEditTaskProps>) => {
 
       // 刷新事件列表
       fetchEventListData!();
+      setEventStatisticsState!({eventStatisticsMethod: EventStatisticsMethod.ALL});
     } else {
       message.info('修改失败，请稍后再试。');
     }
