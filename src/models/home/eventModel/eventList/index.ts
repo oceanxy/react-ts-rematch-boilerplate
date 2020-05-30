@@ -51,7 +51,7 @@ const eventList: IEventListModel = {
         store.dispatch.eventDetails.setState({data: latestEventDetails});
       }
 
-      // 更新事件数量
+      // 更新事件统计tab
       store.dispatch.eventStatistics.setState({data: eventStatistics});
       // 更新事件列表
       store.dispatch.eventList.updateState({data: eventList});

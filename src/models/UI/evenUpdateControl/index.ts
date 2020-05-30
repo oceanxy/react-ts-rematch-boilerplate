@@ -12,11 +12,8 @@ import { store } from '@/store';
 import _ from 'lodash';
 import moment from 'moment';
 import { Client, Frame } from 'stompjs';
+import { message } from 'antd';
 
-/**
- * 位置model
- * @type {IPositionModel}
- */
 const position: IEvenUpdateControlModel = {
   state: {
     stompClient: undefined
@@ -46,27 +43,8 @@ const position: IEvenUpdateControlModel = {
       const stompClient = await fetchApis.fetchSockJs((stompClient: Client, frame?: Frame) => {
         // 登录用户订阅事件信息
         stompClient?.subscribe(`/user/${name}/eventInfo`, (res) => {
-          const data: IEvent[] = JSON.parse(res.body);
-          const tempEventData = [...state?.eventList.data || []];
-
-          // 更新事件数据
-          data.forEach((event) => {
-            const diffEventIndex = _.findIndex(state?.eventList.data, (value: IEvent, index: number) => value.eventId === event.eventId);
-
-            // 如果列表里面不存在则插入这条数据
-            if (diffEventIndex === -1) {
-              tempEventData.unshift(event);
-            } else {
-              tempEventData[diffEventIndex] = event;
-            }
-
-            // 如果当前选中的事件被更新，则更新事件详情
-            if (state?.eventList.curSelectedEvent?.eventId === event.eventId) {
-              store.dispatch.eventDetails.setState(event);
-            }
-          });
-
-          store.dispatch.eventList.setState({data: tempEventData});
+          store.dispatch.eventList.fetchData();
+          message.info('事件列表已更新');
         });
         // 登录用户订阅任务信息
         stompClient?.subscribe(`/user/${name}/taskInfo`, (res) => {
