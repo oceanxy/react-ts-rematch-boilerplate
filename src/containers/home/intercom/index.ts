@@ -4,7 +4,7 @@
  * @Description: 对讲入口
  * @Date: 2020-04-21 周二 15:04:21
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-28 周四 13:35:26
+ * @LastModifiedTime: 2020-05-30 周六 22:18:28
  */
 
 import IntercomPanel from '@/components/home/intercom';
@@ -14,11 +14,12 @@ import IntercomEntityCall from './entityCall';
 import IntercomGroupName from './groupName';
 import IntercomMembers from './members';
 import IntercomNotice from './notice';
+import IntercomTiming from './timing';
 import IntercomOperation from './operation';
 
 const mapStateToProps = (state: RootState) => ({
   active: state.intercom.active,
-  timing: state.intercomOperation.timing,
+  timing: state.intercomTiming.timing,
   curActiveGroupType: state.intercomGroupName.curActiveGroupType,
   isIntercomNoticeActive: state.intercomNotice.active
 });
@@ -29,4 +30,7 @@ const mapDispatchToProps = (dispatch: Dispatch): any => ({
 
 const Intercom = connect(mapStateToProps, mapDispatchToProps)(IntercomPanel);
 
-export { IntercomGroupName, IntercomMembers, IntercomOperation, Intercom, IntercomNotice, IntercomEntityCall };
+export {
+  IntercomGroupName, IntercomMembers, IntercomOperation,
+  Intercom, IntercomNotice, IntercomEntityCall, IntercomTiming
+};

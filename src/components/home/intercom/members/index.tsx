@@ -20,7 +20,7 @@ import './index.scss';
 interface IIntercomMembersProps {
   curTempGroupState: IIntercomGroupNameState
   state: IIntercomMembersState
-  timing: IIntercomOperationState['timing']
+  timing: IIntercomTimingState['timing']
   dispatches: IIntercomMembersModel['effects']
   isActiveIntercom: IIntercomState['active']
   setTemporaryGroupState: ITemporaryGroupModel['effects']['setState']

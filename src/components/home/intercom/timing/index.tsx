@@ -4,7 +4,7 @@
  * @Description: 对讲计时组件
  * @Date: 2020-04-28 周二 16:40:09
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-10 周日 11:09:28
+ * @LastModifiedTime: 2020-05-30 周六 23:50:09
  */
 
 import Container from '@/components/UI/containerComp';
@@ -16,32 +16,9 @@ import './index.scss';
  * 对讲计时组件Render Props
  */
 interface IIntercomTimingProps {
-  /**
-   * 是否开启倒计时，默认关闭
-   */
-  isCountdown?: boolean
-  /**
-   * 倒计时时长，isCountdown为true时生效。单位：毫秒，默认：30*1000
-   */
-  countdownDuration?: number
-  /**
-   * 开始主呼时的时间（moment）
-   */
-  startTime?: moment.Moment
-  /**
-   * 获取计时状态的回调函数
-   * @param {number} timing
-   */
-  getTiming?: (timing: number) => void
-  /**
-   * 计时文本
-   * 倒计时默认：根据countdownDuration字段计算
-   * 顺计时默认：'00:00:00'
-   *
-   * 格式：'文本{timing}文本'。 '{timing}'：为固定格式，会被格式化为具体的值。
-   * 例如：'正在通话中{timing}...'
-   */
-  timingTextFormat?: string
+  operationState: IIntercomOperationState
+  state: IIntercomTimingState
+  setState: IIntercomTimingModel['effects']['setState']
 }
 
 /**
@@ -50,59 +27,53 @@ interface IIntercomTimingProps {
  * @returns {any}
  * @constructor
  */
-const Timing = (props: IIntercomTimingProps) => {
-  const {startTime, getTiming, isCountdown, countdownDuration, timingTextFormat} = props;
-  // 获取moment时长对象
-  const duration = moment.duration(countdownDuration || 35000);
-  const [endTime] = useState((startTime || moment()).add(duration));
-
-  // 计时文本初始化
-  const timingText = isCountdown
-    ? moment((moment().add(duration) as any) - (moment() as any))
-      .subtract(8, 'hours')
-      .format('HH:mm:ss')
-    : '00:00:00';
-
-  // 计时文本状态
-  const [timingVal, setTiming] = useState(timingText);
+const Timing = (props: Partial<IIntercomTimingProps>) => {
+  const {operationState, state, setState} = props;
+  const {timing, text, startTime, isCountdown, countdownDuration} = state!;
+  const {callProcessing, callState} = operationState!;
+  // 计时定时器缓存
+  const [intervalTiming, setIntervalTiming] = useState(0);
 
   /**
-   * 计算时间
+   * 计算时间差
+   * @param endTime
    */
-  const calculatingTime = () => {
+  const calculatingTime = (endTime: moment.Moment) => {
     const cur: any = moment();
-    let du: any;
+    const du = isCountdown ?
+      moment(endTime as any - cur).subtract(8, 'hours') :
+      moment(cur - (startTime as any)).subtract(8, 'hours');
 
-    if (isCountdown) {
-      du = moment(endTime as any - cur).subtract(8, 'hours');
-    } else {
-      du = moment(cur - (startTime as any)).subtract(8, 'hours');
-    }
-
-    setTiming(du.format('HH:mm:ss'));
-    getTiming && getTiming(du.seconds());
+    setState!({
+      text: du.format('HH:mm:ss'),
+      value: du.seconds()
+    });
   };
 
+  // 计算时间差逻辑处理
   useEffect(() => {
-    // let et = moment();
+    if (timing) {
+      // 获取moment时长对象
+      const duration = isCountdown ? moment.duration(countdownDuration || 35000) : 0;
+      const endTime = startTime.add(duration);
 
-    // if (isCountdown) {
-    //   et = (startTime || moment()).add(duration);
-    // }
+      calculatingTime(endTime);
 
-    calculatingTime();
-    const intervalTiming = setInterval(() => {
-      calculatingTime();
-    }, 1000);
+      setIntervalTiming(setInterval(() => {
+        calculatingTime(endTime);
+      }, 1000));
+    } else {
+      clearInterval(intervalTiming);
+    }
 
     return () => clearInterval(intervalTiming);
-  }, [isCountdown, countdownDuration, startTime]);
+  }, [timing, startTime, isCountdown]);
 
-  return (
-    <Container className="inter-plat-intercom-timing-container">
-      {timingTextFormat ? timingTextFormat.replace('{timing}', timingVal) : timingVal}
+  return timing ? (
+    <Container className="inter-plat-intercom-timing-container" key='inter-plat-intercom-timing-container'>
+      {callProcessing ? `连接中 ${text}` : callState ? `通话中 ${text}` : text}
     </Container>
-  );
+  ) : null;
 };
 
 export default Timing;

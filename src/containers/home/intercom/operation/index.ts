@@ -4,7 +4,7 @@
  * @Description: 操作对讲组件
  * @Date: 2020-04-21 周二 15:05:35
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-27 周三 10:35:40
+ * @LastModifiedTime: 2020-05-31 周日 01:47:18
  */
 
 import IntercomOperation from '@/components/home/intercom/operarion';
@@ -17,8 +17,8 @@ const mapStateToProps = (state: RootState) => ({
   curMassPoint: state.map.curMassPoint,
   state: state.intercomOperation,
   monitoringDispatchConfig: state.monitoringDispatch.config,
-  startTime: state.intercomOperation.startTime,
-  membersData: state.intercomMembers.data
+  membersData: state.intercomMembers.data,
+  timingState: state.intercomTiming
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({

@@ -15,7 +15,7 @@ const mapStateToProps = (state: RootState) => ({
   state: state.intercomMembers,
   curTempGroupState: state.intercomGroupName,
   isActiveIntercom: state.intercom.active,
-  timing: state.intercomOperation.timing
+  timing: state.intercomTiming.timing
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): any => ({

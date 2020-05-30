@@ -556,10 +556,13 @@ const monitoringDispatch: IMonitoringDispatchModel = {
     onCallingStop(response): void {
       // 更新状态，触发页面更新
       store.dispatch.intercomOperation.updateState({
-        timing: false,
         callProcessing: false,
         intercomCallProcessing: false,
-        callState: false,
+        callState: false
+      });
+
+      store.dispatch.intercomTiming.updateState({
+        timing: true,
         startTime: undefined
       });
 

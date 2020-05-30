@@ -13,7 +13,6 @@ import { CurActiveGroupType } from '@/models/home/intercom/groupName';
 import { CallModeEnum, ControlCmd } from '@/models/UI/monitoringDispatch';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import Timing from '../timing';
 import './index.scss';
 
 /**
@@ -27,8 +26,8 @@ interface IIntercomOperationProps {
   dispatches: IIntercomOperationModel['effects']
   curMassPoint: IAMapState['curMassPoint']
   monitoringDispatchConfig: IMonitoringDispatchState['config']
-  startTime: IIntercomOperationState['startTime']
   membersData: IIntercomMembersState['data']
+  timingState: IIntercomTimingState
 }
 
 /**
@@ -40,13 +39,14 @@ interface IIntercomOperationProps {
 const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   const {
     intercomGroupNameState, intercomNoticeState, intercomNoticeDispatch, dispatches,
-    curMassPoint, state, monitoringDispatchConfig, startTime, membersData
+    curMassPoint, state, monitoringDispatchConfig, membersData, timingState
   } = props;
-  const {timing, intercomCallProcessing, callProcessing, callState} = state!;
+  const {intercomCallProcessing, callProcessing, callState} = state!;
   const {active, value} = intercomNoticeState!;
   const {setState: setNoticeState, sendData} = intercomNoticeDispatch!;
   const {call, stopCall, entityControl} = dispatches!;
   const {curActiveGroupType, intercomId} = intercomGroupNameState!;
+  const {value: timingValue} = timingState!;
   /**
    * 当前监控对象禁言状态
    */
@@ -95,18 +95,6 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
   };
 
   /**
-   * 超时退出组呼/个呼/电话
-   * @param {number} timing
-   */
-  const exitCallingWhenTimeout = (timing: number) => {
-    if (!callState) {
-      if ((intercomCallProcessing && timing <= 0) || (callProcessing && timing <= 0)) {
-        stopCall();
-      }
-    }
-  };
-
-  /**
    * 根据当前激活的组别（临时组/任务组/个呼）渲染不同的按钮
    * @returns {any}
    */
@@ -115,8 +103,8 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
       // 通知面板按钮
       return (
         <>
-          <Icon icon={IconSource.RETURN} onClick={onNotice.bind(null, false)} title={iconName.RETURN} />
-          <Icon icon={IconSource.SEND} onClick={sendSMS} title={iconName.SEND} disabled={!value} />
+          <Icon icon={IconSource.RETURN} onClick={onNotice.bind(null, false)} title={iconName.RETURN}/>
+          <Icon icon={IconSource.SEND} onClick={sendSMS} title={iconName.SEND} disabled={!value}/>
         </>
       );
     } else {
@@ -166,6 +154,22 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
     return null;
   };
 
+  // 超时退出组呼/个呼/电话状态
+  useEffect(() => {
+    // 当且仅当电话已接通时不执行以下逻辑
+    if (!callState) {
+      if (
+        // 当组呼/个呼时，且剩余时间小于0时
+        (intercomCallProcessing && timingValue <= 0) ||
+        // 当电话处于正在接通中状态，且剩余时间小于0时
+        (callProcessing && timingValue <= 0)
+      ) {
+        // 退出组呼/退出个呼/挂断电话（此时未接通）
+        stopCall();
+      }
+    }
+  }, [timingValue]);
+
   // 检测全员在离线的状态，来处理按钮禁用状态
   useEffect(() => {
     if (membersData?.length) {
@@ -179,15 +183,6 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
 
   return (
     <Container className="inter-plat-intercom-operation">
-      {timing ? (
-        <Timing
-          isCountdown={!callState} // 个呼/组呼/电话呼叫中为true，电话接通后为false
-          countdownDuration={callProcessing ? 30000 : 35000} // 持续时长：个呼/组呼默认35秒；电话呼叫状态30秒；电话接通后，该字段无意义
-          startTime={startTime}
-          getTiming={exitCallingWhenTimeout}
-          timingTextFormat={!callProcessing ? '' : callState ? '通话中 {timing}' : '连接中 {timing}'}
-        />
-      ) : null}
       <Container className="inter-plat-intercom-button-container">{buttons()}</Container>
     </Container>
   );

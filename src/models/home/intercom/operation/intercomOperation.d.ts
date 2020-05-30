@@ -4,26 +4,17 @@
  * @Description: 操作对讲类型定义
  * @Date: 2020-04-21 周二 11:46:04
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-10 周日 09:58:45
+ * @LastModifiedTime: 2020-05-30 周六 22:48:58
  */
 
 import { CallModeEnum } from '@/models/UI/monitoringDispatch';
 import { ModelConfig } from '@rematch/core';
-import moment, { Moment } from 'moment';
 
 declare global {
   /**
    * 对讲操作state
    */
   interface IIntercomOperationState {
-    /**
-     * 计时状态（是否开启计时）
-     */
-    timing: boolean
-    /**
-     * 计时开始时刻的时间
-     */
-    startTime?: moment.Moment
     /**
      * 个呼/组呼状态（与拨打电话状态不能同时为true）
      */

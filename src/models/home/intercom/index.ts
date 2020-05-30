@@ -3,8 +3,8 @@
  * @Email: xieyang@zwlbs.com
  * @Description: 对讲面板model、对讲model入口
  * @Date: 2020-04-21 周二 11:08:07
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
- * @LastModifiedTime: 2020-04-21 周二 11:08:07
+ * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModifiedTime: 2020-05-30 周六 23:03:55
  */
 
 import { store } from '@/store';
@@ -12,6 +12,7 @@ import intercomGroupName, { CurActiveGroupType } from './groupName';
 import intercomMembers from './members';
 import intercomNotice from './notice';
 import intercomOperation from './operation';
+import intercomTiming from './timing';
 
 const intercom: IIntercomModel = {
   state: {
@@ -51,4 +52,8 @@ const intercom: IIntercomModel = {
   }
 };
 
-export default {intercom, intercomGroupName, intercomMembers, intercomOperation, intercomNotice};
+export default {
+  intercom, intercomGroupName,
+  intercomMembers, intercomOperation,
+  intercomNotice, intercomTiming
+};
