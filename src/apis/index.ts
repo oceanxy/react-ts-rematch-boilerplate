@@ -4,14 +4,14 @@
  * @Description: 为每个接口生成请求函数
  * @Date: 2019-11-06 10:31:45
  * @LastModified: Oceanxy(xieyang@zwlbs.com)
- * @LastModifiedTime: 2020-05-28 周四 14:11:13
+ * @LastModifiedTime: 2020-06-01 周一 17:24:25
  */
 
 import apis, { APIRequestConfig, FetchApis } from '@/apis/api';
 import config from '@/config';
 import { IFetchAPI, IFetchSockJs, IFetchWebsocket, WebsocketCallback } from '@/interfaces/api';
 import { APIResponse, IPolling } from '@/interfaces/api/mock';
-import { EHTTPMethod, EProtocal } from '@/interfaces/config';
+import { EHTTPMethod, EProtocal, IGlobalConfig } from '@/interfaces/config';
 import Axios, { AxiosResponse } from 'axios';
 import _ from 'lodash';
 import qs from 'qs';
@@ -21,49 +21,83 @@ import stomp, { Frame } from 'stompjs';
 import DEV_SERVER_CONFIG from '../../build/config';
 import mocks, { Mocks, productionData } from './mock';
 
+// 匹配IP的正则表达式
+const ip = /^(((\\d{1,2})|(1\\d{2})|(2[0-4]\\d)|(25[0-5]))\\.){3}((\\d{1,2})|(1\\d{2})|(2[0-4]\\d)|(25[0-5]))$/;
+// 当前环境是否是开发环境
+const isDev = process.env.NODE_ENV === 'development';
+
 /**
  * 拼接URL
  * @param fetchApi {IFetchAPI} API接口请求配置
  */
 function stitchingURL(fetchApi: IFetchAPI | IFetchWebsocket | IFetchSockJs): string {
-  // 拼接协议
-  let protocols = fetchApi.protocol ? fetchApi.protocol : config.protocol;
+  // URL默认配置
+  const defaultWebsocketConfig: IGlobalConfig = {
+    protocol: EProtocal.HTTP,
+    host: 'localhost',
+    port: isDev ? DEV_SERVER_CONFIG.devServer.port : 8080
+  };
 
-  // websocket转换为ws协议
-  if ('isWebsocket' in fetchApi && fetchApi.isWebsocket && (config.protocol === EProtocal.HTTP || config.protocol === EProtocal.HTTPS)) {
-    protocols = protocols === EProtocal.HTTP ? EProtocal.WS : EProtocal.WSS;
-  }
+  // 处理websocket配置
+  const websocketConfig: null | IGlobalConfig = !config.websocket ?
+    null :
+    !config.websocket.prod && !config.websocket.dev ?
+      config.websocket :
+      isDev ?
+        config.websocket.dev ? config.websocket.dev : config.websocket :
+        config.websocket.prod ? config.websocket.prod : config.websocket;
 
-  // 如果服务端口未设置，则使用全局配置的端口
-  const port = fetchApi.port ? fetchApi.port : config.port;
+  // 如果协议未设置，则使用全局配置的协议
+  let protocol = fetchApi.protocol ? fetchApi.protocol : config.protocol;
+  // 如果端口未设置，则使用全局配置的端口
+  let port = fetchApi.port ? fetchApi.port : config.port;
   // 如果host未设置，则使用全局配置的host
-  const host = fetchApi.host ? fetchApi.host : config.host;
+  let host = fetchApi.host ? fetchApi.host : config.host;
 
-  // 如果接口以及全局配置均未设置port或host，则使用相对路径。如果是websocket或SockJs，则使用默认值，保证websocket链接是完整的URL
-  if (!port || !host) {
-    if ('isSockJs' in fetchApi || 'isWebsocket' in fetchApi) {
-      let envPort: any;
-
-      // 用 IP+PORT 代替域名
-      if (!host || host === 'localhost' || host?.match(/^(((\\d{1,2})|(1\\d{2})|(2[0-4]\\d)|(25[0-5]))\\.){3}((\\d{1,2})|(1\\d{2})|(2[0-4]\\d)|(25[0-5]))$/)) {
-        // 检查当前环境
-        if (process.env.NODE_ENV === 'development') {
-          envPort = DEV_SERVER_CONFIG.devServer.port;
-        } else {
-          envPort = 8080; // 默认8080
-        }
-
-        return `${protocols}${host || 'localhost'}:${port || envPort}${fetchApi.url}`;
+  if (!protocol || !host) {
+    // 检测全双工接口
+    if (('isSockJs' in fetchApi && fetchApi.isSockJs) || ('isWebsocket' in fetchApi && fetchApi.isWebsocket)) {
+      if (websocketConfig) {
+        protocol = websocketConfig.protocol || 'isSockJs' in fetchApi && fetchApi.isSockJs ? defaultWebsocketConfig.protocol : EProtocal.WS;
+        host = websocketConfig.host || defaultWebsocketConfig.host;
+        port = websocketConfig.port || defaultWebsocketConfig.port;
+      } else {
+        protocol = 'isSockJs' in fetchApi && fetchApi.isSockJs ? EProtocal.HTTP : EProtocal.WS;
+        host = defaultWebsocketConfig.host;
+        port = defaultWebsocketConfig.port;
       }
 
+      // 用 IP+PORT 代替域名
+      if (host === defaultWebsocketConfig.host || host?.match(ip)) {
+        return `${protocol}${host}:${port}${fetchApi.url}`;
+      }
+
+      console.log(`${protocol}${host}${fetchApi.url}`);
       // 用域名
-      return `${protocols}${host || 'localhost'}${fetchApi.url}`;
+      return `${protocol}${host}${fetchApi.url}`;
     }
 
+    // 使用服务器相对路径。
     return fetchApi.url;
-  }
+  } else {
+    // 单独为全双工通信接口制订了配置，则使用该配置
+    if (('isWebsocket' in fetchApi || 'isSockJs' in fetchApi) && websocketConfig) {
+      protocol = websocketConfig.protocol || 'isSockJs' in fetchApi && fetchApi.isSockJs ? defaultWebsocketConfig.protocol : EProtocal.WS;
+      host = websocketConfig.host || defaultWebsocketConfig.host;
+      port = isDev ? DEV_SERVER_CONFIG.devServer.port : (websocketConfig.port || defaultWebsocketConfig.port);
+    }
 
-  return `${protocols}${host}:${port}${fetchApi.url}`;
+    // Websocket接口，HTTP协议转换为WS协议。SockJs接口不作处理
+    if ('isWebsocket' in fetchApi && fetchApi.isWebsocket) {
+      protocol = protocol === EProtocal.HTTPS || protocol === EProtocal.WSS ? EProtocal.WSS : EProtocal.WS;
+    }
+
+    if (!host || host === defaultWebsocketConfig.host || host?.match(ip)) {
+      return `${protocol}${host || defaultWebsocketConfig.host}:${port}${fetchApi.url}`;
+    }
+
+    return `${protocol}${host}${fetchApi.url}`;
+  }
 }
 
 /**

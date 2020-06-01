@@ -96,16 +96,9 @@ const apis: APIRequestConfig = {
     url: '/testECharts'
   },
 
+  // ==============以上为测试页面接口======================================================================================
+
   fetchSockJs: {
-    // 生产环境配置
-    // protocol: EProtocal.HTTPS,
-    // host: 'zw.iwalkie.cn',
-
-    // 本地开发，也可以省略
-    // protocol: EProtocal.HTTP,
-    // host: 'localhost',
-    // port: 8080,
-
     url: '/clbs/vehicle',
     isSockJs: true,
     enableStomp: true

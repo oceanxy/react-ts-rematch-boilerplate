@@ -34,7 +34,7 @@ module.exports = {
       },
       '/clbs/vehicle': {
         ws: true,
-        target: 'http://localhost:8080/', // 如果使用的是SockJs，HTTP协议请根据实际修改。（SockJs的协议可能是HTTP协议，也可能是WS协议）
+        target: 'http://localhost:8080/', // 如果使用的是SockJs，URL协议请根据实际修改。（SockJs的协议是HTTP协议，原生Websocket的协议是WS协议）
         changeOrigin: true,
         secure: false
       }
