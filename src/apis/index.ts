@@ -45,7 +45,7 @@ function stitchingURL(fetchApi: IFetchAPI | IFetchWebsocket | IFetchSockJs): str
       let envPort: any;
 
       // 用 IP+PORT 代替域名
-      if (host?.match(/^(((\\d{1,2})|(1\\d{2})|(2[0-4]\\d)|(25[0-5]))\\.){3}((\\d{1,2})|(1\\d{2})|(2[0-4]\\d)|(25[0-5]))$/)) {
+      if (!host || host === 'localhost' || host?.match(/^(((\\d{1,2})|(1\\d{2})|(2[0-4]\\d)|(25[0-5]))\\.){3}((\\d{1,2})|(1\\d{2})|(2[0-4]\\d)|(25[0-5]))$/)) {
         // 检查当前环境
         if (process.env.NODE_ENV === 'development') {
           envPort = DEV_SERVER_CONFIG.devServer.port;
