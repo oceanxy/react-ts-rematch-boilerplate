@@ -13,7 +13,7 @@ import moment from 'moment';
 const operation: IIntercomTimingModel = {
   state: {
     timing: false,
-    startTime: moment(),
+    startTime: undefined,
     isCountdown: false,
     countdownDuration: 0,
     value: 0,

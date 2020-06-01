@@ -112,8 +112,55 @@ const operation: IIntercomOperationModel = {
           isCountdown: isIntercomCall,
           countdownDuration: isIntercomCall ? 35000 : 30000
         } as IIntercomTimingState);
-      } /** 主呼失败 */ else {
-        message.error('呼叫失败，请稍候重试！');
+      }  /** 主呼失败 */ else {
+        switch (response.result) {
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_DUPLEX_TARGET_REJECT:
+            message.info('呼叫被拒绝！');
+            break;
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_TARGET_NOT_ONLINE:
+            message.info('呼叫对象不在线');
+            break;
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_STATUS_ERROR:
+            message.info('网络故障或该对象正在进行其他呼叫');
+            break;
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_CALL_MODE_ERROR:
+            message.info('呼叫模式错误');
+            break;
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_PRIORITY_LOW:
+            message.info('呼叫优先级低');
+            break;
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_NOT_PERMIT_CALLING:
+            message.info('用户被禁言');
+            break;
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_GROUP_NUMBER_ERROR:
+            message.info('群组号码错误');
+            break;
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_TARGET_ON_CALLING:
+            message.info('呼叫对象正在忙');
+            break;
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_TARGET_NOT_EXIST:
+            message.info('呼叫对象不存在');
+            break;
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_WAIT_DUPLEX_RING_TIMEOUT:
+            message.info('双工主叫，寻呼链路建立失败');
+            break;
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_WAIT_DUPLEX_RSP_TIMEOUT:
+            message.info('双工呼叫，对方无应答');
+            break;
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_TARGET_NO_ANSWER:
+            message.info('双工呼叫，对方无法呼通');
+            break;
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_GROUP_ID_ERROR:
+            message.info('群组ID错误');
+            break;
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_NO_ACTIVE_NETWORK:
+            message.info('网络故障');
+            break;
+          case CallingStartResultEnum.CALLING_START_FAILURE_4_UNKNOWN:
+          default:
+            message.info('发生未知错误');
+            break;
+        }
 
         // 更新对讲操作model状态
         intercomOperation.updateState({
@@ -123,7 +170,10 @@ const operation: IIntercomOperationModel = {
         } as IIntercomOperationState);
 
         // 更新对讲计时model状态
-        intercomTiming.updateState({timing: false} as IIntercomTimingState);
+        intercomTiming.updateState({
+          timing: false,
+          startTime: undefined
+        } as IIntercomTimingState);
       }
     },
     stopCall(): void {

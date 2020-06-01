@@ -76,7 +76,7 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
    * @constructor
    */
   const handleCallModel = (callMode: CallModeEnum) => {
-    if (callProcessing || intercomCallProcessing) {
+    if (callProcessing || intercomCallProcessing || callState) {
       stopCall();
     } else {
       call(callMode);
@@ -103,8 +103,8 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
       // 通知面板按钮
       return (
         <>
-          <Icon icon={IconSource.RETURN} onClick={onNotice.bind(null, false)} title={iconName.RETURN}/>
-          <Icon icon={IconSource.SEND} onClick={sendSMS} title={iconName.SEND} disabled={!value}/>
+          <Icon icon={IconSource.RETURN} onClick={onNotice.bind(null, false)} title={iconName.RETURN} />
+          <Icon icon={IconSource.SEND} onClick={sendSMS} title={iconName.SEND} disabled={!value} />
         </>
       );
     } else {
@@ -177,7 +177,11 @@ const IntercomOperation = (props: Partial<IIntercomOperationProps>) => {
 
       if (isMemberOnline === -1 && curActiveGroupType !== CurActiveGroupType.Entity) {
         setDisabledAllButton(true);
+      } else {
+        setDisabledAllButton(false);
       }
+    } else {
+      curActiveGroupType !== CurActiveGroupType.Entity && setDisabledAllButton(true);
     }
   }, [membersData]);
 

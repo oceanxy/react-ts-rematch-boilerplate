@@ -562,11 +562,13 @@ const monitoringDispatch: IMonitoringDispatchModel = {
       });
 
       store.dispatch.intercomTiming.updateState({
-        timing: true,
+        timing: false,
         startTime: undefined
       });
 
-      message.warning('主呼已经断开！');
+      if (response.cause !== CallingStopCauseEnum.CALLING_STOP_CAUSE_NORMAL) {
+        message.warning('主呼已经断开！错误代码：' + response.cause);
+      }
     },
     onTempGroupUpdate(response): void {
       // 其他用户对临时组的操作会触发此事件，目前没有处理这个事件的需求，暂不做处理

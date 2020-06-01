@@ -22,7 +22,7 @@ declare global {
     /**
      * 计时开始时刻的时间
      */
-    startTime: moment.Moment
+    startTime?: moment.Moment
     /**
      * 是否开启倒计时，默认关闭
      * 个呼/组呼/电话呼叫中为true，电话接通后为false

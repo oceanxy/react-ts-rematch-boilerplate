@@ -52,7 +52,10 @@ const Timing = (props: Partial<IIntercomTimingProps>) => {
 
   // 计算时间差逻辑处理
   useEffect(() => {
-    if (timing) {
+    // 再次触发定时，清空上一次计时的定时器
+    clearInterval(intervalTiming);
+
+    if (timing && startTime) {
       // 获取moment时长对象
       const duration = isCountdown ? moment.duration(countdownDuration || 35000) : 0;
       const endTime = startTime.add(duration);
@@ -62,15 +65,13 @@ const Timing = (props: Partial<IIntercomTimingProps>) => {
       setIntervalTiming(setInterval(() => {
         calculatingTime(endTime);
       }, 1000));
-    } else {
-      clearInterval(intervalTiming);
     }
 
     return () => clearInterval(intervalTiming);
   }, [timing, startTime, isCountdown]);
 
   return timing ? (
-    <Container className="inter-plat-intercom-timing-container" key='inter-plat-intercom-timing-container'>
+    <Container className="inter-plat-intercom-timing-container" key="inter-plat-intercom-timing-container">
       {callProcessing ? `连接中 ${text}` : callState ? `通话中 ${text}` : text}
     </Container>
   ) : null;
