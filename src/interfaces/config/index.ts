@@ -35,7 +35,7 @@ export interface IGlobalConfig {
    */
   protocol?: EProtocal
   /**
-   * 全局接口主机IP，默认“localhost”
+   * 全局接口主机IP。如果为假值，则HTTP协议的接口protocol和port字段无效；websocket接口默认为'localhost'
    */
   host?: string
   /**
