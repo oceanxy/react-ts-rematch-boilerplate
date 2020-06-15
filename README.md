@@ -199,3 +199,67 @@ mock对象和api对象受到全局`FetchAPIs`类型的约束。
   isSockjs: true
 }
 ```
+
+### 接口配置说明（port、host和protocol三项的配置说明）
+
+- 当host为域名时，port无效
+- 本地调试配置样例。如果有跨域问题，可使用webpack的devServer代理。如果是后端处理跨域，则根据实际情况配置port、host以及protocol
+
+PS：本地时推荐不配置此三项，会自动使用默认值
+```json5
+{
+  protocol: EProtocal.HTTP,
+  port: 8080,
+  host: 'localhost'
+}
+```
+
+
+- 生产环境配置样例。port、host和protocol为空，则除全双工通道以外的接口默认为相对服务环境的根路径，全双工通道需要在websocket配置项内单独配置
+
+1. 按域名配置全局生产环境配置
+```json5
+{
+  protocol: EProtocal.HTTPS,
+  host: 'zw.iwalkie.cn'
+}
+```
+
+2. 按IP配置全局生产环境配置
+```json5
+{
+  protocol: EProtocal.HTTPS,
+  host: '192.168.1.1',
+  port: 8080
+}
+```
+
+3. 使用部署服务器的相对路径，此时可省略全局protocol/port/host配置，但此时必须为全双工通信配置单独的protocol/port/host
+```json5
+{
+  websocket: {
+    protocol: EProtocal.HTTPS,
+    port: 8080,
+    host: '192.168.1.1'
+  }
+}
+```
+
+4. 为开发环境和生产环境分别配置全双工通信的protocol/port/host
+```json5
+{
+  websocket: {
+    prod: {
+      protocol: EProtocal.HTTPS,
+      port: 8080,
+      host: '192.168.1.1'
+    },
+    // 推荐省略dev配置，自动使用默认值
+    dev: {
+      protocol: EProtocal.HTTP,
+      port: 3001,
+      host: 'localhost'
+    }
+  }
+}
+```
