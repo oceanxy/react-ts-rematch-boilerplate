@@ -28,7 +28,7 @@ export default (props: IWebsocket) => {
 
   return (
     <div className="sock-js">
-      <div>SockJs测试：</div>
+      <div className='test-title'>SockJs测试：</div>
       <div>接收到后端数据：{data.value}</div>
     </div>
   );

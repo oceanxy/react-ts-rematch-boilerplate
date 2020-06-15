@@ -7,8 +7,7 @@
  * @LastModifiedTime: 2020-03-26 18:21:35
  */
 
-import allHomeModel from './home';
 import { test } from './test';
 import UIComponents from './UI';
 
-export default {test, ...allHomeModel, ...UIComponents};
+export default {test, ...UIComponents};

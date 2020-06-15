@@ -21,7 +21,7 @@ module.exports = merge.smart(baseWebpackConfig, {
   output: {
     //---------------------------------------------------------------------------------------------------------------------
     // 生产环境打包
-    filename: 'clbs/resources/js/intercom/[name].[contenthash:8].js'
+    filename: 'js/[name].[contenthash:8].js'
     //---------------------------------------------------------------------------------------------------------------------
   },
   module: {
@@ -114,7 +114,7 @@ module.exports = merge.smart(baseWebpackConfig, {
     new MiniCssExtractPlugin({
       //---------------------------------------------------------------------------------------------------------------------
       // 生产环境路径
-      filename: 'clbs/resources/css/intercom/[name].[contenthash:8].css'
+      filename: 'css/[name].[contenthash:8].css'
       //---------------------------------------------------------------------------------------------------------------------
       // chunkFilename: '[name].[contenthash:8].chunk.css'
     }),

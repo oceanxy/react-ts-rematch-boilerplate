@@ -12,11 +12,9 @@ import Increment from '@/components/test/increment';
 import TestList from '@/components/test/list';
 import TestSockJs from '@/components/test/sockJs';
 import TestWebSocket from '@/components/test/websocket';
-import Nav from '@/components/UI/nav';
-import routes, { routesMap } from '@/config/router';
-import ZWMap from '@/containers/UI/amap';
 import React from 'react';
 import './index.scss';
+import { Link } from 'react-router-dom';
 
 const TestContainer = (props: {
   test: {
@@ -35,15 +33,17 @@ const TestContainer = (props: {
   getEChartsData: any
 }) => {
   return (
-    <div className="test-color">
-      <Nav title={routes.home?.title} to={routesMap.home || '/'} />
+    <>
+      <h2>测试页面</h2>
+      <hr />
+      <Link to={'/'} style={{color: '#ffffff'}}>返回主页</Link>
+
       <Increment count={props.test.count} increment={props.increment} incrementAsync={props.incrementAsync} />
       <TestList data={props.test.listData} getData={props.getListData} />
       <TestWebSocket data={props.test.websocketData} getData={props.getWebSocketData} />
       <TestSockJs data={props.test.sockJsData} getData={props.getSockJsData} />
       <TestChart data={props.test.eChartsData} getData={props.getEChartsData} />
-      <ZWMap style={{width: '100%', height: '100%', position: 'fixed', top: 0, zIndex: -1}} />
-    </div>
+    </>
   );
 };
 

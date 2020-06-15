@@ -2,18 +2,16 @@ import React from 'react';
 import './index.scss';
 
 export default (props: any) => {
-  const { count, incrementAsync, increment } = props;
+  const {count, incrementAsync, increment} = props;
 
   return (
     <div>
-      <span>同步/异步事件测试：</span>
-      <h2>
-        当前数字：<b className="count">{count}</b>
-      </h2>
-      <h2>
+      <span className='test-title'>同步/异步事件测试</span>
+      <div className="count">{count}</div>
+      <p>
         <button onClick={increment.bind(null)}>自增1</button>
         <button onClick={incrementAsync}>异步自增1（1秒延迟）</button>
-      </h2>
+      </p>
     </div>
   );
 };

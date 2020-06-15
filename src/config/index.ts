@@ -66,6 +66,9 @@ const config: IConfig = {
    *   }
    * }
    */
+  // protocol: EProtocal.HTTP,
+  // host: 'localhost',
+  // port: 8080,
   websocket: {
     prod: {
       protocol: EProtocal.HTTPS,
@@ -74,11 +77,13 @@ const config: IConfig = {
   },
 
   // app及路由相关配置
-  basename: '/clbs/talkback/kanBanPage',
-  mock: false,
+  basename: '/',
+  // mock数据开关
+  mock: true,
 
   // 地图相关配置
   map: {
+    // 此mapkey是xieyang@zwlbs.com的私人账号申请的key，后续可能失效，请及时更换
     mapKey: '3018bf7f400b01e710642d798b80eaf1',
     mapVersion: '1.4.15',
     mouseTool: {

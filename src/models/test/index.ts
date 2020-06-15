@@ -11,8 +11,9 @@ import fetchApis from '@/apis';
 import { APIResponse } from '@/interfaces/api/mock';
 import { ModelConfig } from '@rematch/core';
 import { Client, Frame } from 'stompjs';
+import _ from 'lodash';
 
-const test = <ModelConfig> {
+const test = <ModelConfig>{
   state: {
     count: 0,
     listData: {},
@@ -27,7 +28,7 @@ const test = <ModelConfig> {
     eChartsData: []
   },
   reducers: {
-    increment: (state: {count: number}) => {
+    increment: (state: { count: number }) => {
       const {count} = state || {count: 0};
 
       return {
@@ -76,7 +77,6 @@ const test = <ModelConfig> {
     },
     async getSockJsData() {
       return await fetchApis.fetchTestSockJs((stompClient: Client, frame?: Frame) => {
-
         const requestStr = {
           'desc': {
             'MsgId': 40968,
@@ -88,18 +88,21 @@ const test = <ModelConfig> {
           }
         };
 
-        stompClient.subscribe('/user/admin/eventInfo', (res) => {
+        stompClient.subscribe?.('/user/admin/eventInfo', (res) => {
           this.updateSockJsData({name: 'SockJs', value: '/user/admin/eventInfo 通道消息：' + res});
         });
 
-        stompClient.subscribe('/user/admin/taskInfo', (res) => {
+        stompClient.subscribe?.('/user/admin/taskInfo', (res) => {
           this.updateSockJsData({name: 'SockJs', value: '/user/admin/taskInfo 通道消息：' + res});
         });
-        
-        stompClient.send('/app/taskStatusInfo', {}, JSON.stringify(requestStr)); //订阅任务信息
-        stompClient.send('/app/vehicle/subscribeStatus', {}, JSON.stringify(requestStr));
 
-        this.updateSockJsData({name: 'SockJs', value: 'SockJs通道已打开，等待服务器发送消息...'});
+        stompClient.send?.('/app/taskStatusInfo', {}, JSON.stringify(requestStr)); //订阅任务信息
+        stompClient.send?.('/app/vehicle/subscribeStatus', {}, JSON.stringify(requestStr));
+
+        this.updateSockJsData({
+          name: 'SockJs',
+          value: _.isFunction(stompClient.subscribe) ? 'SockJs通道已打开，等待服务器发送消息...' : (stompClient as unknown as APIResponse).data.value
+        });
       });
     },
     async getEChartsData() {

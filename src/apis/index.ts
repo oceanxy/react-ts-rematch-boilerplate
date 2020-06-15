@@ -300,7 +300,10 @@ const fetchApi = (mocks: Mocks, apis: APIRequestConfig) => () => {
     // 检测mock开关
     if (config.mock || fetchApi.forceMock) {
       // 检测URL是否带有websocket协议或该API是否开启了websocket功能，以选择生成mock数据的方式
-      if (fetchApi.url.match(/^wss?:\/\//) || fetchApi.isWebsocket) {
+      if (fetchApi.url.match(/^wss?:\/\//) ||
+        ( 'isWebsocket' in fetchApi && fetchApi.isWebsocket) ||
+        ( 'isSockJs' in fetchApi && fetchApi.isSockJs)
+      ) {
         // 生成mock数据
         productionData(<keyof APIRequestConfig> fetchName, true);
       } else {

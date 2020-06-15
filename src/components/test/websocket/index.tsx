@@ -28,8 +28,8 @@ export default (props: IWebsocket) => {
   }, []);
 
   return (
-    <div className="ws">
-      <div>websocket测试：</div>
+    <div className="">
+      <div className='test-title'>websocket测试：</div>
       <div>接收到后端数据：{data.value}</div>
     </div>
   );

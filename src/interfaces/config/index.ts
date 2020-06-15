@@ -66,7 +66,10 @@ export interface IConfig extends IGlobalConfig {
     dev?: IGlobalConfig
   },
   /**
-   * 根目录
+   * 项目（路由）根目录。注意此字段只对路由生效，不影响数据接口路径及其他路径配置
+   * 例如：'/' 则根目录为'http://localhost:8080/'
+   * 例如：'/test' 则根目录为'http://localhost:8080/test'
+   * 例如：'/test/file' 则根目录为'http://localhost:8080/test/file'
    */
   basename: string
   /**

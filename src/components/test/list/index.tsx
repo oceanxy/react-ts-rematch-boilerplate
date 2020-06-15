@@ -10,7 +10,7 @@ const TestList = (props: any) => {
 
   return (
     <div>
-      <div>数据列表测试：(已开启forceMock)</div>
+      <div className='test-title'>数据列表测试：(已开启forceMock)</div>
       {data &&
         data.child &&
         data.child.map((d: { value: number; name: string }, index: number) => {

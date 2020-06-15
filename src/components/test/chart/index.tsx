@@ -11,26 +11,27 @@ import './index.scss';
 import React, { useEffect } from 'react';
 import ReactEcharts from 'echarts-for-react';
 import * as echarts from 'echarts';
+import { EChartOption } from 'echarts';
 
 const TestChart = (props: any) => {
-  const { data, getData } = props;
-  const option = {
-    // @ts-ignore
-    backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [
-      {
-        offset: 0,
-        color: '#f7f8fa'
-      },
-      {
-        offset: 1,
-        color: '#cdd0d5'
-      }
-    ]),
+  const {data, getData} = props;
+  const option: EChartOption = {
     title: {
+      textStyle: {
+        color: '#ffffff'
+      },
       text: '1990 与 2015 年各国家人均寿命与 GDP'
+    },
+    tooltip: {
+      textStyle: {
+        color: '#ffffff'
+      }
     },
     legend: {
       right: 10,
+      textStyle: {
+        color: '#ffffff'
+      },
       data: ['1990', '2015']
     },
     xAxis: {
@@ -38,13 +39,35 @@ const TestChart = (props: any) => {
         lineStyle: {
           type: 'dashed'
         }
-      }
+      },
+      axisLine: {
+        lineStyle: {
+          color: '#ffffff'
+        }
+      },
+      axisLabel: {
+        color: '#ffffff'
+      },
+      axisTick: {
+        show: false
+      },
     },
     yAxis: {
       splitLine: {
         lineStyle: {
           type: 'dashed'
         }
+      },
+      axisLine: {
+        lineStyle: {
+          color: '#ffffff'
+        }
+      },
+      axisLabel: {
+        color: '#ffffff'
+      },
+      axisTick: {
+        show: false
       },
       scale: true
     },
@@ -128,8 +151,8 @@ const TestChart = (props: any) => {
 
   return (
     <div className="test-chart">
-      <span>ECharts测试：</span>
-      {data && data.length > 1 ? <ReactEcharts option={option} /> : <span>暂无数据</span>}
+      <div className='test-title'>ECharts测试：</div>
+      {data && data.length > 1 ? <ReactEcharts option={option}/> : <span>暂无数据</span>}
     </div>
   );
 };

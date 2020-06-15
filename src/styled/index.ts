@@ -14,6 +14,12 @@ import styledBlocks, { IStyledComponent } from './styledBlocks';
  * 全局样式
  */
 export const GlobalStyle: GlobalStyleComponent<{}, DefaultTheme> = createGlobalStyle`
+  html, body, #root {
+    width: 100%;
+    height: 100%;
+    background: #2d3945;
+  }
+
   html {
     overflow: hidden;
   }
