@@ -1,9 +1,9 @@
 /**
  * @Author: Oceanxy
- * @Email: xieyang@zwlbs.com
+ * @Email: xyzsyx@163.com
  * @Description: 为每个接口生成请求函数
  * @Date: 2019-11-06 10:31:45
- * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModified: Oceanxy(xyzsyx@163.com)
  * @LastModifiedTime: 2020-06-02 周二 14:59:21
  */
 

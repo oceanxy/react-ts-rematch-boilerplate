@@ -1,9 +1,9 @@
 /**
  * @Author: Oceanxy
- * @Email: xieyang@zwlbs.com
+ * @Email: xyzsyx@163.com
  * @Description: 路由属性定义
  * @Date: 2019-12-24 14:20:12
- * @LastModified: Oceanxy（xieyang@zwlbs.com）
+ * @LastModified: Oceanxy（xyzsyx@163.com）
  * @LastModifiedTime: 2020-01-02 14:52:14
  */
 

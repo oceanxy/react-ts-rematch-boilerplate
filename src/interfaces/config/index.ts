@@ -1,9 +1,9 @@
 /**
  * @Author: Oceanxy
- * @Email: xieyang@zwlbs.com
+ * @Email: xyzsyx@163.com
  * @Description: 全局配置定义
  * @Date: 2020-01-02 16:03:27
- * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModified: Oceanxy(xyzsyx@163.com)
  * @LastModifiedTime: 2020-06-01 周一 17:24:19
  */
 

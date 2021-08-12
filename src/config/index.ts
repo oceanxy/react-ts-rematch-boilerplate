@@ -1,9 +1,9 @@
 /**
  * @Author: Oceanxy
- * @Email: xieyang@zwlbs.com
+ * @Email: xyzsyx@163.com
  * @Description: 全局属性配置
  * @Date: 2019-10-16 10:57:25
- * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModified: Oceanxy(xyzsyx@163.com)
  * @LastModifiedTime: 2020-06-01 周一 17:23:09
  */
 
@@ -83,7 +83,7 @@ const config: IConfig = {
 
   // 地图相关配置
   map: {
-    // 此mapkey是xieyang@zwlbs.com的私人账号申请的key，后续可能失效，请及时更换
+    // 此mapkey是xyzsyx@163.com的私人账号申请的key，后续可能失效，请及时更换
     mapKey: '3018bf7f400b01e710642d798b80eaf1',
     mapVersion: '1.4.15',
     mouseTool: {

@@ -1,9 +1,9 @@
 /**
  * @Author: Oceanxy
- * @Email: xieyang@zwlbs.com
+ * @Email: xyzsyx@163.com
  * @Description: api接口请求配置
  * @Date: 2019-11-06 10:33:00
- * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModified: Oceanxy(xyzsyx@163.com)
  * @LastModifiedTime: 2020-04-25 周六 15:19:36q
  */
 

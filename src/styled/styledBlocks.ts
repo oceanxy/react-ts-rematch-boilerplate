@@ -1,9 +1,9 @@
 /**
  * @Author: Oceanxy
- * @Email: xieyang@zwlbs.com
+ * @Email: xyzsyx@163.com
  * @Description: 样式化组件集合
  * @Date: 2020-01-10 15:26:53
- * @LastModified: Oceanxy(xieyang@zwlbs.com)
+ * @LastModified: Oceanxy(xyzsyx@163.com)
  * @LastModifiedTime: 2020-04-03 周五 11:13:06
  */
 
