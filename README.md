@@ -10,7 +10,6 @@
 - eslint `v6.2`
 - react-router `v5`
 - sass-dart `v1`
-- ECharts `v4`
 - antd `v4`
 - eCharts `v4`
 - sockjs `v1`
@@ -44,7 +43,7 @@
 > 注意：不要在脚手架的master分支上直接开发与项目相关的逻辑，项目请另起仓库或切换到另外的分支开发。
 
 ```bash
-git clone ssh://git@192.168.24.250:2022/shiyebu/shiyebu-fe-generator.git
+git clone https://github.com/oceanxy/react-ts-rematch-boilerplate.git
 ```
 
 2. 安装依赖
@@ -96,7 +95,7 @@ yarn build
 
 `src/config/router.ts`
 
-- 另外，如果有websocket链接需求，可以使用以下命令来启动一个ws服务，ws服务端逻辑请在 `/build/websocketServer/index.js` 文件里面编写。
+- 另外，如果有websocket需求，可以使用以下命令来启动一个ws服务，ws服务端逻辑请在 `/build/websocketServer/index.js` 文件里面编写。
 - sockjs的测试服务暂未提供。如有需要，请自行使用nodejs搭建。
 
 
