@@ -9,7 +9,8 @@
 
 import { connect } from 'react-redux';
 import { RootState, Dispatch } from '@/store';
-import TestContainer from '@/components/test';
+// import TestContainer from '@/components/test';
+import TestContainer from '@/components/testReactTabllist';
 
 const mapState = (state: RootState) => ({ test: state.test });
 
@@ -17,7 +18,4 @@ const mapDispatch = (dispatch: Dispatch): any => ({
   ...dispatch.test
 });
 
-export default connect(
-  mapState,
-  mapDispatch
-)(TestContainer);
+export default connect(mapState, mapDispatch)(TestContainer);
